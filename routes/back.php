@@ -1,21 +1,37 @@
 <?php
 
-use App\Http\Controllers\Back\CinemaController;
+use App\Http\Controllers\Backs\Admin\AdminController;
+use App\Http\Controllers\Backs\AuthenticationController;
+use App\Http\Controllers\Backs\Staff\StaffController;
+use App\Http\Controllers\Backs\SuperAdmin\MovieController;
+use App\Http\Controllers\Backs\SuperAdmin\MovieGenreController;
+use App\Http\Controllers\Backs\SuperAdmin\SuperAdminController;
+use App\Http\Controllers\Backs\UserController;
+use App\Http\Middleware\IgnoreLoginMiddleware;
 use Illuminate\Support\Facades\Route;
-
-// Admins
-// Route::group(['as' => 'back.'], function () {
-//     Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login.get')->middleware(IgnoreAdminLoginMiddleware::class);
-//     Route::post('/login', [AuthenticationController::class, 'login'])->name('login.post');
-// });
 
 
 Route::group(['as' => 'back.'], function () {
-    // Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout');
-    Route::get('/cinemas', [CinemaController::class, 'index'])->name('cinemas');
-    Route::get('/rooms', [CinemaController::class, 'abc'])->name('rooms');
-    Route::get('/showtimes', [CinemaController::class, 'afasfas'])->name('showtimes');
-    Route::get('/bills', [CinemaController::class, 'fwefew'])->name('bills');
-    Route::get('/staffs', [CinemaController::class, 'gewgewg'])->name('staffs');
+    //     // Login
+    Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login.get');
+    // ->middleware(IgnoreLoginMiddleware::class);
+    Route::post('/login', [AuthenticationController::class, 'login'])->name('login.post');
+});
 
+Route::group(['prefix' => 'superadmin', 'middleware' => ['superadmin']], function () {
+    Route::get('/logout', [AuthenticationController::class, 'logoutSuperAdmin'])->name('logout_super');
+    Route::get('/home', [SuperAdminController::class, 'index'])->name('home_super');
+    Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+    Route::get('/movie_genres', [MovieGenreController::class, 'index'])->name('movie_genre.index');
+});
+
+Route::group(['middleware' => ['admin']], function () {
+    Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
+    Route::get('/home', [AdminController::class, 'index'])->name('home_admin');
+    Route::get('users', [UserController::class, 'index'])->name('user');
+});
+
+Route::group(['prefix' => 'staff', 'middleware' => ['staff']], function () {
+    Route::get('/logout', [AuthenticationController::class, 'logoutStaff'])->name('logout_staff');
+    Route::get('/home', [StaffController::class, 'index'])->name('home_staff');
 });
