@@ -6,7 +6,7 @@
       border
       :data="items"
       :default-sort="defaultSort || {}"
-      empty-text="データはありません"
+      empty-text="Không có dữ liệu"
       @sort-change="sortChange"
       @selection-change="handleSelectionChange"
       @row-click="rowClick"
@@ -35,7 +35,7 @@
       <slot v-for="slot in Object.keys($slots)" :slot-scope="slot" :name="slot" />
       <template #empty>
         <i class="el-icon-folder-opened"></i>
-        データはありません
+        Không có dữ liệu
       </template>
     </el-table>
     <slot v-if="paginate" name="after">

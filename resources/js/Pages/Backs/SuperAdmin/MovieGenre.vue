@@ -18,8 +18,8 @@
         <div class="mt-5">
           <data-table
             :fields="fields"
-            :items="contacts.data"
-            :paginate="contacts.meta"
+            :items="movie_genres.data"
+            :paginate="movie_genres.meta"
             :current-page="filter.page || 1"
             disable-table-info
             footer-center
@@ -30,28 +30,13 @@
             <template #created_at="{ row }">
               <p>{{ formatDateTime(row?.created_at) }}</p>
             </template>
-            <template #question_content="{ row }">
-              {{ row?.question_content.substring(0, 25).concat("...") }}
-            </template>
-            <template #status="{ row }">
-              <p
-                class="py-2 px-5 w-max min-w-1/2 rounded-100 text-white text-center"
-                :class="[
-                  row?.status === CONTACT_STATUS_UNREAD
-                    ? 'bg-lightGreen'
-                    : 'bg-blackPrimary-100',
-                ]"
-              >
-                {{ row?.status_name }}
-              </p>
-            </template>
-            <template #actions="{ row }">
-              <div v-if="row" class="flex items-center">
+            <!-- <template #actions="{ row }">
+              <div  class="flex items-center">
                 <button
                   class="py-2 px-4 rounded bg-blackPrimary-100"
                   @click="handleDelete(row)"
                 >
-                  <img src="/images/svg/delete.svg" alt="" />
+                  delete
                 </button>
                 <button
                   class="ml-4 py-2 px-4 rounded bg-yellowPrimary"
@@ -60,7 +45,7 @@
                   詳細
                 </button>
               </div>
-            </template>
+            </template> -->
           </data-table>
         </div>
       </div>
@@ -72,12 +57,10 @@
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import DataTable from "@/Components/DataTable.vue";
-import { CONTACT_STATUS_UNREAD, CONTACT_STATUS_READ } from "@/store/const.js";
 import { formatDateTime } from "@/libs/datetime";
 
 import { ref } from "vue";
-import { listContact, deleteContact } from "@/API/contact.js";
-import { CONTACT_TYPE_HOSPITAL, CONTACT_TYPE_CARETAKER } from "@/store/const.js";
+import { listMovieGenre, deleteMovieGenre } from "@/API/movie_genre.js";
 
 export default {
   name: "Contact",
@@ -90,39 +73,16 @@ export default {
     return {
       loading: false,
       dialogVisible: false,
-      contacts: [],
-      CONTACT_TYPE_HOSPITAL: CONTACT_TYPE_HOSPITAL,
-      CONTACT_TYPE_CARETAKER: CONTACT_TYPE_CARETAKER,
-      contacts: [],
+      movie_genres: [],
       filter: {
         page: 1,
         limit: 10,
-        status: "",
-        type: CONTACT_TYPE_HOSPITAL,
       },
-      statusList: [
-        {
-          value: "",
-          label: "ALl",
-        },
-        {
-          value: CONTACT_STATUS_UNREAD,
-          label: "New",
-        },
-        {
-          value: CONTACT_STATUS_READ,
-          label: "Readed",
-        },
-      ],
-      CONTACT_STATUS_UNREAD: CONTACT_STATUS_UNREAD,
-      CONTACT_STATUS_READ: CONTACT_STATUS_READ,
       fields: [
-        { key: "name", label: "病院", width: 250 },
         { key: "id", label: "ID", width: 100 },
-        { key: "created_at", label: "送信日", width: 200 },
-        { key: "question_content", label: "タイトル", width: 500 },
-        { key: "status", label: "閲覧ステータス", width: 200 },
-        { key: "actions", label: "アクション", width: 300 },
+        { key: "name", label: "Tên thể loại", width: 250 },
+        { key: "price", label: "Giá tiền", width: 200 },
+        { key: "create_at", label: "Ngày tạo", width: 500 },
       ],
     };
   },
@@ -130,26 +90,24 @@ export default {
     this.fetchData();
   },
   methods: {
-    handleShowTab(value) {
-      this.filter.type = value;
-      this.fetchData();
-    },
     handleCurrentPage(value) {
       this.filter.page = value;
       this.fetchData();
     },
     async fetchData() {
       this.loading = true;
-      listContact(this.filter)
+      listMovieGenre(this.filter)
         .then(({ status, data }) => {
-          this.contacts = status === 200 ? data : this.contacts;
+          this.movie_genres = status === 200 ? data : this.movie_genres;
         })
         .catch(() => {
           this.$message.error("Server Error");
         });
       this.loading = false;
     },
+
     formatDateTime,
+
     async handleDelete(item) {
       this.$confirm("Are you sure to delete this contact?", "Warning", {
         confirmButtonText: "OK",

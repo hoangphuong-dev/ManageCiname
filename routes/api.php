@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Hospital\JobController as JobHospitalController;
+use App\Http\Controllers\Api\MovieGenreController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -93,3 +95,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['api-verify:admin']], functi
         Route::get('/list-receiver', [BackNotificationController::class, 'getListReceiver']);
     });
 });
+
+
+Route::apiResource('moviegenres', MovieGenreController::class);
