@@ -5,3 +5,4 @@ Cách cài đặt Project 3
 + npm i 
 + compose i 
 + npm run watch
++ run : 127.0.0.1:port 
