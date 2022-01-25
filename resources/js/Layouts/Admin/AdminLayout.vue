@@ -3,7 +3,8 @@
     <el-aside class="AsideMenu bg-white flex-shrink-0">
       <div class="h-16 justify-items-center">
         <a class="m-auto">
-          <img class="h-16" src="/images/logo.png" />
+          <!-- <img class="h-16" src="/images/logo.png" /> -->
+          <el-icon><watch /></el-icon>
         </a>
       </div>
 
@@ -12,11 +13,11 @@
           v-for="menu in menus"
           :key="menu.path"
           class="MenuItem min-h-64 py-3 flex text-base hover:cursor-pointer"
-          :class="{ 'IsActive': activeMenu(menu) }"
+          :class="{ IsActive: activeMenu(menu) }"
           @click="onMenuClick(menu)"
         >
           <div class="flex items-center">
-            <img class="IconMenuItem mx-4" :src="menu.icon" alt="" />
+            <el-icon class="mx-4"><right /></el-icon>
             <div class="text-base">{{ menu.label }}</div>
           </div>
         </div>
@@ -39,8 +40,6 @@
                 <el-dropdown-item command="profile" class="custom-drop-user-first">
                   <div class="w-36 flex justify-between">
                     <div class="flex items-center justify-center">
-                      <img width="12" src="/images/svg/user.svg" alt="" />
-                      &nbsp;&nbsp;
                       <span class="whitespace-nowrap mt-1-5">Hồ sơ</span>
                     </div>
                     <div class="flex items-center">
@@ -52,8 +51,6 @@
                 <el-dropdown-item command="logout" class="custom-drop-user-second">
                   <div class="w-36 flex justify-between">
                     <div class="flex items-center justify-center">
-                      <img width="12" src="/images/svg/logout.svg" alt="" />
-                      &nbsp;&nbsp;
                       <span class="whitespace-nowrap mt-1">Đăng xuất</span>
                     </div>
                     <div class="flex items-center">
@@ -76,11 +73,11 @@
 <script>
 import { Menu } from "@element-plus/icons";
 import AlertNoticeMixin from "@/Mixins/alert-notice";
-import { ArrowDown, ArrowRight } from "@element-plus/icons-vue";
+import { ArrowDown, ArrowRight, Right, Watch } from "@element-plus/icons-vue";
 
 export default {
   name: "AdminLayout",
-  components: { Menu, ArrowDown, ArrowRight },
+  components: { Menu, ArrowDown, ArrowRight, Right, Watch },
   mixins: [AlertNoticeMixin],
   computed: {
     user() {
@@ -91,29 +88,24 @@ export default {
     return {
       menus: [
         {
+          label: "Trang chủ",
+          path: "home_super",
+        },
+        {
           label: "Quản lý phim",
-          icon: "/images/svg/account.svg",
-          path: "movies.index",
+          path: "movie.index",
         },
         {
           label: "Hệ thống rạp",
-          icon: "/images/svg/account.svg",
-          path: "movies.index",
-        },
-        {
-          label: "Admin",
-          icon: "/images/svg/account.svg",
-          path: "movies.index",
+          path: "admin_info.index",
         },
         {
           label: "Quản lý loại phim",
-          icon: "/images/svg/account.svg",
           path: "movie_genre.index",
         },
         {
           label: "Quản lý loại ghế",
-          icon: "/images/svg/account.svg",
-          path: "movies.index",
+          path: "seat_type.index",
         },
       ],
     };

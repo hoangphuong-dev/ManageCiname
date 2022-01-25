@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Hospital\JobController as JobHospitalController;
+use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\MovieGenreController;
 
 /*
@@ -98,3 +99,4 @@ Route::group(['prefix' => 'admin', 'middleware' => ['api-verify:admin']], functi
 
 
 Route::apiResource('moviegenres', MovieGenreController::class);
+Route::apiResource('movies', MovieController::class);

@@ -15,7 +15,6 @@ class MovieGenreRepository
 
     public function list($request)
     {
-
         return $this->movieGenre->query()
             ->when($request->name, function ($query) use ($request) {
                 return $query->where("name", "like", "%{$request->name}%");
@@ -25,5 +24,4 @@ class MovieGenreRepository
             })
             ->paginate($request->query('limit', 10));
     }
-
 }

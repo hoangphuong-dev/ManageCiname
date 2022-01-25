@@ -109,110 +109,112 @@ export default {
       default: () => {},
     },
   },
-  emits: ['row-selected', 'page', 'sort-change', 'row-click'],
+  emits: ["row-selected", "page", "sort-change", "row-click"],
   computed: {
     tableInfo() {
-      return this.items.length > 0 ? this.$t('table.table_info', this.paginate) : ''
+      return this.items.length > 0 ? this.$t("table.table_info", this.paginate) : "";
     },
   },
   mounted() {
-    let triggerScroll = null
+    let triggerScroll = null;
     this.$nextTick(() => {
-      const tableEl = this.$el.querySelector('.el-table__body-wrapper')
-      const element = this.$el.querySelector('.el-table__body')
+      const tableEl = this.$el.querySelector(".el-table__body-wrapper");
+      const element = this.$el.querySelector(".el-table__body");
 
-      if (this.$el.querySelector('.is-scrolling-none') == null) {
-        const table = this.$el.querySelector('.el-table')
+      if (this.$el.querySelector(".is-scrolling-none") == null) {
+        const table = this.$el.querySelector(".el-table");
 
-        const tableWidth = table.offsetWidth ? table.offsetWidth + 'px' : table.style.width
-        this.$el.querySelector('.scroll-wrapper').style.width = tableWidth
+        const tableWidth = table.offsetWidth
+          ? table.offsetWidth + "px"
+          : table.style.width;
+        this.$el.querySelector(".scroll-wrapper").style.width = tableWidth;
 
-        this.$el.querySelector('.scroll-wrapper').addEventListener('scroll', (event) => {
+        this.$el.querySelector(".scroll-wrapper").addEventListener("scroll", (event) => {
           // prevent infinite trigger scroll
-          if (triggerScroll !== 'table') {
-            triggerScroll = 'top'
-            this.scrollTable(event.currentTarget.scrollLeft)
+          if (triggerScroll !== "table") {
+            triggerScroll = "top";
+            this.scrollTable(event.currentTarget.scrollLeft);
           } else {
-            triggerScroll = null
+            triggerScroll = null;
           }
-        })
+        });
 
-        tableEl.addEventListener('scroll', (event) => {
+        tableEl.addEventListener("scroll", (event) => {
           // prevent infinite trigger scroll
-          if (triggerScroll !== 'top') {
-            triggerScroll = 'table'
-            this.scrollTop(event.currentTarget.scrollLeft)
+          if (triggerScroll !== "top") {
+            triggerScroll = "table";
+            this.scrollTop(event.currentTarget.scrollLeft);
           } else {
-            triggerScroll = null
+            triggerScroll = null;
           }
-        })
+        });
       }
-      let isDown = false
-      let startX
-      let scrollLeft = 0
-      let startY
-      let scrollTop = 0
-      element.addEventListener('mousedown', (e) => {
-        isDown = true
-        element.classList.add('active')
-        startX = e.pageX - element.offsetLeft
-        startY = e.pageY - element.offsetTop
-        scrollLeft = tableEl.scrollLeft
-        scrollTop = tableEl.scrollTop
-      })
+      let isDown = false;
+      let startX;
+      let scrollLeft = 0;
+      let startY;
+      let scrollTop = 0;
+      element.addEventListener("mousedown", (e) => {
+        isDown = true;
+        element.classList.add("active");
+        startX = e.pageX - element.offsetLeft;
+        startY = e.pageY - element.offsetTop;
+        scrollLeft = tableEl.scrollLeft;
+        scrollTop = tableEl.scrollTop;
+      });
       const moveListener = (e) => {
-        if (!isDown) return
-        e.preventDefault()
-        const x = e.pageX - element.offsetLeft
-        const y = e.pageY - element.offsetTop
-        const walkX = (x - startX) * 3
-        const walkY = (y - startY) * 3
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - element.offsetLeft;
+        const y = e.pageY - element.offsetTop;
+        const walkX = (x - startX) * 3;
+        const walkY = (y - startY) * 3;
         if (walkX !== 0) {
-          tableEl.scrollLeft = scrollLeft - walkX
+          tableEl.scrollLeft = scrollLeft - walkX;
         }
         if (walkY !== 0) {
-          tableEl.scrollTop = scrollTop - walkY
+          tableEl.scrollTop = scrollTop - walkY;
         }
-      }
-      element.addEventListener('mousemove', moveListener)
+      };
+      element.addEventListener("mousemove", moveListener);
       const upListener = () => {
-        isDown = false
-        element.classList.remove('active')
-      }
-      element.addEventListener('mouseup', upListener)
-      element.addEventListener('mouseleave', upListener)
-    })
+        isDown = false;
+        element.classList.remove("active");
+      };
+      element.addEventListener("mouseup", upListener);
+      element.addEventListener("mouseleave", upListener);
+    });
   },
   methods: {
     toggleSelection(rows) {
       if (rows) {
         rows.forEach((row) => {
-          this.$refs.table.toggleRowSelection(row)
-        })
+          this.$refs.table.toggleRowSelection(row);
+        });
       } else {
-        this.$refs.table.clearSelection()
+        this.$refs.table.clearSelection();
       }
     },
     handleSelectionChange(selectedItems) {
-      this.$emit('row-selected', selectedItems)
+      this.$emit("row-selected", selectedItems);
     },
     rowClick(row) {
-      this.$emit('row-click', row)
+      this.$emit("row-click", row);
     },
     handleCurrentChange(value) {
-      this.$emit('page', value)
+      this.$emit("page", value);
     },
     scrollTop(val) {
-      this.$el.querySelector('.scroll-wrapper').scrollLeft = val
+      this.$el.querySelector(".scroll-wrapper").scrollLeft = val;
     },
     scrollTable(val) {
-      this.$el.querySelector('.el-table__body-wrapper').scrollLeft = val
+      this.$el.querySelector(".el-table__body-wrapper").scrollLeft = val;
     },
     sortChange(column) {
-      this.$emit('sort-change', column)
+      this.$emit("sort-change", column);
     },
   },
-}
+};
 </script>
 <style>
 .data-table .el-table__header th.el-table__cell {

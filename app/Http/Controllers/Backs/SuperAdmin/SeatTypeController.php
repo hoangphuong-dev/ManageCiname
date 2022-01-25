@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class MovieController extends Controller
+class SeatTypeController extends Controller
 {
     public function index()
     {
-        return Inertia::render("Backs/SuperAdmin/Movie");
+        return Inertia::render('Backs/SuperAdmin/SeatType');
     }
 }
