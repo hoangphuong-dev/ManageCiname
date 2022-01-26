@@ -83,10 +83,19 @@ export default {
     user() {
       return this.$page.props.user;
     },
+    menus() {
+      if (this.user?.role === 0) {
+        return this.menuSuper;
+      } else if (this.user?.role === 2) {
+        return this.menuStaff;
+      } else if (this.user?.role === 4) {
+        return this.menuAdmin;
+      }
+    },
   },
   data() {
     return {
-      menus: [
+      menuSuper: [
         {
           label: "Trang chủ",
           path: "home_super",
@@ -108,6 +117,33 @@ export default {
           path: "seat_type.index",
         },
       ],
+      menuAdmin: [
+        {
+          label: "Trang chủ",
+          path: "home_admin",
+        },
+        {
+          label: "Quản lý rạp",
+          path: "cinema.index",
+        },
+        {
+          label: "Quản lý phòng",
+          path: "room.index",
+        },
+        {
+          label: "Quản lý suất chiếu",
+          path: "showtime.index",
+        },
+        {
+          label: "Quản lý hóa đơn",
+          path: "bill.index",
+        },
+        {
+          label: "Quản lý nhân viên",
+          path: "staff.index",
+        },
+      ],
+      menuStaff: [],
     };
   },
   methods: {

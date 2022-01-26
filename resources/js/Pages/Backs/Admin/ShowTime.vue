@@ -2,7 +2,7 @@
   <admin-layout v-loading="loading">
     <template #main>
       <div class="bg-white min-h-full m-4 mb-0 p-4">
-        <h2 class="mb-5">màn của thống kê toàn thành phố</h2>
+        <h2 class="mb-5">Màn ShowTime</h2>
       </div>
     </template>
   </admin-layout>

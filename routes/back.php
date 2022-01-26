@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\Backs\Admin\AdminController;
+use App\Http\Controllers\Backs\Admin\BillController;
+use App\Http\Controllers\Backs\Admin\CinemaController;
+use App\Http\Controllers\Backs\Admin\RoomController;
+use App\Http\Controllers\Backs\Admin\ShowTimeController;
+use App\Http\Controllers\Backs\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Backs\AuthenticationController;
 use App\Http\Controllers\Backs\Staff\StaffController;
 use App\Http\Controllers\Backs\SuperAdmin\AdminInfoController;
@@ -32,7 +37,11 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['superadmin']], functio
 Route::group(['middleware' => ['admin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
     Route::get('/home', [AdminController::class, 'index'])->name('home_admin');
-    Route::get('users', [UserController::class, 'index'])->name('user');
+    Route::get('/cinemas', [CinemaController::class, 'index'])->name('cinema.index');
+    Route::get('rooms', [RoomController::class, 'index'])->name('room.index');
+    Route::get('showtimes', [ShowTimeController::class, 'index'])->name('showtime.index');
+    Route::get('bills', [BillController::class, 'index'])->name('bill.index');
+    Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
 });
 
 Route::group(['prefix' => 'staff', 'middleware' => ['staff']], function () {
