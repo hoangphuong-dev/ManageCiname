@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Movie;
+use Illuminate\Support\Facades\DB;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 //use Your Model
 
@@ -28,5 +29,22 @@ class MovieRepository extends BaseRepository
             })
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 10));
+    }
+
+    public function createMovie($data)
+    {
+        $data['status'] = Movie::MOVIE_ACTIVE;
+        DB::beginTransaction();
+
+        try {
+            $job = Movie::create($data);
+
+
+            DB::commit();
+            return true;
+        } catch (\Throwable $e) {
+            DB::rollback();
+            throw ($e);
+        }
     }
 }

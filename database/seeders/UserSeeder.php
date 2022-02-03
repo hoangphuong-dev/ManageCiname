@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\AdminInfo;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -49,6 +51,22 @@ class UserSeeder extends Seeder
                 'status' => User::ACCOUNT_ACTIVE
             ],
         ]);
-        User::insert($dataUser);
+        DB::beginTransaction();
+        try {
+            User::insert($dataUser);
+
+            $admin = User::where('role', User::ROLE_ADMIN)->firstOrFail();
+
+            $dataAdinInfo = [
+                'user_id' => $admin->id,
+                'province_id' => 1, // Thành phố Hồ Chí Minh
+            ];
+
+            AdminInfo::insert($dataAdinInfo);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return dd($e);
+        }
     }
 }

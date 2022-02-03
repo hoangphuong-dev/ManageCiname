@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdminController as ApiAdminController;
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\HospitalController;
@@ -100,3 +101,4 @@ Route::group(['prefix' => 'admin', 'middleware' => ['api-verify:admin']], functi
 
 Route::apiResource('moviegenres', MovieGenreController::class);
 Route::apiResource('movies', MovieController::class);
+Route::apiResource('admins', ApiAdminController::class);

@@ -15,3 +15,11 @@ export const deleteMovie = async (id) => {
 export const updateMovie = async (id, formData = {}) => {
     return await axios.put("/movies/" + id + "/answer", formData);
 };
+
+export const createAdmin = async (formData = {}) => {
+    return await axios.post('/admins', formData)
+};
+
+export const listAdmin = async (params = {}) => {
+    return await axios.get("/admins", { params });
+};

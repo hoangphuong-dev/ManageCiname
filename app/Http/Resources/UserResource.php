@@ -18,23 +18,15 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'google_id' => $this->google_id,
             'role' => $this->role,
-            'avatar' => $this->avatar_url,
             'name' => $this->name,
+            'avatar' => $this->avatar,
+            'phone' => $this->phone,
             'email' => $this->email,
-            'user_info' =>  $this->userInfo ? UserInfoResource::make($this->userInfo)->resolve() : [],
-            'educations' =>  $this->educations ? UserEducationResource::collection($this->educations)->resolve() : [],
-            'experiences' =>  $this->experiences ?
-                UserExperienceResource::collection($this->experiences)->resolve() : [],
-            'has_experiences' =>  $this->experiences->count() > 0 ? 1 : 0,
-            'qualifications' =>   $this->qualifications ?
-                UserQualificationResource::collection($this->qualifications)->resolve() : [],
+            'email_verified_at' => $this->email_verified_at,
+            'two_factor_secret' => $this->two_factor_secret,
+            'two_factor_recovery_codes' => $this->two_factor_recovery_codes,
             'status' => $this->status,
-            'status_name' => $this->status_name,
-            'status_switch' => $this->status === User::ACCOUNT_STATUS_DONE
-                ? User::ACCOUNT_STATUS_DONE
-                : User::ACCOUNT_STATUS_SUSPEND,
             'created_at' => Carbon::parse($this->created_at)->format('c'),
             'updated_at' => Carbon::parse($this->updated_at)->format('c'),
         ];

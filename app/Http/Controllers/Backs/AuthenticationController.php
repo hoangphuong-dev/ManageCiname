@@ -28,7 +28,7 @@ class AuthenticationController extends Controller
         } catch (\Exception $e) {
             $message = ['error' => $e->getMessage()];
         } finally {
-            if(isset($message)) {
+            if (isset($message)) {
                 return back()->with($message);
             }
             // return redirect(isset($route) ? $route : route('back.login.get'));

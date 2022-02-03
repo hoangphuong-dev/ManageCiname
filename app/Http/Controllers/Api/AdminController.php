@@ -3,22 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MovieRequest;
-use App\Services\MovieService;
+use App\Http\Requests\AdminInfoRequest;
+use App\Services\AdminInfoService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
-class MovieController extends Controller
+class AdminController extends Controller
 {
-    protected $movieService;
 
-    public function __construct(MovieService $movieService)
+    protected $adminInfoService;
+
+    public function __construct(AdminInfoService $adminInfoService)
     {
-        $this->movieService = $movieService;
+        $this->adminInfoService = $adminInfoService;
     }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
-        return $this->movieService->list($request);
+        return $this->adminInfoService->list($request);
     }
 
     /**
@@ -37,10 +43,12 @@ class MovieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MovieRequest $request)
+    public function store(AdminInfoRequest $request)
     {
         try {
-            $this->movieService->store($request);
+            $this->adminInfoService->store($request);
+            $message = ['success' => __('Create admin success')];
+            return Redirect::route('superadmin.admin_info.index')->with($message);
         } catch (\Exception $e) {
             throw $e;
         }

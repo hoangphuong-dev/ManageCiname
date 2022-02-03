@@ -11,7 +11,6 @@
       @selection-change="handleSelectionChange"
       @row-click="rowClick"
     >
-      <el-table-column v-if="enableSelectBox" type="selection" width="55" />
       <el-table-column v-if="enableIndex" type="index" fixed width="100" :label="label" />
       <el-table-column
         v-for="(field, index) in fields"

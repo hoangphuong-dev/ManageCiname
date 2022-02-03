@@ -54,8 +54,18 @@ class UserRepository
 
     public function createUser($fillable)
     {
-        // dd($fillable);
         return $this->user->query()->create($fillable);
+    }
+
+    public function createAdminInfo($fill)
+    {
+        return $this->createUser([
+            'name' => $fill['name'],
+            'phone' => $fill['phone'],
+            'email' => $fill['email'],
+            'role' => User::ROLE_ADMIN,
+            'status' => User::ACCOUNT_ACTIVE,
+        ]);
     }
 
     public function createHospital($fill)
@@ -114,10 +124,10 @@ class UserRepository
     public function getNotificationReceiver($request)
     {
         return $this->user->query()
-        ->where('role', '<>', User::ROLE_ADMIN)
-        ->select(['id', 'name', 'role'])
-        ->when($request->query('name'), function($query, $name) {
-            return $query->where("name", "like", "%{$name}%");
-        })->get();
+            ->where('role', '<>', User::ROLE_ADMIN)
+            ->select(['id', 'name', 'role'])
+            ->when($request->query('name'), function ($query, $name) {
+                return $query->where("name", "like", "%{$name}%");
+            })->get();
     }
 }

@@ -98,23 +98,23 @@ export default {
       menuSuper: [
         {
           label: "Trang chủ",
-          path: "home_super",
+          path: "superadmin.home_super",
         },
         {
           label: "Quản lý phim",
-          path: "movie.index",
+          path: "superadmin.movie.index",
         },
         {
           label: "Hệ thống rạp",
-          path: "admin_info.index",
+          path: "superadmin.admin_info.index",
         },
         {
           label: "Quản lý loại phim",
-          path: "movie_genre.index",
+          path: "superadmin.movie_genre.index",
         },
         {
           label: "Quản lý loại ghế",
-          path: "seat_type.index",
+          path: "superadmin.seat_type.index",
         },
       ],
       menuAdmin: [
@@ -160,7 +160,7 @@ export default {
         case "logout":
           let key = "";
           if (this.user.role === 0) {
-            key = route("logout_super");
+            key = route("superadmin.logout_super");
           } else if (this.user.role == 1) {
             key = route("logout_admin");
           } else {

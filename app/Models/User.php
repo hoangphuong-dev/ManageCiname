@@ -22,6 +22,12 @@ class User extends Authenticatable
 
     protected $guarded = [];
 
+    // protected $fillable = [
+    //     'id',
+    //     'user_id',
+    //     'province_id',
+    // ];
+
     protected $hidden = [
         'password',
     ];
@@ -75,18 +81,20 @@ class User extends Authenticatable
 
     public function routeRedirect()
     {
-        if($this->IsAdmin()) {
+        if ($this->IsAdmin()) {
             return route('home_admin');
         }
         if ($this->IsSuperAdmin()) {
-            return route('home_super');
+            return route('superadmin.home_super');
         }
         if ($this->IsStaff()) {
             return route('home_staff');
-
         }
     }
 
-
-
+    // relationship
+    public function adminInfo()
+    {
+        return $this->hasOne(AdminInfo::class);
+    }
 }

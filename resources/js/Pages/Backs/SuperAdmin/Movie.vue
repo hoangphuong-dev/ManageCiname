@@ -14,7 +14,9 @@
             </div>
           </div>
           <div class="w-1/4 text-right">
-            <el-button>Thêm phim</el-button>
+            <el-button @click="$inertia.visit(route('superadmin.create_movie'))"
+              >Thêm phim</el-button
+            >
           </div>
         </div>
 
@@ -41,10 +43,9 @@
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import DataTable from "@/Components/DataTable.vue";
-import { formatDateTime } from "@/libs/datetime";
 
 import { ref } from "vue";
-import { listMovie, deleteMovie } from "@/API/movie.js";
+import { listMovie } from "@/API/main.js";
 
 export default {
   name: "Contact",
