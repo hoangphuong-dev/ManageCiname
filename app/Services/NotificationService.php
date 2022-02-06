@@ -24,22 +24,22 @@ class NotificationService extends BaseService
         UserRepository $userRepository,
         NotificationManagerRepository $notificationManagerRepository,
         NotificationReadRepository $notificationReadRepository
-    )
-    {
+    ) {
         $this->notificationRepository = $notificationRepository;
         $this->userRepository = $userRepository;
         $this->notificationManagerRepository = $notificationManagerRepository;
         $this->notificationReadRepository = $notificationReadRepository;
     }
 
-    private function makeNotificationManager(Notification $notification, $isAllHospital, $isAllCaretaker, $receiver_ids) {
+    private function makeNotificationManager(Notification $notification, $isAllHospital, $isAllCaretaker, $receiver_ids)
+    {
         $type = null;
 
         if ($isAllHospital) {
             $type = NotificationManage::TYPE_HOSPITAL;
         }
 
-        if($isAllCaretaker) {
+        if ($isAllCaretaker) {
             if ($type === NotificationManage::TYPE_HOSPITAL) {
                 $type = NotificationManage::TYPE_ALL;
             } else {
@@ -47,14 +47,14 @@ class NotificationService extends BaseService
             }
         }
 
-        if(!is_null($type)) {
-            clone($notification)->notificationManager()->create([
+        if (!is_null($type)) {
+            clone ($notification)->notificationManager()->create([
                 'type' => $type
             ]);
         }
 
-        if($type !== NotificationManage::TYPE_ALL) {
-            $listUserId = array_map(function($item) {
+        if ($type !== NotificationManage::TYPE_ALL) {
+            $listUserId = array_map(function ($item) {
                 return [
                     'user_id' => $item
                 ];
@@ -64,8 +64,9 @@ class NotificationService extends BaseService
         }
     }
 
-    public function isDeliveryNotification($schedule) {
-        if(is_null($schedule)) {
+    public function isDeliveryNotification($schedule)
+    {
+        if (is_null($schedule)) {
             return true;
         }
         $schedule = Carbon::parse($schedule);
@@ -129,7 +130,6 @@ class NotificationService extends BaseService
             $this->makeNotificationManager($notification, $isAllHospital, $isAllCaretaker, $receiver_ids);
 
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollback();
         }
@@ -140,7 +140,7 @@ class NotificationService extends BaseService
         $userId = $this->getUserId('caretaker');
         $type = NotificationManage::TYPE_CARETAKER;
 
-        if(is_null($userId)) {
+        if (is_null($userId)) {
             $userId = $this->getUserId('hospital');
             $type = NotificationManage::TYPE_HOSPITAL;
         }

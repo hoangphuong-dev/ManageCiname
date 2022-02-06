@@ -39,4 +39,37 @@ class CinemaController extends Controller
             return back()->with($message);
         }
     }
+
+    public function show($id)
+    {
+        return Inertia::render("Backs/Admin/Cinema", [
+            'cinemas' => 1,
+        ]);
+    }
+
+    public function edit($id, CinemaRequest $request)
+    {
+        // Không được sửa rạp của Admin khác
+        try {
+            $fill = $request->validated();
+            $this->cinemaService->update($id, $fill);
+            $message = ['success' => __('Cập nhật thành công !')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $this->cinemaService->delete($id);
+            $message = ['success' => __('Xóa thành công !')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
+    }
 }

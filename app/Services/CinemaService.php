@@ -42,4 +42,19 @@ class CinemaService extends BaseService
         $cinemas = $this->cinemaRepository->getListCinema($request, $this->getAdminInfoId());
         return CinemaResource::collection($cinemas);
     }
+
+    public function update($id, $fill)
+    {
+        return $this->cinemaRepository->updateById($id, [
+            'name' => $fill['name'],
+            'hotline' => $fill['hotline'],
+            'address' => $fill['address'],
+        ]);
+    }
+
+    public function delete($id)
+    {
+        // Những rạp đã có phòng thì không thể xóa
+        return $this->cinemaRepository->deleteById($id);
+    }
 }
