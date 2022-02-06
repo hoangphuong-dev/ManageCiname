@@ -48,4 +48,10 @@ class AdminInfoRepository extends BaseRepository
         return $this->model->query()
             ->with('province')->get();
     }
+
+    public function getIdAdminInfo($admin_id)
+    {
+        $admin_info = $this->model->query()->where('user_id', $admin_id)->firstOrFail();
+        return !is_null($admin_info) ? $admin_info->id : null;
+    }
 }

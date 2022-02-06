@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\Back\AdminController;
 use App\Http\Controllers\Api\Back\NotificationController as BackNotificationController;
 use App\Http\Controllers\Api\Caretaker\JobController as CaretakerJobController;
+use App\Http\Controllers\Api\CinemaController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UserController;

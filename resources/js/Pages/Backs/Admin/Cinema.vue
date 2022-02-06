@@ -5,57 +5,83 @@
         <div class="w-full flex relative my-10">
           <div class="w-3/4 flex items-end">
             <div class="search">
-              <el-input
-                ref="search"
-                placeholder="Tìm kiếm"
-                clearable
-                v-model="keyword"
-                @keyup.enter="searchChange()"
-              />
+              <search-input
+                :filter="filter"
+                v-model="filter.name"
+                label="Tên rạp, địa chỉ ... "
+                @submit="searchChange()"
+              ></search-input>
             </div>
           </div>
           <div class="w-1/4 text-right">
-            <el-button @click="dialogFormVisible = true">Thêm Admin</el-button>
+            <el-button @click="onOpenDialog">Thêm Rạp</el-button>
           </div>
         </div>
         <div class="grid grid-cols-4 gap-4">
           <div
-            v-for="item in admins"
+            v-for="item in cinemas.data"
             :key="item"
             class="border rounded-md p-4 cursor-pointer"
           >
-            <h2 class="text-center">vsvsvsvsvs</h2>
+            <h2 class="text-center">PHC {{ item.name }}</h2>
             <div class="flex">
               <h3 class="w-1/2">Người quản lý :</h3>
-              <div>{{ item.user.name }}</div>
+              <div>vsvsvsv</div>
             </div>
             <div class="flex">
-              <h3 class="w-1/2">Rạp :</h3>
-              <div>10 rạp</div>
+              <h3 class="w-1/2">aaaa :</h3>
+              <div>aaaa aaaa</div>
             </div>
             <div class="flex">
               <h3 class="w-1/2">Phòng :</h3>
               <div>105 phòng</div>
-              <div>{{ Number(perPage) }}</div>
-              <div>{{ Number(total) }}</div>
             </div>
           </div>
         </div>
         <!-- phan trang  -->
         <div class="w-full justify-center my-10">
-          <pagination :page-size="Number(perPage)" :total="Number(total)" />
+          <pagination
+            v-model="cinemas.meta.current_page"
+            @current-change="handleCurrentPage"
+            :page-size="Number(cinemas.meta.per_page)"
+            :total="Number(cinemas.meta.total)"
+          />
         </div>
         <!-- open dialog -->
-        <el-dialog title="Thêm rạp" v-model="dialogFormVisible">
-          <el-form :model="form">
-            <el-form-item label="Tên rạp" :label-width="formLabelWidth">
-              <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-dialog class="text-center" title="Thêm rạp" v-model="dialogFormVisible">
+          <el-form ref="formData" :model="formData" label-position="top" :rules="rules">
+            <!-- Tên rạp -->
+            <el-form-item label="Tên rạp" prop="name">
+              <el-input
+                v-model="formData.name"
+                autocomplete="off"
+                placeholder="Nhập tên rạp"
+              ></el-input>
+            </el-form-item>
+            <!-- Hotline -->
+            <el-form-item label="Hotline" prop="hotline">
+              <el-input
+                v-model="formData.hotline"
+                autocomplete="off"
+                placeholder="Nhập số điện thoại"
+              ></el-input>
+            </el-form-item>
+            <!-- Địa chỉ -->
+            <el-form-item label="Địa chỉ" prop="hotline">
+              <el-input
+                v-model="formData.address"
+                autocomplete="off"
+                placeholder="Nhập địa chỉ"
+              ></el-input>
             </el-form-item>
           </el-form>
-          <span class="dialog-footer text-right">
-            <el-button @click="dialogFormVisible = false">Hủy</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false">Thêm</el-button>
-          </span>
+          <!-- submit -->
+          <div class="text-right">
+            <span class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">Hủy</el-button>
+              <el-button type="primary" @click="onSubmit">Thêm</el-button>
+            </span>
+          </div>
         </el-dialog>
       </div>
     </template>
@@ -67,7 +93,8 @@ import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { listAdmin } from "@/API/main.js";
-import dialogFormVisible from "element-plus";
+import { Inertia } from "@inertiajs/inertia";
+import { onBefore, onFinish } from "@/Uses/request-inertia";
 
 export default {
   name: "Cinema",
@@ -75,54 +102,108 @@ export default {
     AdminLayout,
     SearchInput,
     Pagination,
-    dialogFormVisible,
+  },
+  props: {
+    cinemas: {
+      required: true,
+    },
+    filtersBE: {
+      type: Object,
+      required: true,
+    },
+  },
+  computed: {
+    filter() {
+      return {
+        page: this.filtersBE.page?.toInt() || 1,
+        limit: this.filtersBE.limit?.toInt() || 10,
+        status: this.filtersBE?.status?.toInt(),
+        name: this.filtersBE?.name || "",
+      };
+    },
   },
   data() {
     return {
+      selectedItem: null,
       loading: false,
       dialogFormVisible: false,
       total: "",
       perPage: "",
-      keyword: "",
-      admins: [],
-      filter: {
-        page: 1,
-        limit: 10,
-      },
-      form: {
+      formData: this.$inertia.form({
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
+        hotline: "",
+        address: "",
+      }),
+      rules: {
+        name: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "blur",
+          },
+        ],
+        hotline: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "blur",
+          },
+        ],
+        address: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "blur",
+          },
+        ],
       },
     };
   },
-  created() {
-    this.fetchData();
-  },
   methods: {
+    inertia() {
+      Inertia.get(
+        route("admin.cinema.index", this.filter),
+        {},
+        { onBefore, onFinish, preserveScroll: true }
+      );
+    },
     handleCurrentPage(value) {
       this.filter.page = value;
-      this.fetchData();
+      this.inertia();
     },
     searchChange() {
-      this.filter.name = this.keyword;
-      this.$emit("handleFilter");
+      this.filter.page = 1;
+      this.inertia();
     },
-    async fetchData() {
-      this.loading = true;
-      listAdmin(this.filter)
-        .then(({ status, data }) => {
-          this.admins = status === 200 ? data.data : this.admins;
-          this.total = data.data.meta.total;
-          this.perPage = data.data.meta.per_page;
-        })
-        .catch(() => {});
-      this.loading = false;
+
+    // method inertia
+    onOpenDialog() {
+      this.formData.reset();
+      this.selectedItem = null;
+      this.dialogFormVisible = !this.dialogFormVisible;
+    },
+    createCinema() {
+      Inertia.post(route("admin.cimemas.store"), this.formData, {
+        onBefore,
+        onFinish,
+        preserveScroll: true,
+        onError: (e) => console.log(e),
+        onSuccess: (_) => {
+          this.formData.reset();
+          this.dialogFormVisible = !this.dialogFormVisible;
+        },
+      });
+    },
+    async onSubmit() {
+      this.$refs["formData"].validate((valid) => {
+        if (valid) {
+          if (this.selectedItem === null) {
+            this.createCinema();
+          } else {
+            this.editNotification();
+          }
+        }
+      });
     },
   },
 };

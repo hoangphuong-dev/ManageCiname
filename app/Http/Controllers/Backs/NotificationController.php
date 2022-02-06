@@ -25,7 +25,7 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $notifications = $this->notificationService->getListNotificationAdmin($request);
-        return Inertia::render('Backs/Notification/Index',[
+        return Inertia::render('Backs/Notification/Index', [
             'notifications' => $notifications,
             'filtersBE' => $request->all()
         ]);

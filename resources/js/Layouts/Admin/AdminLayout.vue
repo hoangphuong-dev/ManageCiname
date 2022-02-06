@@ -120,27 +120,27 @@ export default {
       menuAdmin: [
         {
           label: "Trang chủ",
-          path: "home_admin",
+          path: "admin.home_admin",
         },
         {
           label: "Quản lý rạp",
-          path: "cinema.index",
+          path: "admin.cinema.index",
         },
         {
           label: "Quản lý phòng",
-          path: "room.index",
+          path: "admin.room.index",
         },
         {
           label: "Quản lý suất chiếu",
-          path: "showtime.index",
+          path: "admin.showtime.index",
         },
         {
           label: "Quản lý hóa đơn",
-          path: "bill.index",
+          path: "admin.bill.index",
         },
         {
           label: "Quản lý nhân viên",
-          path: "staff.index",
+          path: "admin.staff.index",
         },
       ],
       menuStaff: [],
@@ -212,11 +212,12 @@ export default {
 }
 .MenuAdmin .el-dialog__header {
   border-radius: 0.5rem 0.5rem 0px 0px;
-  background: #a5c242;
+  background: lightpink;
   color: white;
   font-size: 1.25rem;
   line-height: 1.25rem;
   font-weight: 700;
+  text-align: center;
 }
 .MenuAdmin .el-form-item__label {
   font-size: 0.875rem;

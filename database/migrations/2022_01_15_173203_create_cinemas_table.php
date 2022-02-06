@@ -15,12 +15,12 @@ class CreateCinemasTable extends Migration
     {
         Schema::create('cinemas', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('admin_info_id')->unsigned();
             $table->string('name');
             $table->string('hotline');
             $table->string('address');
 
-            $table->foreign('user_id')->references('id')->on('users')
+            $table->foreign('admin_info_id')->references('id')->on('admin_infos')
                 ->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();

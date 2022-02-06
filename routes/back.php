@@ -38,7 +38,7 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     Route::get('/create_movie', [MovieController::class, 'create'])->name('create_movie');
 });
 
-Route::group(['middleware' => ['admin']], function () {
+Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
     Route::get('/home', [AdminController::class, 'index'])->name('home_admin');
     Route::get('/cinemas', [CinemaController::class, 'index'])->name('cinema.index');
@@ -46,6 +46,8 @@ Route::group(['middleware' => ['admin']], function () {
     Route::get('showtimes', [ShowTimeController::class, 'index'])->name('showtime.index');
     Route::get('bills', [BillController::class, 'index'])->name('bill.index');
     Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
+
+    Route::post('cinemas', [CinemaController::class, 'store'])->name('cimemas.store');
 });
 
 Route::group(['prefix' => 'staff', 'middleware' => ['staff']], function () {
