@@ -37,7 +37,10 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="profile" class="custom-drop-user-first">
+                <el-dropdown-item
+                  command="profile"
+                  class="custom-drop-user-first"
+                >
                   <div class="w-36 flex justify-between">
                     <div class="flex items-center justify-center">
                       <span class="whitespace-nowrap mt-1-5">Hồ sơ</span>
@@ -48,7 +51,10 @@
                   </div>
                 </el-dropdown-item>
                 <hr />
-                <el-dropdown-item command="logout" class="custom-drop-user-second">
+                <el-dropdown-item
+                  command="logout"
+                  class="custom-drop-user-second"
+                >
                   <div class="w-36 flex justify-between">
                     <div class="flex items-center justify-center">
                       <span class="whitespace-nowrap mt-1">Đăng xuất</span>
@@ -127,14 +133,6 @@ export default {
           path: "admin.cinema.index",
         },
         {
-          label: "Quản lý phòng",
-          path: "admin.room.index",
-        },
-        {
-          label: "Quản lý suất chiếu",
-          path: "admin.showtime.index",
-        },
-        {
           label: "Quản lý hóa đơn",
           path: "admin.bill.index",
         },
@@ -152,7 +150,8 @@ export default {
     },
     activeMenu(menu) {
       return (
-        route().current(menu.path) || (menu?.other || []).includes(route().current())
+        route().current(menu.path) ||
+        (menu?.other || []).includes(route().current())
       );
     },
     handleCommand(command) {

@@ -21,20 +21,25 @@
           <div
             v-for="item in cinemas.data"
             :key="item.id"
-            class="border rounded-md p-4 cursor-pointer"
-            @click="detail(item)"
+            class="border rounded-md p-4"
           >
-            <h2 class="text-center">PHC {{ item.name }}</h2>
+            <h2 class="text-center cursor-pointer" @click="detail(item)">
+              PHC {{ item.name }}
+            </h2>
             <p class="text-center">15 phòng</p>
             <p class="text-center">150 phim đang công chiếu</p>
             <div class="mt-4 flex">
               <div class="text-left w-1/2">
-                <el-icon class="hover:text-blue-500" @click="edit(item)"
+                <el-icon
+                  class="hover:text-blue-500 cursor-pointer"
+                  @click="edit(item)"
                   ><edit
                 /></el-icon>
               </div>
               <div class="text-right w-1/2">
-                <el-icon class="hover:text-blue-500" @click="confirmEventDelete(item)"
+                <el-icon
+                  class="hover:text-blue-500 cursor-pointer"
+                  @click="confirmEventDelete(item)"
                   ><delete
                 /></el-icon>
               </div>
@@ -64,7 +69,12 @@
           :title="selectedItem === null ? 'Thêm rạp' : 'Sửa thông tin rạp'"
           v-model="dialogFormVisible"
         >
-          <el-form ref="formData" :model="formData" label-position="top" :rules="rules">
+          <el-form
+            ref="formData"
+            :model="formData"
+            label-position="top"
+            :rules="rules"
+          >
             <!-- Tên rạp -->
             <el-form-item label="Tên rạp" prop="name">
               <el-input

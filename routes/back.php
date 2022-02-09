@@ -41,7 +41,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
     Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
     Route::get('/home', [AdminController::class, 'index'])->name('home_admin');
     Route::get('/cinemas', [CinemaController::class, 'index'])->name('cinema.index');
-    Route::get('rooms', [RoomController::class, 'index'])->name('room.index');
+    // Route::get('rooms', [RoomController::class, 'index'])->name('room.index');
     Route::get('showtimes', [ShowTimeController::class, 'index'])->name('showtime.index');
     Route::get('bills', [BillController::class, 'index'])->name('bill.index');
     Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
@@ -50,6 +50,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
     Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
     Route::get('cinemas/show/{id}', [CinemaController::class, 'show'])->name('cinemas.show');
     Route::delete('cinemas/{id}', [CinemaController::class, 'delete'])->name('cinemas.delete');
+
+    // Route::resources([
+    //     'rooms' => RoomController::class,
+    // ]);
 });
 
 Route::group(['prefix' => 'staff', 'middleware' => ['staff']], function () {

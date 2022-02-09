@@ -20,7 +20,6 @@ class CinemaController extends Controller
     public function index(Request $request)
     {
         $cinemas = $this->cinemaService->getListCinema($request);
-        // dd($cinemas);
         return Inertia::render("Backs/Admin/Cinema", [
             'cinemas' => $cinemas,
             'filtersBE' => $request->all(),
@@ -42,7 +41,7 @@ class CinemaController extends Controller
 
     public function show($id)
     {
-        return Inertia::render("Backs/Admin/Cinema", [
+        return Inertia::render("Backs/Admin/CinemaDetail", [
             'cinemas' => 1,
         ]);
     }
