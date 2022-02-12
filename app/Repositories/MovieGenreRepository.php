@@ -24,4 +24,14 @@ class MovieGenreRepository
             })
             ->paginate($request->query('limit', 10));
     }
+
+    public function all()
+    {
+        return $this->movieGenre->query()->get();
+    }
+
+    public function store($fill)
+    {
+        return $this->movieGenre->create($fill);
+    }
 }

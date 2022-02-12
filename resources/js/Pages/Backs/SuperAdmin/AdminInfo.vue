@@ -2,7 +2,8 @@
   <admin-layout>
     <template #main>
       <div class="bg-white min-h-full m-4 mb-0 p-4">
-        <div class="w-full flex relative my-10">
+      <h2 class="mb-5">Hệ thống rạp</h2>
+        <div class="w-full flex relative">
           <div class="w-3/4 flex items-end">
             <div class="search">
               <el-input
@@ -20,7 +21,7 @@
             >
           </div>
         </div>
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-4 gap-4 mt-5">
           <div
             v-for="item in admins"
             :key="item"

@@ -8,7 +8,4 @@ use Inertia\Inertia;
 
 class MovieGenreController extends Controller
 {
-    public function index() {
-        return Inertia::render("Backs/SuperAdmin/MovieGenre");
-    }
 }

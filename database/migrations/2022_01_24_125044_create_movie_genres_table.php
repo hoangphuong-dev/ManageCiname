@@ -17,8 +17,6 @@ class CreateMovieGenresTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->decimal('price', 13, 2);
-
-            $table->timestamps();
         });
     }
 

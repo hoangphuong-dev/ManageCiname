@@ -23,3 +23,19 @@ export const createAdmin = async (formData = {}) => {
 export const listAdmin = async (params = {}) => {
     return await axios.get("/admins", { params });
 };
+
+export const createMovieGenre = async (formData = {}) => {
+    return await axios.post('/moviegenres', formData);
+}
+
+export const listMovieGenre = async (params = {}) => {
+    return await axios.get("/moviegenres", { params });
+};
+
+export const createCast = async (formData = {}) => {
+    return await axios.post('/casts', formData);
+}
+
+export const listCast = async (params = {}) => {
+    return await axios.get("/casts", { params });
+};

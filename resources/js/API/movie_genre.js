@@ -1,8 +1,6 @@
 import axios from "@/plugins/axios";
 
-export const createMovieGenre = async (formData = {}) => {
-    return await axios.post('/moviegenres', formData)
-}
+
 
 export const listMovieGenre = async (params = {}) => {
     return await axios.get("/moviegenres", { params });

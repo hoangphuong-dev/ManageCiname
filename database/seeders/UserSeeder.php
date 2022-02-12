@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\AdminInfo;
+use App\Models\Cinema;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -62,7 +63,49 @@ class UserSeeder extends Seeder
                 'province_id' => 1, // Thành phố Hồ Chí Minh
             ];
 
-            AdminInfo::insert($dataAdinInfo);
+            $adminInfo = AdminInfo::insert($dataAdinInfo);
+
+            $dataCinema = ([
+                [
+                    'admin_info_id' => $adminInfo,
+                    'name' => "Quận 1",
+                    'hotline' => "09999999555",
+                    'address' => "Quận 1",
+                ],
+                [
+                    'admin_info_id' => $adminInfo,
+                    'name' => "Quận 1",
+                    'hotline' => "09999999555",
+                    'address' => "Quận 1",
+                ],
+                [
+                    'admin_info_id' => $adminInfo,
+                    'name' => "Quận 2",
+                    'hotline' => "09999999555",
+                    'address' => "Quận 1",
+                ],
+                [
+                    'admin_info_id' => $adminInfo,
+                    'name' => "Quận 3",
+                    'hotline' => "09999999555",
+                    'address' => "Quận 1",
+                ],
+                [
+                    'admin_info_id' => $adminInfo,
+                    'name' => "Quận 4",
+                    'hotline' => "09999999555",
+                    'address' => "Quận 1",
+                ],
+                [
+                    'admin_info_id' => $adminInfo,
+                    'name' => "Quận 5",
+                    'hotline' => "09999999555",
+                    'address' => "Quận 1",
+                ],
+            ]);
+
+            Cinema::insert($dataCinema);
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();

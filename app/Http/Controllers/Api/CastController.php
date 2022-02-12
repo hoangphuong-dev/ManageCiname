@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MovieGenreRequest;
-use App\Services\MovieGenreService;
+use App\Repositories\CastRepository;
 use Illuminate\Http\Request;
 
-class MovieGenreController extends Controller
+class CastController extends Controller
 {
-    protected $movieGenreService;
+    protected $castRepository;
 
-    public function __construct(MovieGenreService $movieGenreService)
+    public function __construct(CastRepository $castRepository)
     {
-        $this->movieGenreService = $movieGenreService;
+        $this->castRepository = $castRepository;
     }
-    public function index(Request $request)
+
+    public function index()
     {
-        return $this->movieGenreService->list($request);
+        return $this->castRepository->list();
     }
 
     /**
@@ -36,11 +36,10 @@ class MovieGenreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MovieGenreRequest $request)
+    public function store(Request $request)
     {
-        $fill = $request->validated();
         try {
-            $this->movieGenreService->store($fill);
+            return $this->castRepository->make($request);
         } catch (\Exception $e) {
             throw $e;
         }

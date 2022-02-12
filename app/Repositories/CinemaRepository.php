@@ -29,6 +29,7 @@ class CinemaRepository extends BaseRepository
             'address' => $fill['address'],
         ]);
     }
+
     public function getListCinema($request, $admin_info_id)
     {
         return $this->model->newQuery()
@@ -38,5 +39,19 @@ class CinemaRepository extends BaseRepository
             ->orderBy('created_at', 'desc')
             ->where('admin_info_id', $admin_info_id)
             ->paginate($request->query('limit', 10));
+    }
+
+    public function getArrayIdCinemaByAdminInfo($arrayAdminInfo)
+    {
+        $id_adminInfo = array();
+        foreach ($arrayAdminInfo as $item) {
+            $id_adminInfo[] = $item['id'];
+        }
+        $cinema = $this->model->query()
+            ->select('id')
+            ->whereIn('admin_info_id', $id_adminInfo)
+            ->get()
+            ->toArray();
+        return $cinema;
     }
 }

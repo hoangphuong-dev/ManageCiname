@@ -29,7 +29,6 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     Route::get('/logout', [AuthenticationController::class, 'logoutSuperAdmin'])->name('logout_super');
     Route::get('/home', [SuperAdminController::class, 'index'])->name('home_super');
     Route::get('/movies', [MovieController::class, 'index'])->name('movie.index');
-    Route::get('/movie_genres', [MovieGenreController::class, 'index'])->name('movie_genre.index');
     Route::get('/admin_infos', [AdminInfoController::class, 'index'])->name('admin_info.index');
     Route::get('/seat_types', [SeatTypeController::class, 'index'])->name('seat_type.index');
 

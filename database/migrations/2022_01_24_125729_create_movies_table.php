@@ -20,7 +20,7 @@ class CreateMoviesTable extends Migration
             $table->text('description');
             $table->string('trailler');
             $table->smallInteger('movie_length');
-            $table->tinyInteger('rated')->comment('Giới hạn tuổi');
+            $table->smallInteger('rated')->comment('Giới hạn tuổi');
             $table->tinyInteger('status')->comment('0: deactive , 1 : active');
             $table->timestamps();
         });

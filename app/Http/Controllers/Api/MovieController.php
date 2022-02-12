@@ -39,8 +39,9 @@ class MovieController extends Controller
      */
     public function store(MovieRequest $request)
     {
+        $fill = $request->validated();
         try {
-            $this->movieService->store($request);
+            $this->movieService->store($fill);
         } catch (\Exception $e) {
             throw $e;
         }

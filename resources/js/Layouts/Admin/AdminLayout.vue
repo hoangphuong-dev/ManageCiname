@@ -115,10 +115,6 @@ export default {
           path: "superadmin.admin_info.index",
         },
         {
-          label: "Quản lý loại phim",
-          path: "superadmin.movie_genre.index",
-        },
-        {
           label: "Quản lý loại ghế",
           path: "superadmin.seat_type.index",
         },

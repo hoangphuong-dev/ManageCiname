@@ -20,5 +20,13 @@ class MovieGenreService extends BaseService
         return MovieGenreResource::collection($movieGenre);
     }
 
+    public function all()
+    {
+        return $this->movieGenreRepository->all();
+    }
 
+    public function store($fill)
+    {
+        return $this->movieGenreRepository->store($fill);
+    }
 }

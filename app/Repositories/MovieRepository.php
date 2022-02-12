@@ -31,20 +31,17 @@ class MovieRepository extends BaseRepository
             ->paginate($request->query('limit', 10));
     }
 
-    public function createMovie($data)
+    public function createMovie($fill)
     {
-        $data['status'] = Movie::MOVIE_ACTIVE;
-        DB::beginTransaction();
-
-        try {
-            $job = Movie::create($data);
-
-
-            DB::commit();
-            return true;
-        } catch (\Throwable $e) {
-            DB::rollback();
-            throw ($e);
-        }
+        $fill['status'] = Movie::MOVIE_ACTIVE;
+        return $this->model->create([
+            'name' => $fill['name'],
+            'director' => $fill['director'],
+            'description' => $fill['description'],
+            'trailler' => $fill['trailler'],
+            'movie_length' => $fill['movie_length'],
+            'rated' => $fill['rated'],
+            'status' => $fill['status'],
+        ]);
     }
 }
