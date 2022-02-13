@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\SeatType;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 //use Your Model
 
@@ -16,6 +17,25 @@ class SeatTypeRepository extends BaseRepository
      */
     public function model()
     {
-        //return YourModel::class;
+        return SeatType::class;
+    }
+
+    public function make($data)
+    {
+        return $this->model->create([
+            'name' => $data['name'],
+            'price' => $data['price'],
+            'image' => $data['image'],
+        ]);
+    }
+
+    public function list($request)
+    {
+        return $this->model->query()
+            ->when($request->name, function ($query) use ($request) {
+                return $query->where("name", "like", "%{$request->name}%");
+            })
+            ->orderBy('id', "DESC")
+            ->paginate($request->query('limit', 10));
     }
 }

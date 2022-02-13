@@ -109,13 +109,14 @@
                       </el-button>
                     </span>
                   </div>
-                  <div class="bg-gray-700 my-5 p-2 grid grid-cols-12 gap-4">
-                    <div
-                      class="w-16 bg-red-400 rounded-sm"
-                      v-for="item in 100"
-                      :key="item"
-                    >
-                      {{ Row }}
+                  <div class="bg-gray-700 my-5 p-2 text-center justify-items-center">
+                    <div class="flex" v-for="row in Number(Row)" :key="row">
+                        <div
+                            class=" bg-red-400 rounded-sm m-2"
+                            v-for="item in Number(Column)"
+                            :key="item">
+                            {{ convertCharCode(row) + item }}
+                        </div>
                     </div>
                   </div>
                 </el-dialog>
@@ -327,6 +328,9 @@ export default {
     };
   },
   methods: {
+    convertCharCode(number) {
+      return String.fromCharCode(number + 64)
+    },
     inertiaRoom() {
       Inertia.get(
         route("admin.cinema.index", this.filter),

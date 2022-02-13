@@ -55,19 +55,19 @@ class MovieService extends BaseService
 
         $movie_genre = $fill['movie_genre'];
         $cast = $fill['movie_genre'];
-        // try {
-        // DB::beginTransaction();
-        $movie = $this->movieRepository->createMovie($fill);
-        $this->movieGnereMovieRepository->make($movie_genre, $movie->id);
-        $this->castMovieRepository->make($cast, $movie->id);
-        if (count($id_cinema) > 0) {
-            $this->cinemaMovieRepository->make($id_cinema, $movie->id);
+        try {
+            DB::beginTransaction();
+            $movie = $this->movieRepository->createMovie($fill);
+            $this->movieGnereMovieRepository->make($movie_genre, $movie->id);
+            $this->castMovieRepository->make($cast, $movie->id);
+            if (count($id_cinema) > 0) {
+                $this->cinemaMovieRepository->make($id_cinema, $movie->id);
+            }
+            $this->DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-        // $this->DB::commit();
-        // } catch (\Exception $e) {
-        // DB::rollback();
-        // throw $e;
-        // }
     }
 
     public function getCinemesByProvince($arrayProvinve)
