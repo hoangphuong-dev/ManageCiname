@@ -7,13 +7,71 @@
                         <!-- slider -->
                         <div class="w-full">
                             <div class="w-4/5 m-auto border-white h-44" >
-                                <vue-slider v-model="value" />
+                                <carousel :items-to-show="1.5">
+                                    <slide v-for="slide in 10" :key="slide">
+                                        <div class="h-28 w-full bg-red-50">FFFFFF</div>
+                                    </slide>
+                                </carousel>
                             </div>
                         </div>
-                        <div class="w-full">
+                        <!-- button filter  -->
+                        <div class="w-full flex">
                             <div class="w-1/2">
+                                <el-select
+                                v-model="province"
+                                clearable
+                                placeholder="Chon the loai"
+                            >
+                                <el-option
+                                    v-for="(item, index) in 10"
+                                    :key="index"
+                                    :label="item"
+                                    :value="item"
+                                ></el-option>
+                            </el-select>
 
                             </div>
+                            <div class="w-1/2">
+                                <el-input
+                                    ref="search"
+                                    placeholder="Tim ten"
+                                    clearable
+                                    @keyup.enter="searchChange()"
+                                />
+
+                            </div>
+                        </div>
+                        <div class="flex my-6">
+                            <div class="w-1/2">
+                                <button class="p-4 bg-red-400">Phim dang chieu</button>
+                            </div>
+                            <div class="w-1/2 text-right">
+                                <button class="p-4 bg-red-400">Phim sap chieu</button>
+                            </div>
+                        </div>
+                        <!-- show phim -->
+                        <div class="w-full">
+                             <div class="grid grid-cols-4 gap-4 mt-5">
+                                <div
+                                    v-for="item in 10"
+                                    :key="item"
+                                    class="border rounded-md p-4 cursor-pointer"
+                                >
+                                    <h2 class="text-center">{{ item }}</h2>
+                                    <div class="flex">
+                                    <h3 class="w-1/2">Người quản lý :</h3>
+                                    <div>{{ item }}</div>
+                                    </div>
+                                    <div class="flex">
+                                    <h3 class="w-1/2">Rạp :</h3>
+                                    <div>10 rạp</div>
+                                    </div>
+                                    <div class="flex">
+                                    <h3 class="w-1/2">Phòng :</h3>
+                                    <div>105 phòng</div>
+                                    </div>
+                                </div>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -27,10 +85,14 @@
 // import Notification from "../../../Components/Job/Notification.vue";
 // import JobItem from "@/Components/Job/JobItem.vue";
 // import Pagination from "@/Components/Pagination.vue";
-import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/antd.css'
+import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide } from "vue3-carousel";
+
+
+
+
 export default {
-    components: {VueSlider },
+    components: { Slide, Carousel},
     props: {
         tags: Array,
         hospital_types: Array,
@@ -48,6 +110,15 @@ export default {
             filter: {
                 page: 1,
                 limit: 10,
+            },
+            settings: {
+                "dots": true,
+                "focusOnSelect": true,
+                "infinite": true,
+                "speed": 500,
+                "slidesToShow": 3,
+                "slidesToScroll": 3,
+                "touchThreshold": 5
             },
         };
     },
