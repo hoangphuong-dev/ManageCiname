@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backs;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Services\UserService;
+use Illuminate\Http\Request;
 
 class AuthenticationController extends Controller
 {
@@ -18,6 +19,11 @@ class AuthenticationController extends Controller
     public function showLogin()
     {
         return inertia('Backs/Login/Login');
+    }
+
+    public function registerStaff()
+    {
+        return inertia('Backs/RegisterStaff');
     }
 
     public function login(LoginRequest $request)
@@ -34,6 +40,11 @@ class AuthenticationController extends Controller
             // return redirect(isset($route) ? $route : route('back.login.get'));
             return redirect($route);
         }
+    }
+
+    public function register(Request $request)
+    {
+        dd($request);
     }
 
     public function logoutAdmin()

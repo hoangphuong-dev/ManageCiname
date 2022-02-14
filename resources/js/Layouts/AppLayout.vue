@@ -97,7 +97,7 @@
       </div>
       <!-- footer -->
       <div class="footer w-full bg-yellow-100 h-60">
-        <h1 class="text-center">Đây là footer</h1>
+        <h1 class="text-center">FFFFF</h1>
       </div>
     </div>
   </div>
