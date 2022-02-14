@@ -21,8 +21,10 @@ use Illuminate\Support\Facades\Route;
 Route::group(['as' => 'back.'], function () {
     //     // Login
     Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login.get');
+    Route::get('/register-staff', [AuthenticationController::class, 'registerStaff'])->name('register.staff');
     // ->middleware(IgnoreLoginMiddleware::class);
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login.post');
+    Route::post('/register', [AuthenticationController::class, 'register'])->name('staff.register');
 });
 
 Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => ['superadmin']], function () {
