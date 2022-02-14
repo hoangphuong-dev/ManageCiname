@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['as' => 'back.'], function () {
-    //     // Login
     Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login.get');
     // ->middleware(IgnoreLoginMiddleware::class);
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login.post');
