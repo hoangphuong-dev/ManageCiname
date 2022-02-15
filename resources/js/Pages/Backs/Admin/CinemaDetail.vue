@@ -116,6 +116,19 @@
                             v-for="item in Number(Column)"
                             :key="item">
                             {{ convertCharCode(row) + item }}
+                            <el-select
+                                class="w-full"
+                                v-model="province"
+                                clearable
+                                default-first-option
+                            >
+                                <el-option
+                                    v-for="(item, index) in seat_types"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.id"
+                                ></el-option>
+                            </el-select>
                         </div>
                     </div>
                   </div>
@@ -260,7 +273,7 @@ import { onBefore, onFinish } from "@/Uses/request-inertia";
 import PageInfo from "@/Components/Control/PageInfo.vue";
 import { Edit, Delete } from "@element-plus/icons-vue";
 export default {
-  name: "Cinema",
+  name: "CinemaDetail",
   components: {
     AdminLayout,
     PageInfo,
@@ -277,6 +290,7 @@ export default {
       type: Object,
       required: true,
     },
+    seat_types: Array,
   },
   computed: {
     filter() {
