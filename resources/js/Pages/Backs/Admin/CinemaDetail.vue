@@ -73,7 +73,7 @@
                     ref="formDataRoom"
                     :model="formDataRoom"
                     label-position="top"
-                    :rules="rules"
+                    :rules="rulesRoom"
                   >
                     <!-- Tên rạp -->
                     <el-form-item label="Tên phòng" prop="name">
@@ -110,17 +110,17 @@
                     </span>
                   </div>
                   <div class="bg-gray-700 my-5 p-2 text-center justify-items-center">
-                    <div class="flex" v-for="row in Number(Row)" :key="row">
+                    <!-- <div class="flex" v-for="row in Number(Row)" :key="row">
                         <div
                             class=" bg-red-400 rounded-sm m-2"
                             v-for="item in Number(Column)"
                             :key="item">
-                            {{ convertCharCode(row) + item }}
+                            <div>{{convertCharCode(row) + item}}</div>
                             <el-select
                                 class="w-full"
-                                v-model="province"
+                                :prop="'seat.' + indexRow + '.row_number'"
                                 clearable
-                                default-first-option
+                                filterable
                             >
                                 <el-option
                                     v-for="(item, index) in seat_types"
@@ -130,7 +130,10 @@
                                 ></el-option>
                             </el-select>
                         </div>
-                    </div>
+                    </div> -->
+                  </div>
+                  <div class="text-center">
+                    <el-button v-if="showDiagram" @click="onSubmitRoom">Them phong FFF</el-button>
                   </div>
                 </el-dialog>
               </div>
@@ -139,7 +142,8 @@
           <!-- Tab Suất chiếu -->
           <el-tab-pane label="Suất chiếu">
             <div class="p-4">
-              <div class="w-full flex relative my-4">
+            GGGG
+              <!-- <div class="w-full flex relative my-4">
                 <div class="w-3/4 flex items-end">
                   <div class="search">
                     <search-input label="Chọn ngày  ... "></search-input>
@@ -177,7 +181,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <!-- phan trang phòng chiếu  -->
               <!-- <div
                 v-if="cinemas.meta.total > cinemas.meta.per_page"
@@ -196,7 +200,7 @@
                 />
               </div> -->
               <!-- dialog phòng chiếu  -->
-              <div class="customer_dialog">
+              <!-- <div class="customer_dialog">
                 <el-dialog
                   class="text-center"
                   :title="
@@ -211,7 +215,6 @@
                     label-position="top"
                     :rules="rules"
                   >
-                    <!-- Tên rạp -->
                     <el-form-item label="Tên phòng" prop="name">
                       <el-input
                         v-model="formDataRoom.name"
@@ -236,7 +239,6 @@
                       ></el-input>
                     </el-form-item>
                   </el-form>
-                  <!-- submit -->
                   <div class="text-right">
                     <span class="dialog-footer">
                       <el-button @click="dialogFormVisibleRoom = false">Hủy</el-button>
@@ -255,7 +257,7 @@
                     </div>
                   </div>
                 </el-dialog>
-              </div>
+              </div> -->
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -283,8 +285,9 @@ export default {
     Delete,
   },
   props: {
-    cinemas: {
-      required: true,
+    cinema: {
+        type:Number,
+        required: true,
     },
     filtersBE: {
       type: Object,
@@ -304,6 +307,7 @@ export default {
   },
   data() {
     return {
+      showDiagram: false,
       Row: "",
       Column: "",
       selectedItemRoom: null,
@@ -311,27 +315,14 @@ export default {
       dialogFormVisibleRoom: false,
       total: "",
       perPage: "",
-      formDataRoom: this.$inertia.form({
+      formDataRoom: {
         name: "",
         row_number: "",
         column_number: "",
-      }),
-      rules: {
+        seats: [],
+      },
+      rulesRoom: {
         name: [
-          {
-            required: true,
-            message: "Trường này không được để trống",
-            trigger: "blur",
-          },
-        ],
-        row_number: [
-          {
-            required: true,
-            message: "Trường này không được để trống",
-            trigger: "blur",
-          },
-        ],
-        column_number: [
           {
             required: true,
             message: "Trường này không được để trống",
@@ -342,6 +333,24 @@ export default {
     };
   },
   methods: {
+    viewDiagram() {
+        this.$refs["formDataRoom"].validate((valid) => {
+        if (valid) {
+            this.Row = this.formDataRoom.row_number;
+            this.Column = this.formDataRoom.column_number;
+            this.showDiagram = true
+
+            for (let i = 0; i < this.Row; i++) {
+                for (let j = 0; j < this.Column; j++) {
+                    this.formDataRoom.seats.push({
+                        row: String.fromCharCode(i + 65),
+                        column: Number(j + 1)
+                    })
+                }
+            }
+        }
+        });
+    },
     convertCharCode(number) {
       return String.fromCharCode(number + 64)
     },
@@ -363,18 +372,20 @@ export default {
 
     // method inertia
     onOpenDialogRoom() {
-      this.formDataRoom.reset();
       this.selectedItemRoom = null;
       this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
     },
     createRoom() {
-      Inertia.post(route("admin.cinemas.store"), this.formDataRoom, {
+      Inertia.post(route("admin.rooms.store"), {
+          ...this.formDataRoom,
+          cinema_id : this.cinema
+
+      }, {
         onBefore,
         onFinish,
         preserveScroll: true,
         onError: (e) => console.log(e),
         onSuccess: (_) => {
-          this.formDataRoom.reset();
           this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
         },
       });
@@ -413,18 +424,11 @@ export default {
         { onBefore, onFinish, preserveScroll: true }
       );
     },
-    viewDiagram() {
-      this.$refs["formDataRoom"].validate((valid) => {
-        if (valid) {
-          this.Row = this.formDataRoom.row_number;
-          this.Column = this.formDataRoom.column_number;
-        }
-      });
-    },
+
     async onSubmitRoom() {
       this.$refs["formDataRoom"].validate((valid) => {
         if (valid) {
-          if (this.selectedItem === null) {
+          if (this.selectedItemRoom === null) {
             this.createRoom();
           } else {
             this.editCinema();
