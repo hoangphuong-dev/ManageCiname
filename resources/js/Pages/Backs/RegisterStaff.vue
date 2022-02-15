@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :sm="{ span: 12, offset: 6 }" :xs="{ span: 24, offset: 0 }">
                 <el-card class="box-card">
-                    <h1 class="text-center">Dang ky nhan vien</h1>
+                    <h1 class="text-center">Đăng ký nhân viên</h1>
                     <el-form
                         :ref="formRegister"
                         :model="formData"
@@ -11,7 +11,7 @@
                         label-position="top"
                         :rules="rules"
                     >
-                        <el-form-item prop="name" label="Ho ten">
+                        <el-form-item prop="name" label="Họ tên">
                             <el-input
                                 autocomplete="off"
                                 v-model="formData.name"
@@ -25,26 +25,27 @@
                             ></el-input>
                         </el-form-item>
 
-                        <el-form-item prop="phone" label="So dien thoai">
+                        <el-form-item prop="phone" label="Số điện thoại">
                             <el-input
                                 autocomplete="off"
                                 v-model="formData.phone"
                             ></el-input>
                         </el-form-item>
 
-                        <div class="w-full mt-1 mb-3 flex justify-between">
-                            <el-checkbox
-                                v-model="formData.isAgree"
-                                label="Dong y "
-                            ></el-checkbox>
+                        <div class="w-full">
+                            <el-form-item prop="isAgree">
+                                <el-checkbox
+                                    v-model="formData.isAgree"
+                                    label="Đồng ý với điều khoản"
+                                ></el-checkbox>
+                            </el-form-item>
                         </div>
                         <el-form-item>
                             <button
                                 class="btn-warning w-full"
                                 type="button"
-                                @click="submitForm"
-                            >
-                                Dang ky
+                                @click="submitForm">
+                                Đăng ký
                             </button>
                         </el-form-item>
                     </el-form>
@@ -86,7 +87,7 @@ export default {
             name: [
                 {
                     required: true,
-                    message: "Mật khẩu không được để trống !",
+                    message: "Trường này không được bỏ trống!",
                     trigger: "blur",
                 },
             ],
@@ -110,16 +111,26 @@ export default {
             phone: [
                 {
                     required: true,
-                    message: "Phone không được để trống !",
+                    message: "Số điện thoại không được để trống !",
                     trigger: "blur",
                 },
             ],
             isAgree: [
                 {
                     required: true,
-                    message: "Phone không được để trống !",
+                    message: "Vui lòng đồng ý với điều khoản!",
                     trigger: "change",
                 },
+                {
+                    validator: function (rule, value, callback) {
+                        if (value == false) {
+                            return callback("Vui lòng đồng ý với điều khoản!");
+                        }
+                        callback();
+                    },
+                    trigger: "change",
+                },
+
             ],
 
         });
