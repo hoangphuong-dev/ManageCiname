@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Backs\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RoomRequest;
+use App\Services\RoomService;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
+    protected $roomService;
+
+    public function __construct(RoomService $roomService)
+    {
+        $this->roomService = $roomService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -27,15 +35,17 @@ class RoomController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function store(RoomRequest $request)
     {
-        dd($request);
+        // try {
+        $this->roomService->store($request);
+        // $message = ['success' => __('Tạo rạp thành công !')];
+        // } catch (\Exception $e) {
+        //     $message = ['error' => __('something went wrong')];
+        // } finally {
+        //     return back()->with($message);
+        // }
     }
 
     /**

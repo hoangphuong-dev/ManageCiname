@@ -29,6 +29,11 @@ class SeatTypeRepository extends BaseRepository
         ]);
     }
 
+    public function getAllSeatType()
+    {
+        return $this->model->select(['id', 'name'])->get()->toArray();
+    }
+
     public function list($request)
     {
         return $this->model->query()

@@ -30,12 +30,7 @@ class MovieGenreController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(MovieGenreRequest $request)
     {
         $fill = $request->validated();

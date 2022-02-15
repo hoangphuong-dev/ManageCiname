@@ -26,17 +26,11 @@ class ContactController extends Controller
         return $this->contactService->list($request);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(ContactRequest $request)
     {
         try {
             $this->contactService->store($request);
-
         } catch (\Throwable $e) {
             throw $e;
         }

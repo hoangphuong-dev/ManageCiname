@@ -15,9 +15,9 @@ class SeatTypeService extends BaseService
         $this->seatTypeRepository = $seatTypeRepository;
     }
 
-    public function all()
+    public function getAllSeatType()
     {
-        return $this->seatTypeRepository->all();
+        return $this->seatTypeRepository->getAllSeatType();
     }
 
     public function list($request)

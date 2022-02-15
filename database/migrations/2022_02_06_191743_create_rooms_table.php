@@ -17,6 +17,8 @@ class CreateRoomsTable extends Migration
             $table->id();
             $table->bigInteger('cinema_id')->unsigned();
             $table->string('name');
+            $table->tinyInteger('row_number');
+            $table->tinyInteger('column_number');
             $table->string('status');
             $table->timestamps();
 

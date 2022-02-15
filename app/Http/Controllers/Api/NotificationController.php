@@ -45,12 +45,7 @@ class NotificationController extends Controller
         dd($user->notifications);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(NotificationRequest $request)
     {
         dd($request->all());

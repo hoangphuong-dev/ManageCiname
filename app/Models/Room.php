@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public const STATUS_CLOSE = 0;
+    public const STATUS_OPEN = 1;
 }

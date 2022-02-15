@@ -110,17 +110,23 @@
                     </span>
                   </div>
                   <div class="bg-gray-700 my-5 p-2 text-center justify-items-center">
-                    <!-- <div class="flex" v-for="row in Number(Row)" :key="row">
-                        <div
-                            class=" bg-red-400 rounded-sm m-2"
-                            v-for="item in Number(Column)"
-                            :key="item">
-                            <div>{{convertCharCode(row) + item}}</div>
+                    <div class="grid gap-4" :style="{'grid-template-columns': 'repeat('+ Column+', minmax(0, 1fr))'}">
+                        <div class="border rounded-md p-4"
+                            v-for="(seat, indexSeat) in formDataRoom.seats" :key="indexSeat">
+                            <el-form-item>
+                                <el-input
+                                    v-model="seat.row"
+                                ></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-input
+                                    v-model="seat.column"
+                                ></el-input>
+                            </el-form-item>
                             <el-select
                                 class="w-full"
-                                :prop="'seat.' + indexRow + '.row_number'"
                                 clearable
-                                filterable
+                                v-model="seat.seat_type"
                             >
                                 <el-option
                                     v-for="(item, index) in seat_types"
@@ -130,10 +136,10 @@
                                 ></el-option>
                             </el-select>
                         </div>
-                    </div> -->
+                    </div>
                   </div>
                   <div class="text-center">
-                    <el-button v-if="showDiagram" @click="onSubmitRoom">Them phong FFF</el-button>
+                    <el-button v-if="showDiagram" @click="onSubmitRoom">Thêm phòng</el-button>
                   </div>
                 </el-dialog>
               </div>
@@ -307,6 +313,9 @@ export default {
   },
   data() {
     return {
+    styleObject: {
+
+    },
       showDiagram: false,
       Row: "",
       Column: "",
@@ -339,12 +348,12 @@ export default {
             this.Row = this.formDataRoom.row_number;
             this.Column = this.formDataRoom.column_number;
             this.showDiagram = true
-
+            this.formDataRoom.seats = []
             for (let i = 0; i < this.Row; i++) {
                 for (let j = 0; j < this.Column; j++) {
                     this.formDataRoom.seats.push({
                         row: String.fromCharCode(i + 65),
-                        column: Number(j + 1)
+                        column: Number(j + 1),
                     })
                 }
             }
