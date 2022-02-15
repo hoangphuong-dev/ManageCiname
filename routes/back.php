@@ -10,10 +10,8 @@ use App\Http\Controllers\Backs\AuthenticationController;
 use App\Http\Controllers\Backs\Staff\StaffController;
 use App\Http\Controllers\Backs\SuperAdmin\AdminInfoController;
 use App\Http\Controllers\Backs\SuperAdmin\MovieController;
-use App\Http\Controllers\Backs\SuperAdmin\MovieGenreController;
 use App\Http\Controllers\Backs\SuperAdmin\SeatTypeController;
 use App\Http\Controllers\Backs\SuperAdmin\SuperAdminController;
-use App\Http\Controllers\Backs\UserController;
 use App\Http\Middleware\IgnoreLoginMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -51,9 +49,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
     Route::get('cinemas/show/{id}', [CinemaController::class, 'show'])->name('cinemas.show');
     Route::delete('cinemas/{id}', [CinemaController::class, 'delete'])->name('cinemas.delete');
 
-    // Route::resources([
-    //     'rooms' => RoomController::class,
-    // ]);
+    Route::post('rooms', [RoomController::class, 'store'])->name('rooms.store');
 });
 
 Route::group(['prefix' => 'staff', 'middleware' => ['staff']], function () {

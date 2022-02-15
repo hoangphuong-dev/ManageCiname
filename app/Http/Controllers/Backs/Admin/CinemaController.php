@@ -5,16 +5,19 @@ namespace App\Http\Controllers\Backs\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CinemaRequest;
 use App\Services\CinemaService;
+use App\Services\SeatTypeService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CinemaController extends Controller
 {
     protected $cinemaService;
+    protected $seatTypeService;
 
-    public function __construct(CinemaService $cinemaService)
+    public function __construct(CinemaService $cinemaService, SeatTypeService $seatTypeService)
     {
         $this->cinemaService = $cinemaService;
+        $this->seatTypeService = $seatTypeService;
     }
 
     public function index(Request $request)
@@ -41,8 +44,10 @@ class CinemaController extends Controller
 
     public function show($id)
     {
+        $seat_types = $this->seatTypeService->all();
         return Inertia::render("Backs/Admin/CinemaDetail", [
-            'cinemas' => 1,
+            'cinema' => $id,
+            'seat_types' => $seat_types,
         ]);
     }
 
