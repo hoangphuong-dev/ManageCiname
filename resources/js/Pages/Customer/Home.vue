@@ -17,7 +17,7 @@
                         <!-- button filter  -->
                         <div class="w-full flex">
                             <div class="w-1/2">
-                                <el-select
+                            <el-select
                                 v-model="province"
                                 clearable
                                 placeholder="Chon the loai"
