@@ -29,11 +29,11 @@
               <span class="el-dropdown-link">
                 <div class="flex justify-center items-center">
                   <div class="app__head-profile rounded">
-                    <img
-                      class="w-full h-full rounded"
-                      :src="getImage(user.avatar) || '/images/avatar/default.png'"
-                      alt=""
-                    />
+                    <!-- // <img
+                    //   class="w-full h-full rounded"
+                    //   :src="getImage(user.avatar) || '/images/avatar/default.png'"
+                    //   alt=""
+                    // /> -->
                   </div>
                   <el-icon class="el-icon--right">
                     <arrow-down />
