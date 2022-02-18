@@ -38,14 +38,14 @@ class RoomController extends Controller
 
     public function store(RoomRequest $request)
     {
-        // try {
-        $this->roomService->store($request);
-        // $message = ['success' => __('Tạo rạp thành công !')];
-        // } catch (\Exception $e) {
-        //     $message = ['error' => __('something went wrong')];
-        // } finally {
-        //     return back()->with($message);
-        // }
+        try {
+            $this->roomService->store($request);
+            $message = ['success' => __('Tạo phòng thành công !')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
     }
 
     /**

@@ -417,6 +417,14 @@ export default {
       this.loading = false;
     },
     // method inertia
+
+    resetFormRoom() {
+        this.formDataRoom.name = '';
+        this.formDataRoom.row_number = '';
+        this.formDataRoom.column_number = '';
+        this.formDataRoom.seats =  [];
+    },
+
     onOpenDialogRoom() {
       this.selectedItemRoom = null;
       this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
@@ -436,6 +444,8 @@ export default {
         preserveScroll: true,
         onError: (e) => console.log(e),
         onSuccess: (_) => {
+            // this.resetFormRoom();
+          this.fetchDataRoom();
           this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
         },
       });
