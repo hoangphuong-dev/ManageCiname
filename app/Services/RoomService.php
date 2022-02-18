@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\RoomResource;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\RoomRepository;
 use App\Repositories\SeatRepository;
@@ -34,5 +35,12 @@ class RoomService extends BaseService
         //     DB::rollback();
         //     throw $e;
         // }
+    }
+
+    public function list($request)
+    {
+        $rooms = $this->roomRepository->list($request);
+
+        return RoomResource::collection($rooms);
     }
 }

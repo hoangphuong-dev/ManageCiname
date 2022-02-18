@@ -20,6 +20,11 @@ class CinemaRepository extends BaseRepository
         return Cinema::class;
     }
 
+    public function getCinemaById($id)
+    {
+        return $this->model->where('id', $id)->firstOrFail()->toArray();
+    }
+
     public function createCinema($fill, $admin_info_id)
     {
         return $this->create([

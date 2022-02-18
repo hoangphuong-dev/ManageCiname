@@ -35,4 +35,15 @@ class RoomRepository extends BaseRepository
             'status' => Room::STATUS_OPEN,
         ]);
     }
+
+    public function list($request)
+    {
+        return $this->model->query()
+
+            ->when($request->name, function ($query) use ($request) {
+                return $query->where("name", "like", "%{$request->name}%");
+            })
+            ->where('cinema_id', $request->cinema_id)
+            ->paginate($request->query('limit', 10));
+    }
 }
