@@ -50,7 +50,7 @@ class JobController extends Controller
             'hospitalId' => $hospitalId,
             'isShowApprovalButton' => $isShowApprovalButton,
             'data' => $data,
-        ]); 
+        ]);
     }
 
     public function approvalJob(JobIdRequest $request)
@@ -59,7 +59,7 @@ class JobController extends Controller
             $this->jobService->approvalJob($request->input('job_id'));
             $message = ['success' => __('approval job success')];
         } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {
             return back()->with($message);
         }

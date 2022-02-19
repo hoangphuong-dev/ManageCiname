@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\AdminInfo;
 use App\Models\Cinema;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -69,31 +70,25 @@ class UserSeeder extends Seeder
                 [
                     'admin_info_id' => $adminInfo,
                     'name' => "Quận 1",
-                    'hotline' => "09999999555",
-                    'address' => "Quận 1",
-                ],
-                [
-                    'admin_info_id' => $adminInfo,
-                    'name' => "Quận 1",
-                    'hotline' => "09999999555",
+                    'hotline' => "09993549555",
                     'address' => "Quận 1",
                 ],
                 [
                     'admin_info_id' => $adminInfo,
                     'name' => "Quận 2",
-                    'hotline' => "09999999555",
+                    'hotline' => "0953459999555",
                     'address' => "Quận 1",
                 ],
                 [
                     'admin_info_id' => $adminInfo,
                     'name' => "Quận 3",
-                    'hotline' => "09999999555",
+                    'hotline' => "09953599555",
                     'address' => "Quận 1",
                 ],
                 [
                     'admin_info_id' => $adminInfo,
                     'name' => "Quận 4",
-                    'hotline' => "09999999555",
+                    'hotline' => "095435999555",
                     'address' => "Quận 1",
                 ],
                 [
@@ -102,9 +97,62 @@ class UserSeeder extends Seeder
                     'hotline' => "09999999555",
                     'address' => "Quận 1",
                 ],
+                [
+                    'admin_info_id' => $adminInfo,
+                    'name' => "Quận 6",
+                    'hotline' => "09999999555",
+                    'address' => "Quận 1",
+                ],
+            ]);
+
+            $dataRoom = ([
+                [
+                    'cinema_id' => 1, // Quận 1 ( HCM)
+                    'name' => "Phòng 201",
+                    'status' => Room::STATUS_OPEN,
+                    'row_number' => 0,
+                    'column_number' => 0,
+
+                ],
+                [
+                    'cinema_id' => 1,
+                    'name' => "Phòng 202",
+                    'status' => Room::STATUS_OPEN,
+                    'row_number' => 0,
+                    'column_number' => 0,
+                ],
+                [
+                    'cinema_id' => 1,
+                    'name' => "Phòng 203",
+                    'status' => Room::STATUS_OPEN,
+                    'row_number' => 0,
+                    'column_number' => 0,
+                ],
+                [
+                    'cinema_id' => 1,
+                    'name' => "Phòng 204",
+                    'status' => Room::STATUS_OPEN,
+                    'row_number' => 0,
+                    'column_number' => 0,
+                ],
+                [
+                    'cinema_id' => 1,
+                    'name' => "Phòng 205",
+                    'status' => Room::STATUS_OPEN,
+                    'row_number' => 0,
+                    'column_number' => 0,
+                ],
+                [
+                    'cinema_id' => 1,
+                    'name' => "Phòng 206",
+                    'status' => Room::STATUS_OPEN,
+                    'row_number' => 0,
+                    'column_number' => 0,
+                ],
             ]);
 
             Cinema::insert($dataCinema);
+            Room::insert($dataRoom);
 
             DB::commit();
         } catch (\Exception $e) {

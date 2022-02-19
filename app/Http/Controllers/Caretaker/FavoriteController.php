@@ -35,7 +35,7 @@ class FavoriteController extends Controller
             $this->jobService->toggleFavorite($fill);
             return back();
         } catch (\Exception $e) {
-            return back()->with(['error' => __('something went wrong')]);
+            return back()->with(['error' => __('Có lỗi trong quá trình thực thi !')]);
         }
     }
 }

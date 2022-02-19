@@ -36,7 +36,7 @@ class CinemaController extends Controller
             $this->cinemaService->store($fill);
             $message = ['success' => __('Tạo rạp thành công !')];
         } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {
             return back()->with($message);
         }
@@ -60,7 +60,7 @@ class CinemaController extends Controller
             $this->cinemaService->update($id, $fill);
             $message = ['success' => __('Cập nhật thành công !')];
         } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {
             return back()->with($message);
         }
@@ -72,7 +72,7 @@ class CinemaController extends Controller
             $this->cinemaService->delete($id);
             $message = ['success' => __('Xóa thành công !')];
         } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {
             return back()->with($message);
         }

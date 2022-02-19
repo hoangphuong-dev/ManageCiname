@@ -158,7 +158,7 @@ class JobService extends BaseService
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            throw new \Exception(__('something went wrong'));
+            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
 
@@ -261,7 +261,7 @@ class JobService extends BaseService
             throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception(__('something went wrong'));
+            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
 

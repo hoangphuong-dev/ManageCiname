@@ -61,7 +61,7 @@ class UserService
         } catch (ChangePasswordException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception(__('something went wrong'));
+            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
 
@@ -90,7 +90,7 @@ class UserService
         } catch (ChangePasswordException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception(__('something went wrong'));
+            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
 
@@ -116,7 +116,7 @@ class UserService
         } catch (ChangePasswordException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception(__('something went wrong'));
+            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
 
@@ -130,7 +130,7 @@ class UserService
         } catch (ChangePasswordException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception(__('something went wrong'));
+            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
 
@@ -149,7 +149,7 @@ class UserService
         } catch (ChangePasswordException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception(__('something went wrong'));
+            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
 
@@ -186,7 +186,7 @@ class UserService
         } catch (LoginFailException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception(__('something went wrong'));
+            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
     // đăng nhập hệ thống Admin
@@ -216,7 +216,7 @@ class UserService
         } catch (LoginFailException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception(__('something went wrong'));
+            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
     // logout hệ thống

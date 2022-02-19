@@ -60,7 +60,7 @@ class GoogleService
                 $userId = $user->id;
             }
 
-            if($userId !== null) {
+            if ($userId !== null) {
                 DB::commit();
                 return Auth::guard('caretaker')->loginUsingId($userId, true);
             }
@@ -68,7 +68,7 @@ class GoogleService
         } catch (LoginGoogleFailException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception('Something went wrong');
+            throw new \Exception('Có lỗi trong quá trình thực thi !');
         } finally {
             DB::rollback();
         }

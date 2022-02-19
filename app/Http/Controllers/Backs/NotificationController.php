@@ -38,7 +38,7 @@ class NotificationController extends Controller
             $this->notificationService->make($fill);
             $message = ['success' => __('create notification successful')];
         } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {
             return back()->with($message);
         }
@@ -50,7 +50,7 @@ class NotificationController extends Controller
             $this->notificationService->delete($id);
             $message = ['success' => __('delete notification successful')];
         } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {
             return back()->with($message);
         }
@@ -63,7 +63,7 @@ class NotificationController extends Controller
             $this->notificationService->update($id, $fill);
             $message = ['success' => __('update notification successful')];
         } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {
             return back()->with($message);
         }

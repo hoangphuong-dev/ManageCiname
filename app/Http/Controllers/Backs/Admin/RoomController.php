@@ -42,7 +42,7 @@ class RoomController extends Controller
             $this->roomService->store($request);
             $message = ['success' => __('Tạo phòng thành công !')];
         } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {
             return back()->with($message);
         }

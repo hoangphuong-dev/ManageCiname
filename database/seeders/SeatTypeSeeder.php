@@ -16,17 +16,17 @@ class SeatTypeSeeder extends Seeder
     {
         $dataSeatType = ([
             [
-                'name' => 'Ghe Thuong',
+                'name' => ' Ghế Thường',
                 'image' => 'http://127.0.0.1/dashboard/admin/cinemas/show/1',
                 'price' => '100000',
             ],
             [
-                'name' => 'Ghe Vip',
+                'name' => 'Ghế Vip',
                 'image' => 'http://127.0.0.1/dashboard/admin/cinemas/show/1',
                 'price' => '100000',
             ],
             [
-                'name' => 'Ghe Doi',
+                'name' => 'Ghế Đôi',
                 'image' => 'http://127.0.0.1/dashboard/admin/cinemas/show/1',
                 'price' => '100000',
             ],
