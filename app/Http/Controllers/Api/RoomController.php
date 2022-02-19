@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Backs\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RoomRequest;
 use App\Services\RoomService;
 use Illuminate\Http\Request;
 
@@ -20,9 +19,9 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return $this->roomService->list($request);
     }
 
     /**
@@ -35,17 +34,15 @@ class RoomController extends Controller
         //
     }
 
-
-    public function store(RoomRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-        try {
-            $this->roomService->store($request);
-            $message = ['success' => __('Tạo phòng thành công !')];
-        } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
-        } finally {
-            return back()->with($message);
-        }
+        //
     }
 
     /**

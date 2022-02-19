@@ -45,8 +45,9 @@ class CinemaController extends Controller
     public function show($id)
     {
         $seat_types = $this->seatTypeService->getAllSeatType();
+        $cinema = $this->cinemaService->getCinemaById($id);
         return Inertia::render("Backs/Admin/CinemaDetail", [
-            'cinema' => $id,
+            'cinema' => $cinema,
             'seat_types' => $seat_types,
         ]);
     }

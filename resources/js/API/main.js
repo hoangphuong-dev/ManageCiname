@@ -48,3 +48,11 @@ export const listSeatType = async (params = {}) => {
     return await axios.get("/seat_types", { params });
 };
 
+export const listRoom = async (params = {}) => {
+    return await axios.get("/rooms", { params });
+};
+
+export const listShowTime = async (params = {}) => {
+    return await axios.get("/showtimes", { params });
+};
+

@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Hospital\JobController as JobHospitalController;
 use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\MovieGenreController;
+use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\SeatTypeController;
+use App\Http\Controllers\Api\ShowTimeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,3 +109,5 @@ Route::apiResource('movies', MovieController::class);
 Route::apiResource('admins', ApiAdminController::class);
 Route::apiResource('casts', CastController::class);
 Route::apiResource('seat_types', SeatTypeController::class);
+Route::apiResource('rooms', RoomController::class);
+Route::apiResource('showtimes', ShowTimeController::class);

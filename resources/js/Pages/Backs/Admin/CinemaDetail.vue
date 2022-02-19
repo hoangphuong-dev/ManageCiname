@@ -2,8 +2,12 @@
   <admin-layout>
     <template #main>
       <div class="bg-white min-h-full m-4 mb-0 p-4">
-        <div class="w-full flex relative my-10 bg-red-300">
-          Thong tin chi tiet cua rap
+        <div class="w-full relative my-10 bg-red-300">
+          <h2>PHC {{cinema.name}}</h2>
+          <p>Hotline : {{cinema.hotline}}</p>
+          <p>Dia chi : {{cinema.address}}</p>
+          <p>So phong : 12 phong</p>
+          <p>Phim : 115 phim dang cong chieu</p>
         </div>
         <el-tabs>
           <!-- Tab Phòng chiếu  -->
@@ -12,7 +16,13 @@
               <div class="w-full flex relative my-4">
                 <div class="w-3/4 flex items-end">
                   <div class="search">
-                    <search-input label="Tìm tên phòng ... "></search-input>
+                    <el-input
+                        ref="search"
+                        placeholder="Tìm tên phòng ... "
+                        clearable
+                        v-model="rooms.keyword"
+                        @keyup.enter="searchChange()"
+                    />
                   </div>
                 </div>
                 <div class="w-1/4 text-right">
@@ -20,10 +30,10 @@
                 </div>
               </div>
               <div class="grid grid-cols-6 gap-4">
-                <div class="border rounded-md p-4" v-for="item in 10" :key="item">
-                  <h2 class="text-center cursor-pointer">Phòng 201</h2>
-                  <p class="text-center">256 ghế</p>
-                  <p class="text-center">Trạng thái</p>
+                <div class="border rounded-md p-4" v-for="item in rooms.data" :key="item.id">
+                  <h2 class="text-center cursor-pointer">{{ item.name }}</h2>
+                  <p class="text-center">{{ item.row_number * item.column_number }} ghế</p>
+                  <p class="text-center">Trạng thái {{item.status}}</p>
                   <div class="mt-4 flex">
                     <div class="text-left w-1/2">
                       <el-icon
@@ -146,30 +156,29 @@
             </div>
           </el-tab-pane>
           <!-- Tab Suất chiếu -->
-          <el-tab-pane label="Suất chiếu">
+          <el-tab-pane label="Suat chieu">
             <div class="p-4">
-            GGGG
-              <!-- <div class="w-full flex relative my-4">
+              <div class="w-full flex relative my-4">
                 <div class="w-3/4 flex items-end">
                   <div class="search">
-                    <search-input label="Chọn ngày  ... "></search-input>
-                  </div>
-                  <div class="search">
-                    <search-input label="chọn thể loại... "></search-input>
-                  </div>
-                  <div class="search">
-                    <search-input label="Tìm Tên phim... "></search-input>
+                    <el-input
+                        ref="search"
+                        placeholder="Tìm suat chieu... "
+                        clearable
+                        v-model="showtimes.keyword"
+                        @keyup.enter="searchChange()"
+                    />
                   </div>
                 </div>
                 <div class="w-1/4 text-right">
-                  <el-button @click="onOpenDialogRoom">Thêm Suất chiếu</el-button>
+                  <el-button @click="onOpenDialogShowTime">Thêm Suat chieu</el-button>
                 </div>
               </div>
               <div class="grid grid-cols-6 gap-4">
-                <div class="border rounded-md p-4">
-                  <h2 class="text-center cursor-pointer">Ảnh</h2>
-                  <h2 class="text-center cursor-pointer">Bố già</h2>
-                  <p class="text-center">111 suất chiếu</p>
+                <!-- <div class="border rounded-md p-4" v-for="item in rooms.data" :key="item.id">
+                  <h2 class="text-center cursor-pointer">{{ item.name }}</h2>
+                  <p class="text-center">{{ item.row_number * item.column_number }} ghế</p>
+                  <p class="text-center">Trạng thái {{item.status}}</p>
                   <div class="mt-4 flex">
                     <div class="text-left w-1/2">
                       <el-icon
@@ -186,8 +195,8 @@
                       /></el-icon>
                     </div>
                   </div>
-                </div>
-              </div> -->
+                </div> -->
+              </div>
               <!-- phan trang phòng chiếu  -->
               <!-- <div
                 v-if="cinemas.meta.total > cinemas.meta.per_page"
@@ -205,65 +214,43 @@
                   :total="Number(cinemas.meta.total)"
                 />
               </div> -->
-              <!-- dialog phòng chiếu  -->
-              <!-- <div class="customer_dialog">
+              <!-- dialog suat chieu  -->
+              <div class="customer_dialog">
                 <el-dialog
                   class="text-center"
                   :title="
-                    selectedItemRoom === null ? 'Thêm phòng' : 'Sửa thông tin phòng'
+                    selectedItemShowTime === null ? 'Thêm suat chieu' : 'Sửa thông tin suat'
                   "
-                  v-model="dialogFormVisibleRoom"
+                  v-model="dialogFormVisibleShowTime"
                 >
                   <el-form
                     class="text-center w-1/2 m-auto"
-                    ref="formDataRoom"
-                    :model="formDataRoom"
+                    ref="formDataShowTime"
+                    :model="formDataShowTime"
                     label-position="top"
-                    :rules="rules"
+                    :rules="rulesShowTime"
                   >
+                    <!-- Tên rạp -->
                     <el-form-item label="Tên phòng" prop="name">
                       <el-input
-                        v-model="formDataRoom.name"
+                        v-model="formDataShowTime.name"
                         autocomplete="off"
                         placeholder="Nhập tên phòng"
                       ></el-input>
                     </el-form-item>
 
-                    <el-form-item label="Số hàng" prop="row_number">
-                      <el-input
-                        v-model="formDataRoom.row_number"
-                        autocomplete="off"
-                        placeholder="Nhập số hàng"
-                      ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="Số dãy" prop="column_number">
-                      <el-input
-                        v-model="formDataRoom.column_number"
-                        autocomplete="off"
-                        placeholder="Nhập số dãy"
-                      ></el-input>
-                    </el-form-item>
                   </el-form>
+                  <!-- submit -->
                   <div class="text-right">
                     <span class="dialog-footer">
-                      <el-button @click="dialogFormVisibleRoom = false">Hủy</el-button>
+                      <el-button @click="dialogFormVisibleShowTime = false">Hủy</el-button>
                       <el-button type="primary" @click="viewDiagram">
-                        <span v-if="selectedItemRoom === null">Xem sơ đồ</span>
+                        <span v-if="selectedItemShowTime === null">Theem suat</span>
                       </el-button>
                     </span>
                   </div>
-                  <div class="bg-gray-700 my-5 p-2 grid grid-cols-12 gap-4">
-                    <div
-                      class="w-16 bg-red-400 rounded-sm"
-                      v-for="item in 100"
-                      :key="item"
-                    >
-                      {{ Row }}
-                    </div>
-                  </div>
                 </el-dialog>
-              </div> -->
+              </div>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -280,6 +267,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import PageInfo from "@/Components/Control/PageInfo.vue";
 import { Edit, Delete } from "@element-plus/icons-vue";
+import { listRoom, listShowTime} from "@/API/main.js";
 export default {
   name: "CinemaDetail",
   components: {
@@ -292,7 +280,7 @@ export default {
   },
   props: {
     cinema: {
-        type:Number,
+        type:Array,
         required: true,
     },
     filtersBE: {
@@ -313,19 +301,46 @@ export default {
   },
   data() {
     return {
+        showtimes: {
+            data: [],
+            total: '',
+            keyword: '',
+            perPage: '',
+            filter: {
+                page: 1,
+                limit: 10,
+                cinema_id: this.cinema.id,
+            },
+        },
+        rooms: {
+            data: [],
+            total: '',
+            keyword: '',
+            perPage: '',
+            filter: {
+                page: 1,
+                limit: 10,
+                cinema_id: this.cinema.id,
+            },
+        },
       showDiagram: false,
       Row: "",
       Column: "",
       selectedItemRoom: null,
+      selectedItemShowTime: null,
       loading: false,
       dialogFormVisibleRoom: false,
-      total: "",
-      perPage: "",
+      dialogFormVisibleShowTime: false,
       formDataRoom: {
         name: "",
         row_number: "",
         column_number: "",
         seats: [],
+      },
+
+      formDataShowTime: {
+        name: "",
+
       },
       rulesRoom: {
         name: [
@@ -336,7 +351,20 @@ export default {
           },
         ],
       },
+      rulesShowTime: {
+        name: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "blur",
+          },
+        ],
+      },
     };
+  },
+    created() {
+    this.fetchDataRoom();
+    this.fetchDataShowTime();
   },
   methods: {
     viewDiagram() {
@@ -357,31 +385,58 @@ export default {
         }
         });
     },
-    inertiaRoom() {
-      Inertia.get(
-        route("admin.cinema.index", this.filter),
-        {},
-        { onBefore, onFinish, preserveScroll: true }
-      );
-    },
-    handleCurrentPage(value) {
-      this.filter.page = value;
-      this.inertiaRoom();
-    },
+    // lay du lieu cho phong chieu
+    // handleCurrentPage(value) {
+    //   this.filter.page = value;
+    //   this.fetchData();
+    // },
     searchChange() {
-      this.filter.page = 1;
-      this.inertiaRoom();
+      this.rooms.filter.name = this.rooms.keyword;
+      this.fetchDataRoom();
+    },
+    async fetchDataRoom() {
+      this.loading = true;
+      listRoom(this.rooms.filter)
+        .then(({ status, data }) => {
+          this.rooms.data = status === 200 ? data.data : this.rooms.data;
+          this.rooms.total = data.meta.total;
+          this.rooms.perPage = data.meta.per_page;
+        })
+        .catch(() => {});
+      this.loading = false;
+    },
+    async fetchDataShowTime() {
+      this.loading = true;
+      listShowTime(this.rooms.filter)
+        .then(({ status, data }) => {
+          this.rooms.data = status === 200 ? data.data : this.rooms.data;
+          this.rooms.total = data.meta.total;
+          this.rooms.perPage = data.meta.per_page;
+        })
+        .catch(() => {});
+      this.loading = false;
+    },
+    // method inertia
+
+    resetFormRoom() {
+        this.formDataRoom.name = '';
+        this.formDataRoom.row_number = '';
+        this.formDataRoom.column_number = '';
+        this.formDataRoom.seats =  [];
     },
 
-    // method inertia
     onOpenDialogRoom() {
       this.selectedItemRoom = null;
       this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
     },
+    onOpenDialogShowTime() {
+      this.selectedItemShowTime = null;
+      this.dialogFormVisibleShowTime = !this.dialogFormVisibleShowTime;
+    },
     createRoom() {
       Inertia.post(route("admin.rooms.store"), {
           ...this.formDataRoom,
-          cinema_id : this.cinema
+          cinema_id : this.cinema.id
 
       }, {
         onBefore,
@@ -389,6 +444,8 @@ export default {
         preserveScroll: true,
         onError: (e) => console.log(e),
         onSuccess: (_) => {
+            // this.resetFormRoom();
+          this.fetchDataRoom();
           this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
         },
       });

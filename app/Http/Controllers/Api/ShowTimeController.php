@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\Backs\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RoomRequest;
-use App\Services\RoomService;
+use App\Services\ShowTimeService;
 use Illuminate\Http\Request;
 
-class RoomController extends Controller
+class ShowTimeController extends Controller
 {
-    protected $roomService;
+    protected $showTimeService;
 
-    public function __construct(RoomService $roomService)
+    public function __construct(ShowTimeService $showTimeService)
     {
-        $this->roomService = $roomService;
+        $this->showTimeService = $showTimeService;
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return $this->showTimeService->list($request);
     }
 
     /**
@@ -35,17 +35,15 @@ class RoomController extends Controller
         //
     }
 
-
-    public function store(RoomRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-        try {
-            $this->roomService->store($request);
-            $message = ['success' => __('Tạo phòng thành công !')];
-        } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
-        } finally {
-            return back()->with($message);
-        }
+        //
     }
 
     /**
