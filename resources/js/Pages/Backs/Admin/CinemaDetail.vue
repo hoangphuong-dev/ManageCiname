@@ -5,7 +5,7 @@
         <div class="w-full flex relative my-10 bg-red-300">
           Thong tin chi tiet cua rap
         </div>
-        <el-tabs class="demo-tabs">
+        <el-tabs>
           <!-- Tab Phòng chiếu  -->
           <el-tab-pane label="Phòng chiếu">
             <div class="p-4">
@@ -20,21 +20,21 @@
                 </div>
               </div>
               <div class="grid grid-cols-6 gap-4">
-                <div class="border rounded-md p-4">
+                <div class="border rounded-md p-4" v-for="item in 10" :key="item">
                   <h2 class="text-center cursor-pointer">Phòng 201</h2>
                   <p class="text-center">256 ghế</p>
                   <p class="text-center">Trạng thái</p>
                   <div class="mt-4 flex">
                     <div class="text-left w-1/2">
                       <el-icon
-                        class="hover:text-blue-500 cursor-pointer"
+                        class="cursor-pointer"
                         @click="edit(item)"
                         ><edit
                       /></el-icon>
                     </div>
                     <div class="text-right w-1/2">
                       <el-icon
-                        class="hover:text-blue-500 cursor-pointer"
+                        class="cursor-pointer"
                         @click="confirmEventDelete(item)"
                         ><delete
                       /></el-icon>
@@ -313,9 +313,6 @@ export default {
   },
   data() {
     return {
-    styleObject: {
-
-    },
       showDiagram: false,
       Row: "",
       Column: "",
@@ -359,9 +356,6 @@ export default {
             }
         }
         });
-    },
-    convertCharCode(number) {
-      return String.fromCharCode(number + 64)
     },
     inertiaRoom() {
       Inertia.get(
@@ -425,7 +419,6 @@ export default {
         }
       );
     },
-
     detail(id) {
       Inertia.get(
         route("admin.cinemas.show", { id: id }),
