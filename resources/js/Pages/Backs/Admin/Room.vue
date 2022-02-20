@@ -26,17 +26,31 @@
         <p class="text-center">
           {{ item.row_number * item.column_number }} ghế
         </p>
-        <p class="text-center">Trạng thái {{ item.status }}</p>
+        <p class="text-center">
+          <span class="mr-4">Trạng thái : </span>
+          <el-switch
+            v-model="item.status"
+            active-color="#13ce66"
+            inactive-color="#cccccc"
+            active-value="1"
+            inactive-value="0"
+            @click="handleUpdateStatus(item, item.status)"
+          />
+        </p>
+
         <div class="mt-4 flex">
           <div class="text-left w-1/2">
             <!-- <el-icon class="cursor-pointer" @click="edit(item)"
               ><edit
             /></el-icon> -->
           </div>
-          <div class="text-right w-1/2">
-            <!-- <el-icon class="cursor-pointer" @click="confirmEventDelete(item)"
+          <div class="text-right w-1/2 h-5">
+            <el-icon
+              v-if="item.status == 0"
+              class="cursor-pointer"
+              @click="confirmEventDelete(item)"
               ><delete
-            /></el-icon> -->
+            /></el-icon>
           </div>
         </div>
       </div>
@@ -64,7 +78,7 @@
         v-model="dialogFormVisibleRoom"
       >
         <el-form
-          class="text-center w-1/2 m-auto"
+          class="text-center w-4/5 m-auto"
           ref="formDataRoom"
           :model="formDataRoom"
           label-position="top"
@@ -94,55 +108,57 @@
               placeholder="Nhập số dãy"
             ></el-input>
           </el-form-item>
-        </el-form>
-        <!-- submit -->
-        <div class="text-right">
-          <span class="dialog-footer">
-            <el-button @click="dialogFormVisibleRoom = false">Hủy</el-button>
-            <el-button type="primary" @click="viewDiagram">
-              <span v-if="selectedItemRoom === null">Xem sơ đồ</span>
-            </el-button>
-          </span>
-        </div>
-        <div class="my-5 p-2 text-center justify-items-center">
-          <h2 class="my-2" v-if="showTitle">Sơ đồ ghế</h2>
-          <div
-            class="grid gap-4"
-            :style="{
-              'grid-template-columns': 'repeat(' + Column + ', minmax(0, 1fr))',
-            }"
-          >
+
+          <!-- submit -->
+          <div class="text-right">
+            <span class="dialog-footer">
+              <el-button @click="dialogFormVisibleRoom = false">Hủy</el-button>
+              <el-button type="primary" @click="viewDiagram">
+                <span v-if="selectedItemRoom === null">Xem sơ đồ</span>
+              </el-button>
+            </span>
+          </div>
+          <div class="my-5 p-2 text-center justify-items-center">
+            <h2 class="my-2" v-if="showTitle">Sơ đồ ghế</h2>
             <div
-              class="border rounded-md p-1 text-center bg-green-100"
-              v-for="(seat, indexSeat) in formDataRoom.seats"
-              :key="indexSeat"
+              class="grid gap-4"
+              :style="{
+                'grid-template-columns':
+                  'repeat(' + Column + ', minmax(0, 1fr))',
+              }"
             >
-              <div class="flex min-w-124 w-full">
-                <el-form-item class="w-1/2">
-                  <el-input v-model="seat.row"></el-input>
-                </el-form-item>
-                <el-form-item class="w-1/2">
-                  <el-input v-model="seat.column"></el-input>
-                </el-form-item>
-              </div>
-              <div class="-mt-6 min-w-124 w-full">
-                <el-select class="w-full" clearable v-model="seat.seat_type">
-                  <el-option
-                    v-for="(item, index) in seat_types"
-                    :key="index"
-                    :label="item.name"
-                    :value="item.id"
-                  ></el-option>
-                </el-select>
+              <div
+                class="border rounded-md p-1 text-center bg-green-100"
+                v-for="(seat, indexSeat) in formDataRoom.seats"
+                :key="indexSeat"
+              >
+                <div class="flex min-w-124 w-full">
+                  <el-form-item class="w-1/2">
+                    <el-input v-model="seat.row"></el-input>
+                  </el-form-item>
+                  <el-form-item class="w-1/2">
+                    <el-input v-model="seat.column"></el-input>
+                  </el-form-item>
+                </div>
+                <div class="-mt-6 min-w-124 w-full">
+                  <el-select class="w-full" clearable v-model="seat.seat_type">
+                    <el-option
+                      v-for="(item, index) in seat_types"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id"
+                    ></el-option>
+                  </el-select>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="text-center">
-          <el-button v-if="showDiagram" @click="onSubmitRoom"
-            >Thêm phòng</el-button
-          >
-        </div>
+          <div class="text-center">
+            <el-button v-if="showDiagram" @click="onSubmitRoom"
+              >Thêm phòng</el-button
+            >
+          </div>
+        </el-form>
       </el-dialog>
     </div>
   </div>
@@ -154,13 +170,16 @@ import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import Pagination from "@/Components/Pagination.vue";
-import { listRoom } from "@/API/main.js";
+import { listRoom, updateStatusRoom } from "@/API/main.js";
+import { Edit, Delete } from "@element-plus/icons-vue";
 export default {
   name: "Room",
   components: {
     AdminLayout,
     SearchInput,
     Pagination,
+    Edit,
+    Delete,
   },
   props: {
     cinema: {
@@ -268,7 +287,6 @@ export default {
         }
       });
     },
-    // lay du lieu cho phong chieu
     handleCurrentPage(value) {
       this.rooms.filter.page = value;
       this.fetchDataRoom();
@@ -278,6 +296,13 @@ export default {
       this.formDataRoom.row_number = "";
       this.formDataRoom.column_number = "";
       this.formDataRoom.seats = [];
+    },
+    aaaa(status) {
+      if (status == 1) {
+        return true;
+      } else {
+        return false;
+      }
     },
     onOpenDialogRoom() {
       this.selectedItemRoom = null;
@@ -296,7 +321,7 @@ export default {
           preserveScroll: true,
           onError: (e) => console.log(e),
           onSuccess: (_) => {
-            // this.resetFormRoom();
+            this.resetFormRoom();
             this.fetchDataRoom();
             this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
           },
@@ -317,6 +342,45 @@ export default {
           }
         }
       });
+    },
+    confirmEventDelete({ id }) {
+      this.$confirm(
+        `Bạn có chắc xóa hết tất cả dữ liệu của phòng này ?`,
+        "Cảnh báo",
+        {
+          confirmButtonText: "Chắc chắn",
+          cancelButtonText: "Hủy",
+          type: "warning",
+        }
+      ).then(async () => {
+        Inertia.delete(route("admin.rooms.delete", { id }), {
+          onError: (e) => console.log(e),
+        });
+        this.fetchDataRoom();
+      });
+    },
+    async handleUpdateStatus(item, status) {
+      this.$confirm(`Bạn có chắc chắn thay đổi trạng thái phòng `, "Cảnh báo", {
+        confirmButtonText: "Chắc chắn",
+        cancelButtonText: "Hủy",
+        type: "warning",
+      })
+        .then(async () => {
+          this.loading = true;
+          await updateStatusRoom(item.id, status)
+            .then(async (res) => {
+              this.fetchDataRoom();
+              this.$message.success("Cập nhật trạng thái thành công !");
+            })
+            .catch(() => {
+              this.fetchDataRoom();
+              this.$message.error("Có lỗi trong quá trình thực thi");
+            });
+          this.loading = false;
+        })
+        .catch(() => {
+          this.fetchDataRoom();
+        });
     },
     async fetchDataRoom() {
       this.loading = true;

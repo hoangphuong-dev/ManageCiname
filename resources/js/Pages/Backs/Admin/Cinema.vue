@@ -271,11 +271,15 @@ export default {
       });
     },
     confirmEventDelete({ id }) {
-      this.$confirm(`Bạn có chắc chắc muốn xóa ?`, "Cảnh báo", {
-        confirmButtonText: "Chắc chắn",
-        cancelButtonText: "Hủy",
-        type: "warning",
-      }).then(async () => {
+      this.$confirm(
+        `Bạn có chắc xóa hết tất cả dữ liệu của rạp này ?`,
+        "Cảnh báo",
+        {
+          confirmButtonText: "Chắc chắn",
+          cancelButtonText: "Hủy",
+          type: "warning",
+        }
+      ).then(async () => {
         Inertia.delete(route("admin.cinemas.delete", { id }), {
           onBefore,
           onFinish,

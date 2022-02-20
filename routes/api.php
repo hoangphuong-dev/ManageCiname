@@ -110,4 +110,5 @@ Route::apiResource('admins', ApiAdminController::class);
 Route::apiResource('casts', CastController::class);
 Route::apiResource('seat_types', SeatTypeController::class);
 Route::apiResource('rooms', RoomController::class);
+Route::put('/rooms/{id}/update-status', [RoomController::class, 'changeStatus'])->name('rooms.change_status');
 Route::apiResource('showtimes', ShowTimeController::class);

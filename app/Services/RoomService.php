@@ -21,26 +21,35 @@ class RoomService extends BaseService
     public function store($request)
     {
         $data = $request->validated();
-        // try {
-        //     DB::beginTransaction();
-        $room = $this->roomRepository->createRooom($data);
+        try {
+            DB::beginTransaction();
+            $room = $this->roomRepository->createRooom($data);
 
-        $this->seatRepository->createSeat($data['seats'], $room->id);
+            $this->seatRepository->createSeat($data['seats'], $room->id);
 
-        // $user->load('adminInfo');
+            // $user->load('adminInfo');
 
-        // DB::commit();
-        // return $room;
-        // } catch (\Exception $e) {
-        //     DB::rollback();
-        //     throw $e;
-        // }
+            DB::commit();
+            return $room;
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function delete($id)
+    {
+        return $this->roomRepository->destroy($id);
     }
 
     public function list($request)
     {
         $rooms = $this->roomRepository->list($request);
-
         return RoomResource::collection($rooms);
+    }
+
+    public function updateStatus($id, $request)
+    {
+        return $this->roomRepository->updateStatus($id, $request);
     }
 }

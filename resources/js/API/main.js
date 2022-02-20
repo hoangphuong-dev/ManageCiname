@@ -52,6 +52,11 @@ export const listRoom = async (params = {}) => {
     return await axios.get("/rooms", { params });
 };
 
+export const updateStatusRoom = async (id, status) => {
+    return await axios.put('/rooms/' + id + '/update-status', { status })
+}
+
+
 export const listShowTime = async (params = {}) => {
     return await axios.get("/showtimes", { params });
 };

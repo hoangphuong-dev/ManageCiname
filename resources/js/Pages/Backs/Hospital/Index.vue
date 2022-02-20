@@ -7,7 +7,11 @@
         <div class="w-full flex relative items-end">
           <div class="w-full lg:w-auto mr-2">
             <div class="text-sm text-blackPrimary-300">ステータス</div>
-            <el-select v-model="filter.status" @change="fetchData" placeholder="Select">
+            <el-select
+              v-model="filter.status"
+              @change="fetchData"
+              placeholder="Select"
+            >
               <el-option
                 v-for="item in statusList"
                 :key="item.value"
@@ -17,7 +21,11 @@
             </el-select>
           </div>
           <div class="search">
-            <search-input :filter="filter" @submit="fetchData" label="検索"></search-input>
+            <search-input
+              :filter="filter"
+              @submit="fetchData"
+              label="検索"
+            ></search-input>
           </div>
         </div>
 
@@ -38,7 +46,14 @@
             </template>
             <template #status="{ row }">
               <p
-                class="py-2 px-5 w-max min-w-132 rounded-100 text-white text-center"
+                class="
+                  py-2
+                  px-5
+                  w-max
+                  min-w-132
+                  rounded-100
+                  text-white text-center
+                "
                 :class="[
                   row?.status === HOSPITAL_STATUS_DONE
                     ? 'bg-lightGreen'
@@ -60,7 +75,12 @@
                   inactive-color="#cccccc"
                   @change="updateStatus(row, $event)"
                 />
-                <button class="ml-4 py-2 px-4 rounded bg-yellowPrimary" @click="row.id">詳細</button>
+                <button
+                  class="ml-4 py-2 px-4 rounded bg-yellowPrimary"
+                  @click="row.id"
+                >
+                  詳細
+                </button>
                 <button
                   v-if="row.status == HOSPITAL_STATUS_PENDING"
                   class="ml-4 py-2 px-4 rounded bg-lightGreen"
@@ -78,16 +98,20 @@
 </template>
 
 <script>
-import AdminLayout from '@/Layouts/Admin/AdminLayout.vue'
-import SearchInput from '@/Components/Element/SearchInput.vue'
-import DataTable from '@/Components/DataTable.vue'
-import { HOSPITAL_STATUS_DEACTIVE, HOSPITAL_STATUS_DONE, HOSPITAL_STATUS_PENDING } from '@/store/const.js'
-import { formatDateTime } from '@/libs/datetime'
-import { h } from 'vue'
-import { ElLoading } from 'element-plus'
+import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
+import SearchInput from "@/Components/Element/SearchInput.vue";
+import DataTable from "@/Components/DataTable.vue";
+import {
+  HOSPITAL_STATUS_DEACTIVE,
+  HOSPITAL_STATUS_DONE,
+  HOSPITAL_STATUS_PENDING,
+} from "@/store/const.js";
+import { formatDateTime } from "@/libs/datetime";
+import { h } from "vue";
+import { ElLoading } from "element-plus";
 
 export default {
-  name: 'HospitalList',
+  name: "HospitalList",
   components: {
     AdminLayout,
     SearchInput,
@@ -101,85 +125,116 @@ export default {
       filter: {
         page: 1,
         limit: 10,
-        status: '',
+        status: "",
       },
       statusList: [
         {
-          value: '',
-          label: '全て',
+          value: "",
+          label: "全て",
         },
         {
           value: HOSPITAL_STATUS_DONE,
-          label: '使用中',
+          label: "使用中",
         },
         {
           value: HOSPITAL_STATUS_PENDING,
-          label: '承認待ち',
+          label: "承認待ち",
         },
         {
           value: HOSPITAL_STATUS_DEACTIVE,
-          label: '中止',
+          label: "中止",
         },
       ],
       HOSPITAL_STATUS_DEACTIVE: HOSPITAL_STATUS_DEACTIVE,
       HOSPITAL_STATUS_DONE: HOSPITAL_STATUS_DONE,
       HOSPITAL_STATUS_PENDING: HOSPITAL_STATUS_PENDING,
       fields: [
-        { key: 'name', label: '病院名', width: 250 },
-        { key: 'id', label: 'ID', width: 100 },
-        { key: 'email', label: '登録メール', width: 250 },
-        { key: 'created_at', label: '登録日', width: 200 },
-        { key: 'status', label: 'ステータス', width: 200 },
-        { key: 'actions', label: 'アクション', width: 470 },
+        { key: "name", label: "病院名", width: 250 },
+        { key: "id", label: "ID", width: 100 },
+        { key: "email", label: "登録メール", width: 250 },
+        { key: "created_at", label: "登録日", width: 200 },
+        { key: "status", label: "ステータス", width: 200 },
+        { key: "actions", label: "アクション", width: 470 },
       ],
-    }
+    };
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     handleClose() {},
     openCreateUser() {
-      this.dialogVisible = !this.dialogVisible
+      this.dialogVisible = !this.dialogVisible;
     },
     handleCurrentPage(value) {
-      this.filter.page = value
-      this.fetchData()
+      this.filter.page = value;
+      this.fetchData();
     },
     async fetchData() {
-      this.loading = true
+      this.loading = true;
       await this.axios
         .get(`hospitals`, { params: this.filter })
         .then(async (res) => {
-          this.hospitals = res.data
+          this.hospitals = res.data;
         })
         .catch(() => {
-          this.$message.error('Server Error')
-        })
-      this.loading = false
+          this.$message.error("Server Error");
+        });
+      this.loading = false;
     },
     formatDateTime,
-    async updateStatus(row, status) {
-      if (row.id) {
-        this.loading = true
-        const { data } = await this.axios.put(`hospitals/${row.id}/update-status`, { status: status })
-        data.status_code === 200 ? this.$message.success(data.message) : this.$message.error(data.message)
-        this.loading = false
-        this.fetchData()
+    async handleUpdateStatus(item, status) {
+      if (item.id) {
+        this.$confirm(
+          `Bạn có chắc chắn thay đổi trạng thái phòng `,
+          "Cảnh báo",
+          {
+            confirmButtonText: "Chắc chắn",
+            cancelButtonText: "Hủy",
+            type: "warning",
+          }
+        )
+          .then(async () => {
+            this.loading = true;
+            await updateStatus(item.id, status)
+              .then(async (res) => {
+                this.fetchData();
+                this.$message.success("Cập nhật trạng thái thành công !");
+              })
+              .catch(() => {
+                this.fetchData();
+                this.$message.error("Có lỗi trong quá trình thực thi");
+              });
+            this.loading = false;
+          })
+          .catch(() => {
+            this.fetchData();
+          });
       }
     },
+
     async handleSendLoginInfo(hospital) {
       const state = await this.$shortConfirm(
-        h('p', null, [
-          h('span', null, 'Are you sure you want to submit your account information for this store?'),
-          h('i', { style: 'color: teal' }, `(${hospital.name})(${hospital.email})`),
+        h("p", null, [
+          h(
+            "span",
+            null,
+            "Are you sure you want to submit your account information for this store?"
+          ),
+          h(
+            "i",
+            { style: "color: teal" },
+            `(${hospital.name})(${hospital.email})`
+          ),
         ])
-      )
+      );
       if (!state) {
-        return
+        return;
       }
-      this.$inertia.post(route('back.hospitals.sendLoginInfo'), { id: hospital.id })
+      this.$inertia.post(route("back.hospitals.sendLoginInfo"), {
+        id: hospital.id,
+      });
     },
   },
-}
+};
 </script>

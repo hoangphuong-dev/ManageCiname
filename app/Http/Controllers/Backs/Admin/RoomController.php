@@ -88,8 +88,15 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        //
+        try {
+            $this->roomService->delete($id);
+            $message = ['success' => __('Xóa thành công !')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
+        } finally {
+            return back()->with($message);
+        }
     }
 }

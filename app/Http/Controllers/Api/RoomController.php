@@ -29,9 +29,9 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function changeStatus($id, Request $request)
     {
-        //
+        return $this->roomService->updateStatus($id, $request);
     }
 
     /**

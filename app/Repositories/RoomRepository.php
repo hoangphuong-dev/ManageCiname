@@ -36,6 +36,11 @@ class RoomRepository extends BaseRepository
         ]);
     }
 
+    public function destroy($id)
+    {
+        return $this->model->where('id', $id)->where('status', Room::STATUS_CLOSE)->delete();
+    }
+
     public function list($request)
     {
         return $this->model->query()
@@ -45,5 +50,10 @@ class RoomRepository extends BaseRepository
             })
             ->where('cinema_id', $request->cinema_id)
             ->paginate($request->query('limit', 10));
+    }
+    public function updateStatus($id, $request)
+    {
+        $status = $request->status;
+        return $this->model->where('id', $id)->update(['status' => $status]);
     }
 }
