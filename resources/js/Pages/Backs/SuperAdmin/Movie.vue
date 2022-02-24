@@ -6,17 +6,11 @@
         <div class="w-full flex relative">
           <div class="w-3/4 flex items-end">
             <div class="search">
-              <search-input
-                :filter="filter"
-                @submit="fetchData"
-                label="Tìm kiếm"
-              ></search-input>
+              <search-input :filter="filter" @submit="fetchData" label="Tìm kiếm"></search-input>
             </div>
           </div>
           <div class="w-1/4 text-right">
-            <el-button @click="$inertia.visit(route('superadmin.create_movie'))"
-              >Thêm phim</el-button
-            >
+            <el-button @click="$inertia.visit(route('superadmin.create_movie'))">Thêm phim FFFFF</el-button>
           </div>
         </div>
 
@@ -32,6 +26,17 @@
             enable-select-box
             @page="handleCurrentPage"
           >
+            <template #question_content="{ row }">
+              <iframe
+                width="200"
+                height="315"
+                src="https://www.youtube.com/embed/s4ObxcdXoFE"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </template>
           </data-table>
         </div>
       </div>
@@ -43,25 +48,26 @@
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import DataTable from "@/Components/DataTable.vue";
-
-import { ref } from "vue";
 import { listMovie } from "@/API/main.js";
-
+import Embed from "v-video-embed";
 export default {
   name: "Contact",
   components: {
     AdminLayout,
     SearchInput,
-    DataTable,
+    Embed,
+    DataTable
   },
   data() {
     return {
+      videoId: "",
+      startTime: "",
       loading: false,
       dialogVisible: false,
       movies: [],
       filter: {
         page: 1,
-        limit: 10,
+        limit: 10
       },
       fields: [
         { key: "name", label: "Tên phim" },
@@ -69,13 +75,19 @@ export default {
         { key: "director", label: "Đạo diễn" },
         { key: "rated", label: "Giới hạn độ tuổi" },
         { key: "status", label: "Trạng thái" },
-      ],
+        { key: "question_content", label: "Youtube" }
+      ]
     };
   },
   created() {
     this.fetchData();
   },
   methods: {
+    showVideo(url) {
+      console.log("FFFF", this.$youtube);
+      //   this.videoId = this.$youtube.getIdFromURL(url.trailler);
+      //   this.startTime = this.$youtube.getTimeFromURL(url.trailler);
+    },
     handleCurrentPage(value) {
       this.filter.page = value;
       this.fetchData();
@@ -90,7 +102,7 @@ export default {
           this.$message.error("Server Error");
         });
       this.loading = false;
-    },
+    }
     // async handleDelete(item) {
     //   this.$confirm("Are you sure to delete this contact?", "Warning", {
     //     confirmButtonText: "OK",
@@ -109,6 +121,6 @@ export default {
     //     this.loading = false;
     //   });
     // },
-  },
+  }
 };
 </script>

@@ -27,7 +27,7 @@ createInertiaApp({
             .mixin({ methods: { route } })
             .component('AppLayout', AppLayout);
 
-            useGlobalMixin(rootApp);
+        useGlobalMixin(rootApp);
         rootApp.mount(el);
 
         return rootApp;
