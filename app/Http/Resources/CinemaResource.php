@@ -19,6 +19,7 @@ class CinemaResource extends JsonResource
             'name' => $this->name,
             'hotline' => $this->hotline,
             'address' => $this->address,
+            'movies' => MovieResource::collection($this->whenLoaded('movies')),
         ];
     }
 }

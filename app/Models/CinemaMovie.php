@@ -12,4 +12,14 @@ class CinemaMovie extends Model
     protected $guarded = [];
 
     public $timestamps = false;
+
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class);
+    }
+
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class);
+    }
 }

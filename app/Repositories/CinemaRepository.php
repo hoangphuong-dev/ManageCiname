@@ -25,6 +25,12 @@ class CinemaRepository extends BaseRepository
         return $this->model->where('id', $id)->firstOrFail()->toArray();
     }
 
+    public function getMovieByCinema($id)
+    {
+        return $this->model->query()
+            ->with('movies')->where('id', $id)->firstOrFail();
+    }
+
     public function createCinema($fill, $admin_info_id)
     {
         return $this->create([

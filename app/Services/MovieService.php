@@ -48,6 +48,13 @@ class MovieService extends BaseService
         return MovieResource::collection($movie);
     }
 
+    // public function getMovieByCinema($id)
+    // {
+    //     $movies = $this->movieRepository->getMovieByCinema($id);
+    //     dd($movies);
+    //     return MovieResource::collection($movies);
+    // }
+
     public function store($fill)
     {
         $province = $fill['province'];
@@ -63,7 +70,7 @@ class MovieService extends BaseService
             if (count($id_cinema) > 0) {
                 $this->cinemaMovieRepository->make($id_cinema, $movie->id);
             }
-            $this->DB::commit();
+            DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;

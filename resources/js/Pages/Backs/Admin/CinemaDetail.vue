@@ -15,7 +15,9 @@
             <room :seat_types="seat_types" :cinema="cinema"></room>
           </el-tab-pane>
           <!-- Tab Suất chiếu -->
-          <el-tab-pane label="Suất chiếu"> </el-tab-pane>
+          <el-tab-pane label="Suất chiếu">
+            <show-time :seat_types="seat_types" :cinema="cinema"></show-time>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </template>
@@ -25,13 +27,13 @@
 <script>
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import Room from "./Room.vue";
-import Cinema from "./Room.vue";
+import ShowTime from "./ShowTime.vue";
 export default {
   name: "CinemaDetail",
   components: {
     AdminLayout,
     Room,
-    Cinema,
+    ShowTime,
   },
   props: {
     cinema: {
