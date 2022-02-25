@@ -21,14 +21,9 @@ class MovieController extends Controller
         return $this->movieService->list($request);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function changeStatus($id, Request $request)
     {
-        //
+        return $this->movieService->updateStatus($id, $request);
     }
 
 

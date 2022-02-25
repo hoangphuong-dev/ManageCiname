@@ -31,6 +31,12 @@ class MovieRepository extends BaseRepository
             ->paginate($request->query('limit', 10));
     }
 
+    public function updateStatus($id, $request)
+    {
+        $status = $request->status;
+        return $this->model->where('id', $id)->update(['status' => $status]);
+    }
+
     // public function getMovieByCinema($id)
     // {
     //     return $this->model->query()

@@ -4,11 +4,11 @@ import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/inertia-vue3";
 import { InertiaProgress } from "@inertiajs/progress";
 import ElementPlus from "element-plus";
-import "@element-plus/icons";
 import "element-plus/dist/index.css";
 import VueAxios from "vue-axios";
 import axios from "@/plugins/axios";
 import FormErrors from "@/plugins/form-errors";
+
 import AppLayout from "@/Layouts/AppLayout.vue";
 import useGlobalMixin from "@/Mixins/root-global";
 import store from './store/store';

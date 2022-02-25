@@ -30,3 +30,8 @@ export const COMMENT_STATUS_HIDE = 0
 export const NOTIFICATION_TYPE_CARETAKER = 'CARETAKER'
 export const NOTIFICATION_TYPE_HOSPITAL = 'HOSPITAL'
 export const NOTIFICATION_TYPE_ALL = 'ALL'
+
+
+
+export const MOVIE_ACTIVE = 1
+export const MOVIE_DEACTIVE = 0

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Movie;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,7 +24,9 @@ class MovieResource extends JsonResource
             'trailler' => $this->trailler,
             'movie_length' => $this->movie_length,
             'rated' => $this->rated,
-            'status' => $this->status,
+            'status_switch' => $this->status === Movie::MOVIE_ACTIVE
+                ? Movie::MOVIE_ACTIVE
+                : Movie::MOVIE_DEACTIVE,
             'created_at' => Carbon::parse($this->created_at)->format('c'),
             'updated_at' => Carbon::parse($this->updated_at)->format('c'),
         ];

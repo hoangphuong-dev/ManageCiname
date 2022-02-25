@@ -55,6 +55,11 @@ class MovieService extends BaseService
     //     return MovieResource::collection($movies);
     // }
 
+    public function  updateStatus($id, $request)
+    {
+        return $this->movieRepository->updateStatus($id, $request);
+    }
+
     public function store($fill)
     {
         $province = $fill['province'];

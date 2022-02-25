@@ -106,9 +106,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['api-verify:admin']], functi
 
 Route::apiResource('moviegenres', MovieGenreController::class);
 Route::apiResource('movies', MovieController::class);
+Route::put('/movies/{id}/update-status', [MovieController::class, 'changeStatus'])
+    ->name('movies.change_status');
 Route::apiResource('admins', ApiAdminController::class);
 Route::apiResource('casts', CastController::class);
 Route::apiResource('seat_types', SeatTypeController::class);
 Route::apiResource('rooms', RoomController::class);
-Route::put('/rooms/{id}/update-status', [RoomController::class, 'changeStatus'])->name('rooms.change_status');
+Route::put('/rooms/{id}/update-status', [RoomController::class, 'changeStatus'])
+    ->name('rooms.change_status');
 Route::apiResource('showtimes', ShowTimeController::class);

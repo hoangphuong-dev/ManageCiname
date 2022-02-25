@@ -12,6 +12,10 @@ export const deleteMovie = async (id) => {
     return await axios.delete("/movies/" + id);
 };
 
+export const updateStatusMovie = async (id, status) => {
+    return await axios.put('/movies/' + id + '/update-status', { status })
+}
+
 export const updateMovie = async (id, formData = {}) => {
     return await axios.put("/movies/" + id + "/answer", formData);
 };
@@ -60,4 +64,3 @@ export const updateStatusRoom = async (id, status) => {
 export const listShowTime = async (params = {}) => {
     return await axios.get("/showtimes", { params });
 };
-

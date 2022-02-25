@@ -6,11 +6,17 @@
         <div class="w-full flex relative">
           <div class="w-3/4 flex items-end">
             <div class="search">
-              <search-input :filter="filter" @submit="fetchData" label="Tìm kiếm"></search-input>
+              <search-input
+                :filter="filter"
+                @submit="fetchData"
+                label="Tìm kiếm"
+              ></search-input>
             </div>
           </div>
           <div class="w-1/4 text-right">
-            <el-button @click="$inertia.visit(route('superadmin.create_movie'))">Thêm phim FFFFF</el-button>
+            <el-button @click="$inertia.visit(route('superadmin.create_movie'))"
+              >Thêm phim FFFFF</el-button
+            >
           </div>
         </div>
 
@@ -26,17 +32,38 @@
             enable-select-box
             @page="handleCurrentPage"
           >
-            <template #question_content="{ row }">
+            <!-- <template #trailler="{ row }">
               <iframe
-                width="200"
-                height="315"
-                src="https://www.youtube.com/embed/s4ObxcdXoFE"
-                title="YouTube video player"
-                frameborder="0"
+                width="300"
+                height="150"
+                :src="'https://www.youtube.com/embed/' + videoId(row)"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
               ></iframe>
+            </template> -->
+            <template #image="{ row }">
+              <img
+                :src="
+                  'https://i3.ytimg.com/vi/' +
+                  videoId(row) +
+                  '/maxresdefault.jpg'
+                "
+                alt="ảnh từ youtube"
+              />
             </template>
+            <template #status="{ row }">
+              <div v-if="row" class="flex items-center">
+                <el-switch
+                  v-model="row.status_switch"
+                  active-color="#13ce66"
+                  inactive-color="#cccccc"
+                  :active-value="MOVIE_ACTIVE"
+                  :inactive-value="MOVIE_DEACTIVE"
+                  @click="updateStatus(row, row.status_switch)"
+                />
+              </div>
+            </template>
+            <template #action="{ row }"> Sửa Xóa Xem </template>
           </data-table>
         </div>
       </div>
@@ -48,45 +75,46 @@
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import DataTable from "@/Components/DataTable.vue";
-import { listMovie } from "@/API/main.js";
-import Embed from "v-video-embed";
+import { listMovie, updateStatusMovie } from "@/API/main.js";
+import { MOVIE_ACTIVE, MOVIE_DEACTIVE } from "@/store/const.js";
+import { getYoutubeId } from "@/Helpers/youtube.js";
 export default {
-  name: "Contact",
+  name: "Movie",
   components: {
     AdminLayout,
     SearchInput,
-    Embed,
-    DataTable
+    DataTable,
   },
+
   data() {
     return {
-      videoId: "",
-      startTime: "",
+      MOVIE_ACTIVE: MOVIE_ACTIVE,
+      MOVIE_DEACTIVE: MOVIE_DEACTIVE,
       loading: false,
       dialogVisible: false,
+      url: "",
       movies: [],
       filter: {
         page: 1,
-        limit: 10
+        limit: 10,
       },
       fields: [
+        { key: "image", label: "Ảnh", width: "300" },
         { key: "name", label: "Tên phim" },
-        { key: "image", label: "Ảnh" },
+        // { key: "trailler", label: "Trailler", width: "300" },
         { key: "director", label: "Đạo diễn" },
         { key: "rated", label: "Giới hạn độ tuổi" },
         { key: "status", label: "Trạng thái" },
-        { key: "question_content", label: "Youtube" }
-      ]
+        { key: "action", label: "Thao tác" },
+      ],
     };
   },
   created() {
     this.fetchData();
   },
   methods: {
-    showVideo(url) {
-      console.log("FFFF", this.$youtube);
-      //   this.videoId = this.$youtube.getIdFromURL(url.trailler);
-      //   this.startTime = this.$youtube.getTimeFromURL(url.trailler);
+    videoId(row) {
+      return getYoutubeId(row);
     },
     handleCurrentPage(value) {
       this.filter.page = value;
@@ -102,7 +130,7 @@ export default {
           this.$message.error("Server Error");
         });
       this.loading = false;
-    }
+    },
     // async handleDelete(item) {
     //   this.$confirm("Are you sure to delete this contact?", "Warning", {
     //     confirmButtonText: "OK",
@@ -121,6 +149,30 @@ export default {
     //     this.loading = false;
     //   });
     // },
-  }
+
+    async updateStatus(row, status) {
+      this.$confirm(`Bạn có chắc chắn thay đổi trạng thái phim `, "Cảnh báo", {
+        confirmButtonText: "Chắc chắn",
+        cancelButtonText: "Hủy",
+        type: "warning",
+      })
+        .then(async () => {
+          this.loading = true;
+          await updateStatusMovie(row.id, status)
+            .then(async (res) => {
+              this.fetchData();
+              this.$message.success("Cập nhật trạng thái thành công !");
+            })
+            .catch(() => {
+              this.fetchData();
+              this.$message.error("Có lỗi trong quá trình thực thi");
+            });
+          this.loading = false;
+        })
+        .catch(() => {
+          this.fetchData();
+        });
+    },
+  },
 };
 </script>
