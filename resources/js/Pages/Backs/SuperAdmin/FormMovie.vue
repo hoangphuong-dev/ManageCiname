@@ -37,11 +37,6 @@
               <el-form-item label="Giới hạn độ tuổi" prop="rated">
                 <el-input v-model="formData.rated"></el-input>
               </el-form-item>
-
-              <!-- Mô tả chi tiết phim -->
-              <el-form-item label="Mô tả chi tiết" prop="description">
-                <el-input v-model="formData.description"></el-input>
-              </el-form-item>
             </div>
             <div class="w-1/2 p-2 m-2">
               <!-- Thể loại phim -->
@@ -202,6 +197,35 @@
               </el-form-item>
             </div>
           </div>
+          <div class="w-full">
+            <!-- Mô tả chi tiết phim -->
+            <el-form-item label="Mô tả chi tiết" prop="description">
+              <editor
+                api-key="4ef3zvav0qudmex3qwfywihrcyw1nenban69inpf40obfgdh"
+                v-model="formData.description"
+                :init="{
+                  height: 400,
+                  menubar: false,
+                  plugins: [
+                    'fullscreen advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount image',
+                  ],
+                  toolbar:
+                    'fullscreen | undo redo | formatselect | bold italic forecolor backcolor | \
+                                        alignleft aligncenter alignright alignjustify | \
+                                        bullist numlist outdent indent | removeformat | image',
+                  image_title: true,
+                  automatic_uploads: true,
+                  file_picker_types: 'image',
+                  file_picker_callback: filePicker,
+                  image_description: false,
+                  image_title: false,
+                  fullscreen_native: true,
+                }"
+              />
+            </el-form-item>
+          </div>
         </el-form>
 
         <!-- submit -->
@@ -217,8 +241,10 @@
   </admin-layout>
 </template>
 <script>
-import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import { toFormData } from "@/libs/form";
+import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
+import Editor from "@tinymce/tinymce-vue";
+import { CirclePlus } from "@element-plus/icons-vue";
 import {
   createMovie,
   createMovieGenre,
@@ -226,11 +252,10 @@ import {
   createCast,
   listCast,
 } from "@/API/main.js";
-import { CirclePlus } from "@element-plus/icons-vue";
 
 export default {
   name: "FormAdminInfo",
-  components: { AdminLayout, CirclePlus },
+  components: { AdminLayout, CirclePlus, Editor },
   props: {
     adminInfo: {
       type: Array,
@@ -275,7 +300,12 @@ export default {
         description: {
           required: true,
           message: "Trường này không được trống ",
-          trigger: "blur",
+          trigger: "change",
+        },
+        cast: {
+          required: true,
+          message: "Trường này không được trống ",
+          trigger: "change",
         },
         trailler: [
           {
@@ -302,12 +332,12 @@ export default {
         province: {
           required: true,
           message: "Trường này không được trống ",
-          trigger: "blur",
+          trigger: "change",
         },
         movie_genre: {
           required: true,
           message: "Trường này không được trống ",
-          trigger: "blur",
+          trigger: "change",
         },
       },
       rulesMovieGenre: {
