@@ -82,6 +82,11 @@ class MovieService extends BaseService
         }
     }
 
+    public function delete($id)
+    {
+        return $this->movieRepository->destroy($id);
+    }
+
     public function getCinemesByProvince($arrayProvinve)
     {
         $arrayAdminInfo = $this->adminInfoRepository->getArrayIdAdminInfo($arrayProvinve);

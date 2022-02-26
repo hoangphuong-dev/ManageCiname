@@ -33,6 +33,7 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
 
     Route::get('/create_admin', [AdminInfoController::class, 'create'])->name('create_admin');
     Route::get('/create_movie', [MovieController::class, 'create'])->name('create_movie');
+    Route::delete('movies/{id}', [MovieController::class, 'delete'])->name('movies.delete');
 });
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']], function () {

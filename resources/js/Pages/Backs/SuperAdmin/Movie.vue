@@ -63,7 +63,18 @@
                 />
               </div>
             </template>
-            <template #action="{ row }"> Sửa Xóa Xem </template>
+            <template #action="{ row }">
+              <div class="flex">
+                <div class="mx-4">Sửa</div>
+                <div
+                  v-if="row?.status_switch == MOVIE_DEACTIVE"
+                  @click="confirmEventDelete(row)"
+                  class="cursor-pointer btn-danger p-1 w-8 flex justify-center"
+                >
+                  <img src="/images/trash_white.svg" />
+                </div>
+              </div>
+            </template>
           </data-table>
         </div>
       </div>
@@ -77,13 +88,18 @@ import SearchInput from "@/Components/Element/SearchInput.vue";
 import DataTable from "@/Components/DataTable.vue";
 import { listMovie, updateStatusMovie } from "@/API/main.js";
 import { MOVIE_ACTIVE, MOVIE_DEACTIVE } from "@/store/const.js";
+import { Inertia } from "@inertiajs/inertia";
 import { getYoutubeId } from "@/Helpers/youtube.js";
+import { Edit, Delete } from "@element-plus/icons-vue";
+
 export default {
   name: "Movie",
   components: {
     AdminLayout,
     SearchInput,
     DataTable,
+    Edit,
+    Delete,
   },
 
   data() {
@@ -131,24 +147,23 @@ export default {
         });
       this.loading = false;
     },
-    // async handleDelete(item) {
-    //   this.$confirm("Are you sure to delete this contact?", "Warning", {
-    //     confirmButtonText: "OK",
-    //     cancelButtonText: "Cancel",
-    //     type: "warning",
-    //   }).then(async () => {
-    //     this.loading = true;
-    //     await deleteContact(item.id)
-    //       .then(async (res) => {
-    //         this.fetchData();
-    //         this.$message.success("Delete completed");
-    //       })
-    //       .catch(() => {
-    //         this.$message.error("Server Error");
-    //       });
-    //     this.loading = false;
-    //   });
-    // },
+    confirmEventDelete({ id }) {
+      this.$confirm(
+        `Bạn có chắc xóa hết tất cả dữ liệu của phim này ?`,
+        "Cảnh báo",
+        {
+          confirmButtonText: "Chắc chắn",
+          cancelButtonText: "Hủy",
+          type: "warning",
+        }
+      ).then(async () => {
+        Inertia.delete(route("superadmin.movies.delete", { id }), {
+          onError: (e) => console.log(e),
+        });
+        this.fetchData();
+        this.$message.success("Cập nhật trạng thái thành công !");
+      });
+    },
 
     async updateStatus(row, status) {
       this.$confirm(`Bạn có chắc chắn thay đổi trạng thái phim `, "Cảnh báo", {

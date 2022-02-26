@@ -60,4 +60,9 @@ class MovieRepository extends BaseRepository
             'status' => $fill['status'],
         ]);
     }
+
+    public function destroy($id)
+    {
+        return $this->model->where('id', $id)->where('status', Movie::MOVIE_DEACTIVE)->delete();
+    }
 }
