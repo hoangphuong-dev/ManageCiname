@@ -15,7 +15,7 @@
           </div>
           <div class="w-1/4 text-right">
             <el-button @click="$inertia.visit(route('superadmin.create_movie'))"
-              >Thêm phim FFFFF</el-button
+              >Thêm phim</el-button
             >
           </div>
         </div>
