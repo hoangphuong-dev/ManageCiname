@@ -26,6 +26,11 @@ class SeatTypeService extends BaseService
         return SeatTypeResource::collection($seatType);
     }
 
+    public function edit($request, $id)
+    {
+        return $this->seatTypeRepository->edit($request, $id);
+    }
+
     public function store($request)
     {
         $data = $request->validated();

@@ -1,10 +1,10 @@
 <template>
   <div class="MenuAdmin h-screen flex overflow-hidden">
     <el-aside class="AsideMenu bg-white flex-shrink-0">
-      <div class="h-16 justify-items-center">
-        <a class="m-auto">
-          <!-- <img class="h-16" src="/images/logo.png" /> -->
-          <el-icon><watch /></el-icon>
+      <div class="h-16 justify-items-center border-b-2">
+        <a href="/" class="flex">
+          <img class="w-36 h-14" src="/images/logo.png" />
+          <h1 class="text-red-600 m-4">PHC</h1>
         </a>
       </div>
 
@@ -17,7 +17,7 @@
           @click="onMenuClick(menu)"
         >
           <div class="flex items-center">
-            <el-icon class="mx-4"><right /></el-icon>
+            <img class="w-6 h-6 mr-4" :src="'/images/' + menu.icon + '.png'" />
             <div class="text-base">{{ menu.label }}</div>
           </div>
         </div>
@@ -30,9 +30,14 @@
           <el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link flex items-center justify-center">
               <el-image
-                class="rounded-full w-10 h-10 ml-2"
+                class="rounded-full w-10 h-10 ml-2 border"
                 :src="user?.avatar || ''"
-              ></el-image
+              >
+                <template #error>
+                  <div class="mt-3 ml-2 font-black">
+                    {{ user?.name?.substring(0, 2).toUpperCase() }}
+                  </div>
+                </template> </el-image
               ><el-icon class="el-icon--right"><arrow-down /></el-icon>
             </span>
             <template #dropdown>
@@ -104,36 +109,44 @@ export default {
       menuSuper: [
         {
           label: "Trang chủ",
+          icon: "home",
           path: "superadmin.home_super",
         },
         {
           label: "Quản lý phim",
+          icon: "movie",
           path: "superadmin.movie.index",
         },
         {
           label: "Hệ thống rạp",
+          icon: "cinema",
           path: "superadmin.admin_info.index",
         },
         {
           label: "Quản lý loại ghế",
+          icon: "seat",
           path: "superadmin.seat_type.index",
         },
       ],
       menuAdmin: [
         {
           label: "Trang chủ",
+          icon: "home",
           path: "admin.home_admin",
         },
         {
           label: "Quản lý rạp",
+          icon: "cinema",
           path: "admin.cinema.index",
         },
         {
           label: "Quản lý hóa đơn",
+          icon: "bill",
           path: "admin.bill.index",
         },
         {
           label: "Quản lý nhân viên",
+          icon: "staff",
           path: "admin.staff.index",
         },
       ],
@@ -192,7 +205,7 @@ export default {
   height: 27px;
 }
 .MenuAdmin .MenuItem.IsActive {
-  background: lightpink;
+  background: #ff7777;
   color: white;
   font-weight: 700;
 }

@@ -34,6 +34,11 @@ class SeatTypeRepository extends BaseRepository
         return $this->model->select(['id', 'name'])->get()->toArray();
     }
 
+    public function edit($request, $id)
+    {
+        return $this->model->select(['id', 'name'])->get()->toArray();
+    }
+
     public function list($request)
     {
         return $this->model->query()

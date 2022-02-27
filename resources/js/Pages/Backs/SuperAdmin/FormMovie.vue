@@ -57,6 +57,51 @@
                       ></el-option>
                     </el-select>
                   </el-form-item>
+                  <!-- Dialog thể loại phim -->
+                  <template>
+                    <el-dialog
+                      class="text-center"
+                      title="Thêm thể loại phim"
+                      v-model="dialogFormVisibleMovieGenre"
+                    >
+                      <el-form
+                        class="text-center w-1/2 m-auto"
+                        ref="movieGenreForm"
+                        :model="formDataMoviegenre"
+                        label-position="top"
+                        :rules="rulesMovieGenre"
+                      >
+                        <!-- Tên thể loại -->
+                        <el-form-item label="Tên thể loại" prop="name">
+                          <el-input
+                            v-model="formDataMoviegenre.name"
+                            autocomplete="off"
+                            placeholder="Nhập tên"
+                          ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="Giá tiền thể loại" prop="price">
+                          <el-input
+                            v-model="formDataMoviegenre.price"
+                            autocomplete="off"
+                            placeholder="Nhập giá tiền"
+                          ></el-input>
+                        </el-form-item>
+                        <!-- submit -->
+                        <div class="text-right">
+                          <span class="dialog-footer">
+                            <el-button
+                              @click="dialogFormVisibleMovieGenre = false"
+                              >Hủy</el-button
+                            >
+                            <el-button type="primary" @click="submitMovieGenre"
+                              >Thêm</el-button
+                            >
+                          </span>
+                        </div>
+                      </el-form>
+                    </el-dialog>
+                  </template>
                 </div>
                 <div
                   class="w-1/12 m-auto mt-8 -mr-8 cursor-pointer"
@@ -152,50 +197,7 @@
             </el-form-item>
           </div>
         </el-form>
-        <!-- Dialog thể loại phim -->
-        <template>
-          <el-dialog
-            class="text-center"
-            title="Thêm thể loại phim"
-            v-model="dialogFormVisibleMovieGenre"
-          >
-            <el-form
-              class="text-center w-1/2 m-auto"
-              ref="movieGenreForm"
-              :model="formDataMoviegenre"
-              label-position="top"
-              :rules="rulesMovieGenre"
-            >
-              <!-- Tên thể loại -->
-              <el-form-item label="Tên thể loại" prop="name">
-                <el-input
-                  v-model="formDataMoviegenre.name"
-                  autocomplete="off"
-                  placeholder="Nhập tên"
-                ></el-input>
-              </el-form-item>
 
-              <el-form-item label="Giá tiền thể loại" prop="price">
-                <el-input
-                  v-model="formDataMoviegenre.price"
-                  autocomplete="off"
-                  placeholder="Nhập giá tiền"
-                ></el-input>
-              </el-form-item>
-              <!-- submit -->
-              <div class="text-right">
-                <span class="dialog-footer">
-                  <el-button @click="dialogFormVisibleMovieGenre = false"
-                    >Hủy</el-button
-                  >
-                  <el-button type="primary" @click="submitMovieGenre"
-                    >Thêm</el-button
-                  >
-                </span>
-              </div>
-            </el-form>
-          </el-dialog>
-        </template>
         <!-- Dialog diễn viên -->
         <template>
           <el-dialog

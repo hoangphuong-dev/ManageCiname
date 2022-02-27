@@ -12,7 +12,11 @@
           <div class="customer_dialog">
             <el-dialog
               class="text-center"
-              title="Thêm loại ghế"
+              :title="
+                selectedItem === null
+                  ? 'Thêm loại ghế'
+                  : 'Sửa thông tin loại ghế'
+              "
               v-model="dialogFormVisibleSeatType"
             >
               <el-form
@@ -79,9 +83,10 @@
                   <el-button @click="dialogFormVisibleSeatType = false"
                     >Hủy</el-button
                   >
-                  <el-button type="primary" @click="submitSeatType"
-                    >Thêm</el-button
-                  >
+                  <el-button type="primary" @click="submitSeatType">
+                    <span v-if="selectedItem === null">Thêm</span>
+                    <span v-else>Cập nhật</span>
+                  </el-button>
                 </span>
               </div>
             </el-dialog>
@@ -113,6 +118,8 @@
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import Pagination from "@/Components/Pagination.vue";
+import { Inertia } from "@inertiajs/inertia";
+import { onBefore, onFinish } from "@/Uses/request-inertia";
 import { listSeatType, createSeatType } from "@/API/main.js";
 import { toFormData } from "@/libs/form";
 
@@ -128,6 +135,7 @@ export default {
   data() {
     return {
       imagePreview: "",
+      selectedItem: null,
       loading: false,
       dialogFormVisibleSeatType: false,
       keyword: "",
@@ -175,6 +183,7 @@ export default {
     },
 
     openDialogSeatType() {
+      this.selectedItem = null;
       this.dialogFormVisibleSeatType = true;
       this.resetForm();
     },
@@ -184,26 +193,50 @@ export default {
       this.$emit("handleFilter");
     },
 
+    async createSeatType() {
+      await createSeatType(
+        toFormData({ ...this.formData }, "", { indices: true })
+      )
+        .then(async (res) => {
+          this.$message.success("Create success");
+          this.dialogFormVisibleSeatType = false;
+          this.resetForm();
+          this.fetchData();
+        })
+        .catch(() => {
+          this.$message.error("Server Error");
+        });
+    },
+    async editSeaType() {
+      Inertia.put(
+        route("superadmin.seat_types.edit", { id: this.selectedItem }),
+        this.formData,
+        {
+          onBefore,
+          onFinish,
+          preserveScroll: true,
+          onError: (e) => console.log(e),
+          onSuccess: (_) => {
+            this.dialogFormVisible = !this.dialogFormVisible;
+            this.selectedItem = null;
+          },
+        }
+      );
+    },
     async submitSeatType() {
-      this.$refs["SeatTypeForm"].validate(async (valid) => {
+      this.$refs["SeatTypeForm"].validate((valid) => {
         if (valid) {
-          await createSeatType(
-            toFormData({ ...this.formData }, "", { indices: true })
-          )
-            .then(async (res) => {
-              this.$message.success("Create success");
-              this.dialogFormVisibleSeatType = false;
-              this.resetForm();
-              this.fetchData();
-            })
-            .catch(() => {
-              this.$message.error("Server Error");
-            });
+          if (this.selectedItem === null) {
+            this.createSeatType();
+          } else {
+            this.editSeaType();
+          }
         }
       });
     },
 
     edit(item) {
+      this.selectedItem = item.id;
       this.dialogFormVisibleSeatType = true;
       this.formData.name = item.name;
       this.formData.price = item.price;
