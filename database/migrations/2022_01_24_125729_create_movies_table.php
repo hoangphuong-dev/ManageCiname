@@ -24,6 +24,28 @@ class CreateMoviesTable extends Migration
             $table->tinyInteger('status')->comment('0: deactive , 1 : active');
             $table->timestamps();
         });
+
+        Schema::create('movie_genre_movies', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('movie_genre_id')->unsigned();
+            $table->bigInteger('movie_id')->unsigned();
+
+            $table->foreign('movie_genre_id')->references('id')->on('movie_genres')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('movie_id')->references('id')->on('movies')
+                ->onUpdate('cascade')->onDelete('cascade');
+        });
+
+        Schema::create('movies_format_movies', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('format_movie_id')->unsigned();
+            $table->bigInteger('movie_id')->unsigned();
+
+            $table->foreign('format_movie_id')->references('id')->on('format_movies')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('movie_id')->references('id')->on('movies')
+                ->onUpdate('cascade')->onDelete('cascade');
+        });
     }
 
     /**
@@ -33,6 +55,8 @@ class CreateMoviesTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('movie_genre_movies');
+        Schema::dropIfExists('movies_format_movies');
         Schema::dropIfExists('movies');
     }
 }

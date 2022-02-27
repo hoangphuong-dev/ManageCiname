@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Cast;
+use App\Models\MovieGenre;
 use App\Models\Province;
+use App\Models\SeatType;
 use Illuminate\Database\Seeder;
 
-class ProvinceSedeer extends Seeder
+class BaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +17,36 @@ class ProvinceSedeer extends Seeder
      */
     public function run()
     {
+        $dataCast = ([
+            ['name' => 'Trấn Thành'],
+            ['name' => 'Công Lý'],
+            ['name' => 'Trường Giang'],
+            ['name' => 'Hoài Linh'],
+            ['name' => 'Thanh Mai'],
+            ['name' => 'Trúc Mã'],
+            ['name' => 'Hồng Vân'],
+            ['name' => 'Hồng Đăng'],
+            ['name' => 'Ngọc Thảo'],
+            ['name' => 'Thúy Kiều'],
+            ['name' => 'Thúy Vân'],
+            ['name' => 'Hồng Đam'],
+            ['name' => 'Ngọc Hiền'],
+            ['name' => 'Đàm Vĩnh Hưng'],
+        ]);
+
+        Cast::insert($dataCast);
+
+        $movieGenre = ([
+            ['name' => 'Hoạt hình',],
+            ['name' => 'Bom tấn'],
+            ['name' => 'Hành động'],
+            ['name' => 'Ca nhạc'],
+            ['name' => 'Cổ trang'],
+            ['name' => 'Gia đình'],
+            ['name' => 'Hài hước'],
+        ]);
+        MovieGenre::insert($movieGenre);
+
         $dataProvince = [
             "Hồ Chí Minh",
             "Hà Nội",
@@ -84,5 +117,25 @@ class ProvinceSedeer extends Seeder
                 'name' => $data
             ]);
         }
+
+        $dataSeatType = ([
+            [
+                'name' => ' Ghế Thường',
+                'image' => 'http://127.0.0.1/dashboard/admin/cinemas/show/1',
+                'price' => '100000',
+            ],
+            [
+                'name' => 'Ghế Vip',
+                'image' => 'http://127.0.0.1/dashboard/admin/cinemas/show/1',
+                'price' => '100000',
+            ],
+            [
+                'name' => 'Ghế Đôi',
+                'image' => 'http://127.0.0.1/dashboard/admin/cinemas/show/1',
+                'price' => '100000',
+            ],
+        ]);
+
+        SeatType::insert($dataSeatType);
     }
 }

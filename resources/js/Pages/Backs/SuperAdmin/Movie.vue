@@ -65,8 +65,15 @@
             </template>
             <template #action="{ row }">
               <div class="flex">
-                <div class="mx-4">Sửa</div>
                 <div class="mx-4">Xem</div>
+                <div
+                  class="mx-4"
+                  @click="
+                    $inertia.get(route('superadmin.movies.edit', row?.id))
+                  "
+                >
+                  Sửa
+                </div>
                 <div
                   v-if="row?.status_switch == MOVIE_DEACTIVE"
                   @click="confirmEventDelete(row)"
@@ -161,7 +168,6 @@ export default {
           onError: (e) => console.log(e),
           onSuccess: (_) => {
             this.fetchData();
-            this.$message.success("Xóa thành công !");
           },
         });
       });

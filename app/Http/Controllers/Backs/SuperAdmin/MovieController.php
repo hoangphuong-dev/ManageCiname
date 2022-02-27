@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Backs\SuperAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\MovieGenre;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class MovieController extends Controller
@@ -46,5 +44,16 @@ class MovieController extends Controller
         } finally {
             return back()->with($message);
         }
+    }
+
+    public function edit($id)
+    {
+        $movie = $this->movieService->edit($id);
+        return Inertia::render(
+            'Backs/SuperAdmin/EditMovie',
+            [
+                'movie' => $movie
+            ]
+        );
     }
 }
