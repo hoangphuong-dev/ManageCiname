@@ -57,51 +57,6 @@
                       ></el-option>
                     </el-select>
                   </el-form-item>
-                  <!-- Dialog thể loại phim -->
-                  <template>
-                    <el-dialog
-                      class="text-center"
-                      title="Thêm thể loại phim"
-                      v-model="dialogFormVisibleMovieGenre"
-                    >
-                      <el-form
-                        class="text-center w-1/2 m-auto"
-                        ref="movieGenreForm"
-                        :model="formDataMoviegenre"
-                        label-position="top"
-                        :rules="rulesMovieGenre"
-                      >
-                        <!-- Tên thể loại -->
-                        <el-form-item label="Tên thể loại" prop="name">
-                          <el-input
-                            v-model="formDataMoviegenre.name"
-                            autocomplete="off"
-                            placeholder="Nhập tên"
-                          ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="Giá tiền thể loại" prop="price">
-                          <el-input
-                            v-model="formDataMoviegenre.price"
-                            autocomplete="off"
-                            placeholder="Nhập giá tiền"
-                          ></el-input>
-                        </el-form-item>
-                        <!-- submit -->
-                        <div class="text-right">
-                          <span class="dialog-footer">
-                            <el-button
-                              @click="dialogFormVisibleMovieGenre = false"
-                              >Hủy</el-button
-                            >
-                            <el-button type="primary" @click="submitMovieGenre"
-                              >Thêm</el-button
-                            >
-                          </span>
-                        </div>
-                      </el-form>
-                    </el-dialog>
-                  </template>
                 </div>
                 <div
                   class="w-1/12 m-auto mt-8 -mr-8 cursor-pointer"
@@ -138,55 +93,12 @@
                   <el-icon><circle-plus /></el-icon>
                 </div>
               </div>
-
-              <!-- Khu vực chiếu phim -->
-              <el-form-item
-                label="Thành phố được phép chiếu phim"
-                prop="province"
-              >
-                <el-select
-                  class="custom-el-form-item w-full"
-                  v-model="formData.province"
-                  placeholder="Chọn khu vực"
-                  clearable
-                  multiple
-                >
-                  <el-option
-                    v-for="item in adminInfo"
-                    :key="item.province.id"
-                    :label="item.province.name"
-                    :value="item.province.id"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
             </div>
           </div>
           <div class="w-full">
             <!-- Mô tả chi tiết phim -->
             <el-form-item label="Mô tả chi tiết" prop="description">
-              <editor
-                api-key="4ef3zvav0qudmex3qwfywihrcyw1nenban69inpf40obfgdh"
-                v-model="formData.description"
-                :init="{
-                  height: 400,
-                  menubar: false,
-                  plugins: [
-                    'fullscreen advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help wordcount image',
-                  ],
-                  toolbar:
-                    'fullscreen | undo redo | formatselect | bold italic forecolor backcolor | \
-                                        alignleft aligncenter alignright alignjustify | \
-                                        bullist numlist outdent indent | removeformat | image',
-                  image_title: true,
-                  automatic_uploads: true,
-                  file_picker_types: 'image',
-                  image_description: false,
-                  image_title: false,
-                  fullscreen_native: true,
-                }"
-              />
+              <editor v-model="formData.description" :init="{ height: 400 }" />
             </el-form-item>
           </div>
           <div class="flex justify-center mt-8">
@@ -197,7 +109,50 @@
             </el-form-item>
           </div>
         </el-form>
+        <!-- Dialog thể loại phim -->
+        <template>
+          <el-dialog
+            class="text-center"
+            title="Thêm thể loại phim"
+            v-model="dialogFormVisibleMovieGenre"
+          >
+            <el-form
+              class="text-center w-1/2 m-auto"
+              ref="movieGenreForm"
+              :model="formDataMoviegenre"
+              label-position="top"
+              :rules="rulesMovieGenre"
+            >
+              <!-- Tên thể loại -->
+              <el-form-item label="Tên thể loại" prop="name">
+                <el-input
+                  v-model="formDataMoviegenre.name"
+                  autocomplete="off"
+                  placeholder="Nhập tên"
+                ></el-input>
+              </el-form-item>
 
+              <el-form-item label="Giá tiền thể loại" prop="price">
+                <el-input
+                  v-model="formDataMoviegenre.price"
+                  autocomplete="off"
+                  placeholder="Nhập giá tiền"
+                ></el-input>
+              </el-form-item>
+              <!-- submit -->
+              <div class="text-right">
+                <span class="dialog-footer">
+                  <el-button @click="dialogFormVisibleMovieGenre = false"
+                    >Hủy</el-button
+                  >
+                  <el-button type="primary" @click="submitMovieGenre"
+                    >Thêm</el-button
+                  >
+                </span>
+              </div>
+            </el-form>
+          </el-dialog>
+        </template>
         <!-- Dialog diễn viên -->
         <template>
           <el-dialog
@@ -251,12 +206,6 @@ import {
 export default {
   name: "FormAdminInfo",
   components: { AdminLayout, CirclePlus, Editor },
-  props: {
-    adminInfo: {
-      type: Array,
-      required: true,
-    },
-  },
   data() {
     return {
       dialogFormVisibleMovieGenre: false,
@@ -270,7 +219,6 @@ export default {
         trailler: "",
         movie_length: "",
         rated: "",
-        province: [],
         movie_genre: [],
         cast: [],
       },
@@ -323,11 +271,6 @@ export default {
           required: true,
           message: "Trường này không được trống ",
           trigger: "blur",
-        },
-        province: {
-          required: true,
-          message: "Trường này không được trống ",
-          trigger: "change",
         },
         movie_genre: {
           required: true,

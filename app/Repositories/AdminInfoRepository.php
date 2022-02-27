@@ -55,8 +55,8 @@ class AdminInfoRepository extends BaseRepository
         return !is_null($admin_info) ? $admin_info->id : null;
     }
 
-    public function getArrayIdAdminInfo($arrayProvinve)
+    public function getArrayIdAdminInfo()
     {
-        return $this->model->query()->select('id')->whereIn('province_id', $arrayProvinve)->get()->toArray();;
+        return $this->model->query()->select('id')->get()->toArray();;
     }
 }

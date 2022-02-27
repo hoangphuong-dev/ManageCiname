@@ -62,9 +62,7 @@ class MovieService extends BaseService
 
     public function store($fill)
     {
-        $province = $fill['province'];
-        $id_cinema = $this->getCinemesByProvince($province);
-
+        $id_cinema = $this->getCinemesByProvince();
         $movie_genre = $fill['movie_genre'];
         $cast = $fill['movie_genre'];
         try {
@@ -93,9 +91,9 @@ class MovieService extends BaseService
         return $this->movieRepository->destroy($id);
     }
 
-    public function getCinemesByProvince($arrayProvinve)
+    public function getCinemesByProvince()
     {
-        $arrayAdminInfo = $this->adminInfoRepository->getArrayIdAdminInfo($arrayProvinve);
+        $arrayAdminInfo = $this->adminInfoRepository->getArrayIdAdminInfo();
         return $this->cinemaRepository->getArrayIdCinemaByAdminInfo($arrayAdminInfo);
     }
 }

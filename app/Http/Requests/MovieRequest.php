@@ -30,7 +30,6 @@ class MovieRequest extends FormRequest
             'trailler' => ['required', 'max:255'],
             'movie_length' => ['required', 'max:100'],
             'rated' => 'required',
-            'province' => 'required|array',
             'movie_genre' => 'required|array',
             'cast' => 'required|array',
         ];
