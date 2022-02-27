@@ -31,10 +31,8 @@ class SeatTypeService extends BaseService
         $data = $request->validated();
         if (isset($data['image'])) {
             $image = ImageHelper::upload($data['image']);
-
             $data['image'] = $image;
         }
-
         return $this->seatTypeRepository->make($data);
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageHelper
 {
-    public const ALLOW_IMAGE = ['jpeg','png','jpg','gif','svg'];
+    public const ALLOW_IMAGE = ['jpeg', 'png', 'jpg', 'gif', 'svg'];
     public const DEFAULT_PATH = 'uploads';
 
     static public function upload($image, $fileName = null, $toPath = self::DEFAULT_PATH)
@@ -16,7 +16,7 @@ class ImageHelper
         $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $image->extension();
 
-        if(!in_array($extension, self::ALLOW_IMAGE)) {
+        if (!in_array($extension, self::ALLOW_IMAGE)) {
             throw new ImageUploadFailException('Image not allow, image allow with extension ' . implode(",", self::ALLOW_IMAGE));
         }
 
@@ -28,6 +28,7 @@ class ImageHelper
 
         $filePath = $image->storeAs($toPath, $fileName);
         Storage::url($filePath);
+
         return $filePath;
     }
 
@@ -45,17 +46,20 @@ class ImageHelper
         }
     }
 
-    static public function deleteImages(array $images) {
+    static public function deleteImages(array $images)
+    {
         foreach ($images as $image) {
             static::deleteImage($image);
         }
     }
 
-    static public function deleteImage($path) {
+    static public function deleteImage($path)
+    {
         Storage::delete($path);
     }
 
-    static public function get($path) {
+    static public function get($path)
+    {
         return Storage::url($path);
     }
 }
