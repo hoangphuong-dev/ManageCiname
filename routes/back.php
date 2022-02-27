@@ -27,15 +27,17 @@ Route::group(['as' => 'back.'], function () {
 Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => ['superadmin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutSuperAdmin'])->name('logout_super');
     Route::get('/home', [SuperAdminController::class, 'index'])->name('home_super');
-    Route::get('/movies', [MovieController::class, 'index'])->name('movie.index');
+
     Route::get('/admin_infos', [AdminInfoController::class, 'index'])->name('admin_info.index');
     Route::get('/seat_types', [SeatTypeController::class, 'index'])->name('seat_type.index');
 
     Route::put('seat_types/{id}', [SeatTypeController::class, 'edit'])->name('seat_types.edit');
 
+    Route::get('/movies', [MovieController::class, 'index'])->name('movie.index');
     Route::get('/create_admin', [AdminInfoController::class, 'create'])->name('create_admin');
     Route::get('/create_movie', [MovieController::class, 'create'])->name('create_movie');
     Route::delete('movies/{id}', [MovieController::class, 'delete'])->name('movies.delete');
+    Route::get('movies/edit/{id}', [MovieController::class, 'edit'])->name('movies.edit');
 });
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']], function () {

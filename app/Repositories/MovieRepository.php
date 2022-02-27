@@ -24,6 +24,7 @@ class MovieRepository extends BaseRepository
     public function list($request)
     {
         return $this->model->query()
+            // ->with(['movie_genres', 'casts', 'cinemas'])
             ->when($request->name, function ($query) use ($request) {
                 return $query->where("name", "like", "%{$request->name}%");
             })
@@ -59,6 +60,20 @@ class MovieRepository extends BaseRepository
             'rated' => $fill['rated'],
             'status' => $fill['status'],
         ]);
+    }
+
+    public function show($id)
+    {
+        // $callable = function (&$query) use ($userId) {
+        //     $query->where('user_id', $userId);
+        // };
+        // return $this->job->query()
+        //     ->with(['province', 'images', 'tags'])
+        //     ->when($userId, function ($query) use ($callable) {
+        //         $query->with(['jobApplyPending' => $callable, 'jobApplyReject' => $callable, 'favorites' => $callable]);
+        //     })
+        //     ->findOrFail($id);
+        return $this->model->findOrFail($id);
     }
 
     public function destroy($id)

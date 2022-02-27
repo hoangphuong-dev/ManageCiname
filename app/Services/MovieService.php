@@ -82,6 +82,12 @@ class MovieService extends BaseService
         }
     }
 
+    public function edit($id)
+    {
+        $movie = $this->movieRepository->show($id);
+        return MovieResource::make($movie);
+    }
+
     public function delete($id)
     {
         return $this->movieRepository->destroy($id);
