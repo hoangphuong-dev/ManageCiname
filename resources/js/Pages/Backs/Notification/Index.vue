@@ -31,7 +31,9 @@
             </div>
           </div>
           <div class="w-1/4 flex items-end">
-            <button class="ml-auto btn-primary" @click="onOpenDialog">+登録</button>
+            <button class="ml-auto btn-primary" @click="onOpenDialog">
+              +登録
+            </button>
           </div>
         </div>
 
@@ -49,7 +51,14 @@
           >
             <template #status="{ row }">
               <p
-                class="py-2 px-5 w-max min-w-132 rounded-100 text-white text-center"
+                class="
+                  py-2
+                  px-5
+                  w-max
+                  min-w-132
+                  rounded-100
+                  text-white text-center
+                "
                 :class="[row?.status ? 'bg-lightGreen' : 'bg-yellowPrimary']"
               >
                 {{ row?.status ? "Delivered" : "Pending" }}
@@ -75,7 +84,11 @@
                 >
                   <template #reference>
                     <button class="btn-warning bg-gray-200">
-                      <img src="/images/svg/trash.svg" alt="" class="size-icon" />
+                      <img
+                        src="/images/svg/trash.svg"
+                        alt=""
+                        class="size-icon"
+                      />
                     </button>
                   </template>
                 </el-popconfirm>
@@ -96,7 +109,12 @@
           :title="selectedItem === null ? 'お知らせ登録' : 'Edit Notification'"
           :before-close="onCloseDialog"
         >
-          <el-form ref="formData" :model="formData" label-position="top" :rules="rules">
+          <el-form
+            ref="formData"
+            :model="formData"
+            label-position="top"
+            :rules="rules"
+          >
             <el-form-item
               :show-message="$errors.check('receiver_ids')"
               :inline-message="$errors.check('receiver_ids')"
@@ -201,7 +219,11 @@
           </el-form>
           <template #footer>
             <span class="dialog-footer flex justify-center gap-2.5">
-              <button class="btn-info" type="info" @click="dialogVisible = false">
+              <button
+                class="btn-info"
+                type="info"
+                @click="dialogVisible = false"
+              >
                 キャンセル
               </button>
               <button class="btn-primary" @click="onSubmit">登録</button>
@@ -224,7 +246,11 @@
           ></div>
           <template #footer>
             <span class="dialog-footer flex justify-center gap-2.5">
-              <button class="btn-info" type="info" @click="dialogVisibleDetail = false">
+              <button
+                class="btn-info"
+                type="info"
+                @click="dialogVisibleDetail = false"
+              >
                 キャンセル
               </button>
             </span>
@@ -407,7 +433,10 @@ export default {
       for (const item of this.options) {
         if (this.formData.isAllHospital && item.role === ROLE_USER) {
           arr.push(item);
-        } else if (this.formData.isAllCaretaker && item.role === ROLE_HOSPITAL) {
+        } else if (
+          this.formData.isAllCaretaker &&
+          item.role === ROLE_HOSPITAL
+        ) {
           arr.push(item);
         }
       }
@@ -418,7 +447,9 @@ export default {
       if (this.selectedItem === null) {
         return {};
       }
-      return this.notifications.data.find((item) => item.id === this.selectedItem);
+      return this.notifications.data.find(
+        (item) => item.id === this.selectedItem
+      );
     },
   },
   methods: {
@@ -531,7 +562,9 @@ export default {
     },
     onChangeAllCaretaker(val) {
       if (val) {
-        this.formData.receiver_ids = [...this.getUserSelectedByRole(ROLE_HOSPITAL)];
+        this.formData.receiver_ids = [
+          ...this.getUserSelectedByRole(ROLE_HOSPITAL),
+        ];
       }
     },
     renderReceiver(row) {
@@ -556,7 +589,9 @@ export default {
 
       for (const item of notificationManager) {
         if (
-          [NOTIFICATION_TYPE_CARETAKER, NOTIFICATION_TYPE_HOSPITAL].includes(item.type)
+          [NOTIFICATION_TYPE_CARETAKER, NOTIFICATION_TYPE_HOSPITAL].includes(
+            item.type
+          )
         ) {
           return "<span class='font-bold'>Other</span>";
         }

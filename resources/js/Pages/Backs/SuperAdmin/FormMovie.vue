@@ -3,7 +3,6 @@
     <template #main>
       <div class="bg-white min-h-full m-4 mb-0 p-4">
         <h2 class="text-center my-5">Thêm Phim</h2>
-
         <el-form
           class="el-form--style"
           ref="formMovie"
@@ -66,50 +65,6 @@
                   <el-icon><circle-plus /></el-icon>
                 </div>
               </div>
-              <!-- Dialog thể loại phim -->
-              <div class="customer_dialog">
-                <el-dialog
-                  class="text-center"
-                  title="Thêm thể loại phim"
-                  v-model="dialogFormVisibleMovieGenre"
-                >
-                  <el-form
-                    class="text-center w-1/2 m-auto"
-                    ref="movieGenreForm"
-                    :model="formDataMoviegenre"
-                    label-position="top"
-                    :rules="rulesMovieGenre"
-                  >
-                    <!-- Tên thể loại -->
-                    <el-form-item label="Tên thể loại" prop="name">
-                      <el-input
-                        v-model="formDataMoviegenre.name"
-                        autocomplete="off"
-                        placeholder="Nhập tên"
-                      ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="Giá tiền thể loại" prop="price">
-                      <el-input
-                        v-model="formDataMoviegenre.price"
-                        autocomplete="off"
-                        placeholder="Nhập giá tiền"
-                      ></el-input>
-                    </el-form-item>
-                  </el-form>
-                  <!-- submit -->
-                  <div class="text-right">
-                    <span class="dialog-footer">
-                      <el-button @click="dialogFormVisibleMovieGenre = false"
-                        >Hủy</el-button
-                      >
-                      <el-button type="primary" @click="submitMovieGenre"
-                        >Thêm</el-button
-                      >
-                    </span>
-                  </div>
-                </el-dialog>
-              </div>
 
               <!-- Diễn viên -->
               <div class="flex w-full">
@@ -137,42 +92,6 @@
                 >
                   <el-icon><circle-plus /></el-icon>
                 </div>
-              </div>
-              <!-- Dialog diễn viên -->
-              <div class="customer_dialog">
-                <el-dialog
-                  class="text-center"
-                  title="Thêm diễn viên"
-                  v-model="dialogFormVisibleCast"
-                >
-                  <el-form
-                    class="text-center w-1/2 m-auto"
-                    ref="CastForm"
-                    :model="formDataCast"
-                    label-position="top"
-                    :rules="rulesCast"
-                  >
-                    <!-- Tên diễn viên -->
-                    <el-form-item label="Tên diễn viên" prop="name">
-                      <el-input
-                        v-model="formDataCast.name"
-                        autocomplete="off"
-                        placeholder="Nhập tên"
-                      ></el-input>
-                    </el-form-item>
-                  </el-form>
-                  <!-- submit -->
-                  <div class="text-right">
-                    <span class="dialog-footer">
-                      <el-button @click="dialogFormVisibleCast = false"
-                        >Hủy</el-button
-                      >
-                      <el-button type="primary" @click="submitCast"
-                        >Thêm</el-button
-                      >
-                    </span>
-                  </div>
-                </el-dialog>
               </div>
 
               <!-- Khu vực chiếu phim -->
@@ -218,7 +137,6 @@
                   image_title: true,
                   automatic_uploads: true,
                   file_picker_types: 'image',
-                  file_picker_callback: filePicker,
                   image_description: false,
                   image_title: false,
                   fullscreen_native: true,
@@ -226,16 +144,91 @@
               />
             </el-form-item>
           </div>
+          <div class="flex justify-center mt-8">
+            <el-form-item>
+              <el-button class="btn-submit--style" @click="onSubmit"
+                >Thêm</el-button
+              >
+            </el-form-item>
+          </div>
         </el-form>
-
-        <!-- submit -->
-        <div class="flex justify-center mt-8">
-          <el-form-item>
-            <el-button class="btn-submit--style" @click="onSubmit"
-              >Thêm</el-button
+        <!-- Dialog thể loại phim -->
+        <template>
+          <el-dialog
+            class="text-center"
+            title="Thêm thể loại phim"
+            v-model="dialogFormVisibleMovieGenre"
+          >
+            <el-form
+              class="text-center w-1/2 m-auto"
+              ref="movieGenreForm"
+              :model="formDataMoviegenre"
+              label-position="top"
+              :rules="rulesMovieGenre"
             >
-          </el-form-item>
-        </div>
+              <!-- Tên thể loại -->
+              <el-form-item label="Tên thể loại" prop="name">
+                <el-input
+                  v-model="formDataMoviegenre.name"
+                  autocomplete="off"
+                  placeholder="Nhập tên"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item label="Giá tiền thể loại" prop="price">
+                <el-input
+                  v-model="formDataMoviegenre.price"
+                  autocomplete="off"
+                  placeholder="Nhập giá tiền"
+                ></el-input>
+              </el-form-item>
+              <!-- submit -->
+              <div class="text-right">
+                <span class="dialog-footer">
+                  <el-button @click="dialogFormVisibleMovieGenre = false"
+                    >Hủy</el-button
+                  >
+                  <el-button type="primary" @click="submitMovieGenre"
+                    >Thêm</el-button
+                  >
+                </span>
+              </div>
+            </el-form>
+          </el-dialog>
+        </template>
+        <!-- Dialog diễn viên -->
+        <template>
+          <el-dialog
+            class="text-center"
+            title="Thêm diễn viên"
+            v-model="dialogFormVisibleCast"
+          >
+            <el-form
+              class="text-center w-1/2 m-auto"
+              ref="CastForm"
+              :model="formDataCast"
+              label-position="top"
+              :rules="rulesCast"
+            >
+              <!-- Tên diễn viên -->
+              <el-form-item label="Tên diễn viên" prop="name">
+                <el-input
+                  v-model="formDataCast.name"
+                  autocomplete="off"
+                  placeholder="Nhập tên"
+                ></el-input>
+              </el-form-item>
+              <div class="text-right">
+                <span class="dialog-footer">
+                  <el-button @click="dialogFormVisibleCast = false"
+                    >Hủy</el-button
+                  >
+                  <el-button type="primary" @click="submitCast">Thêm</el-button>
+                </span>
+              </div>
+            </el-form>
+          </el-dialog>
+        </template>
       </div>
     </template>
   </admin-layout>
@@ -366,11 +359,6 @@ export default {
     this.fetchDataCast();
   },
   methods: {
-    onOpenDialogMovieGenre() {
-      this.formDataMoviegenre.name = "";
-      this.formDataMoviegenre.price = "";
-      this.dialogFormVisibleMovieGenre = true;
-    },
     onOpenDialogCast() {
       this.formDataCast.name = "";
       this.dialogFormVisibleCast = true;
@@ -384,6 +372,7 @@ export default {
           )
             .then(async (res) => {
               this.$message.success("Create success");
+              this.$inertia.visit(route("superadmin.movie.index"));
             })
             .catch(() => {
               this.$message.error("Server Error");

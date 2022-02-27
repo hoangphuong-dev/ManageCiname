@@ -66,6 +66,7 @@
             <template #action="{ row }">
               <div class="flex">
                 <div class="mx-4">Sửa</div>
+                <div class="mx-4">Xem</div>
                 <div
                   v-if="row?.status_switch == MOVIE_DEACTIVE"
                   @click="confirmEventDelete(row)"
@@ -117,7 +118,6 @@ export default {
       fields: [
         { key: "image", label: "Ảnh", width: "300" },
         { key: "name", label: "Tên phim" },
-        // { key: "trailler", label: "Trailler", width: "300" },
         { key: "director", label: "Đạo diễn" },
         { key: "rated", label: "Giới hạn độ tuổi" },
         { key: "status", label: "Trạng thái" },
@@ -159,9 +159,11 @@ export default {
       ).then(async () => {
         Inertia.delete(route("superadmin.movies.delete", { id }), {
           onError: (e) => console.log(e),
+          onSuccess: (_) => {
+            this.fetchData();
+            this.$message.success("Xóa thành công !");
+          },
         });
-        this.fetchData();
-        this.$message.success("Cập nhật trạng thái thành công !");
       });
     },
 
