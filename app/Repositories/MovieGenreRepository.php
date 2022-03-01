@@ -21,8 +21,7 @@ class MovieGenreRepository
             })
             ->when($request->price, function ($query) use ($request) {
                 return $query->where("price", $request->price);
-            })
-            ->paginate($request->query('limit', 10));
+            })->get();
     }
 
     public function all()

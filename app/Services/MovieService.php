@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Resources\MovieResource;
+use App\Models\MovieFormatMovie;
 use App\Repositories\AdminInfoRepository;
 use App\Repositories\CastMovieRepository;
 use App\Repositories\CinemaMovieRepository;
@@ -70,8 +71,16 @@ class MovieService extends BaseService
             $movie = $this->movieRepository->createMovie($fill);
             $this->movieGnereMovieRepository->make($movie_genre, $movie->id);
             $this->castMovieRepository->make($cast, $movie->id);
+
             if (count($id_cinema) > 0) {
                 $this->cinemaMovieRepository->make($id_cinema, $movie->id);
+            }
+
+            foreach ($fill['format'] as $item) {
+                MovieFormatMovie::create([
+                    'format_movie_id' => $item,
+                    'movie_id' => $movie->id,
+                ]);
             }
             DB::commit();
         } catch (\Exception $e) {

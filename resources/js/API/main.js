@@ -44,6 +44,14 @@ export const listCast = async (params = {}) => {
     return await axios.get("/casts", { params });
 };
 
+export const listFormat = async (params = {}) => {
+    return await axios.get("/formats", { params });
+};
+
+export const createFormat = async (formData = {}) => {
+    return await axios.post('/formats', formData);
+}
+
 export const createSeatType = async (formData = {}) => {
     return await axios.post('/seat_types', formData);
 }

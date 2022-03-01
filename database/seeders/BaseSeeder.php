@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Cast;
+use App\Models\FormatMovie;
 use App\Models\MovieGenre;
 use App\Models\Province;
 use App\Models\SeatType;
@@ -17,6 +18,13 @@ class BaseSeeder extends Seeder
      */
     public function run()
     {
+        $dataFormat = ([
+            ['name' => 'Nomal'],
+            ['name' => '2D'],
+            ['name' => '3D'],
+        ]);
+        FormatMovie::insert($dataFormat);
+
         $dataCast = ([
             ['name' => 'Trấn Thành'],
             ['name' => 'Công Lý'],

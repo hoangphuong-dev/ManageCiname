@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Back\NotificationController as BackNotificationCont
 use App\Http\Controllers\Api\Caretaker\JobController as CaretakerJobController;
 use App\Http\Controllers\Api\CastController;
 use App\Http\Controllers\Api\CinemaController;
+use App\Http\Controllers\Api\FormatController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UserController;
@@ -112,6 +113,7 @@ Route::apiResource('admins', ApiAdminController::class);
 Route::apiResource('casts', CastController::class);
 Route::apiResource('seat_types', SeatTypeController::class);
 Route::apiResource('rooms', RoomController::class);
+Route::apiResource('formats', FormatController::class);
 Route::put('/rooms/{id}/update-status', [RoomController::class, 'changeStatus'])
     ->name('rooms.change_status');
 Route::apiResource('showtimes', ShowTimeController::class);

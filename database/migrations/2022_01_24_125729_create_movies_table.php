@@ -36,7 +36,7 @@ class CreateMoviesTable extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
         });
 
-        Schema::create('movies_format_movies', function (Blueprint $table) {
+        Schema::create('movie_format_movies', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('format_movie_id')->unsigned();
             $table->bigInteger('movie_id')->unsigned();

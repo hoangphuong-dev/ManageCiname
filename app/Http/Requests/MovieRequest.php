@@ -32,6 +32,7 @@ class MovieRequest extends FormRequest
             'rated' => 'required',
             'movie_genre' => 'required|array',
             'cast' => 'required|array',
+            'format' => 'required|array',
         ];
     }
 }
