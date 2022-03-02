@@ -38,6 +38,9 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     Route::get('/create_movie', [MovieController::class, 'create'])->name('create_movie');
     Route::delete('movies/{id}', [MovieController::class, 'delete'])->name('movies.delete');
     Route::get('movies/edit/{id}', [MovieController::class, 'edit'])->name('movies.edit');
+
+    Route::post('movies/import', [MovieController::class, 'importCsv'])->name('movies.import');
+    Route::get('movies/export', [MovieController::class, 'exportCsv'])->name('movies.export');
 });
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']], function () {

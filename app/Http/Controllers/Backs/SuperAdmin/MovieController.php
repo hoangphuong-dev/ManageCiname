@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Backs\SuperAdmin;
 
+use App\Exports\MovieExport;
 use App\Http\Controllers\Controller;
+use App\Imports\MovieImport;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MovieController extends Controller
 {
@@ -22,6 +25,17 @@ class MovieController extends Controller
     public function index()
     {
         return Inertia::render("Backs/SuperAdmin/Movie");
+    }
+
+    public function importCsv()
+    {
+        Excel::import(new MovieImport, request()->file('file'));
+        return back();
+    }
+
+    public function exportCsv()
+    {
+        return Excel::download(new MovieExport, 'movies.csv');
     }
 
     public function create()

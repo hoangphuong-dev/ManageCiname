@@ -14,10 +14,54 @@
             </div>
           </div>
           <div class="w-1/4 text-right">
-            <el-button @click="$inertia.visit(route('superadmin.create_movie'))"
-              >Thêm phim</el-button
+            <el-button @click="openDialog()"> Import CSV </el-button>
+            <el-button
+              @click="$inertia.visit(route('superadmin.create_movie'))"
             >
+              Thêm phim
+            </el-button>
           </div>
+        </div>
+
+        <!-- Dialog định dạng -->
+        <div class="customer_dialog">
+          <el-dialog title="Hướng dẫn import file csv" v-model="dialogForm">
+            <div class="text-bold">
+              <p>
+                Để quá trình import không bị lỗi . Bạn phải thực hiện đúng các
+                nguyên tắc sau
+              </p>
+              <p>
+                - Các thứ tự cột và các thông tin của phim phải được sắp xếp
+                theo 1 thứ tự nhất định
+              </p>
+              <p>- Vui lòng không chọn file có định dạng quá lớn .</p>
+              <p>
+                - Nếu import quá nhiều bản ghi => Nên chia nhỏ file để chương
+                trình làm việc thuận lợi hơn
+              </p>
+              <p>
+                - Bạn có thể export template mẫu và trình bày theo mẫu để việc
+                import diễn ra thuận lợi
+              </p>
+            </div>
+            <div>
+              <form
+                :action="route('superadmin.movies.import')"
+                method="POST"
+                enctype="multipart/form-data"
+              >
+                <input type="file" name="file" class="form-control" />
+                <br />
+                <button class="btn btn-success">Import User Data</button>
+                <a
+                  class="btn btn-warning"
+                  :href="route('superadmin.movies.export')"
+                  >Export User Data</a
+                >
+              </form>
+            </div>
+          </el-dialog>
         </div>
 
         <div class="mt-5">
@@ -115,8 +159,7 @@ export default {
       MOVIE_ACTIVE: MOVIE_ACTIVE,
       MOVIE_DEACTIVE: MOVIE_DEACTIVE,
       loading: false,
-      dialogVisible: false,
-      url: "",
+      dialogForm: false,
       movies: [],
       filter: {
         page: 1,
@@ -136,6 +179,9 @@ export default {
     this.fetchData();
   },
   methods: {
+    openDialog() {
+      this.dialogForm = true;
+    },
     videoId(row) {
       return getYoutubeId(row);
     },
