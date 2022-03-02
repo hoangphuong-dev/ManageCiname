@@ -25,6 +25,15 @@ class RoomRepository extends BaseRepository
         return $this->model->create($fillable);
     }
 
+    public function getRoomByCinema($id_cinema)
+    {
+        return $this->model->newQuery()
+            ->select('id', 'name')
+            ->where('cinema_id', $id_cinema)
+            ->where('status', Room::STATUS_OPEN)
+            ->get()->toArray();
+    }
+
     public function createRooom($data)
     {
         return $this->make([

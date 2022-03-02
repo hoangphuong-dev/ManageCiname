@@ -65,7 +65,6 @@
         </div>
         <!-- open dialog -->
         <el-dialog
-          class="text-center"
           :title="selectedItem === null ? 'Thêm rạp' : 'Sửa thông tin rạp'"
           v-model="dialogFormVisible"
         >
@@ -99,17 +98,18 @@
                 placeholder="Nhập địa chỉ"
               ></el-input>
             </el-form-item>
+
+            <!-- submit -->
+            <div class="text-right">
+              <span class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">Hủy</el-button>
+                <el-button type="primary" @click="onSubmit">
+                  <span v-if="selectedItem === null">Thêm</span>
+                  <span v-else>Cập nhật</span>
+                </el-button>
+              </span>
+            </div>
           </el-form>
-          <!-- submit -->
-          <div class="text-right">
-            <span class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">Hủy</el-button>
-              <el-button type="primary" @click="onSubmit">
-                <span v-if="selectedItem === null">Thêm</span>
-                <span v-else>Cập nhật</span>
-              </el-button>
-            </span>
-          </div>
         </el-dialog>
       </div>
     </template>

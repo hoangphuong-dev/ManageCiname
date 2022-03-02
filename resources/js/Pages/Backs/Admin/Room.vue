@@ -39,11 +39,7 @@
         </p>
 
         <div class="mt-4 flex">
-          <div class="text-left w-1/2">
-            <!-- <el-icon class="cursor-pointer" @click="edit(item)"
-              ><edit
-            /></el-icon> -->
-          </div>
+          <div class="text-left w-1/2"></div>
           <div class="text-right w-1/2 h-5">
             <el-icon
               v-if="item.status == 0"
@@ -71,7 +67,6 @@
     <!-- dialog phòng chiếu  -->
     <div class="customer_dialog">
       <el-dialog
-        class="text-center"
         :title="
           selectedItemRoom === null ? 'Thêm phòng' : 'Sửa thông tin phòng'
         "

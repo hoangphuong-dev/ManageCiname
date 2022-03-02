@@ -16,7 +16,7 @@
           </el-tab-pane>
           <!-- Tab Suất chiếu -->
           <el-tab-pane label="Suất chiếu">
-            <show-time :seat_types="seat_types" :cinema="cinema"></show-time>
+            <show-time :rooms="rooms" :cinema="cinema"></show-time>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -42,6 +42,10 @@ export default {
     },
     seat_types: {
       type: Object,
+      required: true,
+    },
+    rooms: {
+      type: Array,
       required: true,
     },
   },

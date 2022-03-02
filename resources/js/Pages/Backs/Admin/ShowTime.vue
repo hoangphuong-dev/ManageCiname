@@ -13,13 +13,10 @@
         </div>
       </div>
       <div class="w-1/4 text-right">
-        <el-button @click="onOpenDialogRoom">Thêm Suất Chiếu</el-button>
-        <div v-for="item in cinema.movies" :key="item.id">
-          <p>{{ item.name }}</p>
-        </div>
+        <el-button @click="openDialogShowTime">Thêm Suất Chiếu</el-button>
       </div>
     </div>
-    <div v-if="rooms.data.length > 0" class="grid grid-cols-5 gap-4">
+    <!-- <div v-if="rooms.data.length > 0" class="grid grid-cols-5 gap-4">
       <div
         class="border rounded-md p-4"
         v-for="item in rooms.data"
@@ -42,11 +39,7 @@
         </p>
 
         <div class="mt-4 flex">
-          <div class="text-left w-1/2">
-            <!-- <el-icon class="cursor-pointer" @click="edit(item)"
-              ><edit
-            /></el-icon> -->
-          </div>
+          <div class="text-left w-1/2"></div>
           <div class="text-right w-1/2 h-5">
             <el-icon
               v-if="item.status == 0"
@@ -57,8 +50,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div v-else><el-empty description="Không có dữ liệu"></el-empty></div>
+    </div> -->
+    <!-- <div v-else><el-empty description="Không có dữ liệu"></el-empty></div> -->
     <!-- phan trang suất chiếu  -->
     <!-- <div
       v-if="rooms.total > rooms.perPage"
@@ -72,97 +65,110 @@
       />
     </div> -->
     <!-- dialog suất chiếu  -->
-    <div class="customer_dialog">
-      <el-dialog
-        class="text-center"
-        :title="selectedItemRoom === null ? 'Thêm suất' : 'Sửa thông tin suất'"
-        v-model="dialogFormVisibleRoom"
+    <el-dialog
+      :title="
+        selectedItemShowTime === null
+          ? 'Thêm suất chiếu'
+          : 'Sửa thông tin suất chiếu'
+      "
+      v-model="dialogFormShowTime"
+    >
+      <el-form
+        class="w-11/12 m-auto"
+        ref="formData"
+        :model="formData"
+        label-position="top"
+        :rules="rules"
       >
-        <el-form
-          class="text-center w-4/5 m-auto"
-          ref="formDataRoom"
-          :model="formDataRoom"
-          label-position="top"
-          :rules="rulesRoom"
-        >
-          <!-- Tên rạp -->
+        <!-- Chọn phim -->
+        <el-form-item label="Chọn phim" prop="movie">
+          <el-select class="w-full" v-model="formData.movie" clearable>
+            <el-option
+              v-for="item in listMovie"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="Tên suất" prop="name">
-            <el-input
-              v-model="formDataRoom.name"
-              autocomplete="off"
-              placeholder="Nhập tên suất"
-            ></el-input>
-          </el-form-item>
+        <!-- Chọn ngày  -->
+        <el-form-item label="Chọn ngày" prop="date">
+          <el-date-picker
+            v-model="formData.date"
+            type="date"
+            placeholder="Chọn một ngày"
+          >
+          </el-date-picker>
+        </el-form-item>
 
-          <el-form-item label="Số hàng" prop="row_number">
-            <el-input
-              v-model="formDataRoom.row_number"
-              autocomplete="off"
-              placeholder="Nhập số hàng"
-            ></el-input>
-          </el-form-item>
+        <!-- Số lượng  -->
+        <el-form-item label="Số lượng suất chiếu" prop="count">
+          <el-input-number
+            class="text-left"
+            v-model="formData.count"
+            :min="1"
+            :max="20"
+          />
+        </el-form-item>
 
-          <el-form-item label="Số dãy" prop="column_number">
-            <el-input
-              v-model="formDataRoom.column_number"
-              autocomplete="off"
-              placeholder="Nhập số dãy"
-            ></el-input>
-          </el-form-item>
+        <!-- submit -->
+        <div class="text-right">
+          <el-button @click="dialogFormShowTime = false">Hủy</el-button>
+          <el-button type="primary" @click="viewSchedule">
+            <span v-if="selectedItemShowTime === null">Xem toàn bộ</span>
+          </el-button>
+        </div>
 
-          <!-- submit -->
-          <div class="text-right">
-            <span class="dialog-footer">
-              <el-button @click="dialogFormVisibleRoom = false">Hủy</el-button>
-              <el-button type="primary" @click="viewDiagram">
-                <span v-if="selectedItemRoom === null">Xem sơ đồ</span>
-              </el-button>
-            </span>
-          </div>
-          <div class="my-5 p-2 text-center justify-items-center">
-            <h2 class="my-2" v-if="showTitle">Sơ đồ ghế</h2>
-            <div
-              class="grid gap-4"
-              :style="{
-                'grid-template-columns':
-                  'repeat(' + Column + ', minmax(0, 1fr))',
-              }"
-            >
-              <div
-                class="border rounded-md p-1 text-center bg-green-100"
-                v-for="(seat, indexSeat) in formDataRoom.seats"
-                :key="indexSeat"
+        <!-- Lịch chiếu -->
+        <div v-if="showTitle" class="my-5 p-2 text-center justify-items-center">
+          <h2 class="my-2">Lịch chiếu</h2>
+          <div class="flex w-full">
+            <!-- Chọn phòng  -->
+            <el-form-item label="Chọn phòng" prop="room">
+              <el-select v-model="formData.room" clearable>
+                <el-option
+                  v-for="item in rooms"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+
+            <!-- chọn thời gian bắt đầu  -->
+            <el-form-item class="ml-4" label="Giờ chiếu" prop="time_start">
+              <el-time-select
+                class="mr-4"
+                v-model="formData.time_start"
+                :max-time="endTime"
+                placeholder="Giờ chiếu"
+                start="09:00"
+                step="00:30"
+                end="23:59"
               >
-                <div class="flex min-w-124 w-full">
-                  <el-form-item class="w-1/2">
-                    <el-input v-model="seat.row"></el-input>
-                  </el-form-item>
-                  <el-form-item class="w-1/2">
-                    <el-input v-model="seat.column"></el-input>
-                  </el-form-item>
-                </div>
-                <div class="-mt-6 min-w-124 w-full">
-                  <el-select class="w-full" clearable v-model="seat.seat_type">
-                    <el-option
-                      v-for="(item, index) in seat_types"
-                      :key="index"
-                      :label="item.name"
-                      :value="item.id"
-                    ></el-option>
-                  </el-select>
-                </div>
-              </div>
-            </div>
+              </el-time-select>
+            </el-form-item>
+
+            <!-- Thời gian kết thúc -->
+            <el-form-item label="Giờ kết thúc">
+              <el-time-select
+                v-model="endTime"
+                :min-time="startTime"
+                placeholder="Kết thúc"
+                start="08:30"
+                step="00:15"
+                end="18:30"
+              >
+              </el-time-select>
+            </el-form-item>
           </div>
           <div class="text-center">
-            <el-button v-if="showDiagram" @click="onSubmitRoom"
-              >Thêm suất</el-button
-            >
+            <el-button @click="onSubmitRoom">Thêm</el-button>
           </div>
-        </el-form>
-      </el-dialog>
-    </div>
+        </div>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -175,7 +181,7 @@ import Pagination from "@/Components/Pagination.vue";
 import { listRoom, updateStatusRoom } from "@/API/main.js";
 import { Edit, Delete } from "@element-plus/icons-vue";
 export default {
-  name: "Room",
+  name: "ShowTime",
   components: {
     AdminLayout,
     SearchInput,
@@ -188,23 +194,26 @@ export default {
       type: Object,
       required: true,
     },
-    seat_types: {
-      type: Object,
+    rooms: {
+      type: Array,
       required: true,
     },
   },
+  computed: {
+    listMovie() {
+      return this.cinema.movies;
+    },
+  },
   created() {
-    this.fetchDataRoom();
+    // this.fetchDataRoom();
   },
   data() {
     return {
       showTitle: false,
-      showDiagram: false,
-      selectedItemRoom: null,
-      dialogFormVisibleRoom: false,
-      Row: "",
-      Column: "",
-      rooms: {
+      selectedItemShowTime: null,
+      dialogFormShowTime: false,
+      Count: "",
+      showtime: {
         data: [],
         total: "",
         current_page: "",
@@ -216,53 +225,24 @@ export default {
           cinema_id: this.cinema.id,
         },
       },
-      formDataRoom: {
-        name: "",
-        row_number: "",
-        column_number: "",
-        seats: [],
+      formData: {
+        count: "",
+        movie: "",
+        date: "",
+        room: [],
       },
-      rulesRoom: {
-        name: [
+      rules: {
+        movie: [
           {
             required: true,
             message: "Trường này không được để trống",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
-        row_number: [
+        date: [
           {
             required: true,
             message: "Trường này không được để trống",
-            trigger: "blur",
-          },
-          {
-            pattern: /^\d+$/,
-            message: "Trường thông tin này phải là số nguyên",
-            trigger: "blur",
-          },
-          {
-            max: 2,
-            number: true,
-            message: "Số hàng không lớn hơn 100",
-            trigger: "blur",
-          },
-        ],
-        column_number: [
-          {
-            required: true,
-            message: "Trường này không được để trống",
-            trigger: "blur",
-          },
-          {
-            pattern: /^\d+$/,
-            message: "Trường thông tin này phải là số nguyên",
-            trigger: "blur",
-          },
-          {
-            max: 2,
-            number: true,
-            message: "Số dãy không lớn hơn 100",
             trigger: "blur",
           },
         ],
@@ -270,22 +250,11 @@ export default {
     };
   },
   methods: {
-    viewDiagram() {
-      this.$refs["formDataRoom"].validate((valid) => {
+    viewSchedule() {
+      this.$refs["formData"].validate((valid) => {
         if (valid) {
           this.showTitle = true;
-          this.Row = this.formDataRoom.row_number;
-          this.Column = this.formDataRoom.column_number;
-          this.showDiagram = true;
-          this.formDataRoom.seats = [];
-          for (let i = 0; i < this.Row; i++) {
-            for (let j = 0; j < this.Column; j++) {
-              this.formDataRoom.seats.push({
-                row: String.fromCharCode(i + 65),
-                column: Number(j + 1),
-              });
-            }
-          }
+          this.Count = this.formData.count;
         }
       });
     },
@@ -299,16 +268,10 @@ export default {
       this.formDataRoom.column_number = "";
       this.formDataRoom.seats = [];
     },
-    aaaa(status) {
-      if (status == 1) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    onOpenDialogRoom() {
-      this.selectedItemRoom = null;
-      this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
+
+    openDialogShowTime() {
+      this.selectedItemShowTime = null;
+      this.dialogFormShowTime = !this.dialogFormShowTime;
     },
     createRoom() {
       Inertia.post(
@@ -325,7 +288,7 @@ export default {
           onSuccess: (_) => {
             this.resetFormRoom();
             this.fetchDataRoom();
-            this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
+            this.dialogFormShowTime = !this.dialogFormShowTime;
           },
         }
       );
@@ -337,7 +300,7 @@ export default {
     async onSubmitRoom() {
       this.$refs["formDataRoom"].validate((valid) => {
         if (valid) {
-          if (this.selectedItemRoom === null) {
+          if (this.selectedItemShowTime === null) {
             this.createRoom();
           } else {
             this.editCinema();

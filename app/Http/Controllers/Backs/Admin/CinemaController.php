@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CinemaRequest;
 use App\Services\CinemaService;
 use App\Services\MovieService;
+use App\Services\RoomService;
 use App\Services\SeatTypeService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,15 +16,18 @@ class CinemaController extends Controller
     protected $cinemaService;
     protected $seatTypeService;
     protected $movieService;
+    protected $roomService;
 
     public function __construct(
         CinemaService $cinemaService,
         SeatTypeService $seatTypeService,
         MovieService $movieService,
+        RoomService $roomService
     ) {
         $this->cinemaService = $cinemaService;
         $this->seatTypeService = $seatTypeService;
         $this->movieService = $movieService;
+        $this->roomService = $roomService;
     }
 
     public function index(Request $request)
@@ -52,9 +56,11 @@ class CinemaController extends Controller
     {
         $seat_types = $this->seatTypeService->getAllSeatType();
         $cinema = $this->cinemaService->getMovieByCinema($id);
+        $rooms = $this->roomService->getRoomByCinema($id);
         return Inertia::render("Backs/Admin/CinemaDetail", [
             'cinema' => $cinema,
             'seat_types' => $seat_types,
+            'rooms' => $rooms,
         ]);
     }
 

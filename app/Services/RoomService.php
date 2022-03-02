@@ -18,6 +18,11 @@ class RoomService extends BaseService
         $this->seatRepository = $seatRepository;
     }
 
+    public function getRoomByCinema($id_cinema)
+    {
+        return $this->roomRepository->getRoomByCinema($id_cinema);
+    }
+
     public function store($request)
     {
         $data = $request->validated();

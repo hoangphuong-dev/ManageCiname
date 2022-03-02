@@ -49,10 +49,9 @@ class MovieService extends BaseService
         return MovieResource::collection($movie);
     }
 
-    // public function getMovieByCinema($id)
+    // public function getMovieByCinema($id_cinema)
     // {
-    //     $movies = $this->movieRepository->getMovieByCinema($id);
-    //     dd($movies);
+    //     $movies = $this->movieRepository->getMovieByCinema($id_cinema);
     //     return MovieResource::collection($movies);
     // }
 
