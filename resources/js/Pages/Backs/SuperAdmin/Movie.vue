@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <!-- Dialog định dạng -->
+        <!-- Dialog csv -->
         <div class="customer_dialog">
           <el-dialog title="Hướng dẫn import file csv" v-model="dialogForm">
             <div class="text-bold">
