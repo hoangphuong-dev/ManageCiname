@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\Movie;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class MovieImport implements ToModel
+class MovieImport implements ToModel, WithHeadingRow
 {
     /**
      * @param array $row

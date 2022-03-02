@@ -27,10 +27,10 @@
         <div class="customer_dialog">
           <el-dialog title="Hướng dẫn import file csv" v-model="dialogForm">
             <div class="text-bold">
-              <p>
+              <h3>
                 Để quá trình import không bị lỗi . Bạn phải thực hiện đúng các
-                nguyên tắc sau
-              </p>
+                nguyên tắc sau :
+              </h3>
               <p>
                 - Các thứ tự cột và các thông tin của phim phải được sắp xếp
                 theo 1 thứ tự nhất định
@@ -46,20 +46,29 @@
               </p>
             </div>
             <div>
+              <h3 class="my-4">Chọn file import</h3>
               <form
                 :action="route('superadmin.movies.import')"
                 method="POST"
                 enctype="multipart/form-data"
               >
+                <input type="hidden" name="_token" :value="csrf" />
                 <input type="file" name="file" class="form-control" />
                 <br />
-                <button class="btn btn-success">Import User Data</button>
-                <a
-                  class="btn btn-warning"
-                  :href="route('superadmin.movies.export')"
-                  >Export User Data</a
-                >
+                <button class="btn btn-success p-2 my-4">
+                  Import Movie Data
+                </button>
               </form>
+              <h3 class="my-4">
+                Hoặc download file excel mẫu và điền thông tin của các cột giống
+                như file mẫu
+                <a
+                  class="text-red-400 hover:underline"
+                  :href="route('superadmin.movies.export')"
+                >
+                  Export Movie Data
+                </a>
+              </h3>
             </div>
           </el-dialog>
         </div>
@@ -156,6 +165,9 @@ export default {
 
   data() {
     return {
+      csrf: document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content"),
       MOVIE_ACTIVE: MOVIE_ACTIVE,
       MOVIE_DEACTIVE: MOVIE_DEACTIVE,
       loading: false,

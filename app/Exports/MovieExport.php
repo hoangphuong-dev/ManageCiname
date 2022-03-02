@@ -4,14 +4,29 @@ namespace App\Exports;
 
 use App\Models\Movie;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class MovieExport implements FromCollection
+class MovieExport implements
+    FromCollection,
+    WithHeadings,
+    ShouldAutoSize
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
     public function collection()
     {
-        return Movie::limit(5)->get();
+        return Movie::select('name', 'director', 'description', 'trailler', 'movie_length', 'rated')
+            ->limit(5)->get();
+    }
+
+    public function headings(): array
+    {
+        return [
+            'name',
+            'director',
+            'description',
+            'trailler',
+            'movie_length',
+            'rated'
+        ];
     }
 }

@@ -9,6 +9,7 @@ use App\Services\MovieGenreService;
 use App\Services\MovieService;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
@@ -27,15 +28,21 @@ class MovieController extends Controller
         return Inertia::render("Backs/SuperAdmin/Movie");
     }
 
-    public function importCsv()
+    public function importCsv(Request $request)
     {
-        Excel::import(new MovieImport, request()->file('file'));
-        return back();
+        try {
+            Excel::import(new MovieImport, request()->file('file'));
+            $message = ['success' => __('Import thành công !')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
+        } finally {
+            return back()->with($message);
+        }
     }
 
     public function exportCsv()
     {
-        return Excel::download(new MovieExport, 'movies.csv');
+        return Excel::download(new MovieExport, 'movies.xlsx');
     }
 
     public function create()

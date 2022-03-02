@@ -220,7 +220,7 @@ export default {
 }
 .MenuAdmin .el-dialog__header {
   border-radius: 0.5rem 0.5rem 0px 0px;
-  background: lightpink;
+  background: #ff7777;
   color: white;
   font-size: 1.25rem;
   line-height: 1.25rem;
