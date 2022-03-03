@@ -96,8 +96,10 @@
         <el-form-item label="Chọn ngày" prop="date">
           <el-date-picker
             v-model="formData.date"
-            type="date"
             placeholder="Chọn một ngày"
+            type="date"
+            format="YYYY/MM/DD"
+            value-format="YYYY-MM-DD"
           >
           </el-date-picker>
         </el-form-item>
@@ -116,17 +118,21 @@
         <div class="text-right">
           <el-button @click="dialogFormShowTime = false">Hủy</el-button>
           <el-button type="primary" @click="viewSchedule">
-            <span v-if="selectedItemShowTime === null">Xem toàn bộ</span>
+            <span v-if="selectedItemShowTime === null">Xem lịch chiếu</span>
           </el-button>
         </div>
 
         <!-- Lịch chiếu -->
         <div v-if="showTitle" class="my-5 p-2 text-center justify-items-center">
           <h2 class="my-2">Lịch chiếu</h2>
-          <div class="flex w-full">
+          <div
+            class="flex w-full"
+            v-for="(row, indexSchedule) in formData.schedule"
+            :key="indexSchedule"
+          >
             <!-- Chọn phòng  -->
-            <el-form-item label="Chọn phòng" prop="room">
-              <el-select v-model="formData.room" clearable>
+            <el-form-item label="Chọn phòng">
+              <el-select v-model="row.room" clearable>
                 <el-option
                   v-for="item in rooms"
                   :key="item.id"
@@ -136,11 +142,11 @@
               </el-select>
             </el-form-item>
 
-            <!-- chọn thời gian bắt đầu  -->
-            <el-form-item class="ml-4" label="Giờ chiếu" prop="time_start">
+            <!-- chọn thời gian bắt đầu -->
+            <el-form-item class="ml-4" label="Giờ chiếu">
               <el-time-select
                 class="mr-4"
-                v-model="formData.time_start"
+                v-model="row.time_start"
                 :max-time="endTime"
                 placeholder="Giờ chiếu"
                 start="09:00"
@@ -151,7 +157,7 @@
             </el-form-item>
 
             <!-- Thời gian kết thúc -->
-            <el-form-item label="Giờ kết thúc">
+            <!-- <el-form-item label="Giờ kết thúc">
               <el-time-select
                 v-model="endTime"
                 :min-time="startTime"
@@ -161,10 +167,10 @@
                 end="18:30"
               >
               </el-time-select>
-            </el-form-item>
+            </el-form-item> -->
           </div>
           <div class="text-center">
-            <el-button @click="onSubmitRoom">Thêm</el-button>
+            <el-button @click="onSubmitShowTime">Thêm lịch chiếu</el-button>
           </div>
         </div>
       </el-form>
@@ -178,7 +184,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import Pagination from "@/Components/Pagination.vue";
-import { listRoom, updateStatusRoom } from "@/API/main.js";
+import { listShowTime } from "@/API/main.js";
 import { Edit, Delete } from "@element-plus/icons-vue";
 export default {
   name: "ShowTime",
@@ -205,7 +211,7 @@ export default {
     },
   },
   created() {
-    // this.fetchDataRoom();
+    this.fetchData();
   },
   data() {
     return {
@@ -229,7 +235,7 @@ export default {
         count: "",
         movie: "",
         date: "",
-        room: [],
+        schedule: [],
       },
       rules: {
         movie: [
@@ -254,7 +260,11 @@ export default {
       this.$refs["formData"].validate((valid) => {
         if (valid) {
           this.showTitle = true;
-          this.Count = this.formData.count;
+          for (let i = 0; i < this.formData.count; i++) {
+            this.formData.schedule.push({
+              room: "",
+            });
+          }
         }
       });
     },
@@ -273,11 +283,11 @@ export default {
       this.selectedItemShowTime = null;
       this.dialogFormShowTime = !this.dialogFormShowTime;
     },
-    createRoom() {
+    createShowTime() {
       Inertia.post(
-        route("admin.rooms.store"),
+        route("admin.showtimes.store"),
         {
-          ...this.formDataRoom,
+          ...this.formData,
           cinema_id: this.cinema.id,
         },
         {
@@ -286,8 +296,8 @@ export default {
           preserveScroll: true,
           onError: (e) => console.log(e),
           onSuccess: (_) => {
-            this.resetFormRoom();
-            this.fetchDataRoom();
+            // this.resetFormRoom();
+            // this.fetchDataRoom();
             this.dialogFormShowTime = !this.dialogFormShowTime;
           },
         }
@@ -297,11 +307,11 @@ export default {
       this.rooms.filter.name = this.rooms.keyword;
       this.fetchDataRoom();
     },
-    async onSubmitRoom() {
-      this.$refs["formDataRoom"].validate((valid) => {
+    async onSubmitShowTime() {
+      this.$refs["formData"].validate((valid) => {
         if (valid) {
           if (this.selectedItemShowTime === null) {
-            this.createRoom();
+            this.createShowTime();
           } else {
             this.editCinema();
           }
@@ -324,32 +334,10 @@ export default {
         this.fetchDataRoom();
       });
     },
-    async handleUpdateStatus(item, status) {
-      this.$confirm(`Bạn có chắc chắn thay đổi trạng thái suất `, "Cảnh báo", {
-        confirmButtonText: "Chắc chắn",
-        cancelButtonText: "Hủy",
-        type: "warning",
-      })
-        .then(async () => {
-          this.loading = true;
-          await updateStatusRoom(item.id, status)
-            .then(async (res) => {
-              this.fetchDataRoom();
-              this.$message.success("Cập nhật trạng thái thành công !");
-            })
-            .catch(() => {
-              this.fetchDataRoom();
-              this.$message.error("Có lỗi trong quá trình thực thi");
-            });
-          this.loading = false;
-        })
-        .catch(() => {
-          this.fetchDataRoom();
-        });
-    },
-    async fetchDataRoom() {
+
+    async fetchData() {
       this.loading = true;
-      listRoom(this.rooms.filter)
+      listShowTime(this.rooms.filter)
         .then(({ status, data }) => {
           this.rooms.data = status === 200 ? data.data : this.rooms.data;
           this.rooms.total = data.meta.total;

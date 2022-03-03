@@ -13,7 +13,7 @@ class ShowTimeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class ShowTimeRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'movie' => ['required'],
+            'date' => ['required'],
+            'schedule' => 'required|array',
         ];
     }
 }

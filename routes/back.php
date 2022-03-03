@@ -59,6 +59,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 
     Route::post('rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::delete('rooms/{id}', [RoomController::class, 'delete'])->name('rooms.delete');
+
+    Route::post('showtimes', [ShowTimeController::class, 'store'])->name('showtimes.store');
 });
 
 Route::group(['prefix' => 'staff', 'middleware' => ['staff']], function () {
