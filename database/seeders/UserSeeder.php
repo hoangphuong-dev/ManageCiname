@@ -53,6 +53,7 @@ class UserSeeder extends Seeder
                 'status' => User::ACCOUNT_ACTIVE
             ],
         ]);
+
         DB::beginTransaction();
         try {
             User::insert($dataUser);
@@ -66,93 +67,22 @@ class UserSeeder extends Seeder
 
             $adminInfo = AdminInfo::insert($dataAdinInfo);
 
-            $dataCinema = ([
-                [
+            $faker = \Faker\Factory::create();
+            for ($i = 1; $i < 11; $i++) {
+                Cinema::create([
                     'admin_info_id' => $adminInfo,
-                    'name' => "Quận 1",
-                    'hotline' => "09993549555",
-                    'address' => "Quận 1",
-                ],
-                [
-                    'admin_info_id' => $adminInfo,
-                    'name' => "Quận 2",
-                    'hotline' => "0953459999555",
-                    'address' => "Quận 1",
-                ],
-                [
-                    'admin_info_id' => $adminInfo,
-                    'name' => "Quận 3",
-                    'hotline' => "09953599555",
-                    'address' => "Quận 1",
-                ],
-                [
-                    'admin_info_id' => $adminInfo,
-                    'name' => "Quận 4",
-                    'hotline' => "095435999555",
-                    'address' => "Quận 1",
-                ],
-                [
-                    'admin_info_id' => $adminInfo,
-                    'name' => "Quận 5",
-                    'hotline' => "09999999555",
-                    'address' => "Quận 1",
-                ],
-                [
-                    'admin_info_id' => $adminInfo,
-                    'name' => "Quận 6",
-                    'hotline' => "09999999555",
-                    'address' => "Quận 1",
-                ],
-            ]);
-
-            $dataRoom = ([
-                [
+                    'name' => "Quận " . $i,
+                    'hotline' => $faker->phoneNumber,
+                    'address' => $faker->address,
+                ]);
+                Room::create([
                     'cinema_id' => 1, // Quận 1 ( HCM)
-                    'name' => "Phòng 201",
+                    'name' => "Phòng 2 " . $i,
                     'status' => Room::STATUS_OPEN,
                     'row_number' => 0,
                     'column_number' => 0,
-
-                ],
-                [
-                    'cinema_id' => 1,
-                    'name' => "Phòng 202",
-                    'status' => Room::STATUS_OPEN,
-                    'row_number' => 0,
-                    'column_number' => 0,
-                ],
-                [
-                    'cinema_id' => 1,
-                    'name' => "Phòng 203",
-                    'status' => Room::STATUS_OPEN,
-                    'row_number' => 0,
-                    'column_number' => 0,
-                ],
-                [
-                    'cinema_id' => 1,
-                    'name' => "Phòng 204",
-                    'status' => Room::STATUS_OPEN,
-                    'row_number' => 0,
-                    'column_number' => 0,
-                ],
-                [
-                    'cinema_id' => 1,
-                    'name' => "Phòng 205",
-                    'status' => Room::STATUS_OPEN,
-                    'row_number' => 0,
-                    'column_number' => 0,
-                ],
-                [
-                    'cinema_id' => 1,
-                    'name' => "Phòng 206",
-                    'status' => Room::STATUS_OPEN,
-                    'row_number' => 0,
-                    'column_number' => 0,
-                ],
-            ]);
-
-            Cinema::insert($dataCinema);
-            Room::insert($dataRoom);
+                ]);
+            }
 
             DB::commit();
         } catch (\Exception $e) {

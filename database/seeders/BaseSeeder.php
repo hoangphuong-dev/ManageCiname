@@ -23,7 +23,7 @@ class BaseSeeder extends Seeder
             ['name' => '2D'],
             ['name' => '3D'],
         ]);
-        // FormatMovie::insert($dataFormat);
+        FormatMovie::insert($dataFormat);
 
         $dataCast = ([
             ['name' => 'Trấn Thành'],
@@ -42,7 +42,7 @@ class BaseSeeder extends Seeder
             ['name' => 'Đàm Vĩnh Hưng'],
         ]);
 
-        // Cast::insert($dataCast);
+        Cast::insert($dataCast);
 
         $movieGenre = ([
             ['name' => 'Hoạt hình',],
@@ -53,7 +53,7 @@ class BaseSeeder extends Seeder
             ['name' => 'Gia đình'],
             ['name' => 'Hài hước'],
         ]);
-        // MovieGenre::insert($movieGenre);
+        MovieGenre::insert($movieGenre);
 
         $dataProvince = [
             "Hồ Chí Minh",
