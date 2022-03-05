@@ -91,13 +91,13 @@
           </template>
           <template v-else>
             <div class="mr-4 px-6 py-2 rounded border">
-              <el-link
+              <!-- <el-link
                 :href="route('show_login')"
                 :underline="false"
                 type="primary"
               >
-                <h3 class="text-yellowPrimary">Đăng nhập</h3>
-              </el-link>
+                <h3 class="text-yellowPrimary">Đăng nhập</h3> -->
+              <!-- </el-link> -->
             </div>
           </template>
         </div>
