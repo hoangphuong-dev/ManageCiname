@@ -1,39 +1,27 @@
 <template>
   <div class="app">
-    <div class="app__head" :class="{ 'h-screen': expandMenuMobile }">
+    <div class="app__head">
       <div
         class="flex justify-between items-center m-auto h-24 max-w-screen-2xl"
       >
-        <div class="hidden lg:flex grid-content bg-purple">
-          <el-link
-            href="/"
-            :underline="false"
-            class="h-20"
-            style="width: 158px"
-          >
-            <el-image class="h-20" src="images/logo.png"></el-image>
-          </el-link>
+        <div class="flex grid-content bg-purple">
+          <el-image class="h-20" src="images/logo.png"></el-image>
+          <h1 class="text-red-600 m-4">PHC</h1>
         </div>
         <div class="app__head-menu h-full">
-          <ul
-            id="main-menu"
-            class="hidden lg:flex justify-center items-center h-full"
-          >
-            <!-- <li
+          <ul id="main-menu" class="flex justify-center items-center h-full">
+            <li
               :class="{ 'menu-active': activeMenu(menu) }"
               v-for="menu in menus"
               :key="menu.path"
             >
-              <a :href="route(menu.path)">{{ menu.label }}</a>
-            </li> -->
+              <a class="text-xl" :href="route(menu.path)">{{ menu.label }}</a>
+            </li>
           </ul>
         </div>
         <div class="grid-content h-full flex items-center justify-end">
           <template v-if="user !== null">
-            <div class="app__head-notification">
-              <!-- <PopupNotification /> -->
-            </div>
-            <div class="app__head-user-name">{{ user.name }}</div>
+            <!-- <div class="app__head-user-name">{{ user.name }}</div> -->
 
             <!-- <el-dropdown @command="handleCommand" trigger="click">
               <span class="el-dropdown-link">
@@ -119,7 +107,7 @@
       </div>
       <!-- footer -->
       <div class="footer w-full bg-yellow-100 h-60">
-        <h1 class="text-center">FFFFF</h1>
+        <h1 class="text-center">Footer</h1>
       </div>
     </div>
   </div>
@@ -129,40 +117,34 @@
 import { defineComponent } from "vue";
 import AlertNoticeMixin from "@/Mixins/alert-notice";
 import { ArrowDown, ArrowRight } from "@element-plus/icons-vue";
-import PopupNotification from "@/Components/Notifications/Popup.vue";
 
 export default defineComponent({
-  props: {
-    title: String,
-    ClassMain: String,
-  },
   components: {
     ArrowDown,
     ArrowRight,
-    PopupNotification,
   },
   mixins: [AlertNoticeMixin],
-  computed: {
-    user() {
-      return this.$page.props.user;
-    },
-  },
+
   data() {
     return {
       showingNavigationDropdown: false,
       expandMenuMobile: false,
       menus: [
         {
-          label: "Phim",
-          path: "#",
+          label: "Phim đang chỉếu",
+          path: "movies",
+        },
+        {
+          label: "Phim sắp chiếu",
+          path: "movies",
         },
         {
           label: "Vé của tôi",
-          path: "#",
+          path: "your_ticket",
         },
         {
           label: "Thành viên",
-          path: "#",
+          path: "member",
         },
       ],
     };
@@ -194,19 +176,10 @@ export default defineComponent({
 });
 </script>
 
-<style>
-body {
-  background: #e5e5e5;
-}
-</style>
 <style scoped>
 .app__head {
   background-color: #fff;
-  border-bottom: 2px solid #3d3d3d;
-}
-
-.app__head-notification {
-  margin-right: 41px;
+  border-bottom: 2px solid #ff7777;
 }
 
 .app__head-user-name {
@@ -219,22 +192,10 @@ body {
   border: 1px solid #cccccc;
 }
 
-.el-menu__custom--horizontal {
-  border: none;
-  height: 100%;
-}
-
-.el-menu__custom--horizontal > li {
-  height: 100%;
-}
-
 #main-menu li a {
-  color: #3d3d3d;
   text-decoration: none;
   cursor: pointer;
-  margin: 0 20px;
-  height: 100%;
-  display: flex;
+  margin: 0 50px;
   align-items: center;
 }
 
@@ -244,34 +205,17 @@ body {
   align-items: center;
 }
 
-#main-menu :not(.menu-active) a:hover {
-  border-bottom: 2px solid #a5c242;
-}
-
 #main-menu li:hover a {
   font-style: normal;
   font-weight: bold;
-  color: #a5c242;
+  color: #ff7777;
 }
 
 .menu-active {
   font-weight: bold;
-  border-bottom: 2px solid #a5c242;
 }
 
 .menu-active > a {
-  color: #a5c242 !important;
-}
-
-.mt-1-5 {
-  margin-top: 6px;
-}
-
-.custom-drop-user-second {
-  margin-top: 10px;
-}
-
-.custom-drop-user-first {
-  margin-bottom: 10px;
+  color: #ff7777 !important;
 }
 </style>
