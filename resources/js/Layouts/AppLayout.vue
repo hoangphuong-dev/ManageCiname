@@ -1,21 +1,31 @@
 <template>
   <div class="app">
     <div class="app__head" :class="{ 'h-screen': expandMenuMobile }">
-      <div class="flex justify-between items-center m-auto h-24 max-w-screen-2xl">
+      <div
+        class="flex justify-between items-center m-auto h-24 max-w-screen-2xl"
+      >
         <div class="hidden lg:flex grid-content bg-purple">
-          <el-link href="/" :underline="false" class="h-20" style="width: 158px">
+          <el-link
+            href="/"
+            :underline="false"
+            class="h-20"
+            style="width: 158px"
+          >
             <el-image class="h-20" src="images/logo.png"></el-image>
           </el-link>
         </div>
         <div class="app__head-menu h-full">
-          <ul id="main-menu" class="hidden lg:flex justify-center items-center h-full">
-            <li
+          <ul
+            id="main-menu"
+            class="hidden lg:flex justify-center items-center h-full"
+          >
+            <!-- <li
               :class="{ 'menu-active': activeMenu(menu) }"
               v-for="menu in menus"
               :key="menu.path"
             >
               <a :href="route(menu.path)">{{ menu.label }}</a>
-            </li>
+            </li> -->
           </ul>
         </div>
         <div class="grid-content h-full flex items-center justify-end">
@@ -25,15 +35,17 @@
             </div>
             <div class="app__head-user-name">{{ user.name }}</div>
 
-            <el-dropdown @command="handleCommand" trigger="click">
+            <!-- <el-dropdown @command="handleCommand" trigger="click">
               <span class="el-dropdown-link">
                 <div class="flex justify-center items-center">
                   <div class="app__head-profile rounded">
-                    <!-- // <img
-                    //   class="w-full h-full rounded"
-                    //   :src="getImage(user.avatar) || '/images/avatar/default.png'"
-                    //   alt=""
-                    // /> -->
+                    <img
+                      class="w-full h-full rounded"
+                      :src="
+                        getImage(user.avatar) || '/images/avatar/default.png'
+                      "
+                      alt=""
+                    />
                   </div>
                   <el-icon class="el-icon--right">
                     <arrow-down />
@@ -42,7 +54,10 @@
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item command="profile" class="custom-drop-user-first">
+                  <el-dropdown-item
+                    command="profile"
+                    class="custom-drop-user-first"
+                  >
                     <div class="w-36 flex justify-between">
                       <div class="flex items-center justify-center">
                         <img width="12" src="/images/svg/user.svg" alt="" />
@@ -55,7 +70,10 @@
                     </div>
                   </el-dropdown-item>
                   <hr />
-                  <el-dropdown-item command="logout" class="custom-drop-user-second">
+                  <el-dropdown-item
+                    command="logout"
+                    class="custom-drop-user-second"
+                  >
                     <div class="w-36 flex justify-between">
                       <div class="flex items-center justify-center">
                         <img width="12" src="/images/svg/logout.svg" alt="" />
@@ -69,11 +87,15 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
-            </el-dropdown>
+            </el-dropdown> -->
           </template>
           <template v-else>
             <div class="mr-4 px-6 py-2 rounded border">
-              <el-link :href="route('show_login')" :underline="false" type="primary">
+              <el-link
+                :href="route('show_login')"
+                :underline="false"
+                type="primary"
+              >
                 <h3 class="text-yellowPrimary">Đăng nhập</h3>
               </el-link>
             </div>
@@ -132,15 +154,15 @@ export default defineComponent({
       menus: [
         {
           label: "Phim",
-          path: "hospital.notification",
+          path: "#",
         },
         {
           label: "Vé của tôi",
-          path: "hospital.index",
+          path: "#",
         },
         {
           label: "Thành viên",
-          path: "hospital.jobs.list",
+          path: "#",
         },
       ],
     };
@@ -149,12 +171,10 @@ export default defineComponent({
     handleCommand(command) {
       switch (command) {
         case "logout":
-          window.location.href =
-            this.user.role === 1 ? route("hospital.logout") : route("caretaker.logout");
+          window.location.href = this.user.role === 1 ? route("#") : route("#");
           break;
         case "profile":
-          window.location.href =
-            this.user.role === 1 ? route("hospital.profile") : route("caretaker.profile");
+          window.location.href = this.user.role === 1 ? route("#") : route("#");
           break;
 
         default:
@@ -166,7 +186,8 @@ export default defineComponent({
     },
     activeMenu(menu) {
       return (
-        route().current(menu.path) || (menu?.other || []).includes(route().current())
+        route().current(menu.path) ||
+        (menu?.other || []).includes(route().current())
       );
     },
   },
