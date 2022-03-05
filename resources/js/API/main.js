@@ -68,6 +68,6 @@ export const updateStatusRoom = async (id, status) => {
     return await axios.put('/rooms/' + id + '/update-status', { status })
 }
 
-export const listShowTime = async (params = {}) => {
+export const listScheduleByDay = async (params = {}) => {
     return await axios.get("/showtimes", { params });
 };

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ShowTime;
+use App\Models\ViewShowTimeByDay;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 //use Your Model
 
@@ -31,16 +32,26 @@ class ShowTimeRepository extends BaseRepository
         }
     }
 
-    public function list($request)
+    public function list($request, $cinema_id)
     {
-        return $this->model->get();
-        // return $this->model->query()
+        return ViewShowTimeByDay::query()
+            ->when($request->name, function ($query) use ($request) {
+                return $query->where("name", "like", "%{$request->name}%");
+            })
+            ->where('cinema_id', $cinema_id)
+            ->orderBy('day')
+            ->paginate($request->query('limit', 10));
+    }
 
-        //     ->when($request->name, function ($query) use ($request) {
-        //         return $query->where("name", "like", "%{$request->name}%");
-        //     })
-        //     ->join('rooms', 'rooms.id', '=', 'show_times.room_id')
-        //     ->where('rooms.cinema_id', $request->cinema_id)
-        //     ->paginate($request->query('limit', 10));
+    public function getShowTimeByMovieDay($cinema_id, $movie_id, $day)
+    {
+        return $this->model->newQuery()
+            ->select('show_times.*', 'rooms.name', 'rooms.row_number', 'rooms.column_number')
+            ->selectRaw('DATE_FORMAT(time_start, "%H:%i") as time')
+            ->where('movie_id', $movie_id)
+            ->where('cinema_id', $cinema_id)
+            ->whereRaw('DATE_FORMAT(time_start, "%d-%m-%Y") like "' . $day . '"')
+            ->join('rooms', 'rooms.id', '=', 'show_times.room_id')
+            ->get();
     }
 }

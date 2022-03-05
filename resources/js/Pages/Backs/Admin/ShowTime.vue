@@ -7,7 +7,7 @@
             ref="search"
             placeholder="Tìm tên phim ... "
             clearable
-            v-model="rooms.keyword"
+            v-model="showtime.keyword"
             @keyup.enter="searchChange()"
           />
         </div>
@@ -16,54 +16,48 @@
         <el-button @click="openDialogShowTime">Thêm Suất Chiếu</el-button>
       </div>
     </div>
-    <!-- <div v-if="rooms.data.length > 0" class="grid grid-cols-5 gap-4">
+
+    <div v-if="showtime.data.length > 0" class="grid grid-cols-4 gap-4">
       <div
         class="border rounded-md p-4"
-        v-for="item in rooms.data"
+        v-for="item in showtime.data"
         :key="item.id"
       >
-        <h2 class="text-center">{{ item.name }}</h2>
-        <p class="text-center">
-          {{ item.row_number * item.column_number }} ghế
-        </p>
-        <p class="text-center">
-          <span class="mr-4">Trạng thái : </span>
-          <el-switch
-            v-model="item.status"
-            active-color="#13ce66"
-            inactive-color="#cccccc"
-            active-value="1"
-            inactive-value="0"
-            @click="handleUpdateStatus(item, item.status)"
-          />
-        </p>
+        <h2
+          @click="detailShowTime(item)"
+          class="text-center mb-2 cursor-pointer"
+        >
+          {{ item.name }}
+        </h2>
+        <img
+          :src="
+            'https://i3.ytimg.com/vi/' + videoId(item) + '/maxresdefault.jpg'
+          "
+        />
 
-        <div class="mt-4 flex">
-          <div class="text-left w-1/2"></div>
-          <div class="text-right w-1/2 h-5">
-            <el-icon
-              v-if="item.status == 0"
-              class="cursor-pointer"
-              @click="confirmEventDelete(item)"
-              ><delete
-            /></el-icon>
+        <div class="w-full flex my-4">
+          <div class="w-2/3">{{ item.day }}</div>
+          <div class="w-1/3 flex text-right">
+            <h3 class="text-red-400 mr-2">{{ item.sum_show_time }}</h3>
+            suất chiếu
           </div>
         </div>
       </div>
-    </div> -->
-    <!-- <div v-else><el-empty description="Không có dữ liệu"></el-empty></div> -->
+    </div>
+    <div v-else><el-empty description="Không có dữ liệu"></el-empty></div>
     <!-- phan trang suất chiếu  -->
-    <!-- <div
-      v-if="rooms.total > rooms.perPage"
+    <div
+      v-if="showtime.total > showtime.perPage"
       class="w-full justify-center my-16 flex"
     >
       <pagination
-        v-model="rooms.current_page"
+        v-model="showtime.current_page"
         @current-change="handleCurrentPage"
-        :page-size="Number(rooms.perPage)"
-        :total="Number(rooms.total)"
+        :page-size="Number(showtime.perPage)"
+        :total="Number(showtime.total)"
       />
-    </div> -->
+    </div>
+
     <!-- dialog suất chiếu  -->
     <el-dialog
       :title="
@@ -184,8 +178,9 @@ import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import Pagination from "@/Components/Pagination.vue";
-import { listShowTime } from "@/API/main.js";
-import { Edit, Delete } from "@element-plus/icons-vue";
+import { getYoutubeId } from "@/Helpers/youtube.js";
+import { listScheduleByDay } from "@/API/main.js";
+import { Edit } from "@element-plus/icons-vue";
 export default {
   name: "ShowTime",
   components: {
@@ -193,7 +188,6 @@ export default {
     SearchInput,
     Pagination,
     Edit,
-    Delete,
   },
   props: {
     cinema: {
@@ -218,7 +212,7 @@ export default {
       showTitle: false,
       selectedItemShowTime: null,
       dialogFormShowTime: false,
-      Count: "",
+
       showtime: {
         data: [],
         total: "",
@@ -231,12 +225,14 @@ export default {
           cinema_id: this.cinema.id,
         },
       },
+
       formData: {
         count: "",
         movie: "",
         date: "",
         schedule: [],
       },
+
       rules: {
         movie: [
           {
@@ -255,7 +251,20 @@ export default {
       },
     };
   },
+
   methods: {
+    detailShowTime(item) {
+      Inertia.get(
+        route("admin.view_detail_showtimes", {
+          cinema_id: item.cinema_id,
+          movie_id: item.movie_id,
+          day: item.day,
+        }),
+        {},
+        { onBefore, onFinish, preserveScroll: true }
+      );
+    },
+
     viewSchedule() {
       this.$refs["formData"].validate((valid) => {
         if (valid) {
@@ -268,21 +277,34 @@ export default {
         }
       });
     },
-    handleCurrentPage(value) {
-      this.rooms.filter.page = value;
-      this.fetchDataRoom();
+
+    videoId(row) {
+      return getYoutubeId(row);
     },
-    resetFormRoom() {
-      this.formDataRoom.name = "";
-      this.formDataRoom.row_number = "";
-      this.formDataRoom.column_number = "";
-      this.formDataRoom.seats = [];
+
+    handleCurrentPage(value) {
+      this.showtime.filter.page = value;
+      this.fetchData();
+    },
+
+    searchChange() {
+      this.showtime.filter.name = this.showtime.keyword;
+      this.fetchData();
+    },
+
+    resetFormData() {
+      this.formData.count = "";
+      this.formData.movie = "";
+      this.formData.date = "";
+      this.formData.schedule = [];
+      this.showTitle = false;
     },
 
     openDialogShowTime() {
       this.selectedItemShowTime = null;
       this.dialogFormShowTime = !this.dialogFormShowTime;
     },
+
     createShowTime() {
       Inertia.post(
         route("admin.showtimes.store"),
@@ -296,17 +318,14 @@ export default {
           preserveScroll: true,
           onError: (e) => console.log(e),
           onSuccess: (_) => {
-            // this.resetFormRoom();
-            // this.fetchDataRoom();
+            this.resetFormData();
             this.dialogFormShowTime = !this.dialogFormShowTime;
+            this.fetchData();
           },
         }
       );
     },
-    searchChange() {
-      this.rooms.filter.name = this.rooms.keyword;
-      this.fetchDataRoom();
-    },
+
     async onSubmitShowTime() {
       this.$refs["formData"].validate((valid) => {
         if (valid) {
@@ -318,31 +337,15 @@ export default {
         }
       });
     },
-    confirmEventDelete({ id }) {
-      this.$confirm(
-        `Bạn có chắc xóa hết tất cả dữ liệu của suất này ?`,
-        "Cảnh báo",
-        {
-          confirmButtonText: "Chắc chắn",
-          cancelButtonText: "Hủy",
-          type: "warning",
-        }
-      ).then(async () => {
-        Inertia.delete(route("admin.rooms.delete", { id }), {
-          onError: (e) => console.log(e),
-        });
-        this.fetchDataRoom();
-      });
-    },
 
     async fetchData() {
       this.loading = true;
-      listShowTime(this.rooms.filter)
+      listScheduleByDay(this.showtime.filter)
         .then(({ status, data }) => {
-          this.rooms.data = status === 200 ? data.data : this.rooms.data;
-          this.rooms.total = data.meta.total;
-          this.rooms.perPage = data.meta.per_page;
-          this.rooms.current_page = data.meta.current_page;
+          this.showtime.data = status === 200 ? data.data : this.showtime.data;
+          this.showtime.total = data.meta.total;
+          this.showtime.perPage = data.meta.per_page;
+          this.showtime.current_page = data.meta.current_page;
         })
         .catch(() => {});
       this.loading = false;

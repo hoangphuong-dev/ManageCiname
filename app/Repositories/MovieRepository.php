@@ -38,15 +38,6 @@ class MovieRepository extends BaseRepository
         return $this->model->where('id', $id)->update(['status' => $status]);
     }
 
-    // public function getMovieByCinema($id)
-    // {
-    //     return $this->model->query()
-    //         ->with('cinemas')
-    //         // ->select('movies.name', 'cinema_movies.*')
-    //         // ->join('cinema_movies', 'cinema_movies.movie_id', '=', 'movies.id')
-    //         // ->where('cinema_movies.cinema_id', $id)
-    //         ->where('movies.status', Movie::MOVIE_ACTIVE)->get();
-    // }
 
     public function createMovie($fill)
     {

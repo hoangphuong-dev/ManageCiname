@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Models\AdminInfo;
 use App\Models\Cinema;
+use App\Models\Movie;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 //use Your Model
 
@@ -27,8 +29,13 @@ class CinemaRepository extends BaseRepository
 
     public function getMovieByCinema($id)
     {
-        return $this->model->query()
-            ->with('movies')->where('id', $id)->firstOrFail();
+        return $this->model
+            ->newQuery()
+            ->with(["movies" => function ($q) {
+                $q->where('status', Movie::MOVIE_ACTIVE);
+            }])
+            ->where('id', $id)
+            ->firstOrFail();
     }
 
     public function createCinema($fill, $admin_info_id)
@@ -64,5 +71,17 @@ class CinemaRepository extends BaseRepository
             ->get()
             ->toArray();
         return $cinema;
+    }
+
+    public function getAllCinemaByAdmin($admin_id)
+    {
+        $admin_info = AdminInfo::where('user_id', $admin_id)->firstOrFail();
+        $cinema = $this->model->select('id')->where('admin_info_id', $admin_info->id)->get()->toArray();
+
+        $arr_cinema_id = array();
+        foreach ($cinema as $item) {
+            $arr_cinema_id[] = $item['id'];
+        }
+        return $arr_cinema_id;
     }
 }

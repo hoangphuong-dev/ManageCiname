@@ -19,16 +19,9 @@
           </p>
         </div>
 
-        <el-tabs>
-          <!-- Tab Suất chiếu -->
-          <el-tab-pane label="Suất chiếu">
-            <show-time :rooms="rooms" :cinema="cinema"></show-time>
-          </el-tab-pane>
-          <!-- Tab Phòng chiếu  -->
-          <el-tab-pane label="Phòng chiếu">
-            <room :seat_types="seat_types" :cinema="cinema"></room>
-          </el-tab-pane>
-        </el-tabs>
+        <hr />
+
+        <div>CHi tiết suất chiếu ở đây</div>
       </div>
     </template>
   </admin-layout>
@@ -42,14 +35,10 @@ import {
   VideoCameraFilled,
   School,
 } from "@element-plus/icons-vue";
-import Room from "./Room.vue";
-import ShowTime from "./ShowTime.vue";
 export default {
   name: "CinemaDetail",
   components: {
     AdminLayout,
-    Room,
-    ShowTime,
     Phone,
     LocationInformation,
     VideoCameraFilled,
@@ -60,24 +49,12 @@ export default {
       type: Object,
       required: true,
     },
-    seat_types: {
-      type: Object,
-      required: true,
-    },
-    rooms: {
-      type: Array,
-      required: true,
-    },
   },
   data() {
     return {
       loading: false,
     };
   },
+  methods: {},
 };
 </script>
-<style>
-.customer_dialog .el-overlay .el-overlay-dialog .el-dialog {
-  width: 90%;
-}
-</style>

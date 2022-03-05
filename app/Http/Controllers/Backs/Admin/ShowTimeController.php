@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backs\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowTimeRequest;
+use App\Services\CinemaService;
 use App\Services\ShowTimeService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,10 +12,14 @@ use Inertia\Inertia;
 class ShowTimeController extends Controller
 {
     protected $showTimeService;
+    protected $cinemaService;
 
-    public function __construct(ShowTimeService $showTimeService)
-    {
+    public function __construct(
+        ShowTimeService $showTimeService,
+        CinemaService $cinemaService
+    ) {
         $this->showTimeService = $showTimeService;
+        $this->cinemaService = $cinemaService;
     }
 
     public function index()
@@ -32,5 +37,28 @@ class ShowTimeController extends Controller
         } finally {
             return back()->with($message);
         }
+    }
+
+    public function viewDetailShowTimes($cinema_id, $movie_id, $day)
+    {
+        $cinema = $this->cinemaService->getMovieByCinema($cinema_id);
+        $movie = $this->showTimeService->getMovieById($movie_id);
+
+        $showtimes = $this->showTimeService->getShowTimeByMovieDay($cinema_id, $movie_id, $day);
+        return Inertia::render('Backs/Admin/ShowTimeDetail', [
+            'cinema' => $cinema,
+            'showtimes' => $showtimes,
+            'movie' => $movie,
+            'day' => $day,
+        ]);
+    }
+
+    public function viewDetailShowTimeById($cinema_id, $showtime_id)
+
+    {
+        $cinema = $this->cinemaService->getMovieByCinema($cinema_id);
+        return Inertia::render('Backs/Admin/ShowTimeDetailById', [
+            'cinema' => $cinema,
+        ]);
     }
 }

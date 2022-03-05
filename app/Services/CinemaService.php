@@ -29,8 +29,6 @@ class CinemaService extends BaseService
     public function getMovieByCinema($id)
     {
         return $this->cinemaRepository->getMovieByCinema($id);
-        // dd($cinema);
-        // return CinemaResource::collection($cinema);
     }
 
     public function getAdminInfoId()
