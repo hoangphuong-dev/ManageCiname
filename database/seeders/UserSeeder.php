@@ -57,22 +57,14 @@ class UserSeeder extends Seeder
         DB::beginTransaction();
         try {
             User::insert($dataUser);
-
             $admin = User::where('role', User::ROLE_ADMIN)->firstOrFail();
-
-            $dataAdinInfo = [
-                'user_id' => $admin->id,
-                'province_id' => 1, // Thành phố Hồ Chí Minh
-            ];
-
-            $adminInfo = AdminInfo::insert($dataAdinInfo);
 
             $faker = \Faker\Factory::create();
             for ($i = 1; $i < 11; $i++) {
                 Cinema::create([
-                    'admin_info_id' => $adminInfo,
+                    'user_id' => $admin->id,
+                    'province_id' => 1, // Thành phố Hồ Chí Minh
                     'name' => "Quận " . $i,
-                    'hotline' => $faker->phoneNumber,
                     'address' => $faker->address,
                 ]);
                 Room::create([
