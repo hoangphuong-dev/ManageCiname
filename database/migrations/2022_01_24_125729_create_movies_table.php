@@ -55,8 +55,9 @@ class CreateMoviesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('movie_format_movies');
         Schema::dropIfExists('movie_genre_movies');
-        Schema::dropIfExists('movies_format_movies');
         Schema::dropIfExists('movies');
     }
 }

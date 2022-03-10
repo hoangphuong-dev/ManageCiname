@@ -36,6 +36,6 @@ class ViewCinemaByProvince extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('view_cinema_by_province');
+        \DB::statement("DROP VIEW IF EXISTS view_cinema_by_province");
     }
 }
