@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Backs\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ViewCinemaByProvince;
 use App\Services\AdminInfoService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class AdminInfoController extends Controller
@@ -18,7 +18,10 @@ class AdminInfoController extends Controller
 
     public function index()
     {
-        return Inertia::render("Backs/SuperAdmin/AdminInfo");
+        $master_cinemas = ViewCinemaByProvince::get();
+        return Inertia::render("Backs/SuperAdmin/MasterCinema", [
+            'master_cinemas' => $master_cinemas,
+        ]);
     }
 
     public function create()

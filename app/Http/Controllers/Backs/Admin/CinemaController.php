@@ -30,10 +30,10 @@ class CinemaController extends Controller
         $this->roomService = $roomService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request, $province_id)
     {
-        $cinemas = $this->cinemaService->getListCinema($request);
-        return Inertia::render("Backs/Admin/Cinema", [
+        $cinemas = $this->cinemaService->getListCinema($request, $province_id);
+        return Inertia::render("Backs/SuperAdmin/Cinema", [
             'cinemas' => $cinemas,
             'filtersBE' => $request->all(),
         ]);

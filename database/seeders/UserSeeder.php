@@ -54,6 +54,8 @@ class UserSeeder extends Seeder
             ],
         ]);
 
+
+
         DB::beginTransaction();
         try {
             User::insert($dataUser);

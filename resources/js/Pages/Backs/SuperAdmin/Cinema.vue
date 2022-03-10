@@ -194,7 +194,7 @@ export default {
   methods: {
     inertia() {
       Inertia.get(
-        route("admin.cinema.index", this.filter),
+        route("superadmin.cinema.index", this.filter),
         {},
         { onBefore, onFinish, preserveScroll: true }
       );
@@ -215,7 +215,7 @@ export default {
       this.dialogFormVisible = !this.dialogFormVisible;
     },
     createCinema() {
-      Inertia.post(route("admin.cinemas.store"), this.formData, {
+      Inertia.post(route("superadmin.cinemas.store"), this.formData, {
         onBefore,
         onFinish,
         preserveScroll: true,
@@ -237,7 +237,7 @@ export default {
     },
     editCinema() {
       Inertia.post(
-        route("admin.cinemas.edit", { id: this.selectedItem }),
+        route("superadmin.cinemas.edit", { id: this.selectedItem }),
         this.formData,
         {
           onBefore,
@@ -254,7 +254,7 @@ export default {
     },
     detail(id) {
       Inertia.get(
-        route("admin.cinemas.show", { id: id }),
+        route("superadmin.cinemas.show", { id: id }),
         {},
         { onBefore, onFinish, preserveScroll: true }
       );

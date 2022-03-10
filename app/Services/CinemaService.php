@@ -47,9 +47,9 @@ class CinemaService extends BaseService
         }
     }
 
-    public function getListCinema($request)
+    public function getListCinema($request, $province_id)
     {
-        $cinemas = $this->cinemaRepository->getListCinema($request, $this->getAdminInfoId());
+        $cinemas = $this->cinemaRepository->getListCinema($request, $province_id);
         return CinemaResource::collection($cinemas);
     }
 

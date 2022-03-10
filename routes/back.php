@@ -41,20 +41,24 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
 
     Route::post('movies/import', [MovieController::class, 'importCsv'])->name('movies.import');
     Route::get('movies/export', [MovieController::class, 'exportCsv'])->name('movies.export');
+
+    Route::get('/cinemas/{province_id}', [CinemaController::class, 'index'])->name('cinema.province');
+    Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
+    Route::post('cinemas', [CinemaController::class, 'store'])->name('cinemas.store');
+    Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
+    Route::get('cinemas/show/{id}', [CinemaController::class, 'show'])->name('cinemas.show');
 });
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
     Route::get('/home', [AdminController::class, 'index'])->name('home_admin');
-    Route::get('/cinemas', [CinemaController::class, 'index'])->name('cinema.index');
 
     Route::get('showtimes', [ShowTimeController::class, 'index'])->name('showtime.index');
     Route::get('bills', [BillController::class, 'index'])->name('bill.index');
     Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
 
-    Route::post('cinemas', [CinemaController::class, 'store'])->name('cinemas.store');
-    Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
-    Route::get('cinemas/show/{id}', [CinemaController::class, 'show'])->name('cinemas.show');
+
+
     Route::delete('cinemas/{id}', [CinemaController::class, 'delete'])->name('cinemas.delete');
 
     Route::post('rooms', [RoomController::class, 'store'])->name('rooms.store');

@@ -48,14 +48,14 @@ class CinemaRepository extends BaseRepository
         ]);
     }
 
-    public function getListCinema($request, $admin_info_id)
+    public function getListCinema($request, $province_id)
     {
         return $this->model->newQuery()
             ->when($request->name, function ($query) use ($request) {
                 return $query->where("name", "like", "%{$request->name}%");
             })
             ->orderBy('created_at', 'desc')
-            ->where('admin_info_id', $admin_info_id)
+            ->where('province_id', $province_id)
             ->paginate($request->query('limit', 10));
     }
 
