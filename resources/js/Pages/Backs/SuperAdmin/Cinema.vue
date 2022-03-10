@@ -23,22 +23,33 @@
             :key="item.id"
             class="border rounded-md p-4"
           >
-            <h2 class="text-center cursor-pointer" @click="detail(item)">
-              PHC {{ item.name }}
-            </h2>
+            <h2 class="text-center">PHC {{ item.name }}</h2>
             <p class="text-center">15 phòng</p>
             <p class="text-center">150 phim đang công chiếu</p>
             <div class="mt-4 flex">
-              <div class="text-left w-1/2">
+              <div class="text-left w-1/3">
+                <el-tooltip
+                  class="box-item"
+                  content="Sửa thông tin rạp"
+                  placement="top-start"
+                >
+                  <el-icon
+                    class="hover:text-red-500 cursor-pointer"
+                    @click="edit(item)"
+                    ><edit
+                  /></el-icon>
+                </el-tooltip>
+              </div>
+              <div class="w-1/3 text-center">
                 <el-icon
-                  class="hover:text-blue-500 cursor-pointer"
-                  @click="edit(item)"
-                  ><edit
+                  class="hover:text-red-500 cursor-pointer"
+                  @click="detail(item)"
+                  ><zoom-in
                 /></el-icon>
               </div>
-              <div class="text-right w-1/2">
+              <div class="text-right w-1/3">
                 <el-icon
-                  class="hover:text-blue-500 cursor-pointer"
+                  class="hover:text-red-500 cursor-pointer"
                   @click="confirmEventDelete(item)"
                   ><delete
                 /></el-icon>
@@ -123,7 +134,7 @@ import Pagination from "@/Components/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import PageInfo from "@/Components/Control/PageInfo.vue";
-import { Edit, Delete } from "@element-plus/icons-vue";
+import { Edit, Delete, ZoomIn } from "@element-plus/icons-vue";
 
 export default {
   name: "Cinema",
@@ -134,6 +145,7 @@ export default {
     Pagination,
     Edit,
     Delete,
+    ZoomIn,
   },
   props: {
     cinemas: {

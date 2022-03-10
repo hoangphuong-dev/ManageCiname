@@ -5,7 +5,7 @@
         <h2 class="mb-5">Hệ thống rạp</h2>
         <div class="w-full flex relative">
           <div class="w-3/4 flex items-end">
-            <div class="search">
+            <div class="flex">
               <el-input
                 ref="search"
                 placeholder="Tìm kiếm"
@@ -20,11 +20,17 @@
           <div
             v-for="item in master_cinemas"
             :key="item"
-            class="border rounded-md p-4 cursor-pointer"
-            @click="detail(item)"
+            class="border rounded-md p-4"
           >
             <h2 class="text-center">{{ item.name }}</h2>
+
             <div>{{ item.count_cinema }} rạp</div>
+            <div>{{ item.count_cinema }} phòng</div>
+            <div class="text-center mt-6">
+              <el-button size="small" @click="detail(item)" type="danger">
+                Xem chi tiết
+              </el-button>
+            </div>
           </div>
         </div>
       </div>
