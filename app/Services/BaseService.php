@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Services;
 
-use App\Exceptions\CouldNotFindUserIdException;
 use Illuminate\Support\Facades\Auth;
 
-class BaseService {
+class BaseService
+{
 
     public function getUserId($guard)
     {
