@@ -2,21 +2,28 @@
   <admin-layout>
     <template #main>
       <div class="bg-white min-h-full m-4 mb-0 p-4">
-        <div class="w-full mb-10 flex text-red-400">
-          <h2 class="">PHC {{ cinema.name }}</h2>
-          <p class="ml-16">
-            <el-icon><phone /></el-icon> {{ cinema.hotline }}
-          </p>
-          <p class="mx-16">
-            <el-icon><location-information /></el-icon>
-            {{ cinema.address }}
-          </p>
-          <p class="mr-16">
-            <el-icon><video-camera-filled /></el-icon> 115 phim công chiếu
-          </p>
-          <p>
-            <el-icon><school /></el-icon> 115 phòng
-          </p>
+        <h2>Xem chi tiết rạp</h2>
+        <h1 class="text-center my-4">{{ cinema.name }}</h1>
+        <div class="w-full flex mb-10 text-red-400">
+          <div class="w-1/2">
+            <p class="my-2">
+              <el-icon><video-camera-filled /></el-icon> 115 phim công chiếu
+            </p>
+            <p>
+              <el-icon><school /></el-icon> 115 phòng
+            </p>
+          </div>
+
+          <div class="w-1/2">
+            <p class="my-2">
+              <el-icon><phone /></el-icon>
+              <span> Hotline : {{ cinema.user.phone }}</span>
+            </p>
+            <p>
+              <el-icon><location-information /></el-icon>
+              <span> Địa chỉ : {{ cinema.address }}</span>
+            </p>
+          </div>
         </div>
 
         <el-tabs>
@@ -26,7 +33,11 @@
           </el-tab-pane>
           <!-- Tab Phòng chiếu  -->
           <el-tab-pane label="Phòng chiếu">
-            <room :seat_types="seat_types" :cinema="cinema"></room>
+            <room
+              :movie_formats="movie_formats"
+              :seat_types="seat_types"
+              :cinema_id="cinema.id"
+            ></room>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -65,6 +76,10 @@ export default {
       required: true,
     },
     rooms: {
+      type: Array,
+      required: true,
+    },
+    movie_formats: {
       type: Array,
       required: true,
     },

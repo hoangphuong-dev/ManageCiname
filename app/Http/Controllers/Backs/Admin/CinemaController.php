@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Backs\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CinemaRequest;
+use App\Models\FormatMovie;
+use App\Models\MovieFormatMovie;
 use App\Models\ViewCinemaByProvince;
 use App\Services\CinemaService;
 use App\Services\MovieService;
@@ -70,6 +72,7 @@ class CinemaController extends Controller
 
     public function show($id)
     {
+        $movie_formats = FormatMovie::all();
         $seat_types = $this->seatTypeService->getAllSeatType();
         $cinema = $this->cinemaService->getMovieByCinema($id);
         $rooms = $this->roomService->getRoomByCinema($id);
@@ -77,6 +80,7 @@ class CinemaController extends Controller
             'cinema' => $cinema,
             'seat_types' => $seat_types,
             'rooms' => $rooms,
+            'movie_formats' => $movie_formats,
         ]);
     }
 
@@ -93,8 +97,6 @@ class CinemaController extends Controller
         $user_id = $request->user_id;
         try {
             $this->cinemaService->updateCinema($id, $fillCinema);
-
-
             $this->userService->updateUserById($fillUser, $user_id);
             $message = ['success' => __('Cập nhật thành công !')];
         } catch (\Exception $e) {

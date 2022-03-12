@@ -34,7 +34,7 @@ class CinemaRepository extends BaseRepository
             ->newQuery()
             ->with(["movies" => function ($q) {
                 $q->where('status', Movie::MOVIE_ACTIVE);
-            }])
+            }, 'user'])
             ->where('id', $id)
             ->firstOrFail();
     }

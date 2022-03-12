@@ -104,6 +104,23 @@
             ></el-input>
           </el-form-item>
 
+          <el-form-item label="Chọn định dạng" prop="format">
+            <el-select
+              class="w-full"
+              v-model="formDataRoom.format"
+              value-key="1"
+              placeholder="Định dạng"
+              clearable
+            >
+              <el-option
+                v-for="item in movie_formats"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
           <!-- submit -->
           <div class="text-right">
             <span class="dialog-footer">
@@ -177,8 +194,9 @@ export default {
     Delete,
   },
   props: {
-    cinema: {
-      type: Object,
+    cinema_id: Number,
+    movie_formats: {
+      type: Array,
       required: true,
     },
     seat_types: {
@@ -206,17 +224,25 @@ export default {
         filter: {
           page: 1,
           limit: 10,
-          cinema_id: this.cinema.id,
+          cinema_id: this.cinema_id,
         },
       },
       formDataRoom: {
         name: "",
         row_number: "",
         column_number: "",
+        format: "",
         seats: [],
       },
       rulesRoom: {
         name: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "blur",
+          },
+        ],
+        format: [
           {
             required: true,
             message: "Trường này không được để trống",
@@ -301,7 +327,7 @@ export default {
         route("admin.rooms.store"),
         {
           ...this.formDataRoom,
-          cinema_id: this.cinema.id,
+          cinema_id: this.cinema_id,
         },
         {
           onBefore,

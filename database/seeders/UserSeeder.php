@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             //SuperAdmin
             [
                 'name' => 'SuperAdmin',
+                'phone' => '0968 222 320',
                 'email' => 'superadmin@gmail.com',
                 'password' => Hash::make('abc@12345'),
                 'role' => User::ROLE_SUPERADMIN,
@@ -31,6 +32,7 @@ class UserSeeder extends Seeder
             //Admin
             [
                 'name' => 'Admin',
+                'phone' => '0968 385 320',
                 'email' => 'admin@gmail.com',
                 'password' => Hash::make('abc@12345'),
                 'role' => User::ROLE_ADMIN,
@@ -40,6 +42,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Nhân viên',
                 'email' => 'staff@gmail.com',
+                'phone' => '0968 444 320',
                 'password' => Hash::make('abc@12345'),
                 'role' => User::ROLE_STAFF,
                 'status' => User::ACCOUNT_ACTIVE
@@ -48,6 +51,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Khách hàng',
                 'email' => 'customer@gmail.com',
+                'phone' => '0968 385 323',
                 'password' => Hash::make('abc@12345'),
                 'role' => User::ROLE_CUSTOMER,
                 'status' => User::ACCOUNT_ACTIVE
@@ -71,8 +75,9 @@ class UserSeeder extends Seeder
                 ]);
                 Room::create([
                     'cinema_id' => 1, // Quận 1 ( HCM)
-                    'name' => "Phòng 2 " . $i,
+                    'name' => "Phòng 2" . $i,
                     'status' => Room::STATUS_OPEN,
+                    'format_movie_id' => 1,
                     'row_number' => 0,
                     'column_number' => 0,
                 ]);
