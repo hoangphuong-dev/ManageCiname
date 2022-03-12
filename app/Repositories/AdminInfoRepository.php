@@ -40,7 +40,7 @@ class AdminInfoRepository extends BaseRepository
                 return $query->where("name", "like", "%{$request->name}%");
             })
 
-            ->paginate($request->query('limit', 10));
+            ->paginate($request->query('limit', 12));
     }
 
     public function getProvinceShowMovie()

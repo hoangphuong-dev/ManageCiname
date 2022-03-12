@@ -6,6 +6,7 @@ use App\Models\Filters\UserFilters;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 
 class UserRepository
 {
@@ -16,9 +17,11 @@ class UserRepository
         $this->user = $user;
     }
 
-    public function all()
+    public function updateUserById($fill, $user_id)
     {
-        return $this->user->all();
+        return $this->user
+            ->where('id', $user_id)
+            ->update($fill);
     }
 
     public function findByEmail($email)
@@ -36,7 +39,7 @@ class UserRepository
         return $this->user->query()
             ->roleHospital()
             ->filters(new UserFilters($request))
-            ->paginate($request->query('limit', 10));
+            ->paginate($request->query('limit', 12));
     }
 
     public function updateStatus($id, $status)
@@ -57,14 +60,26 @@ class UserRepository
         return $this->user->query()->create($fillable);
     }
 
-    public function createAdminInfo($fill)
+    public function createAdmin($data)
     {
         return $this->createUser([
-            'name' => $fill['name'],
-            'phone' => $fill['phone'],
-            'email' => $fill['email'],
+            'name' => $data['name'],
+            'phone' => $data['phone'],
+            'email' => $data['email'],
+            'password' => $data['password'],
             'role' => User::ROLE_ADMIN,
-            'status' => User::ACCOUNT_ACTIVE,
+            'status' => User::ACCOUNT_DEACTIVE,
         ]);
+    }
+
+    public function confirmAdmin($admin_id)
+    {
+        return $this->user->newQuery()
+            ->where('email_verified_at', NULL)
+            ->where('id', $admin_id)
+            ->update([
+                'email_verified_at' => now(),
+                'status' => User::ACCOUNT_ACTIVE,
+            ]);
     }
 }

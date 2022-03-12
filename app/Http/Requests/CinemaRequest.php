@@ -25,8 +25,11 @@ class CinemaRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'hotline' => ['required'],
+            'phone' => ['required', 'unique:users'],
+            'email' => ['required', 'email', 'unique:users'],
+            'cinema_name' => ['required'],
             'address' => ['required'],
+            'province_id' => ['required'],
         ];
     }
 }

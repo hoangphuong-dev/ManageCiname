@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CinemaResource extends JsonResource
+class ViewCinemaByProvinceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +17,7 @@ class CinemaResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'address' => $this->address,
-            'movies' => MovieResource::collection($this->whenLoaded('movies')),
-            'user' =>  $this->user ? UserResource::make($this->user)->resolve() : [],
+            'count_cinema' => $this->count_cinema,
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\AdminInfo;
 use App\Models\Cinema;
 use App\Models\Movie;
+use App\Models\ViewCinemaByProvince;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 //use Your Model
 
@@ -38,14 +39,22 @@ class CinemaRepository extends BaseRepository
             ->firstOrFail();
     }
 
-    public function createCinema($fill, $admin_info_id)
+    public function createCinema($fill, $admin_id)
     {
         return $this->create([
-            'admin_info_id' => $admin_info_id,
+            'user_id' => $admin_id,
+            'province_id' => $fill['province_id'],
             'name' => $fill['name'],
-            'hotline' => $fill['hotline'],
             'address' => $fill['address'],
         ]);
+    }
+
+    public function getMasterCinema($request)
+    {
+        return ViewCinemaByProvince::when($request->name, function ($query) use ($request) {
+            return $query->where("name", "like", "%{$request->name}%");
+        })
+            ->paginate($request->query('limit', 12));
     }
 
     public function getListCinema($request, $province_id)
@@ -54,9 +63,10 @@ class CinemaRepository extends BaseRepository
             ->when($request->name, function ($query) use ($request) {
                 return $query->where("name", "like", "%{$request->name}%");
             })
+            ->with('user')
             ->orderBy('created_at', 'desc')
             ->where('province_id', $province_id)
-            ->paginate($request->query('limit', 10));
+            ->paginate($request->query('limit', 12));
     }
 
     public function getArrayIdCinemaByAdminInfo($arrayAdminInfo)

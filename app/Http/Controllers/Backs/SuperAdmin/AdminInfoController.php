@@ -18,10 +18,7 @@ class AdminInfoController extends Controller
 
     public function index()
     {
-        $master_cinemas = ViewCinemaByProvince::get();
-        return Inertia::render("Backs/SuperAdmin/MasterCinema", [
-            'master_cinemas' => $master_cinemas,
-        ]);
+       
     }
 
     public function create()

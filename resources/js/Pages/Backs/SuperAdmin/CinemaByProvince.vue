@@ -23,16 +23,49 @@
             :key="item.id"
             class="border rounded-md p-4"
           >
-            <h2 class="text-center">PHC {{ item.name }}</h2>
-            <p class="text-center">15 phòng</p>
-            <p class="text-center">150 phim đang công chiếu</p>
+            <h2 class="text-center mb-2">{{ item.name }}</h2>
+            <div class="w-full flex">
+              <div class="w-1/3 border-dashed border-2 p-2 border-b-0">
+                Quản lý
+              </div>
+              <div
+                class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
+              >
+                {{ item.user.name }}
+              </div>
+            </div>
+            <div class="w-full flex">
+              <div class="w-1/3 border-dashed border-2 p-2 border-b-0">
+                Hotline
+              </div>
+              <div
+                class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
+              >
+                {{ item.user.phone }}
+              </div>
+            </div>
+            <div class="w-full flex">
+              <div class="w-1/3 border-dashed border-2 p-2 border-b-0">
+                Số phòng
+              </div>
+              <div
+                class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
+              >
+                5555
+              </div>
+            </div>
+            <div class="w-full flex">
+              <div class="w-1/3 border-dashed border-2 p-2">
+                Phim đang chiếu
+              </div>
+              <div class="w-2/3 border-dashed border-2 p-2 border-l-0">
+                11 phim
+              </div>
+            </div>
+
             <div class="mt-4 flex">
               <div class="text-left w-1/3">
-                <el-tooltip
-                  class="box-item"
-                  content="Sửa thông tin rạp"
-                  placement="top-start"
-                >
+                <el-tooltip content="Sửa thông tin rạp">
                   <el-icon
                     class="hover:text-red-500 cursor-pointer"
                     @click="edit(item)"
@@ -41,22 +74,27 @@
                 </el-tooltip>
               </div>
               <div class="w-1/3 text-center">
-                <el-icon
-                  class="hover:text-red-500 cursor-pointer"
-                  @click="detail(item)"
-                  ><zoom-in
-                /></el-icon>
+                <el-tooltip content="Xem chi tiết rạp">
+                  <el-icon
+                    class="hover:text-red-500 cursor-pointer"
+                    @click="detail(item)"
+                    ><zoom-in
+                  /></el-icon>
+                </el-tooltip>
               </div>
               <div class="text-right w-1/3">
-                <el-icon
-                  class="hover:text-red-500 cursor-pointer"
-                  @click="confirmEventDelete(item)"
-                  ><delete
-                /></el-icon>
+                <el-tooltip content="Xóa rạp">
+                  <el-icon
+                    class="hover:text-red-500 cursor-pointer"
+                    @click="confirmEventDelete(item)"
+                    ><delete
+                  /></el-icon>
+                </el-tooltip>
               </div>
             </div>
           </div>
         </div>
+
         <!-- phan trang  -->
         <div
           v-if="cinemas.meta.total > cinemas.meta.per_page"
@@ -74,6 +112,7 @@
             :total="Number(cinemas.meta.total)"
           />
         </div>
+
         <!-- open dialog -->
         <el-dialog
           :title="selectedItem === null ? 'Thêm rạp' : 'Sửa thông tin rạp'"
@@ -85,30 +124,58 @@
             label-position="top"
             :rules="rules"
           >
-            <!-- Tên rạp -->
-            <el-form-item label="Tên rạp" prop="name">
-              <el-input
-                v-model="formData.name"
-                autocomplete="off"
-                placeholder="Nhập tên rạp"
-              ></el-input>
-            </el-form-item>
-            <!-- Hotline -->
-            <el-form-item label="Hotline" prop="hotline">
-              <el-input
-                v-model="formData.hotline"
-                autocomplete="off"
-                placeholder="Nhập số điện thoại"
-              ></el-input>
-            </el-form-item>
-            <!-- Địa chỉ -->
-            <el-form-item label="Địa chỉ" prop="hotline">
-              <el-input
-                v-model="formData.address"
-                autocomplete="off"
-                placeholder="Nhập địa chỉ"
-              ></el-input>
-            </el-form-item>
+            <div class="flex w-full">
+              <div class="w-1/2 mr-4">
+                <!-- Tên admin -->
+                <el-form-item label="Tên người quản lý" prop="name">
+                  <el-input
+                    v-model="formData.name"
+                    autocomplete="off"
+                    placeholder="Nhập tên"
+                  ></el-input>
+                </el-form-item>
+
+                <!-- Số điện thoại -->
+                <el-form-item label="Số điện thoại" prop="phone">
+                  <el-input
+                    v-model="formData.phone"
+                    autocomplete="off"
+                    placeholder="Nhập số điện thoại"
+                  ></el-input>
+                </el-form-item>
+
+                <!-- Email -->
+                <div v-if="selectedItem == null">
+                  <el-form-item label="Email" prop="email">
+                    <el-input
+                      v-model="formData.email"
+                      autocomplete="off"
+                      placeholder="Nhập email"
+                    ></el-input>
+                  </el-form-item>
+                </div>
+              </div>
+
+              <div class="w-1/2">
+                <!-- Tên rạp -->
+                <el-form-item label="Tên rạp" prop="cinema_name">
+                  <el-input
+                    v-model="formData.cinema_name"
+                    autocomplete="off"
+                    placeholder="Nhập tên rạp"
+                  ></el-input>
+                </el-form-item>
+
+                <!-- Địa chỉ -->
+                <el-form-item label="Địa chỉ" prop="address">
+                  <el-input
+                    v-model="formData.address"
+                    autocomplete="off"
+                    placeholder="Nhập email"
+                  ></el-input>
+                </el-form-item>
+              </div>
+            </div>
 
             <!-- submit -->
             <div class="text-right">
@@ -137,7 +204,7 @@ import PageInfo from "@/Components/Control/PageInfo.vue";
 import { Edit, Delete, ZoomIn } from "@element-plus/icons-vue";
 
 export default {
-  name: "Cinema",
+  name: "CinemaByProvince",
   components: {
     AdminLayout,
     PageInfo,
@@ -148,6 +215,7 @@ export default {
     ZoomIn,
   },
   props: {
+    province_id: String,
     cinemas: {
       required: true,
     },
@@ -160,9 +228,10 @@ export default {
     filter() {
       return {
         page: this.filtersBE.page?.toInt() || 1,
-        limit: this.filtersBE.limit?.toInt() || 10,
+        limit: this.filtersBE.limit?.toInt() || 12,
         status: this.filtersBE?.status?.toInt(),
         name: this.filtersBE?.name || "",
+        province_id: this.filtersBE?.province_id || "",
       };
     },
   },
@@ -175,8 +244,11 @@ export default {
       perPage: "",
       formData: this.$inertia.form({
         name: "",
-        hotline: "",
+        phone: "",
+        email: "",
+        cinema_name: "",
         address: "",
+        province_id: this.province_id,
       }),
       rules: {
         name: [
@@ -186,7 +258,39 @@ export default {
             trigger: "blur",
           },
         ],
-        hotline: [
+        phone: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "change",
+          },
+          {
+            validator: function (err, value, callback) {
+              let val = value.replace(/\s+/g, " ");
+              if (
+                !(val.length >= 9 && val.length <= 12) ||
+                value.includes(" ")
+              ) {
+                return callback("Số điện thoại không đúng định dạng");
+              }
+              callback();
+            },
+            trigger: "change",
+          },
+        ],
+        email: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "blur",
+          },
+          {
+            type: "email",
+            message: "Email không đúng định dạng",
+            trigger: "change",
+          },
+        ],
+        cinema_name: [
           {
             required: true,
             message: "Trường này không được để trống",
@@ -206,7 +310,7 @@ export default {
   methods: {
     inertia() {
       Inertia.get(
-        route("superadmin.cinema.index", this.filter),
+        route("superadmin.cinema.province", this.filter),
         {},
         { onBefore, onFinish, preserveScroll: true }
       );
@@ -239,12 +343,14 @@ export default {
       });
     },
     edit(item) {
-      console.log(item);
       this.dialogFormVisible = true;
       this.selectedItem = item.id;
 
-      this.formData.name = item.name;
-      this.formData.hotline = item.hotline;
+      this.formData.user_id = item.user.id;
+      this.formData.name = item.user.name;
+      this.formData.phone = item.user.phone;
+      this.formData.email = item.user.email;
+      this.formData.cinema_name = item.name;
       this.formData.address = item.address;
     },
     editCinema() {
@@ -264,6 +370,7 @@ export default {
         }
       );
     },
+
     detail(id) {
       Inertia.get(
         route("superadmin.cinemas.show", { id: id }),
@@ -292,7 +399,7 @@ export default {
           type: "warning",
         }
       ).then(async () => {
-        Inertia.delete(route("admin.cinemas.delete", { id }), {
+        Inertia.delete(route("superadmin.cinemas.delete", { id }), {
           onBefore,
           onFinish,
           preserveScroll: true,

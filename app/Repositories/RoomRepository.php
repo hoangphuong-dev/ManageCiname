@@ -58,7 +58,7 @@ class RoomRepository extends BaseRepository
                 return $query->where("name", "like", "%{$request->name}%");
             })
             ->where('cinema_id', $request->cinema_id)
-            ->paginate($request->query('limit', 10));
+            ->paginate($request->query('limit', 12));
     }
     public function updateStatus($id, $request)
     {

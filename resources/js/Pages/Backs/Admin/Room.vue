@@ -292,13 +292,6 @@ export default {
       this.formDataRoom.column_number = "";
       this.formDataRoom.seats = [];
     },
-    aaaa(status) {
-      if (status == 1) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     onOpenDialogRoom() {
       this.selectedItemRoom = null;
       this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;

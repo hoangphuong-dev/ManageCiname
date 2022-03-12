@@ -1,8 +1,8 @@
 <template>
-  <h3 class="page-size">
-    Tổng {{ totalPage }} item ({{ (currentPage - 1) * perPage + 1 }}～{{
+  <h3 class="page-size mt-2">
+    Tổng {{ totalPage }} ({{ (currentPage - 1) * perPage + 1 }}～{{
       currentPage * perPage < totalPage ? currentPage * perPage : totalPage
-    }}data)
+    }})
   </h3>
 </template>
 

@@ -42,6 +42,16 @@ class AuthenticationController extends Controller
         }
     }
 
+    public function confirmAdmin(Request $request, $admin_id)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(401);
+        }
+        $this->userService->confirmAdmin($admin_id);
+
+        return redirect()->route('back.login.get');
+    }
+
     public function register(Request $request)
     {
         dd($request);

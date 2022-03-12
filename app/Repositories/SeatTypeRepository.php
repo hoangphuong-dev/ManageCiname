@@ -46,6 +46,6 @@ class SeatTypeRepository extends BaseRepository
                 return $query->where("name", "like", "%{$request->name}%");
             })
             ->orderBy('id', "DESC")
-            ->paginate($request->query('limit', 10));
+            ->paginate($request->query('limit', 12));
     }
 }

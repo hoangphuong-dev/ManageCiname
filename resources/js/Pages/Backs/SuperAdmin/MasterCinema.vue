@@ -18,7 +18,7 @@
         </div>
         <div class="grid grid-cols-4 gap-4 mt-5">
           <div
-            v-for="item in master_cinemas"
+            v-for="item in masterCinema"
             :key="item"
             class="border rounded-md p-4"
           >
@@ -27,7 +27,7 @@
             <div>{{ item.count_cinema }} rạp</div>
             <div>{{ item.count_cinema }} phòng</div>
             <div class="text-center mt-6">
-              <el-button size="small" @click="detail(item)" type="danger">
+              <el-button size="small" @click="detail(item.id)" type="danger">
                 Xem chi tiết
               </el-button>
             </div>
@@ -46,7 +46,7 @@ import { onBefore, onFinish } from "@/Uses/request-inertia";
 import { Inertia } from "@inertiajs/inertia";
 
 export default {
-  name: "AdminInfo",
+  name: "MasterCinema",
   components: {
     AdminLayout,
     SearchInput,
@@ -54,26 +54,42 @@ export default {
   },
   props: {
     master_cinemas: Object,
+    filtersBE: Object,
+  },
+  computed: {
+    masterCinema() {
+      return this.master_cinemas.data;
+    },
+    filter() {
+      return {
+        page: this.filtersBE.page?.toInt() || 1,
+        limit: this.filtersBE.limit?.toInt() || 10,
+        name: this.filtersBE?.name || "",
+      };
+    },
   },
   data() {
     return {
       loading: false,
-      dialogVisible: false,
       total: "",
       perPage: "",
       keyword: "",
-      admins: [],
-      filter: {
-        page: 1,
-        limit: 10,
-      },
     };
   },
   methods: {
+    inertia() {
+      Inertia.get(
+        route("superadmin.admin_info.index", this.filter),
+        {},
+        { onBefore, onFinish, preserveScroll: true }
+      );
+    },
+
     searchChange() {
       this.filter.name = this.keyword;
-      this.$emit("handleFilter");
+      this.inertia();
     },
+
     detail(province_id) {
       Inertia.get(
         route("superadmin.cinema.province", { province_id: province_id }),

@@ -40,7 +40,7 @@ class ShowTimeRepository extends BaseRepository
             })
             ->where('cinema_id', $cinema_id)
             ->orderBy('day')
-            ->paginate($request->query('limit', 10));
+            ->paginate($request->query('limit', 12));
     }
 
     public function getShowTimeByMovieDay($cinema_id, $movie_id, $day)

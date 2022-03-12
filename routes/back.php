@@ -22,13 +22,15 @@ Route::group(['as' => 'back.'], function () {
     // ->middleware(IgnoreLoginMiddleware::class);
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login.post');
     Route::post('/register', [AuthenticationController::class, 'register'])->name('staff.register');
+
+    Route::get('/confirm-acount/{admin_id}', [AuthenticationController::class, 'confirmAdmin'])->name('confirm.acount');
 });
 
 Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => ['superadmin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutSuperAdmin'])->name('logout_super');
     Route::get('/home', [SuperAdminController::class, 'index'])->name('home_super');
 
-    Route::get('/admin_infos', [AdminInfoController::class, 'index'])->name('admin_info.index');
+
     Route::get('/seat_types', [SeatTypeController::class, 'index'])->name('seat_type.index');
 
     Route::put('seat_types/{id}', [SeatTypeController::class, 'edit'])->name('seat_types.edit');
@@ -42,11 +44,13 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     Route::post('movies/import', [MovieController::class, 'importCsv'])->name('movies.import');
     Route::get('movies/export', [MovieController::class, 'exportCsv'])->name('movies.export');
 
-    Route::get('/cinemas/{province_id}', [CinemaController::class, 'index'])->name('cinema.province');
+    Route::get('/admin_infos', [CinemaController::class, 'getMasterCinema'])->name('admin_info.index');
+    Route::get('/cinemas', [CinemaController::class, 'getListCinemaByProvince'])->name('cinema.province');
     Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
     Route::post('cinemas', [CinemaController::class, 'store'])->name('cinemas.store');
     Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
     Route::get('cinemas/show/{id}', [CinemaController::class, 'show'])->name('cinemas.show');
+    Route::delete('cinemas/{id}', [CinemaController::class, 'delete'])->name('cinemas.delete');
 });
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']], function () {
@@ -59,7 +63,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 
 
 
-    Route::delete('cinemas/{id}', [CinemaController::class, 'delete'])->name('cinemas.delete');
+
 
     Route::post('rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::delete('rooms/{id}', [RoomController::class, 'delete'])->name('rooms.delete');

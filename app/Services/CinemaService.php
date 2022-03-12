@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Resources\AdminInfoResource;
 use App\Http\Resources\CinemaResource;
+use App\Http\Resources\ViewCinemaByProvinceResource;
 use App\Repositories\AdminInfoRepository;
 use App\Repositories\CinemaRepository;
 use App\Repositories\ProvinceRepository;
@@ -13,12 +14,17 @@ use Illuminate\Support\Facades\DB;
 class CinemaService extends BaseService
 {
     protected $cinemaRepository;
+    protected $userService;
     protected $adminInfoRepository;
 
-    public function __construct(CinemaRepository $cinemaRepository, AdminInfoRepository $adminInfoRepository)
-    {
+    public function __construct(
+        CinemaRepository $cinemaRepository,
+        UserService $userService,
+        AdminInfoRepository $adminInfoRepository
+    ) {
         $this->cinemaRepository = $cinemaRepository;
         $this->adminInfoRepository = $adminInfoRepository;
+        $this->userService = $userService;
     }
 
     public function getCinemaById($id)
@@ -40,8 +46,10 @@ class CinemaService extends BaseService
     public function store($fill)
     {
         try {
-            $cinema = $this->cinemaRepository->createCinema($fill, $this->getAdminInfoId());
-            return $cinema;
+            $admin = $this->userService->createAdmin($fill);
+
+            $user = $this->cinemaRepository->createCinema($fill, $admin->id);
+            // return $cinema;
         } catch (\Exception $e) {
             throw $e;
         }
@@ -53,11 +61,16 @@ class CinemaService extends BaseService
         return CinemaResource::collection($cinemas);
     }
 
-    public function update($id, $fill)
+    public function getMasterCinema($request)
+    {
+        $data = $this->cinemaRepository->getMasterCinema($request);
+        return ViewCinemaByProvinceResource::collection($data);
+    }
+
+    public function updateCinema($id, $fill)
     {
         return $this->cinemaRepository->updateById($id, [
-            'name' => $fill['name'],
-            'hotline' => $fill['hotline'],
+            'name' => $fill['cinema_name'],
             'address' => $fill['address'],
         ]);
     }
