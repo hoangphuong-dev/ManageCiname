@@ -16,27 +16,40 @@
         <el-button @click="onOpenDialogRoom">Thêm Phòng</el-button>
       </div>
     </div>
-    <div v-if="rooms.data.length > 0" class="grid grid-cols-5 gap-4">
+    <div v-if="rooms.data.length > 0" class="grid grid-cols-3 gap-6">
       <div
         class="border rounded-md p-4"
         v-for="item in rooms.data"
         :key="item.id"
       >
         <h2 class="text-center">{{ item.name }}</h2>
-        <p class="text-center">
-          {{ item.row_number * item.column_number }} ghế
-        </p>
-        <p class="text-center">
-          <span class="mr-4">Trạng thái : </span>
-          <el-switch
-            v-model="item.status"
-            active-color="#13ce66"
-            inactive-color="#cccccc"
-            active-value="1"
-            inactive-value="0"
-            @click="handleUpdateStatus(item, item.status)"
-          />
-        </p>
+        <div class="w-full flex">
+          <div class="w-1/3 border-dashed border-2 p-2 border-b-0">Số ghế</div>
+          <div class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0">
+            {{ item.row_number * item.column_number }} ghế
+          </div>
+        </div>
+        <div class="w-full flex">
+          <div class="w-1/3 border-dashed border-2 p-2 border-b-0">
+            Ngày tạo
+          </div>
+          <div class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0">
+            2022/08/08
+          </div>
+        </div>
+        <div class="w-full flex">
+          <div class="w-1/3 border-dashed border-2 p-2">Trạng thái</div>
+          <div class="w-2/3 border-dashed border-2 p-2 border-l-0">
+            <el-switch
+              v-model="item.status"
+              active-color="#13ce66"
+              inactive-color="#cccccc"
+              active-value="1"
+              inactive-value="0"
+              @click="handleUpdateStatus(item, item.status)"
+            />
+          </div>
+        </div>
 
         <div class="mt-4 flex">
           <div class="text-left w-1/2"></div>
@@ -105,7 +118,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item class="text-left" label="Số hàng ghế" prop="row_number">
+          <el-form-item class="text-left" label="Số hàng ghế">
             <el-input-number
               v-model="formDataRoom.row_number"
               :min="8"
@@ -113,11 +126,7 @@
             />
           </el-form-item>
 
-          <el-form-item
-            class="text-left"
-            label="Số dãy ghế"
-            prop="column_number"
-          >
+          <el-form-item class="text-left" label="Số dãy ghế">
             <el-input-number
               v-model="formDataRoom.column_number"
               :min="8"
@@ -134,6 +143,8 @@
               </el-button>
             </span>
           </div>
+
+          <!-- sơ đồ ghế -->
           <div class="my-5 p-2 text-center justify-items-center">
             <h2 class="my-2" v-if="showTitle">Sơ đồ ghế</h2>
             <div
@@ -187,6 +198,7 @@ import { onBefore, onFinish } from "@/Uses/request-inertia";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { listRoom, updateStatusRoom } from "@/API/main.js";
+import { ref } from "vue";
 import { Edit, Delete } from "@element-plus/icons-vue";
 export default {
   name: "Room",
@@ -227,14 +239,14 @@ export default {
         perPage: "",
         filter: {
           page: 1,
-          limit: 10,
+          limit: 12,
           cinema_id: this.cinema_id,
         },
       },
       formDataRoom: {
         name: "",
-        row_number: "",
-        column_number: "",
+        row_number: ref(8),
+        column_number: ref(8),
         format: "",
         seats: [],
       },
@@ -250,30 +262,6 @@ export default {
           {
             required: true,
             message: "Trường này không được để trống",
-            trigger: "blur",
-          },
-        ],
-        row_number: [
-          {
-            required: true,
-            message: "Trường này không được để trống",
-            trigger: "blur",
-          },
-          {
-            pattern: /^\d+$/,
-            message: "Trường thông tin này phải là số nguyên",
-            trigger: "blur",
-          },
-        ],
-        column_number: [
-          {
-            required: true,
-            message: "Trường này không được để trống",
-            trigger: "blur",
-          },
-          {
-            pattern: /^\d+$/,
-            message: "Trường thông tin này phải là số nguyên",
             trigger: "blur",
           },
         ],
@@ -309,8 +297,8 @@ export default {
 
     resetFormRoom() {
       this.formDataRoom.name = "";
-      this.formDataRoom.row_number = "";
-      this.formDataRoom.column_number = "";
+      this.formDataRoom.row_number = ref(8);
+      this.formDataRoom.column_number = ref(8);
       this.formDataRoom.seats = [];
     },
 

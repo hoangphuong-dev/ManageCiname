@@ -27,6 +27,7 @@ class RoomRequest extends FormRequest
             'name' => ['required'],
             'row_number' => ['required'],
             'column_number' => ['required'],
+            'format' => ['required'],
             'cinema_id' => ['required'],
             'seats' => ['required'],
         ];

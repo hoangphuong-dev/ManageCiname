@@ -41,6 +41,7 @@ class RoomRepository extends BaseRepository
             'cinema_id' => $data['cinema_id'],
             'row_number' => $data['row_number'],
             'column_number' => $data['column_number'],
+            'format_movie_id' => $data['format'],
             'status' => Room::STATUS_OPEN,
         ]);
     }
@@ -58,6 +59,7 @@ class RoomRepository extends BaseRepository
                 return $query->where("name", "like", "%{$request->name}%");
             })
             ->where('cinema_id', $request->cinema_id)
+            ->orderBy('created_at', 'DESC')
             ->paginate($request->query('limit', 12));
     }
     public function updateStatus($id, $request)
