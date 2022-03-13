@@ -26,6 +26,20 @@ export default {
           center: "title",
           right: "dayGridMonth,timeGridWeek",
         },
+        titleFormat: {
+          year: "numeric",
+          month: "2-digit",
+          day: "numeric",
+          weekday: "long",
+        },
+        buttonText: {
+          today: "Hôm nay",
+          month: "Tháng",
+          week: "Tuần ",
+          day: "Ngày",
+          list: "list",
+        },
+        timeZone: "Asia/Ho_Chi_Minh",
         editable: true,
       },
       events: [
