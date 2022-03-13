@@ -14,6 +14,7 @@ use App\Services\SeatTypeService;
 use App\Services\UserService;
 use Faker\Core\Number;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class CinemaController extends Controller
@@ -68,6 +69,13 @@ class CinemaController extends Controller
         } finally {
             return back()->with($message);
         }
+    }
+
+    public function showCinemaByAdmin()
+    {
+        $admin = Auth::guard('admin')->user();
+        $cinema = $this->cinemaService->getCinemaByAdmin($admin->id);
+        return $this->show($cinema['id']);
     }
 
     public function show($id)

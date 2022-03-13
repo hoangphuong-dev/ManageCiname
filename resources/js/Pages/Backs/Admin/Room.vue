@@ -73,7 +73,7 @@
         v-model="dialogFormVisibleRoom"
       >
         <el-form
-          class="text-center w-4/5 m-auto"
+          class="text-center w-full"
           ref="formDataRoom"
           :model="formDataRoom"
           label-position="top"
@@ -85,22 +85,6 @@
               v-model="formDataRoom.name"
               autocomplete="off"
               placeholder="Nhập tên phòng"
-            ></el-input>
-          </el-form-item>
-
-          <el-form-item label="Số hàng" prop="row_number">
-            <el-input
-              v-model="formDataRoom.row_number"
-              autocomplete="off"
-              placeholder="Nhập số hàng"
-            ></el-input>
-          </el-form-item>
-
-          <el-form-item label="Số dãy" prop="column_number">
-            <el-input
-              v-model="formDataRoom.column_number"
-              autocomplete="off"
-              placeholder="Nhập số dãy"
             ></el-input>
           </el-form-item>
 
@@ -121,6 +105,26 @@
             </el-select>
           </el-form-item>
 
+          <el-form-item class="text-left" label="Số hàng ghế" prop="row_number">
+            <el-input-number
+              v-model="formDataRoom.row_number"
+              :min="8"
+              :max="20"
+            />
+          </el-form-item>
+
+          <el-form-item
+            class="text-left"
+            label="Số dãy ghế"
+            prop="column_number"
+          >
+            <el-input-number
+              v-model="formDataRoom.column_number"
+              :min="8"
+              :max="20"
+            />
+          </el-form-item>
+
           <!-- submit -->
           <div class="text-right">
             <span class="dialog-footer">
@@ -133,27 +137,27 @@
           <div class="my-5 p-2 text-center justify-items-center">
             <h2 class="my-2" v-if="showTitle">Sơ đồ ghế</h2>
             <div
-              class="grid gap-4"
+              class="grid gap-2"
               :style="{
                 'grid-template-columns':
                   'repeat(' + Column + ', minmax(0, 1fr))',
               }"
             >
               <div
-                class="border rounded-md p-1 text-center bg-green-100"
+                class="text-center"
                 v-for="(seat, indexSeat) in formDataRoom.seats"
                 :key="indexSeat"
               >
-                <div class="flex min-w-124 w-full">
-                  <el-form-item class="w-1/2">
+                <div class="flex w-full seat_customer option_seat_customer">
+                  <el-form-item class="w-1/2 name_seat">
                     <el-input v-model="seat.row"></el-input>
                   </el-form-item>
                   <el-form-item class="w-1/2">
                     <el-input v-model="seat.column"></el-input>
                   </el-form-item>
                 </div>
-                <div class="-mt-6 min-w-124 w-full">
-                  <el-select class="w-full" clearable v-model="seat.seat_type">
+                <div class="-mt-6 w-full seat_customer">
+                  <el-select class="w-full" clear-icon v-model="seat.seat_type">
                     <el-option
                       v-for="(item, index) in seat_types"
                       :key="index"
@@ -260,12 +264,6 @@ export default {
             message: "Trường thông tin này phải là số nguyên",
             trigger: "blur",
           },
-          {
-            max: 2,
-            number: true,
-            message: "Số hàng không lớn hơn 100",
-            trigger: "blur",
-          },
         ],
         column_number: [
           {
@@ -276,12 +274,6 @@ export default {
           {
             pattern: /^\d+$/,
             message: "Trường thông tin này phải là số nguyên",
-            trigger: "blur",
-          },
-          {
-            max: 2,
-            number: true,
-            message: "Số dãy không lớn hơn 100",
             trigger: "blur",
           },
         ],
@@ -302,26 +294,31 @@ export default {
               this.formDataRoom.seats.push({
                 row: String.fromCharCode(i + 65),
                 column: Number(j + 1),
+                seat_type: this.seat_types[0].id,
               });
             }
           }
         }
       });
     },
+
     handleCurrentPage(value) {
       this.rooms.filter.page = value;
       this.fetchDataRoom();
     },
+
     resetFormRoom() {
       this.formDataRoom.name = "";
       this.formDataRoom.row_number = "";
       this.formDataRoom.column_number = "";
       this.formDataRoom.seats = [];
     },
+
     onOpenDialogRoom() {
       this.selectedItemRoom = null;
       this.dialogFormVisibleRoom = !this.dialogFormVisibleRoom;
     },
+
     createRoom() {
       Inertia.post(
         route("admin.rooms.store"),
@@ -342,10 +339,12 @@ export default {
         }
       );
     },
+
     searchChange() {
       this.rooms.filter.name = this.rooms.keyword;
       this.fetchDataRoom();
     },
+
     async onSubmitRoom() {
       this.$refs["formDataRoom"].validate((valid) => {
         if (valid) {
@@ -357,6 +356,7 @@ export default {
         }
       });
     },
+
     confirmEventDelete({ id }) {
       this.$confirm(
         `Bạn có chắc xóa hết tất cả dữ liệu của phòng này ?`,
@@ -373,6 +373,7 @@ export default {
         this.fetchDataRoom();
       });
     },
+
     async handleUpdateStatus(item, status) {
       this.$confirm(`Bạn có chắc chắn thay đổi trạng thái phòng `, "Cảnh báo", {
         confirmButtonText: "Chắc chắn",
@@ -396,6 +397,7 @@ export default {
           this.fetchDataRoom();
         });
     },
+
     async fetchDataRoom() {
       this.loading = true;
       listRoom(this.rooms.filter)
@@ -411,3 +413,23 @@ export default {
   },
 };
 </script>
+
+
+<style>
+.seat_customer .el-input__inner {
+  line-height: 0px;
+  height: 30px;
+  text-align: center;
+  padding: 0px;
+  border-radius: 0px;
+}
+.seat_customer .el-form-item__content {
+  height: 30px;
+}
+.option_seat_customer .el-input__inner {
+  border-bottom: none;
+}
+.name_seat {
+  margin-bottom: 30px;
+}
+</style>

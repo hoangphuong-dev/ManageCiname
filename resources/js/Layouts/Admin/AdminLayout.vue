@@ -137,7 +137,7 @@ export default {
         {
           label: "Quản lý rạp",
           icon: "cinema",
-          path: "admin.cinema.index",
+          path: "admin.cinemas.show",
         },
         {
           label: "Quản lý hóa đơn",

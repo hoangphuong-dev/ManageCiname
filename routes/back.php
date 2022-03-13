@@ -62,8 +62,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
     Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
 
 
-
-
+    Route::get('cinemas/show', [CinemaController::class, 'showCinemaByAdmin'])->name('cinemas.show');
 
     Route::post('rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::delete('rooms/{id}', [RoomController::class, 'delete'])->name('rooms.delete');

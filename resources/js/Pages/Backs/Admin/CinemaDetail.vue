@@ -93,6 +93,6 @@ export default {
 </script>
 <style>
 .customer_dialog .el-overlay .el-overlay-dialog .el-dialog {
-  width: 90%;
+  width: 95%;
 }
 </style>

@@ -16,7 +16,9 @@ export default {
     AdminLayout,
   },
   data() {
-    return {};
+    return {
+      loading: false,
+    };
   },
   methods: {},
 };

@@ -23,6 +23,11 @@ class CinemaRepository extends BaseRepository
         return Cinema::class;
     }
 
+    public function getCinemaByAdmin($admin_id)
+    {
+        return $this->model->where('user_id', $admin_id)->firstOrFail()->toArray();
+    }
+
     public function getCinemaById($id)
     {
         return $this->model->where('id', $id)->firstOrFail()->toArray();
