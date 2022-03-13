@@ -29,11 +29,9 @@
         "@element-plus/icons": "0.0.11",
         "@element-plus/icons-vue": "^0.2.4",
         "@tinymce/tinymce-vue": "^4.0.5",
-        "@vueform/slider": "^2.0.8",
         "element-plus": "^1.2.0-beta.5",
         "vue-axios": "^3.4.0",
         "vue-quill-editor": "^3.0.6",
-        "vue-slick": "^1.1.16",
         "vue3-carousel": "^0.1.36",
         "vuex": "^4.0.2"
     }
