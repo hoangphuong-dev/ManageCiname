@@ -67,3 +67,16 @@ export default {
   },
 };
 </script>
+
+<style>
+.fc .fc-button-primary {
+  background: #ff7777;
+  margin-right: 4px;
+  border-color: #ff7777;
+}
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background: #ff7777;
+  border-color: #ff7777;
+  margin-right: 4px;
+}
+</style>
