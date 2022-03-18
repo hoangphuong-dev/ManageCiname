@@ -23,22 +23,14 @@ class ShowTimeService extends BaseService
 
     public function store($request)
     {
-
-        $data = $request->validated();
-        try {
-            DB::beginTransaction();
-            $show_time = $this->showTimeRepository->createShowTime($data);
-
-            // $this->seatRepository->createSeat($data['seats'], $room->id);
-
-            // $user->load('adminInfo');
-
-            DB::commit();
-            return $show_time;
-        } catch (\Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
+        $fill = $request->validated();
+        $data = [
+            'romm_id' => $fill['romm_id'],
+            'movie_id' => $fill['movie_id'],
+            'time_start' => $fill['day'] . ' ' . $fill['time_start'],
+            'time_end' =>  $fill['day'] . ' ' . $fill['time_end'],
+        ];
+        return $this->showTimeRepository->createShowTime($data);
     }
 
     public function list($request)

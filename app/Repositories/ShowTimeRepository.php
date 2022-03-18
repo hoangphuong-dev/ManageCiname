@@ -23,13 +23,12 @@ class ShowTimeRepository extends BaseRepository
 
     public function  createShowTime($data)
     {
-        foreach ($data['schedule'] as $item) {
-            $this->model->create([
-                'movie_id' => $data['movie'],
-                'room_id' => $item['room'],
-                'time_start' => $data['date'] . ' ' . $item['time_start'],
-            ]);
-        }
+        $this->model->create([
+            'movie_id' => $data['movie_id'],
+            'room_id' => $data['romm_id'],
+            'time_start' => $data['time_start'],
+            'time_end' => $data['time_end'],
+        ]);
     }
 
     public function list($request, $cinema_id)

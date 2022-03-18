@@ -31,7 +31,7 @@ class ShowTimeController extends Controller
     {
         try {
             $this->showTimeService->store($request);
-            $message = ['success' => __('Tạo lịch chiếu thành công !')];
+            $message = ['success' => __('Tạo suất chiếu thành công !')];
         } catch (\Exception $e) {
             $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {
