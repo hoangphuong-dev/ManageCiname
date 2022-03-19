@@ -7,6 +7,7 @@ use App\Http\Controllers\Backs\Admin\RoomController;
 use App\Http\Controllers\Backs\Admin\ShowTimeController;
 use App\Http\Controllers\Backs\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Backs\AuthenticationController;
+use App\Http\Controllers\Backs\Staff\ShowTimeController as StaffShowTimeController;
 use App\Http\Controllers\Backs\Staff\StaffController;
 use App\Http\Controllers\Backs\SuperAdmin\AdminInfoController;
 use App\Http\Controllers\Backs\SuperAdmin\MovieController;
@@ -76,7 +77,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
         ->name('view-showtime-by-id');
 });
 
-Route::group(['prefix' => 'staff', 'middleware' => ['staff']], function () {
-    Route::get('/logout', [AuthenticationController::class, 'logoutStaff'])->name('logout_staff');
-    Route::get('/home', [StaffController::class, 'index'])->name('home_staff');
+Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {
+    Route::get('/logout', [AuthenticationController::class, 'logoutStaff'])->name('logout');
+    Route::get('/home', [StaffController::class, 'index'])->name('home');
+    Route::get('/showtime', [StaffShowTimeController::class, 'index'])->name('showtime');
 });

@@ -26,4 +26,5 @@ Route::apiResource('rooms', RoomController::class);
 Route::apiResource('formats', FormatController::class);
 Route::put('/rooms/{id}/update-status', [RoomController::class, 'changeStatus'])
     ->name('rooms.change_status');
-Route::apiResource('showtimes', ShowTimeController::class);
+Route::get('/showtimes/room/{id}', [ShowTimeController::class, 'listShowTimeByRoom'])
+    ->name('showtimes.rooms');

@@ -42,6 +42,15 @@ class ShowTimeRepository extends BaseRepository
             ->paginate($request->query('limit', 12));
     }
 
+    public function listShowTimeByRoom($roomId, $request)
+    {
+        return $this->model->query()
+            // ->when($request->name, function ($query) use ($request) {
+            //     return $query->where("name", "like", "%{$request->name}%");
+            // })
+            ->where('room_id', $roomId)->get();
+    }
+
     public function getShowTimeByMovieDay($cinema_id, $movie_id, $day)
     {
         return $this->model->newQuery()

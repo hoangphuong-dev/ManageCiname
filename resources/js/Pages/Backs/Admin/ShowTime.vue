@@ -2,6 +2,22 @@
 <template>
   <div class="demo-app">
     <div class="demo-app-main">
+      <div class="w-1/2 m-auto my-4">
+        <el-select
+          class="w-full"
+          placeholder="Chọn phòng chiếu"
+          v-model="roomCurrent"
+        >
+          <el-option
+            v-for="item in rooms"
+            :key="item.id"
+            :value="item.id"
+            :label="item.name"
+          >
+          </el-option>
+        </el-select>
+      </div>
+
       <FullCalendar :options="calendarOptions">
         <template v-slot:eventContent="arg">
           <b>{{ arg.timeText }}</b>
@@ -39,13 +55,6 @@
                   </div>
                 </div>
               </el-option>
-
-              <template v-if="selected" #prefix>
-                <div class="option-grid prefix">
-                  <div class="title">{{ selected.name }}</div>
-                  <div class="movie_length">{{ selected.movie_length }}</div>
-                </div>
-              </template>
             </el-select>
 
             <!-- THông tin phim vừa chọn  -->
@@ -173,7 +182,8 @@ import { onBefore, onFinish } from "@/Uses/request-inertia";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Inertia } from "@inertiajs/inertia";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
-import { INITIAL_EVENTS, createEventId } from "./event-utils";
+import { INITIAL_EVENTS } from "./event-utils";
+import { listShowTimeByRoom } from "@/API/main.js";
 
 export default {
   components: {
@@ -183,6 +193,17 @@ export default {
     cinema: {
       type: Object,
       required: true,
+    },
+    rooms: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  watch: {
+    roomCurrent() {
+      this.formData.romm_id = this.roomCurrent;
+      this.calendarOptions.initialEvents = 777777;
     },
   },
 
@@ -201,10 +222,17 @@ export default {
           center: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         },
-        initialView: "timeGridDay", // swithch this to resourceTimeGridDay to see resource bug
-        initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
-        editable: true,
+        buttonText: {
+          today: "Hôm nay",
+          month: "Tháng",
+          week: "Tuần",
+          day: "Ngày",
+        },
+        locale: "vi",
+        initialView: "timeGridWeek", // swithch this to resourceTimeGridDay to see resource bug
+        initialEvents: [], // alternatively, use the `events` setting to fetch from a feed
         selectable: true,
+        editable: true,
         selectMirror: true,
         dayMaxEvents: true,
         weekends: true,
@@ -213,38 +241,30 @@ export default {
         eventsSet: this.handleEvents,
         resources: this.myResources,
         events: this.myEvents,
-        /* you can update a remote database when these fire:
-        eventAdd:
-        eventChange:
-        eventRemove:
-        */
       },
-
-      initRoom: 1,
 
       dialogForm: false,
 
       eventGuid: 0,
       currentEvents: [],
       movieCurrent: [],
-
-      myResources: [{ id: 1, title: "works" }],
+      roomCurrent: "",
 
       myEvents: [
         {
           id: 1,
-          title: "FFFFF",
-          start: new Date().toISOString().replace(/T.*$/, ""),
+          title: "FFFFFFFF",
+          start: new Date().toISOString().replace(/T.*$/, "") + "T14:00:00",
         },
         {
           id: 2,
-          title: "Timed event",
+          title: "EEEEEEEE",
           start: new Date().toISOString().replace(/T.*$/, "") + "T12:00:00",
         },
       ],
 
       formData: {
-        romm_id: 1,
+        romm_id: "",
         movie_id: "",
         day: "",
         time_start: "",
@@ -253,13 +273,27 @@ export default {
     };
   },
 
+  created() {
+    this.fetchDataShowTimeByRoom();
+  },
+
   methods: {
+    async fetchDataShowTimeByRoom() {
+      this.loading = true;
+      listShowTimeByRoom(1)
+        .then(({ status, data }) => {
+          console.log("FFFF", data);
+          // this.rooms.data = status === 200 ? data.data : this.rooms.data;
+          // this.rooms.total = data.meta.total;
+          // this.rooms.perPage = data.meta.per_page;
+          // this.rooms.current_page = data.meta.current_page;
+        })
+        .catch(() => {});
+      this.loading = false;
+    },
+
     resetForm() {
-      this.formData.romm_id = 1;
       this.formData.movie_id = "";
-      this.formData.day = "";
-      this.formData.time_start = "";
-      this.formData.time_end = "";
     },
     createShowTime() {
       Inertia.post(
@@ -290,21 +324,29 @@ export default {
     },
 
     handleDateSelect(selectInfo) {
-      this.formData.day = selectInfo.start.toISOString().replace(/T.*$/, "");
-      this.formData.time_start = selectInfo.start.toLocaleTimeString();
-      this.formData.time_end = selectInfo.end.toLocaleTimeString();
-      this.dialogForm = !this.dialogForm;
+      if (this.roomCurrent === "") {
+        alert("Vui lòng chọn phòng chiếu");
+        return false;
+      }
+      if (selectInfo.start > new Date()) {
+        this.formData.day = selectInfo.start.toISOString().replace(/T.*$/, "");
+        this.formData.time_start = selectInfo.start.toLocaleTimeString();
+        this.formData.time_end = selectInfo.end.toLocaleTimeString();
+        this.dialogForm = !this.dialogForm;
 
-      let calendarApi = selectInfo.view.calendar;
-      // calendarApi.unselect(); // clear date selection
-      // if (title) {
-      //   calendarApi.addEvent({
-      //     id: createEventId(),
-      //     title,
-      //     start: selectInfo.startStr,
-      //     end: selectInfo.endStr,
-      //   });
-      // }
+        let calendarApi = selectInfo.view.calendar;
+
+        console.log(selectInfo.view.calendar.addEvent);
+        calendarApi.unselect(); // clear date selection
+        // if (title) {
+        //   calendarApi.addEvent({
+        //     id: createEventId(),
+        //     title,
+        //     start: selectInfo.startStr,
+        //     end: selectInfo.endStr,
+        //   });
+        // }
+      }
     },
 
     // handleEventClick(clickInfo) {
@@ -342,18 +384,34 @@ b {
   border-right: 1px solid #d3e2e8;
 }
 
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+  margin-left: -1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.fc .fc-button-group > .fc-button {
+  position: relative;
+  flex: 1 1 auto;
+}
+.fc .fc-button:not(:disabled) {
+  cursor: pointer;
+}
+.fc .fc-button-primary {
+  background: #ff7777;
+  border-color: #ff7777;
+}
+
 .demo-app-sidebar-section {
   padding: 2em;
+}
+.fc .fc-button-primary:not(:disabled):active,
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background: #2c3e50;
+  border-color: #2c3e50;
 }
 
 .demo-app-main {
   flex-grow: 1;
-}
-
-.fc {
-  /* the calendar root */
-  max-width: 1100px;
-  margin: 0 auto;
 }
 </style>
 <style lang="css">

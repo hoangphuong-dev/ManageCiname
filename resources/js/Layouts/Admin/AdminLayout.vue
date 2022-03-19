@@ -150,7 +150,18 @@ export default {
           path: "admin.staff.index",
         },
       ],
-      menuStaff: [],
+      menuStaff: [
+        {
+          label: "Trang chủ",
+          icon: "home",
+          path: "staff.home",
+        },
+        {
+          label: "Xem suất chiếu",
+          icon: "cinema",
+          path: "staff.showtime",
+        },
+      ],
     };
   },
   methods: {
@@ -172,7 +183,7 @@ export default {
           } else if (this.user.role == 1) {
             key = route("logout_admin");
           } else {
-            key = route("logout_staff");
+            key = route("staff.logout");
           }
           window.location.href = key;
           break;

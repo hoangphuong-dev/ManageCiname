@@ -42,6 +42,13 @@ class ShowTimeService extends BaseService
         return ViewShowTimeResource::collection($showtimes);
     }
 
+    public function listShowTimeByRoom($roomId, $request)
+    {
+        return $showtimes = $this->showTimeRepository->listShowTimeByRoom($roomId, $request);
+
+        // return ViewShowTimeResource::collection($showtimes);
+    }
+
     public function  getShowTimeByMovieDay($cinema_id, $movie_id, $day)
     {
         return $this->showTimeRepository->getShowTimeByMovieDay($cinema_id, $movie_id, $day);

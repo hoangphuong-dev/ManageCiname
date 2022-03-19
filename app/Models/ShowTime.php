@@ -12,4 +12,9 @@ class ShowTime extends Model
     protected $guarded = [];
 
     public $timestamps = false;
+
+    // public function cinema()
+    // {
+    //     return $this->hasOne(Cinema::class);
+    // }
 }

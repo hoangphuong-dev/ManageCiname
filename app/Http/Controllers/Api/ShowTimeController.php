@@ -17,12 +17,13 @@ class ShowTimeController extends Controller
 
     public function index(Request $request)
     {
+        dd($request->all());
         return $this->showTimeService->list($request);
     }
 
-    public function show($id)
+    public function listShowTimeByRoom($roomId, Request $request)
     {
-        //
+        return $this->showTimeService->listShowTimeByRoom($roomId, $request);
     }
 
     /**
@@ -33,7 +34,7 @@ class ShowTimeController extends Controller
      */
     public function edit($id)
     {
-        //
+        dd(222);
     }
 
     /**

@@ -88,7 +88,7 @@ class User extends Authenticatable
             return route('superadmin.home_super');
         }
         if ($this->IsStaff()) {
-            return route('home_staff');
+            return route('staff.home');
         }
     }
 
