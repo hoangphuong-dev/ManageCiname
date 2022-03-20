@@ -21,7 +21,7 @@ class ShowTimeRepository extends BaseRepository
         return ShowTime::class;
     }
 
-    public function  createShowTime($data)
+    public function createShowTime($data)
     {
         $this->model->create([
             'movie_id' => $data['movie_id'],

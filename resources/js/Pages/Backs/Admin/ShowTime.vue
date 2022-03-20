@@ -33,8 +33,9 @@
           label-position="top"
           class="text-center w-full"
           ref="formData"
+          :rules="rules"
         >
-          <el-form-item label="Chọn phim">
+          <el-form-item label="Chọn phim" prop="movie_id">
             <el-select
               v-model="formData.movie_id"
               class="w-full"
@@ -57,7 +58,7 @@
               </el-option>
             </el-select>
 
-            <!-- THông tin phim vừa chọn  -->
+            <!-- Thông tin phim vừa chọn  -->
             <div v-if="formData.movie_id > 0">
               <div class="w-full flex text-left mt-4">
                 <div
@@ -123,18 +124,23 @@
             </div>
           </el-form-item>
 
-          <el-form-item class="text-left" label="Ngày chiếu">
+          <el-form-item class="text-left" label="Ngày chiếu" prop="day">
             <el-date-picker
               v-model="formData.day"
               type="date"
               placeholder="Chọn ngày chiếu"
             />
           </el-form-item>
+
           <div class="w-full flex">
             <div class="w-1/2">
-              <el-form-item class="text-left" label="Thời gian bắt đầu">
+              <el-form-item
+                class="text-left"
+                label="Thời gian bắt đầu"
+                prop="time_start"
+              >
                 <el-time-select
-                  class="w-11/12"
+                  class="w-full"
                   v-model="formData.time_start"
                   start="00:00"
                   step="00:30"
@@ -143,10 +149,14 @@
                 />
               </el-form-item>
             </div>
-            <div class="w-1/2 text-right">
-              <el-form-item class="text-left" label="Thời gian kết thúc">
+            <div class="w-1/2 ml-2">
+              <el-form-item
+                class="text-left"
+                label="Thời gian kết thúc"
+                prop="time_end"
+              >
                 <el-time-select
-                  class="w-11/12"
+                  class="w-full"
                   v-model="formData.time_end"
                   :start="formData.time_start"
                   step="00:30"
@@ -173,7 +183,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -202,13 +211,12 @@ export default {
   watch: {
     roomCurrent() {
       this.formData.romm_id = this.roomCurrent;
-      // this.calendarOptions.initialEvents = 777777;
+      this.fetchDataShowTimeByRoom(this.roomCurrent);
     },
   },
 
   data: function () {
     return {
-      selected: ref(null),
       calendarOptions: {
         plugins: [
           dayGridPlugin,
@@ -229,7 +237,6 @@ export default {
         },
         locale: "vi",
         initialView: "timeGridWeek", // swithch this to resourceTimeGridDay to see resource bug
-        // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         selectable: true,
         // editable: true,
         selectMirror: true,
@@ -255,17 +262,43 @@ export default {
         time_start: "",
         time_end: "",
       },
+      rules: {
+        movie_id: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "change",
+          },
+        ],
+        day: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "blur",
+          },
+        ],
+        time_start: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "blur",
+          },
+        ],
+        time_end: [
+          {
+            required: true,
+            message: "Trường này không được để trống",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
 
-  created() {
-    this.fetchDataShowTimeByRoom();
-  },
-
   methods: {
-    async fetchDataShowTimeByRoom() {
+    async fetchDataShowTimeByRoom(romm_id) {
       this.loading = true;
-      listShowTimeByRoom(1)
+      listShowTimeByRoom(romm_id)
         .then(({ status, data }) => {
           this.calendarOptions.events = data.data;
         })
@@ -280,22 +313,28 @@ export default {
       this.formData.time_start = "";
       this.formData.time_end = "";
     },
-    createShowTime() {
-      Inertia.post(
-        route("admin.showtimes.store"),
-        { ...this.formData },
-        {
-          onBefore,
-          onFinish,
-          onError: (e) => console.log(e),
-          onSuccess: (_) => {
-            this.resetForm();
-            this.fetchDataShowTimeByRoom();
-            this.dialogForm = !this.dialogForm;
-          },
+
+    async createShowTime() {
+      this.$refs["formData"].validate((valid) => {
+        if (valid) {
+          Inertia.post(
+            route("admin.showtimes.store"),
+            { ...this.formData },
+            {
+              onBefore,
+              onFinish,
+              onError: (e) => console.log(e),
+              onSuccess: (_) => {
+                this.resetForm();
+                this.fetchDataShowTimeByRoom(this.roomCurrent);
+                this.dialogForm = !this.dialogForm;
+              },
+            }
+          );
         }
-      );
+      });
     },
+
     videoId(row) {
       return getYoutubeId(row);
     },
@@ -322,19 +361,15 @@ export default {
       }
     },
 
-    // handleEventClick(clickInfo) {
-    //   if (
-    //     confirm(
-    //       `Are you sure you want to delete the event '${clickInfo.event.title}'`
-    //     )
-    //   ) {
-    //     clickInfo.event.remove();
-    //   }
-    // },
-
-    // handleEvents(events) {
-    //   this.currentEvents = events;
-    // },
+    handleEventClick(clickInfo) {
+      if (
+        confirm(
+          `Are you sure you want to delete the event '${clickInfo.event.title}'`
+        )
+      ) {
+        clickInfo.event.remove();
+      }
+    },
   },
 };
 </script>
