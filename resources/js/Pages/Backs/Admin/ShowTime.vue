@@ -182,7 +182,6 @@ import { onBefore, onFinish } from "@/Uses/request-inertia";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Inertia } from "@inertiajs/inertia";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
-import { INITIAL_EVENTS } from "./event-utils";
 import { listShowTimeByRoom } from "@/API/main.js";
 
 export default {
@@ -203,7 +202,7 @@ export default {
   watch: {
     roomCurrent() {
       this.formData.romm_id = this.roomCurrent;
-      this.calendarOptions.initialEvents = 777777;
+      // this.calendarOptions.initialEvents = 777777;
     },
   },
 
@@ -230,17 +229,16 @@ export default {
         },
         locale: "vi",
         initialView: "timeGridWeek", // swithch this to resourceTimeGridDay to see resource bug
-        initialEvents: [], // alternatively, use the `events` setting to fetch from a feed
+        // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
         selectable: true,
-        editable: true,
+        // editable: true,
         selectMirror: true,
         dayMaxEvents: true,
         weekends: true,
         select: this.handleDateSelect,
-        eventClick: this.handleEventClick,
-        eventsSet: this.handleEvents,
+        eventClick: this.handleEventClick, // sự kiện khi click vào suất chiếu
         resources: this.myResources,
-        events: this.myEvents,
+        events: [],
       },
 
       dialogForm: false,
@@ -249,19 +247,6 @@ export default {
       currentEvents: [],
       movieCurrent: [],
       roomCurrent: "",
-
-      myEvents: [
-        {
-          id: 1,
-          title: "FFFFFFFF",
-          start: new Date().toISOString().replace(/T.*$/, "") + "T14:00:00",
-        },
-        {
-          id: 2,
-          title: "EEEEEEEE",
-          start: new Date().toISOString().replace(/T.*$/, "") + "T12:00:00",
-        },
-      ],
 
       formData: {
         romm_id: "",
@@ -282,11 +267,7 @@ export default {
       this.loading = true;
       listShowTimeByRoom(1)
         .then(({ status, data }) => {
-          console.log("FFFF", data);
-          // this.rooms.data = status === 200 ? data.data : this.rooms.data;
-          // this.rooms.total = data.meta.total;
-          // this.rooms.perPage = data.meta.per_page;
-          // this.rooms.current_page = data.meta.current_page;
+          this.calendarOptions.events = data.data;
         })
         .catch(() => {});
       this.loading = false;
@@ -294,6 +275,10 @@ export default {
 
     resetForm() {
       this.formData.movie_id = "";
+      this.formData.day = "";
+      this.formData.movie_id = "";
+      this.formData.time_start = "";
+      this.formData.time_end = "";
     },
     createShowTime() {
       Inertia.post(
@@ -305,7 +290,7 @@ export default {
           onError: (e) => console.log(e),
           onSuccess: (_) => {
             this.resetForm();
-            // this.fetchDataRoom();
+            this.fetchDataShowTimeByRoom();
             this.dialogForm = !this.dialogForm;
           },
         }
@@ -326,6 +311,7 @@ export default {
     handleDateSelect(selectInfo) {
       if (this.roomCurrent === "") {
         alert("Vui lòng chọn phòng chiếu");
+        selectInfo.view.calendar.unselect(); // bỏ chọn suất chiếu khi chưa chọn phòng
         return false;
       }
       if (selectInfo.start > new Date()) {
@@ -333,19 +319,6 @@ export default {
         this.formData.time_start = selectInfo.start.toLocaleTimeString();
         this.formData.time_end = selectInfo.end.toLocaleTimeString();
         this.dialogForm = !this.dialogForm;
-
-        let calendarApi = selectInfo.view.calendar;
-
-        console.log(selectInfo.view.calendar.addEvent);
-        calendarApi.unselect(); // clear date selection
-        // if (title) {
-        //   calendarApi.addEvent({
-        //     id: createEventId(),
-        //     title,
-        //     start: selectInfo.startStr,
-        //     end: selectInfo.endStr,
-        //   });
-        // }
       }
     },
 
@@ -359,9 +332,9 @@ export default {
     //   }
     // },
 
-    handleEvents(events) {
-      this.currentEvents = events;
-    },
+    // handleEvents(events) {
+    //   this.currentEvents = events;
+    // },
   },
 };
 </script>

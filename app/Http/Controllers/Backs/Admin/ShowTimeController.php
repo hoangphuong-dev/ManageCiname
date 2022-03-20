@@ -54,7 +54,6 @@ class ShowTimeController extends Controller
     }
 
     public function viewDetailShowTimeById($cinema_id, $showtime_id)
-
     {
         $cinema = $this->cinemaService->getMovieByCinema($cinema_id);
         return Inertia::render('Backs/Admin/ShowTimeDetailById', [

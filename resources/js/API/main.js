@@ -71,3 +71,8 @@ export const updateStatusRoom = async (id, status) => {
 export const listShowTimeByRoom = async (id) => {
     return await axios.get("/showtimes/room/" + id);
 };
+
+export const listScheduleByDay = async (params = {}) => {
+    return await axios.get("/showtimes", { params });
+};
+
