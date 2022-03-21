@@ -4,8 +4,8 @@
       <div
         class="flex justify-between items-center m-auto h-24 max-w-screen-2xl"
       >
-        <div class="flex grid-content bg-purple">
-          <el-image class="h-20" src="images/logo.png"></el-image>
+        <div class="flex grid-content bg-purple cursor-pointer" @click="home()">
+          <el-image class="h-20" src="/images/logo.png"></el-image>
           <h1 class="text-red-600 m-4">PHC</h1>
         </div>
         <div class="app__head-menu h-full">
@@ -92,7 +92,7 @@
       </div>
     </div>
 
-    <div class="app__main" :class="ClassMain">
+    <div class="app__main">
       <div class="app__main_container max-w-screen-2xl m-auto">
         <!-- Page Heading -->
         <header class="bg-white shadow" v-if="$slots.header">
@@ -117,6 +117,8 @@
 import { defineComponent } from "vue";
 import AlertNoticeMixin from "@/Mixins/alert-notice";
 import { ArrowDown, ArrowRight } from "@element-plus/icons-vue";
+import { Inertia } from "@inertiajs/inertia";
+import { onBefore, onFinish } from "@/Uses/request-inertia";
 
 export default defineComponent({
   components: {
@@ -124,6 +126,11 @@ export default defineComponent({
     ArrowRight,
   },
   mixins: [AlertNoticeMixin],
+  computed: {
+    user() {
+      return this.$page.props.user;
+    },
+  },
 
   data() {
     return {
@@ -131,7 +138,7 @@ export default defineComponent({
       expandMenuMobile: false,
       menus: [
         {
-          label: "Phim đang chỉếu",
+          label: "Phim đang chiếu",
           path: "movies",
         },
         {
@@ -150,6 +157,10 @@ export default defineComponent({
     };
   },
   methods: {
+    home() {
+      Inertia.get(route("home"), { onBefore, onFinish });
+    },
+
     handleCommand(command) {
       switch (command) {
         case "logout":

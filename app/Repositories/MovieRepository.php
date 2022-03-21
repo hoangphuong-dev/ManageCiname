@@ -24,9 +24,18 @@ class MovieRepository extends BaseRepository
     public function list($request)
     {
         return $this->model->query()
+            ->select("movies.*")
             // ->with(['movie_genres', 'casts', 'cinemas'])
             ->when($request->name, function ($query) use ($request) {
                 return $query->where("name", "like", "%{$request->name}%");
+            })
+            ->when($request->action, function ($query) use ($request) {
+                return $query->where("movies.status", "=", $request->action);
+            })
+            ->when($request->movie_genre, function ($query) use ($request) {
+                return $query
+                    ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
+                    ->where("movie_genre_id", "=", $request->movie_genre);
             })
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 12));
@@ -36,6 +45,17 @@ class MovieRepository extends BaseRepository
     {
         $status = $request->status;
         return $this->model->where('id', $id)->update(['status' => $status]);
+    }
+
+    public function getMovieRelated($arr_movie_genre_id)
+    {
+        return $this->model
+            ->select("movies.*")
+            ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
+            ->whereIn("movie_genre_id", $arr_movie_genre_id)
+            ->where("movies.status", "=", Movie::MOVIE_ACTIVE)
+            ->orderBy('created_at', "DESC")->limit(5)
+            ->get();
     }
 
 
@@ -64,7 +84,9 @@ class MovieRepository extends BaseRepository
         //         $query->with(['jobApplyPending' => $callable, 'jobApplyReject' => $callable, 'favorites' => $callable]);
         //     })
         //     ->findOrFail($id);
-        return $this->model->findOrFail($id);
+        return $this->model
+            ->with(['movie_genres', 'casts'])
+            ->findOrFail($id);
     }
 
     public function destroy($id)

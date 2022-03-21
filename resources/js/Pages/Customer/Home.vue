@@ -1,5 +1,5 @@
 <template>
-  <app-layout title="Dashboard">
+  <app-layout>
     <div class="py-12">
       <div class="mx-auto messenger-window__custom">
         <div class="w-full">
@@ -14,62 +14,99 @@
                 </carousel>
               </div>
             </div>
+
             <!-- button filter  -->
-            <div class="w-full flex">
-              <div class="w-1/2">
-                <el-select
-                  v-model="province"
-                  clearable
-                  placeholder="Chon the loai"
-                >
-                  <el-option
-                    v-for="(item, index) in 10"
-                    :key="index"
-                    :label="item"
-                    :value="item"
-                  ></el-option>
-                </el-select>
-              </div>
-              <div class="w-1/2">
-                <el-input
-                  ref="search"
-                  placeholder="Tim ten"
-                  clearable
-                  @keyup.enter="searchChange()"
-                />
-              </div>
+            <div
+              class="
+                w-full
+                pt-8
+                pb-16
+                mb-2
+                border-dashed border-t-2 border-b-2 border-red-300
+              "
+            >
+              <el-form>
+                <div class="flex">
+                  <div class="w-1/2">
+                    <el-form-item label="Tìm theo từ khóa">
+                      <el-input
+                        ref="search"
+                        v-model="movies.keyword"
+                        placeholder="Tìm tên phim ... "
+                        clearable
+                        @keyup.enter="searchChange()"
+                      />
+                    </el-form-item>
+                  </div>
+
+                  <div class="w-1/2">
+                    <el-select
+                      class="ml-4"
+                      v-model="movies.search_movie_genre"
+                      clearable
+                      placeholder="Chọn thể loại"
+                    >
+                      <el-option
+                        v-for="item in movie_genres.data"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
+                        @click="searchType()"
+                      ></el-option>
+                    </el-select>
+                  </div>
+                </div>
+              </el-form>
             </div>
-            <div class="flex my-6">
-              <div class="w-1/2">
-                <button class="p-4 bg-red-400">Phim dang chieu</button>
-              </div>
-              <div class="w-1/2 text-right">
-                <button class="p-4 bg-red-400">Phim sap chieu</button>
-              </div>
-            </div>
+
             <!-- show phim -->
             <div class="w-full">
-              <div class="grid grid-cols-4 gap-4 mt-5">
+              <h2 class="text-center">Danh sách chọn phim</h2>
+              <div
+                v-if="movies.data.length > 0"
+                class="grid grid-cols-4 gap-6 mt-5"
+              >
                 <div
-                  v-for="item in 10"
-                  :key="item"
-                  class="border rounded-md p-4 cursor-pointer"
+                  v-for="item in movies.data"
+                  :key="item.id"
+                  class="border rounded-md p-4"
                 >
-                  <h2 class="text-center">{{ item }}</h2>
-                  <div class="flex">
-                    <h3 class="w-1/2">Người quản lý :</h3>
-                    <div>{{ item }}</div>
-                  </div>
-                  <div class="flex">
-                    <h3 class="w-1/2">Rạp :</h3>
-                    <div>10 rạp</div>
-                  </div>
-                  <div class="flex">
-                    <h3 class="w-1/2">Phòng :</h3>
-                    <div>105 phòng</div>
+                  <img
+                    :src="
+                      'https://i3.ytimg.com/vi/' +
+                      videoId(item) +
+                      '/maxresdefault.jpg'
+                    "
+                  />
+
+                  <h2 class="text-center my-2">{{ item.name }}</h2>
+                  <div class="w-full text-center">
+                    <el-button
+                      size="small"
+                      @click="detail(item.id)"
+                      type="danger"
+                    >
+                      Xem chi tiết
+                    </el-button>
                   </div>
                 </div>
               </div>
+              <div v-else>
+                <el-empty description="Không có dữ liệu"></el-empty>
+              </div>
+            </div>
+
+            <!-- phan trang suất chiếu  -->
+            <div
+              v-if="movies.total > movies.perPage"
+              class="w-full justify-center my-16 flex"
+            >
+              <pagination
+                v-model="movies.current_page"
+                @current-change="handleCurrentPage"
+                :page-size="Number(movies.perPage)"
+                :total="Number(movies.total)"
+              />
             </div>
           </div>
         </div>
@@ -79,56 +116,73 @@
 </template>
 
 <script>
-// import Filter from "../../../Components/Job/Filter.vue";
-// import Notification from "../../../Components/Job/Notification.vue";
-// import JobItem from "@/Components/Job/JobItem.vue";
-// import Pagination from "@/Components/Pagination.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import Pagination from "@/Components/Pagination.vue";
+import { getYoutubeId } from "@/Helpers/youtube.js";
+import { listMovie } from "@/API/main.js";
+import { Inertia } from "@inertiajs/inertia";
+import { onBefore, onFinish } from "@/Uses/request-inertia";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel";
 
 export default {
-  components: { Slide, Carousel },
+  components: { Slide, Carousel, Pagination, AppLayout },
   props: {
-    tags: Array,
-    hospital_types: Array,
+    movie_genres: Object,
   },
   created() {
-    // this.fetchData();
+    this.fetchData();
   },
   data: function () {
     return {
-      value: 0,
       loading: false,
-      total: "",
-      perPage: "",
-      filter: {
-        page: 1,
-        limit: 10,
-      },
-      settings: {
-        dots: true,
-        focusOnSelect: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 3,
-        touchThreshold: 5,
+      movies: {
+        data: [],
+        total: "",
+        current_page: "",
+        keyword: "",
+        search_movie_genre: "",
+        perPage: "",
+        filter: {
+          page: 1,
+          limit: 12,
+          action: "1", // lấy những film active
+        },
       },
     };
   },
   methods: {
+    detail(id) {
+      Inertia.get(route("movie.detail", id), { onBefore, onFinish });
+    },
+
+    videoId(row) {
+      return getYoutubeId(row);
+    },
+
     handleCurrentPage(value) {
-      this.filter.page = value;
+      this.movies.filter.page = value;
       this.fetchData();
     },
+
+    searchChange() {
+      this.movies.filter.name = this.movies.keyword;
+      this.fetchData();
+    },
+
+    searchType() {
+      this.movies.filter.movie_genre = this.movies.search_movie_genre;
+      this.fetchData();
+    },
+
     async fetchData() {
       this.loading = true;
-      await this.axios
-        .get(`jobs`, { params: this.filter })
-        .then(async (res) => {
-          this.jobs = res.data;
-          this.total = res.data.meta.total;
-          this.perPage = res.data.meta.per_page;
+      listMovie(this.movies.filter)
+        .then(({ status, data }) => {
+          this.movies.data = status === 200 ? data.data : this.movies.data;
+          this.movies.total = data.meta.total;
+          this.movies.perPage = data.meta.per_page;
+          this.movies.current_page = data.meta.current_page;
         })
         .catch(() => {});
       this.loading = false;

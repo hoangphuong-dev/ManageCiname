@@ -18,7 +18,8 @@ class MovieController extends Controller
 
     public function index(Request $request)
     {
-        return $this->movieService->list($request);
+        $movies =  $this->movieService->list($request);
+        return $movies;
     }
 
     public function changeStatus($id, Request $request)
@@ -35,50 +36,5 @@ class MovieController extends Controller
         } catch (\Exception $e) {
             throw $e;
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -23,6 +23,13 @@ class CinemaRepository extends BaseRepository
         return Cinema::class;
     }
 
+    public function listCinemaByProvince($id)
+    {
+        return $this->model
+            ->select('id', 'name')
+            ->where('province_id', $id)->get()->toArray();
+    }
+
     public function getCinemaByAdmin($admin_id)
     {
         return $this->model->where('user_id', $admin_id)->firstOrFail()->toArray();

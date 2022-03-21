@@ -385,6 +385,19 @@ export default {
           this.fetchDataRoom();
         });
     },
+
+    async fetchDataRoom() {
+      this.loading = true;
+      listRoom(this.rooms.filter)
+        .then(({ status, data }) => {
+          this.rooms.data = status === 200 ? data.data : this.rooms.data;
+          this.rooms.total = data.meta.total;
+          this.rooms.perPage = data.meta.per_page;
+          this.rooms.current_page = data.meta.current_page;
+        })
+        .catch(() => {});
+      this.loading = false;
+    },
   },
 };
 </script>

@@ -12,4 +12,10 @@ class MovieGenre extends Model
     protected $guarded = [];
 
     public $timestamps = false;
+
+
+    public function movies()
+    {
+        return $this->belongsToMany(Movie::class, 'movie_genre_movies', 'movie_genre_id', 'movie_id');
+    }
 }

@@ -19,4 +19,9 @@ class ProvinceRepository extends BaseRepository
     {
         return Province::class;
     }
+
+    public function list()
+    {
+        return $this->model->all()->toArray();
+    }
 }

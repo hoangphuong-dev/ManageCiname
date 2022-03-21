@@ -34,6 +34,12 @@ class ShowTimeService extends BaseService
         return $this->showTimeRepository->createShowTime($data);
     }
 
+    public function listShowTimeByCinema($request)
+    {
+        $cinema_id = $request->cinema_id;
+        return $showtime = $this->showTimeRepository->listShowTimeByCinema($cinema_id, $request);
+    }
+
     public function list($request)
     {
         // $admin = Auth::guard('admin')->user();

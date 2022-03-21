@@ -31,6 +31,16 @@ class ShowTimeRepository extends BaseRepository
         ]);
     }
 
+    public function listShowTimeByCinema($cinema_id, $request)
+    {
+        return $this->model
+            // ->when($request->name, function ($query) use ($request) {
+            //     return $query->where("name", "like", "%{$request->name}%");
+            // })
+            ->where('cinema_id', $cinema_id)
+            ->get();
+    }
+
     public function list($request, $cinema_id)
     {
         return ViewShowTimeByDay::query()

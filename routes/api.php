@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\MovieGenreController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\SeatTypeController;
 use App\Http\Controllers\Api\ShowTimeController;
-
+use App\Http\Controllers\Customer\CustomerController;
 
 Route::apiResource('moviegenres', MovieGenreController::class);
 Route::apiResource('movies', MovieController::class);
@@ -30,3 +30,6 @@ Route::get('/showtimes/room/{id}', [ShowTimeController::class, 'listShowTimeByRo
     ->name('showtimes.rooms');
 
 Route::apiResource('showtimes', ShowTimeController::class);
+Route::get('provinces', [CustomerController::class, 'getProvince']);
+
+Route::get('get-cinema-by-province/{id}', [CustomerController::class, 'getCinemaByProvince']);

@@ -76,3 +76,11 @@ export const listScheduleByDay = async (params = {}) => {
     return await axios.get("/showtimes", { params });
 };
 
+export const listProvince = async (params = {}) => {
+    return await axios.get("/provinces", { params });
+};
+
+export const getCinemaByProvince = async (id) => {
+    return await axios.get("/get-cinema-by-province/" + id);
+};
+
