@@ -81,15 +81,10 @@ class CinemaRepository extends BaseRepository
             ->paginate($request->query('limit', 12));
     }
 
-    public function getArrayIdCinemaByAdminInfo($arrayAdminInfo)
+    public function getAllArrayIdCinema()
     {
-        $id_adminInfo = array();
-        foreach ($arrayAdminInfo as $item) {
-            $id_adminInfo[] = $item['id'];
-        }
         $cinema = $this->model->query()
             ->select('id')
-            ->whereIn('admin_info_id', $id_adminInfo)
             ->get()
             ->toArray();
         return $cinema;

@@ -74,9 +74,7 @@
       <el-tabs>
         <!-- Tab chi tiết -->
         <el-tab-pane label="Mô tả chi tiết">
-          <div>
-            {{ movie.description }}
-          </div>
+          <div class="p-4" v-html="movie.description"></div>
         </el-tab-pane>
         <!-- Tab Phòng chiếu  -->
 

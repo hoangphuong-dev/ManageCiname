@@ -47,10 +47,9 @@ class MovieController extends Controller
 
     public function create()
     {
-        $adminInfo = $this->movieService->getProvinceShowMovie();
         $movie_genres = $this->movieGenreService->all();
+
         return Inertia::render("Backs/SuperAdmin/FormMovie", [
-            'adminInfo' => $adminInfo,
             'movie_genres' => $movie_genres,
         ]);
     }
