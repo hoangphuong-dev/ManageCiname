@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Helper\ImageHelper;
 use App\Http\Resources\SeatTypeResource;
 use App\Repositories\SeatTypeRepository;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SeatTypeService extends BaseService
 {
@@ -33,11 +35,32 @@ class SeatTypeService extends BaseService
 
     public function store($request)
     {
+
         $data = $request->validated();
         if (isset($data['image'])) {
-            $image = ImageHelper::upload($data['image']);
-            $data['image'] = $image;
+
+            // $file = $request->file('image');
+
+            // $str = Str::random(10);
+            // // // Save image to temporary directory
+            // $data['image'] = $request->file('image')->storeAs('public/uploads', "{$str}.{$file->extension()}");
+
+            // $path = Storage::url($data['image'], now()->addMinutes(15));
+
+            // $image = ImageHelper::upload($data['image']);
+            // $data['image'] = $path;
+
+
+
+
+
+
+            $file = $request->file('image');
+            $filename = date('YmdHi') . $file->getClientOriginalName();
+            $file->move(public_path('public/Image'), $filename);
+            $data['image'] = $filename;
         }
+
         return $this->seatTypeRepository->make($data);
     }
 }
