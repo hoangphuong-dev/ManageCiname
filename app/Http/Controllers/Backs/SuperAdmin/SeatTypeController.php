@@ -25,6 +25,8 @@ class SeatTypeController extends Controller
 
     public function edit(Request $request, $id)
     {
-        return $this->seatTypeService->edit($request, $id);
+        // return $this->seatTypeService->edit($request, $id);
+        $message = ['error' => "Tinh nang nay van dang duoc phat trien them"];
+        return back()->with($message);
     }
 }
