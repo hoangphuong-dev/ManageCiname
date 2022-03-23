@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Helper\FormatDate;
 use App\Http\Controllers\Controller;
 use App\Repositories\CinemaRepository;
 use App\Repositories\ProvinceRepository;
@@ -66,9 +67,10 @@ class CustomerController extends Controller
 
     public function orderTicket(Request $request)
     {
-        $showtimes =  $this->showTimeService->listShowTimeByCinema($request);
-
-        dd($showtimes);
+        // $showtimes =  $this->showTimeService->listShowTimeByCinema($request);
+        $formatDate = new FormatDate();
+        $twoWeeks = $formatDate->getTwoWeek();
+        // dd($showtimes);
         return Inertia::render('Customer/Home', []);
     }
 }
