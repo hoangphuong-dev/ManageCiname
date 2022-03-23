@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-4 mt-5">
+        <div class="grid grid-cols-4 gap-4 mt-5 w-1/2 m-auto">
           <div
             v-for="item in seatTypes"
             :key="item"
@@ -102,7 +102,7 @@
             @click="edit(item)"
           >
             <div class="w-full">
-              <img class="w-full rounded h-96" :src="getImage(item.image)" />
+              <img class="w-full rounded h-48" :src="getImage(item.image)" />
             </div>
 
             <div class="mt-2 text-center">
