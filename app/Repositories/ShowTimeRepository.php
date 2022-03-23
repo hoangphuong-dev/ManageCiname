@@ -31,15 +31,16 @@ class ShowTimeRepository extends BaseRepository
         ]);
     }
 
-    public function listShowTimeByCinema($cinema_id, $request)
+    public function listShowTimeByCinema($data)
     {
+        // có thể lấy ra tên phòng và số ghế trống nếu cần 
         return $this->model
+            ->select("show_times.*")
             ->join("rooms", "rooms.id", "=", "show_times.room_id")
-            // ->when($request->name, function ($query) use ($request) {
-            //     return $query->where("name", "like", "%{$request->name}%");
-            // })
-            ->where('rooms.cinema_id', $cinema_id)
+            ->where('show_times.movie_id', $data['movie_id'])
+            ->where('rooms.cinema_id', $data['cinema_id'])
             ->where('time_start', '>=', now())
+            ->whereRaw("time_start like '" . $data['current_date'] . "%'")
             ->get();
     }
 

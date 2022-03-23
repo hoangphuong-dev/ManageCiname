@@ -9,6 +9,7 @@ use App\Repositories\ProvinceRepository;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
 use App\Services\ShowTimeService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Inertia\Inertia;
@@ -68,20 +69,30 @@ class CustomerController extends Controller
 
     public function orderTicket(Request $request)
     {
-        $this->getShowTimeByDay();
-        // $showtimes =  $this->showTimeService->listShowTimeByCinema($request);
-        // $formatDate = new FormatDate();
-        // $twoWeeks = $formatDate->getTwoWeek();
-        // dd($showtimes);
-        // return Inertia::render('Customer/Home', []);
+        $data = $request->all();
+        $date = Carbon::now()->toDateString();
+        if (!isset($data['current_date'])) {
+            $data['current_date'] = $date;
+        }
+        // dd($data);
+        $showtimes =  ($this->showTimeService->listShowTimeByCinema($data)->collection);
+
+
+        $formatDate = new FormatDate();
+        $twoWeeks = $formatDate->getTwoWeek();
+        return Inertia::render('Customer/ViewShowTime', [
+            'twoWeeks' => $twoWeeks,
+            'filterFE' => $data,
+            'showtimes' => $showtimes,
+        ]);
     }
 
     public function getShowTimeByDay()
     {
-        $request = array();
-        $request['day'] = '2022-08-02';
-        $request['movie_id'] = '1';
-        $request['cinema_id'] = '1';
+        // $request = array();
+        // $request['day'] = '2022-08-02';
+        // $request['movie_id'] = '1';
+        // $request['cinema_id'] = '1';
 
         // dd($showtimes);
 

@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Http\Requests\ShowTimeRequest;
 use App\Http\Resources\CalenderResource;
+use App\Http\Resources\ShowTimeResource;
 use App\Http\Resources\ViewShowTimeResource;
 use App\Models\Movie;
 use App\Repositories\CinemaRepository;
@@ -36,8 +38,8 @@ class ShowTimeService extends BaseService
 
     public function listShowTimeByCinema($request)
     {
-        $cinema_id = $request->cinema_id;
-        return $showtime = $this->showTimeRepository->listShowTimeByCinema($cinema_id, $request);
+        $showtimes = $this->showTimeRepository->listShowTimeByCinema($request);
+        return ShowTimeResource::collection($showtimes);
     }
 
     public function list($request)

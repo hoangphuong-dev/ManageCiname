@@ -18,8 +18,9 @@ class FormatDate
 
         foreach ($period as $item) {
             $date = $item->format('Y-m-d'); // lay ngay thang nam 
+            $show = $item->format('d-m');
             $day =   $this->formatWeekday($item->format('l')); // lay thu trong tuan 
-            array_push($arr, array($day => $date));
+            array_push($arr, array('week' =>  $day, 'day' => $date, 'show' => $show));
         }
         return $arr;
     }

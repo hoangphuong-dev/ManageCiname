@@ -18,7 +18,8 @@ class ShowTimeResource extends JsonResource
             'id' => $this->id,
             'movie_id' => $this->movie_id,
             'room_id' => $this->room_id,
-            'time_start' => $this->time_start,
+            'time_start' => date_format(date_create($this->time_start), "H:i"),
+            'time_end' => date_format(date_create($this->time_end), "H:i"),
         ];
     }
 }
