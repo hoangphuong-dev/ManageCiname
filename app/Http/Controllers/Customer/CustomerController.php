@@ -10,6 +10,7 @@ use App\Services\MovieGenreService;
 use App\Services\MovieService;
 use App\Services\ShowTimeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -67,10 +68,22 @@ class CustomerController extends Controller
 
     public function orderTicket(Request $request)
     {
+        $this->getShowTimeByDay();
         // $showtimes =  $this->showTimeService->listShowTimeByCinema($request);
-        $formatDate = new FormatDate();
-        $twoWeeks = $formatDate->getTwoWeek();
+        // $formatDate = new FormatDate();
+        // $twoWeeks = $formatDate->getTwoWeek();
         // dd($showtimes);
-        return Inertia::render('Customer/Home', []);
+        // return Inertia::render('Customer/Home', []);
+    }
+
+    public function getShowTimeByDay()
+    {
+        $request = array();
+        $request['day'] = '2022-08-02';
+        $request['movie_id'] = '1';
+        $request['cinema_id'] = '1';
+
+        $showtimes = $this->showTimeService->listShowTimeByCinema($request);
+        dd($showtimes);
     }
 }
