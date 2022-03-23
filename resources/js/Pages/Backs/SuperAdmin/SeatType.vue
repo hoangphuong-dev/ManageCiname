@@ -8,6 +8,7 @@
           <div class="w-1/4 text-right">
             <el-button @click="openDialogSeatType">Thêm Loại ghế</el-button>
           </div>
+
           <!-- dialog lọai ghế  -->
           <div class="customer_dialog">
             <el-dialog
@@ -61,7 +62,7 @@
                       v-if="!imagePreview"
                     >
                       <el-empty description="Không có dữ liệu"></el-empty>
-                      <p class="text-lightGreen">Chọn ảnh</p>
+                      <p class="text-red-200">Chọn ảnh</p>
                     </div>
                     <img
                       v-else
@@ -92,21 +93,23 @@
             </el-dialog>
           </div>
         </div>
+
         <div class="grid grid-cols-4 gap-4 mt-5">
           <div
             v-for="item in seatTypes"
             :key="item"
-            class="border rounded-md p-4 cursor-pointer"
+            class="border rounded-md p-2 cursor-pointer"
+            @click="edit(item)"
           >
-            <div class="flex cursor-pointer" @click="edit(item)">
-              <div class="w-1/2">
-                <img
-                  class="w-full h-full rounded"
-                  :src="getImage(item.image)"
-                />
-              </div>
-              <div class="w-1/2">{{ item.name }}</div>
+            <div class="w-full">
+              <img class="w-full rounded h-96" :src="getImage(item.image)" />
             </div>
+
+            <div class="mt-2 text-center">
+              {{ item.name }}
+            </div>
+
+            <div class="mt-2 text-center">{{ item.price }} VND</div>
           </div>
         </div>
       </div>
@@ -217,8 +220,8 @@ export default {
           preserveScroll: true,
           onError: (e) => console.log(e),
           onSuccess: (_) => {
-            this.dialogFormVisible = !this.dialogFormVisible;
             this.selectedItem = null;
+            this.dialogFormVisible = !this.dialogFormVisible;
           },
         }
       );
@@ -235,11 +238,17 @@ export default {
       });
     },
 
+    convertMoney(money) {
+      return money.split(",").join("");
+    },
+
     edit(item) {
       this.selectedItem = item.id;
       this.dialogFormVisibleSeatType = true;
       this.formData.name = item.name;
-      this.formData.price = item.price;
+      this.formData.price = this.convertMoney(item.price);
+      this.formData.image = item.image;
+      this.imagePreview = this.getImage(item.image);
     },
 
     resetForm() {
@@ -273,9 +282,10 @@ export default {
     },
 
     getImage(file) {
+      console.log(file);
       if (!file) return;
       if (this.isValidHttpUrl(file)) return file;
-      return `/storage/${file}`;
+      return `/uploads/${file}`;
     },
   },
 };

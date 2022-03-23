@@ -30,7 +30,8 @@ class SeatTypeService extends BaseService
 
     public function edit($request, $id)
     {
-        return $this->seatTypeRepository->edit($request, $id);
+        // dd($request->all());
+        // return $this->seatTypeRepository->edit($request, $id);
     }
 
     public function store($request)
@@ -38,26 +39,9 @@ class SeatTypeService extends BaseService
 
         $data = $request->validated();
         if (isset($data['image'])) {
-
-            // $file = $request->file('image');
-
-            // $str = Str::random(10);
-            // // // Save image to temporary directory
-            // $data['image'] = $request->file('image')->storeAs('public/uploads', "{$str}.{$file->extension()}");
-
-            // $path = Storage::url($data['image'], now()->addMinutes(15));
-
-            // $image = ImageHelper::upload($data['image']);
-            // $data['image'] = $path;
-
-
-
-
-
-
             $file = $request->file('image');
             $filename = date('YmdHi') . $file->getClientOriginalName();
-            $file->move(public_path('public/Image'), $filename);
+            $file->move(public_path('uploads'), $filename);
             $data['image'] = $filename;
         }
 

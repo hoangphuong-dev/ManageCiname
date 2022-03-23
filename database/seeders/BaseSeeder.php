@@ -129,17 +129,17 @@ class BaseSeeder extends Seeder
         $dataSeatType = ([
             [
                 'name' => ' Ghế Thường',
-                'image' => 'http://127.0.0.1/dashboard/admin/cinemas/show/1',
+                'image' => 'ghe-thuong.png',
                 'price' => '100000',
             ],
             [
                 'name' => 'Ghế Vip',
-                'image' => 'http://127.0.0.1/dashboard/admin/cinemas/show/1',
+                'image' => 'ghe-vip.png',
                 'price' => '100000',
             ],
             [
                 'name' => 'Ghế Đôi',
-                'image' => 'http://127.0.0.1/dashboard/admin/cinemas/show/1',
+                'image' => 'ghe-doi.png',
                 'price' => '100000',
             ],
         ]);
