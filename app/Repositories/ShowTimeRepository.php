@@ -34,10 +34,12 @@ class ShowTimeRepository extends BaseRepository
     public function listShowTimeByCinema($cinema_id, $request)
     {
         return $this->model
+            ->join("rooms", "rooms.id", "=", "show_times.room_id")
             // ->when($request->name, function ($query) use ($request) {
             //     return $query->where("name", "like", "%{$request->name}%");
             // })
-            ->where('cinema_id', $cinema_id)
+            ->where('rooms.cinema_id', $cinema_id)
+            ->where('time_start', '>=', now())
             ->get();
     }
 

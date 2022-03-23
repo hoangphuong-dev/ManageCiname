@@ -68,7 +68,10 @@ class CustomerController extends Controller
     {
         $showtimes =  $this->showTimeService->listShowTimeByCinema($request);
 
-        dd($showtimes);
-        return Inertia::render('Customer/Home', []);
+        // dd($showtimes);
+
+        return Inertia::render('Customer/ViewShowTime', [
+            'showtimes' => $showtimes,
+        ]);
     }
 }
