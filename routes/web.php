@@ -13,6 +13,8 @@ Route::get('/show-seats-by-showtimes', [CustomerController::class, 'showSeatBySh
 
 Route::get('/confirm-order', [CustomerController::class, 'confirmOrder'])->name('confirm_order');
 
+Route::get('/order-success-bill-{id}', [CustomerController::class, 'orderSuccess'])->name('order-success');
+
 Route::post('/order', [CustomerController::class, 'order'])->name('order');
 
 Route::get('/movies', [CustomerController::class, 'index'])->name('movies');

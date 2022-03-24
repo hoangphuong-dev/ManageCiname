@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 
 class UserService
 {
@@ -35,6 +36,13 @@ class UserService
         $this->hospitalInfoRepository = $hospitalInfoRepository;
     }
 
+    public function checkOrderCustomer($data)
+    {
+        return $this->userRepository->createCustomer($data);
+    }
+
+
+
     public function updateUserById($fill, $user_id)
     {
         return $this->userRepository->updateUserById($fill, $user_id);
@@ -44,6 +52,8 @@ class UserService
     {
         return $this->userRepository->updateStatus($id, $request->status);
     }
+
+
 
     public function changePassword($fill)
     {
@@ -66,34 +76,34 @@ class UserService
         }
     }
 
-    private function getTimeToken()
-    {
-        $tokenExpired = TOKEN_EXPIRED;
-        return strtotime("+$tokenExpired minutes");
-    }
+    // private function getTimeToken()
+    // {
+    //     $tokenExpired = TOKEN_EXPIRED;
+    //     return strtotime("+$tokenExpired minutes");
+    // }
 
-    public function forgotPassword($fill)
-    {
-        try {
-            $user = $this->userRepository->findByEmail($fill['email']);
-            if ($user === null) {
-                throw new ChangePasswordException('email address does not exist');
-            }
+    // public function forgotPassword($fill)
+    // {
+    //     try {
+    //         $user = $this->userRepository->findByEmail($fill['email']);
+    //         if ($user === null) {
+    //             throw new ChangePasswordException('email address does not exist');
+    //         }
 
-            $token = Str::random(30);
-            $time = $this->getTimeToken(); //expire after 5 minute
+    //         $token = Str::random(30);
+    //         $time = $this->getTimeToken(); //expire after 5 minute
 
-            $token = "$token.$time";
-            $user->token_life_time = $token;
-            $user->save();
+    //         $token = "$token.$time";
+    //         $user->token_life_time = $token;
+    //         $user->save();
 
-            Mail::to($user->email)->queue(new ForgotPassword($token));
-        } catch (ChangePasswordException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
-        }
-    }
+    //         Mail::to($user->email)->queue(new ForgotPassword($token));
+    //     } catch (ChangePasswordException $e) {
+    //         throw $e;
+    //     } catch (\Exception $e) {
+    //         throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
+    //     }
+    // }
 
     public function checkToken($token)
     {

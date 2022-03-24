@@ -17,6 +17,20 @@ class UserRepository
         $this->user = $user;
     }
 
+    public function createCustomer($data)
+    {
+        $user = $this->findByEmail($data['email']);
+        if ($user == null) {
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'role' => User::ROLE_CUSTOMER,
+            ]);
+        }
+        return $user->id;
+    }
+
     public function updateUserById($fill, $user_id)
     {
         return $this->user

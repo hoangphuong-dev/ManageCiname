@@ -6,21 +6,29 @@ use App\Helper\FormatDate;
 use App\Http\Controllers\Controller;
 use App\Repositories\CinemaRepository;
 use App\Repositories\ProvinceRepository;
+use App\Services\BillService;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
 use App\Services\ShowTimeService;
+use App\Services\TicketService;
+use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
+    private const SESSION_KEY = 'order_info';
 
     public $movieGenreService;
     public $movieSearvice;
     public $provinceRepository;
     public $cinemaRepository;
+    public $billService;
+    public $userService;
+    public $ticketService;
     public $showTimeService;
 
     public function __construct(
@@ -29,7 +37,13 @@ class CustomerController extends Controller
         ProvinceRepository $provinceRepository,
         CinemaRepository $cinemaRepository,
         ShowTimeService $showTimeService,
+        TicketService $ticketService,
+        BillService $billService,
+        UserService $userService,
     ) {
+        $this->billService = $billService;
+        $this->userService = $userService;
+        $this->ticketService = $ticketService;
         $this->movieGenreService = $movieGenreService;
         $this->movieSearvice = $movieService;
         $this->provinceRepository = $provinceRepository;
@@ -69,7 +83,6 @@ class CustomerController extends Controller
 
     public function showSeatByShowTime(Request $request)
     {
-        // dd($request);
         // lay ra thong tin cua suat chieu hien tai (phong , so ghe trong, daban )
         $showtime = $this->showTimeService->getRoomByShowTime($request->current_showtime);
         return Inertia::render('Customer/ViewRoom', [
@@ -80,12 +93,41 @@ class CustomerController extends Controller
 
     public function confirmOrder(Request $request)
     {
+        $data = $request->all();
+
+        session()->put(self::SESSION_KEY, $data);
+
         return Inertia::render('Customer/ConfirmOrder');
+    }
+
+    public function orderSuccess($id)
+    {
+        return Inertia::render('Customer/OrderSuccess', [
+            'bill_id' => $id
+        ]);
     }
 
     public function order(Request $request)
     {
-        dd($request->all());
+        $fill = $request->all();
+        $fill['total_money'] = "500000";
+        $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
+        try {
+            DB::beginTransaction();
+            $user_id = $this->userService->checkOrderCustomer($data);
+
+            $bill = $this->billService->createBill($user_id, $fill['total_money']);
+
+            $this->ticketService->createTicket($data, $bill->id);
+            DB::commit();
+            return redirect()->route('order-success', $bill->id);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with($e);
+        }
+        // gui mail nua nhe
+
+        // xoas session o day di nhe 
     }
 
     public function orderTicket(Request $request)
