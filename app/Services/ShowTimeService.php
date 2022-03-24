@@ -27,11 +27,14 @@ class ShowTimeService extends BaseService
     public function store($request)
     {
         $fill = $request->validated();
+        // convert time
+        $time_start = date_format(date_create($fill['time_start']), "H:i");
+        $time_end = date_format(date_create($fill['time_end']), "H:i");
         $data = [
             'romm_id' => $fill['romm_id'],
             'movie_id' => $fill['movie_id'],
-            'time_start' => $fill['day'] . ' ' . $fill['time_start'],
-            'time_end' =>  $fill['day'] . ' ' . $fill['time_end'],
+            'time_start' => $fill['day'] . ' ' . $time_start,
+            'time_end' =>  $fill['day'] . ' ' . $time_end,
         ];
         return $this->showTimeRepository->createShowTime($data);
     }
