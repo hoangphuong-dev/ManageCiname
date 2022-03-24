@@ -18,10 +18,10 @@
           >
             <div
               class="rounded border p-2 text-center cursor-pointer"
+              v-for="(item, index) in showtime.room.seats"
+              :key="index"
               @click="chooseSeat(item.id)"
-              :class="{ active: active_seat === item.id }"
-              v-for="item in showtime.room.seats"
-              :key="item"
+              :class="{ active: active_seat[index] === item.id }"
             >
               <div class="w-1/2 m-auto">
                 <img
@@ -30,7 +30,8 @@
                 />
               </div>
               <div class="text-base mt-2">
-                {{ item.row_name + item.columns_number }}
+                <!-- {{ item.row_name + item.columns_number }} -->
+                {{ index }}
               </div>
             </div>
           </div>
@@ -61,10 +62,10 @@ export default {
 
   data() {
     return {
-      active_seat: 0,
+      active_seat: [],
       formData: {
         showtime_id: this.showtime.id,
-        seat_id: "",
+        seat_id: [],
       },
     };
   },
@@ -77,8 +78,19 @@ export default {
     },
 
     chooseSeat(id) {
-      this.active_seat = id;
-      this.formData.seat_id = id;
+      if (this.active_seat.includes(id)) {
+        console.log("Delete");
+        const index = this.active_seat.indexOf(id);
+        if (index > -1) {
+          this.active_seat.splice(index, 1);
+        }
+      } else {
+        console.log("Add");
+        this.active_seat.push(id);
+      }
+
+      // this.active_seat = id;
+      this.formData.seat_id = this.active_seat;
     },
 
     videoId(row) {
