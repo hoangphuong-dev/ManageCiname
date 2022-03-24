@@ -32,13 +32,13 @@
             <show-time :rooms="rooms" :cinema="cinema"></show-time>
           </el-tab-pane>
           <!-- Tab Phòng chiếu  -->
-          <!-- <el-tab-pane label="Phòng chiếu">
+          <el-tab-pane label="Phòng chiếu">
             <room
               :movie_formats="movie_formats"
               :seat_types="seat_types"
               :cinema_id="cinema.id"
             ></room>
-          </el-tab-pane> -->
+          </el-tab-pane>
         </el-tabs>
       </div>
     </template>

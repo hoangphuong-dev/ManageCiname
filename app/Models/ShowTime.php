@@ -17,4 +17,13 @@ class ShowTime extends Model
     // {
     //     return $this->hasOne(Cinema::class);
     // }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class);
+    }
 }

@@ -13,4 +13,15 @@ class Room extends Model
 
     public const STATUS_CLOSE = 0;
     public const STATUS_OPEN = 1;
+
+
+    public function cinemas()
+    {
+        return $this->hasMany(ShowTime::class);
+    }
+
+    public function seats()
+    {
+        return $this->hasMany(Seat::class);
+    }
 }

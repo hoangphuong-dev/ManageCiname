@@ -67,6 +67,14 @@ class CustomerController extends Controller
         return $this->cinemaRepository->listCinemaByProvince($id);
     }
 
+    public function showSeatByShowTime(Request $request)
+    {
+        // dd($request);
+        // lay ra thong tin cua suat chieu hien tai (phong , so ghe trong, daban )
+        $rooms = $this->showTimeService->getRoomByShowTime($request->current_showtime);
+        dd($rooms);
+    }
+
     public function orderTicket(Request $request)
     {
         $data = $request->all();

@@ -21,6 +21,18 @@ class ShowTimeRepository extends BaseRepository
         return ShowTime::class;
     }
 
+    public function getRoomByShowTime($showTimeId)
+    {
+        return $this->model->newQuery()
+            ->with([
+                'movie', 'room' => function ($query) {
+                    $query->with(['seats']);
+                }
+            ])
+            ->where('id', $showTimeId)
+            ->firstOrFail();
+    }
+
     public function createShowTime($data)
     {
         $this->model->create([

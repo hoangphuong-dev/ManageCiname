@@ -14,6 +14,12 @@ class Movie extends Model
     public const MOVIE_ACTIVE = 1;
     public const MOVIE_DEACTIVE = 0;
 
+
+    public function showtimes()
+    {
+        return $this->hasMany(ShowTime::class);
+    }
+
     public function cinemas()
     {
         return $this->belongsToMany(Cinema::class, 'cinema_movies', 'cinema_id', 'movie_id');

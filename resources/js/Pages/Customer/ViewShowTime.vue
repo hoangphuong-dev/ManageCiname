@@ -45,6 +45,7 @@
           "
         >
           <div
+            :model="active_showtime"
             @click="chooseShowTime(item.id)"
             :class="{ active: active_showtime === item.id }"
             class="rounded hover:border-red-200 border-2 p-2 cursor-pointer"
@@ -57,12 +58,23 @@
           </div>
         </div>
         <div
-          class="w-full mt-6 rounded px-4 border shadow-lg pt-4 pb-20"
           v-else
+          class="w-full mt-6 rounded px-4 border shadow-lg pt-4 pb-20"
         >
           <el-empty
             description="Không có suất chiếu vào ngày này . Vui lòng chọn ngày khác"
           ></el-empty>
+        </div>
+
+        <div class="w-7 m-auto bg-red-600 mt-8">
+          <el-button
+            class="m-auto"
+            size="small"
+            @click="chooseSeat()"
+            type="danger"
+          >
+            Chonn ghe
+          </el-button>
         </div>
         <!-- Danh sach suat chieu  -->
         <!-- <div
@@ -117,7 +129,7 @@ export default {
         province_id: this.filterFE.province_id,
         cinema_id: this.filterFE.cinema_id,
         current_date: this.filterFE.current_date,
-        current_showtime: "",
+        current_showtime: this.active_showtime,
       },
     };
   },
@@ -126,6 +138,13 @@ export default {
   },
 
   methods: {
+    chooseSeat() {
+      Inertia.get(route("show_seat_by_showtime", { ...this.formData }), {
+        onBefore,
+        onFinish,
+      });
+    },
+
     chooseDate(item) {
       this.active_day = item;
       this.formData.current_date = item;

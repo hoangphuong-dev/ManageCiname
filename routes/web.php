@@ -9,6 +9,8 @@ Route::get('/movie-detail/{id}', [CustomerController::class, 'detailMovie'])->na
 
 Route::get('/order-ticket', [CustomerController::class, 'orderTicket'])->name('order.ticket');
 
+Route::get('/show-seats-by-showtimes', [CustomerController::class, 'showSeatByShowTime'])->name('show_seat_by_showtime');
+
 Route::get('/movies', [CustomerController::class, 'index'])->name('movies');
 
 Route::get('/your-ticket', [CustomerController::class, 'index'])->name('your_ticket');
