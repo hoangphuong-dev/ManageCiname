@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SeatType extends Model
+class Bill extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-
-    public function seats()
+    public function user()
     {
-        return $this->hasMany(Seat::class);
+        return $this->belongsTo(User::class);
     }
 }

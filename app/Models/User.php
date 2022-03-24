@@ -102,4 +102,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Cinema::class);
     }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
 }

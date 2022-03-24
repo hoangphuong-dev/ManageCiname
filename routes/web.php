@@ -11,6 +11,10 @@ Route::get('/order-ticket', [CustomerController::class, 'orderTicket'])->name('o
 
 Route::get('/show-seats-by-showtimes', [CustomerController::class, 'showSeatByShowTime'])->name('show_seat_by_showtime');
 
+Route::get('/confirm-order', [CustomerController::class, 'confirmOrder'])->name('confirm_order');
+
+Route::post('/order', [CustomerController::class, 'order'])->name('order');
+
 Route::get('/movies', [CustomerController::class, 'index'])->name('movies');
 
 Route::get('/your-ticket', [CustomerController::class, 'index'])->name('your_ticket');

@@ -71,8 +71,21 @@ class CustomerController extends Controller
     {
         // dd($request);
         // lay ra thong tin cua suat chieu hien tai (phong , so ghe trong, daban )
-        $rooms = $this->showTimeService->getRoomByShowTime($request->current_showtime);
-        dd($rooms);
+        $showtime = $this->showTimeService->getRoomByShowTime($request->current_showtime);
+        return Inertia::render('Customer/ViewRoom', [
+            'showtime' => $showtime,
+        ]);
+    }
+
+
+    public function confirmOrder(Request $request)
+    {
+        return Inertia::render('Customer/ConfirmOrder');
+    }
+
+    public function order(Request $request)
+    {
+        dd($request->all());
     }
 
     public function orderTicket(Request $request)

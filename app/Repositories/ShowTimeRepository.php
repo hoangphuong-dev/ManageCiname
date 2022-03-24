@@ -26,7 +26,11 @@ class ShowTimeRepository extends BaseRepository
         return $this->model->newQuery()
             ->with([
                 'movie', 'room' => function ($query) {
-                    $query->with(['seats']);
+                    $query->with([
+                        'seats' => function ($query) {
+                            $query->with('seat_type');
+                        }
+                    ]);
                 }
             ])
             ->where('id', $showTimeId)
