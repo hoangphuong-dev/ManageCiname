@@ -20,6 +20,12 @@ class BillRepository extends BaseRepository
         return Bill::class;
     }
 
+    public function getBillByCinema($admin_id, $request)
+    {
+        return $this->model->newQuery()
+        ->
+    }
+
     public function createBill($user_id, $data)
     {
         return $this->newQuery()->create([
