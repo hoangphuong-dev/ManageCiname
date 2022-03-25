@@ -18,4 +18,9 @@ class TicketService
         // try catch o day nua nhe 
         return $this->ticketRepository->createTicket($data, $bill_id);
     }
+
+    public function getTicketByBill($id)
+    {
+        return $this->ticketRepository->getTicketByBill($id);
+    }
 }

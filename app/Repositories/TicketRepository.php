@@ -30,4 +30,22 @@ class TicketRepository extends BaseRepository
             ]);
         }
     }
+
+    public function getTicketByBill($id)
+    {
+        return $this->model->newQuery()
+            ->with([
+                'seat' => function ($query) {
+                    $query->with('seat_type');
+                },
+                'bill' => function ($query) {
+                    $query->with('user');
+                },
+                'showtime' => function ($query) {
+                    $query->with(['room', 'movie']);
+                },
+            ])
+            ->where('bill_id', $id)
+            ->get();
+    }
 }

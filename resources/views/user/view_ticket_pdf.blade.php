@@ -42,15 +42,15 @@
         <table width="100%">
             <tr>
                 <td width="30%">Người đặt :</td>
-                <td width="70%">{{$ticket->customer_name}}</td>
+                <td width="70%">{{$ticket->bill->user->name}}</td>
             </tr>
             <tr>
                 <td>Số điện thoại :</td>
-                <td>{{$ticket->phone}}</td>
+                <td>{{$ticket->bill->user->phone}}</td>
             </tr>
             <tr>
                 <td>Email :</td>
-                <td>{{$ticket->email}}</td>
+                <td>{{$ticket->bill->user->email}}</td>
             </tr>
             <tr>
                 <td>Ngày đặt :</td>
@@ -58,38 +58,28 @@
             </tr>
             <tr>
                 <td>Tên phim :</td>
-                <td>{{$ticket->movie_name}}</td>
+                <td>{{$ticket->showtime->movie->name}}</td>
             </tr>
+
             <tr>
                 <td>Phòng chiếu :</td>
-                <td>{{$ticket->name}}</td>
+                <td>{{$ticket->showtime->room->name}}</td>
             </tr>
             <tr>
                 <td>Ghế xem :</td>
-                <td>{{$ticket->row_number.$ticket->columns_number}} ({{$ticket->seat_type_name}})</td>
+                <td>{{$ticket->seat->id.$ticket->seat->id}} ({{$ticket->seat->seat_type->id}})</td>
             </tr>
             <tr>
                 <td>Suất chiếu :</td>
-                <td>{{ date_format(date_create($ticket->time_start), "H:i  (d/m/Y)") }}</td>
-            </tr>
-            <tr>
-                <td>
-                    @php
-                    $string = ' Mã hoá đơn : '. $ticket->bill_id.
-                    ' Ngày đặt :'. $ticket->create_at.
-                    ' Người đặt : '. $ticket->customer_name.
-                    ' Tên phim : '. $ticket->name.
-                    ' Phòng chiếu : '. $ticket->name.
-                    ' Suất chiếu : '. $ticket->time_start.
-                    ' Ghế xem : '. $ticket->row_number.$ticket->columns_number.
-                    ' Tổng tiền : '. $ticket->price;
-                    @endphp
-                    <img src="data:image/png;base64,
-                    {!! base64_encode(QrCode::encoding('UTF-8')->size(100)->generate($string)) !!}">
-                </td>
-                <td align="right">Tổng tiền : {{number_format($ticket->price)}} VNĐ</td>
+                <td>{{ date_format(date_create($ticket->showtime->time_start), "H:i  (d/m/Y)") }}</td>
             </tr>
 
+            <tr>
+                <td>
+
+                </td>
+                <td align="right">Tổng tiền : {{number_format($ticket->bill->total_money)}} VNĐ</td>
+            </tr>
         </table>
     </div>
 </body>

@@ -186,10 +186,9 @@ class CustomerController extends Controller
 
     public function downloadPDF($id)
     {
-        dd($id);
+        $tickets = $this->ticketService->getTicketByBill($id);
 
-        $tickets = $this->ticket_service->exportPDF();
-        $pdf = Pdf::loadView('user.view_ticket_pdf', [
+        $pdf = PDF::loadView('user.view_ticket_pdf', [
             'tickets' => $tickets,
         ]);
         return $pdf->stream('ticket.pdf')->header('Content-Type', 'application/pdf');
