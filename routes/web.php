@@ -11,9 +11,13 @@ Route::get('/order-ticket', [CustomerController::class, 'orderTicket'])->name('o
 
 Route::get('/show-seats-by-showtimes', [CustomerController::class, 'showSeatByShowTime'])->name('show_seat_by_showtime');
 
-Route::get('/confirm-order', [CustomerController::class, 'confirmOrder'])->name('confirm_order');
+Route::get('/customer-order', [CustomerController::class, 'getInfoCustomer'])->name('get_info_customer');
 
 Route::get('/order-success-bill-{id}', [CustomerController::class, 'orderSuccess'])->name('order-success');
+
+Route::get('/authentication-token/{token}', [CustomerController::class, 'authenOrder'])->name('authen_order');
+
+Route::get('/download-bill-pdf/{id}', [CustomerController::class, 'downloadPDF'])->name('download_bill_pdf');
 
 Route::post('/order', [CustomerController::class, 'order'])->name('order');
 

@@ -18,7 +18,7 @@ class CreateTicketsTable extends Migration
             $table->bigInteger('bill_id')->unsigned();
             $table->bigInteger('showtime_id')->unsigned();
             $table->bigInteger('seat_id')->unsigned();
-
+            $table->unique('showtime_id', 'seat_id');
 
             $table->foreign('bill_id')->references('id')->on('bills')
                 ->onUpdate('cascade')->onDelete('cascade');

@@ -16,19 +16,11 @@ class JwtHelper
     {
         $key = static::getSecretKey();
         $token = JWT::encode(array_merge($payload, [
-            'expired' => $expired ?? strtotime("+5 minutes"),
+            'expired' => $expired ?? strtotime("+10 minutes"),
             'type' => 'token'
         ]), $key, 'HS256');
 
-        $refresh_token = JWT::encode(array_merge($payload, [
-            'expired' => $expired ?? strtotime("+10 minutes"),
-            'type' => 'refresh_token'
-        ]), $key, 'HS256');
-
-        return [
-            'token' => $token,
-            'refresh_token' => $refresh_token,
-        ];
+        return $token;
     }
 
     public static function parse($jwt)
@@ -45,7 +37,7 @@ class JwtHelper
 
         $currentTime = time();
 
-        if($currentTime > $tokenLifeTime) {
+        if ($currentTime > $tokenLifeTime) {
             return true;
         }
         return $payload;

@@ -28,7 +28,7 @@ class UserRepository
                 'role' => User::ROLE_CUSTOMER,
             ]);
         }
-        return $user->id;
+        return $user;
     }
 
     public function updateUserById($fill, $user_id)

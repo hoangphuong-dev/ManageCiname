@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\CustomerOrder;
+use App\Exceptions\CustomerException;
 use App\Helper\FormatDate;
+use App\Helper\JwtHelper;
 use App\Http\Controllers\Controller;
+use App\Mail\AuthenOrder;
 use App\Repositories\CinemaRepository;
 use App\Repositories\ProvinceRepository;
 use App\Services\BillService;
@@ -16,7 +20,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
+use PDF;
 
 class CustomerController extends Controller
 {
@@ -91,45 +97,6 @@ class CustomerController extends Controller
     }
 
 
-    public function confirmOrder(Request $request)
-    {
-        $data = $request->all();
-
-        session()->put(self::SESSION_KEY, $data);
-
-        return Inertia::render('Customer/ConfirmOrder');
-    }
-
-    public function orderSuccess($id)
-    {
-        return Inertia::render('Customer/OrderSuccess', [
-            'bill_id' => $id
-        ]);
-    }
-
-    public function order(Request $request)
-    {
-        $fill = $request->all();
-        $fill['total_money'] = "500000";
-        $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
-        try {
-            DB::beginTransaction();
-            $user_id = $this->userService->checkOrderCustomer($data);
-
-            $bill = $this->billService->createBill($user_id, $fill['total_money']);
-
-            $this->ticketService->createTicket($data, $bill->id);
-            DB::commit();
-            return redirect()->route('order-success', $bill->id);
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back()->with($e);
-        }
-        // gui mail nua nhe
-
-        // xoas session o day di nhe 
-    }
-
     public function orderTicket(Request $request)
     {
         $data = $request->all();
@@ -150,17 +117,81 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function getShowTimeByDay()
+    public function getInfoCustomer(Request $request)
     {
-        // $request = array();
-        // $request['day'] = '2022-08-02';
-        // $request['movie_id'] = '1';
-        // $request['cinema_id'] = '1';
+        $data = $request->all();
 
-        // dd($showtimes);
+        session()->put(self::SESSION_KEY, $data);
 
-        return Inertia::render('Customer/ViewShowTime', [
-            // 'showtimes' => $showtimes,
+        return Inertia::render('Customer/ConfirmOrder');
+    }
+
+    public function order(Request $request)
+    {
+        $fill = $request->all();
+        $fill['total_money'] = "500000";
+        $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
+
+        // generate token from JWT
+        $token = JwtHelper::make($data);
+
+        Mail::to($data['email'])->send(new AuthenOrder($token));
+        // dua ra trang thong bao vua gui mail
+
+        // return redirect()->back();
+
+        dd($token);
+    }
+
+
+    public function authenOrder($token)
+    {
+        if (JwtHelper::isExpired($token) === true) {
+            throw new CustomerException(__('token expired'));
+        }
+        $data = JwtHelper::parse($token);
+
+        // dd($data);
+
+        $flag = true;
+        // try {
+        //     DB::beginTransaction();
+        $user = $this->userService->checkOrderCustomer($data);
+
+        $bill = $this->billService->createBill($user->id, $data['total_money']);
+
+        $this->ticketService->createTicket($data, $bill->id);
+        //     DB::commit();
+        // } catch (\Exception $e) {
+        //     $flag = false;
+        //     DB::rollback();
+        //     return back()->with($e);
+        // }
+        if ($flag) {
+            event(new CustomerOrder($bill, $user));
+
+            return redirect()->route('order-success', $bill->id);
+
+            // dd("success");
+        }
+        session()->forget(self::SESSION_KEY);
+    }
+
+    public function orderSuccess($id)
+    {
+        return Inertia::render('Customer/OrderSuccess', [
+            'bill_id' => $id
         ]);
+    }
+
+    public function downloadPDF($id)
+    {
+        dd($id);
+
+        $tickets = $this->ticket_service->exportPDF();
+        $pdf = Pdf::loadView('user.view_ticket_pdf', [
+            'tickets' => $tickets,
+        ]);
+        return $pdf->stream('ticket.pdf')->header('Content-Type', 'application/pdf');
     }
 }

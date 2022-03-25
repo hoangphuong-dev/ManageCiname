@@ -3,7 +3,11 @@
     <div class="pb-12 pt-6">
       <div class="mx-auto">
         <div class="w-full shadow-lg p-4">
-          Thong bao thang cong voi in ve o day nnhe
+          Success Tai ve PDF :
+
+          <el-button size="small" @click="downloadPDF(bill_id)" type="danger">
+            PDF
+          </el-button>
         </div>
       </div>
     </div>
@@ -19,18 +23,15 @@ import { onBefore, onFinish } from "@/Uses/request-inertia";
 export default {
   components: { AppLayout },
   props: {
-    // showtime: Object,
+    bill_id: Number,
   },
 
   data() {
     return {};
   },
   methods: {
-    submit() {
-      Inertia.get(route("confirm_order", { ...this.formData }), {
-        onBefore,
-        onFinish,
-      });
+    downloadPDF(id) {
+      window.location.href = route("download_bill_pdf", id);
     },
   },
 };

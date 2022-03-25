@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     submit() {
-      Inertia.get(route("confirm_order", { ...this.formData }), {
+      Inertia.get(route("get_info_customer", { ...this.formData }), {
         onBefore,
         onFinish,
       });
