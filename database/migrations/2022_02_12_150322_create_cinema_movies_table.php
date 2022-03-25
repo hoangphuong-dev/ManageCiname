@@ -17,6 +17,7 @@ class CreateCinemaMoviesTable extends Migration
             $table->id();
             $table->bigInteger('cinema_id')->unsigned();
             $table->bigInteger('movie_id')->unsigned();
+            $table->unique(array('cinema_id', 'movie_id'));
 
             $table->foreign('cinema_id')->references('id')->on('cinemas')
                 ->onUpdate('cascade')->onDelete('cascade');

@@ -17,7 +17,7 @@ class CreateCastMoviesTable extends Migration
             $table->id();
             $table->bigInteger("cast_id")->unsigned();
             $table->bigInteger("movie_id")->unsigned();
-            // $table->unique('cast_id', 'movie_id');
+            $table->unique(array('cast_id', 'movie_id'));
 
             $table->foreign('cast_id')->references('id')->on('casts')
                 ->onUpdate('cascade')->onDelete('cascade');

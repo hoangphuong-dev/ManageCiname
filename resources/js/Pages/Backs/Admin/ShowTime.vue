@@ -210,7 +210,7 @@ export default {
 
   watch: {
     roomCurrent() {
-      this.formData.romm_id = this.roomCurrent;
+      this.formData.room_id = this.roomCurrent;
       this.fetchDataShowTimeByRoom(this.roomCurrent);
     },
   },
@@ -256,7 +256,7 @@ export default {
       roomCurrent: "",
 
       formData: {
-        romm_id: "",
+        room_id: "",
         movie_id: "",
         day: "",
         time_start: "",
@@ -296,9 +296,9 @@ export default {
   },
 
   methods: {
-    async fetchDataShowTimeByRoom(romm_id) {
+    async fetchDataShowTimeByRoom(room_id) {
       this.loading = true;
-      listShowTimeByRoom(romm_id)
+      listShowTimeByRoom(room_id)
         .then(({ status, data }) => {
           this.calendarOptions.events = data.data;
         })

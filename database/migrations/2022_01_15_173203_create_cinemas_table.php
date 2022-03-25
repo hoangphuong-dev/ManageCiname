@@ -15,10 +15,11 @@ class CreateCinemasTable extends Migration
     {
         Schema::create('cinemas', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('user_id')->unique()->unsigned();
             $table->bigInteger('province_id')->unsigned();
             $table->string('name');
             $table->string('address');
+            $table->unique(array('province_id', 'name'));
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');

@@ -29,6 +29,9 @@ class ShowTimeController extends Controller
 
     public function store(ShowTimeRequest $request)
     {
+        $check = $this->showTimeService->checkShowTime($request);
+
+        // dd($check);
         try {
             $this->showTimeService->store($request);
             $message = ['success' => __('Tạo suất chiếu thành công !')];

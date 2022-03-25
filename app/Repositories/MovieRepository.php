@@ -75,17 +75,7 @@ class MovieRepository extends BaseRepository
 
     public function show($id)
     {
-        // $callable = function (&$query) use ($userId) {
-        //     $query->where('user_id', $userId);
-        // };
-        // return $this->job->query()
-        //     ->with(['province', 'images', 'tags'])
-        //     ->when($userId, function ($query) use ($callable) {
-        //         $query->with(['jobApplyPending' => $callable, 'jobApplyReject' => $callable, 'favorites' => $callable]);
-        //     })
-        //     ->findOrFail($id);
-        return $this->model
-            ->with(['movie_genres', 'casts'])
+        return $movie = $this->model
             ->findOrFail($id);
     }
 

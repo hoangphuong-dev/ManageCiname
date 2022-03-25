@@ -22,6 +22,7 @@ class BaseSeeder extends Seeder
             ['name' => 'Nomal'],
             ['name' => '2D'],
             ['name' => '3D'],
+            ['name' => 'Imax'],
         ]);
         FormatMovie::insert($dataFormat);
 
@@ -56,8 +57,8 @@ class BaseSeeder extends Seeder
         MovieGenre::insert($movieGenre);
 
         $dataProvince = [
-            "Hồ Chí Minh",
             "Hà Nội",
+            "Hồ Chí Minh",
             "Đà Nẵng",
             "Bình Dương",
             "Đồng Nai",

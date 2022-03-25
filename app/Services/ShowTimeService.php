@@ -30,17 +30,28 @@ class ShowTimeService extends BaseService
         return $this->showTimeRepository->getRoomByShowTime($showTimeId);
     }
 
+    public function checkShowTime($request)
+    {
+        $data = $this->convertTime($request->validated());
+        return $this->showTimeRepository->checkShowTime($data);
+    }
+
+    public function convertTime($fill)
+    {
+        $fill['day'] = date_format(date_create($fill['day']), "Y-m-d");
+        $fill['time_start'] = date_format(date_create($fill['time_start']), "H:i");
+        $fill['time_end'] = date_format(date_create($fill['time_end']), "H:i");
+        return $fill;
+    }
+
     public function store($request)
     {
-        $fill = $request->validated();
-        // convert time
-        $time_start = date_format(date_create($fill['time_start']), "H:i");
-        $time_end = date_format(date_create($fill['time_end']), "H:i");
+        $fill = $this->convertTime($request->validated());
         $data = [
             'romm_id' => $fill['romm_id'],
             'movie_id' => $fill['movie_id'],
-            'time_start' => $fill['day'] . ' ' . $time_start,
-            'time_end' =>  $fill['day'] . ' ' . $time_end,
+            'time_start' => $fill["day"] . ' ' . $fill['time_start'],
+            'time_end' =>  $fill["day"] . ' ' . $fill["time_end"],
         ];
         return $this->showTimeRepository->createShowTime($data);
     }

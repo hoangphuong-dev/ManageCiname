@@ -29,6 +29,8 @@ class CreateMoviesTable extends Migration
             $table->id();
             $table->bigInteger('movie_genre_id')->unsigned();
             $table->bigInteger('movie_id')->unsigned();
+            $table->unique(array('movie_genre_id', 'movie_id'));
+
 
             $table->foreign('movie_genre_id')->references('id')->on('movie_genres')
                 ->onUpdate('cascade')->onDelete('cascade');
@@ -40,6 +42,7 @@ class CreateMoviesTable extends Migration
             $table->id();
             $table->bigInteger('format_movie_id')->unsigned();
             $table->bigInteger('movie_id')->unsigned();
+            $table->unique(array('format_movie_id', 'movie_id'));
 
             $table->foreign('format_movie_id')->references('id')->on('format_movies')
                 ->onUpdate('cascade')->onDelete('cascade');

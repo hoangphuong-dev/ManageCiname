@@ -21,6 +21,57 @@ class ShowTimeRepository extends BaseRepository
         return ShowTime::class;
     }
 
+    public function checkShowTime($data)
+    {
+
+        // lay ra tat ca suat chieu cua ngay duoc truyen vao 
+        $showtimes = $this->model->newQuery()
+            ->selectRaw('DATE_FORMAT(time_start, "%H:%i") as time_start, DATE_FORMAT(time_end, "%H:%i") as time_end')
+            ->where('room_id', $data['room_id'])
+            ->whereRaw('DATE_FORMAT(time_start, "%Y-%m-%d") like "' . $data['day'] . '"')
+            ->orderBy('time_start')
+            ->get()->toArray();
+
+        foreach ($showtimes as $key => $showtime) {
+            dd($showtime);
+            if ($key != 0) {
+                if (strtotime($showtime[$data['time_start']]) < strtotime($showtime[$key - 1][$data['time_end']])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+
+
+        // return $this->model->newQuery()
+        // ->where('time_start')
+        // $start_time_key = "11:00";
+        // $end_time_key = "12:00";
+
+        // $periods = [
+        //     ["start_time" => "09:00", "end_time" => "10:30"],
+        //     ["start_time" => "14:30", "end_time" => "16:30"],
+        //     ["start_time" => "11:30", "end_time" => "13:00"],
+        //     ["start_time" => "10:30", "end_time" => "11:30"],
+        // ];
+
+        // usort($periods, function ($a, $b) use ($start_time_key, $end_time_key) {
+        //     return strtotime($start_time_key) <=> strtotime($end_time_key);
+        // });
+
+
+        // foreach ($periods as $key => $period) {
+        //     if ($key != 0) {
+        //         if (strtotime($start_time_key) < strtotime($periods[$key - 1][$end_time_key])) {
+        //             return true;
+        //         }
+        //     }
+        // }
+        // return false;
+
+
+    }
+
     public function getRoomByShowTime($showTimeId)
     {
         return $this->model->newQuery()

@@ -85,12 +85,12 @@ class MovieSeeder extends Seeder
                     'description' => $data_description,
                     'trailler' =>  $dataUrlYoutube[array_rand($dataUrlYoutube)],
                     'movie_length' => 120,
-                    'rated' => array_rand([3, 21]),
+                    'rated' => 16,
                     'status' => array_rand([0, 1]),
                 ]);
                 $movie_id = $movie->id;
 
-                for ($j = 0; $j < 2; $j++) {
+                for ($j = 1; $j < 2; $j++) {
                     CastMovie::create([
                         'cast_id' => $casts_id[array_rand($casts_id)],
                         'movie_id' => $movie_id,

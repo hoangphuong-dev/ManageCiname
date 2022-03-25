@@ -24,7 +24,7 @@ class ShowTimeRequest extends FormRequest
     public function rules()
     {
         return [
-            'romm_id' => ['required'],
+            'room_id' => ['required'],
             'movie_id' => ['required'],
             'day' => ['required'],
             'time_start' => ['required'],
