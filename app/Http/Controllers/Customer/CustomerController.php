@@ -147,7 +147,7 @@ class CustomerController extends Controller
     public function authenOrder($token)
     {
         if (JwtHelper::isExpired($token) === true) {
-            throw new CustomerException(__('token expired'));
+            return "Token da het han , Vui long dat lai ve khac !";
         }
         $data = JwtHelper::parse($token);
 

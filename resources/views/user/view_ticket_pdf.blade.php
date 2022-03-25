@@ -54,7 +54,7 @@
             </tr>
             <tr>
                 <td>Ngày đặt :</td>
-                <td>{{ date_format(date_create($ticket->create_at), "H:i (d/m/Y)") }}</td>
+                <td>{{ date_format(date_create($ticket->created_at), "H:i (d/m/Y)") }}</td>
             </tr>
             <tr>
                 <td>Tên phim :</td>
@@ -67,16 +67,26 @@
             </tr>
             <tr>
                 <td>Ghế xem :</td>
-                <td>{{$ticket->seat->id.$ticket->seat->id}} ({{$ticket->seat->seat_type->id}})</td>
+                <td>{{$ticket->seat->row_name .$ticket->seat->columns_number}} ({{$ticket->seat->seat_type->name}})</td>
             </tr>
             <tr>
                 <td>Suất chiếu :</td>
                 <td>{{ date_format(date_create($ticket->showtime->time_start), "H:i  (d/m/Y)") }}</td>
             </tr>
-
             <tr>
                 <td>
-
+                    @php
+                    $code = ' Mã hoá đơn : '. $ticket->bill->id.
+                    ' Ngày đặt :'. $ticket->created_at.
+                    ' Người đặt : '.$ticket->bill->user->name.
+                    ' Tên phim : '. $ticket->showtime->movie->name.
+                    ' Phòng chiếu : '.$ticket->showtime->room->name.
+                    ' Suất chiếu : '. $ticket->showtime->time_start.
+                    ' Ghế xem : '. $ticket->seat->row_name .$ticket->seat->columns_number.
+                    ' Tổng tiền : '. $ticket->bill->total_money;
+                    @endphp
+                    <img src="data:image/png;base64,
+                    {!! base64_encode(QrCode::encoding('UTF-8')->size(100)->generate($code)) !!}">
                 </td>
                 <td align="right">Tổng tiền : {{number_format($ticket->bill->total_money)}} VNĐ</td>
             </tr>
