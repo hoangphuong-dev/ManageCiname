@@ -23,7 +23,14 @@ class BillRepository extends BaseRepository
     public function getBillByCinema($admin_id, $request)
     {
         return $this->model->newQuery()
-        ->
+            // ->when($request->action, function ($query) use ($request) {
+            //     return $query->where("movies.status", "=", $request->action);
+            // })
+            ->with(['cinema' => function ($q) use ($admin_id) {
+                $q->where('user_id', $admin_id);
+            }])
+            ->orderBy('id', "DESC")
+            ->paginate($request->query('limit', 12));
     }
 
     public function createBill($user_id, $data)

@@ -13,20 +13,24 @@ use Inertia\Inertia;
 class BillController extends Controller
 {
     public $cinemaService;
+    public $billService;
 
-    public function __construct(CinemaService $cinemaService)
+    public function __construct(CinemaService $cinemaService, BillService $billService)
     {
         $this->cinemaService = $cinemaService;
+        $this->billService = $billService;
     }
 
     public function index(Request $request)
     {
         $admin = Auth::guard('admin')->user();
 
-        $cinema = $this->cinemaService->getCinemaByIdAdmin($admin->id);
+        // $cinema = $this->cinemaService->getCinemaByIdAdmin($admin->id);
+
+        $bills = $this->billService->getBillByCinema($admin->id, $request);
 
         return Inertia::render('Backs/Admin/Bill', [
-            'cinema' => $cinema,
+            'bills' => $bills,
         ]);
     }
 }

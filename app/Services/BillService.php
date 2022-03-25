@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\BillResource;
 use App\Repositories\BillRepository;
 
 class BillService
@@ -17,5 +18,11 @@ class BillService
     {
         // try catch o day nua nhe 
         return $this->billRepository->createBill($user_id, $data);
+    }
+
+    public function getBillByCinema($admin_id, $request)
+    {
+        $bills = $this->billRepository->getBillByCinema($admin_id, $request);
+        return BillResource::collection($bills);
     }
 }
