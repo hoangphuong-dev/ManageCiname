@@ -13,9 +13,9 @@ class BillService
         $this->billRepository = $billRepository;
     }
 
-    public function createBill($user_id, $tottal_money)
+    public function createBill($user_id, $data)
     {
         // try catch o day nua nhe 
-        return $this->billRepository->createBill($user_id, $tottal_money);
+        return $this->billRepository->createBill($user_id, $data);
     }
 }

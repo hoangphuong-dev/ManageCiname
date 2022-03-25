@@ -16,10 +16,13 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('cinema_id')->unsigned();
             $table->decimal("total_money", 13, 2);
 
 
             $table->foreign('user_id')->references('id')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('cinema_id')->references('id')->on('cinemas')
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

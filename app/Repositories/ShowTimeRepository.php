@@ -29,7 +29,8 @@ class ShowTimeRepository extends BaseRepository
                     $query->with([
                         'seats' => function ($query) {
                             $query->with('seat_type');
-                        }
+                        },
+                        'cinema'
                     ]);
                 }
             ])

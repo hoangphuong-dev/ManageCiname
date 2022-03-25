@@ -64,6 +64,7 @@ export default {
     return {
       active_seat: [],
       formData: {
+        cinema_id: this.showtime.room.cinema.id,
         showtime_id: this.showtime.id,
         seat_id: [],
       },

@@ -89,8 +89,9 @@ class CustomerController extends Controller
 
     public function showSeatByShowTime(Request $request)
     {
-        // lay ra thong tin cua suat chieu hien tai (phong , so ghe trong, daban )
+        // lay ra thong tin cua suat chieu hien tai (phong , so ghe trong, daban, id_rap )
         $showtime = $this->showTimeService->getRoomByShowTime($request->current_showtime);
+
         return Inertia::render('Customer/ViewRoom', [
             'showtime' => $showtime,
         ]);
@@ -132,6 +133,8 @@ class CustomerController extends Controller
         $fill['total_money'] = "500000";
         $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
 
+        // dd($data);
+
         // generate token from JWT
         $token = JwtHelper::make($data);
 
@@ -151,14 +154,12 @@ class CustomerController extends Controller
         }
         $data = JwtHelper::parse($token);
 
-        // dd($data);
-
         $flag = true;
         // try {
         //     DB::beginTransaction();
         $user = $this->userService->checkOrderCustomer($data);
 
-        $bill = $this->billService->createBill($user->id, $data['total_money']);
+        $bill = $this->billService->createBill($user->id, $data);
 
         $this->ticketService->createTicket($data, $bill->id);
         //     DB::commit();

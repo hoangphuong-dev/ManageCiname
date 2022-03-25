@@ -58,10 +58,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
     Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
     Route::get('/home', [AdminController::class, 'index'])->name('home_admin');
 
+    // start manage cinema
     Route::get('showtimes', [ShowTimeController::class, 'index'])->name('showtime.index');
-    Route::get('bills', [BillController::class, 'index'])->name('bill.index');
-    Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
-
 
     Route::get('cinemas/show', [CinemaController::class, 'showCinemaByAdmin'])->name('cinemas.show');
 
@@ -75,6 +73,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 
     Route::get('cinemas/{cinema_id}/showtime/{showtime_id}', [ShowTimeController::class, 'viewDetailShowTimeById'])
         ->name('view-showtime-by-id');
+    // end manage cinema
+
+    Route::get('bills', [BillController::class, 'index'])->name('bill.index');
+    Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
 });
 
 Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {

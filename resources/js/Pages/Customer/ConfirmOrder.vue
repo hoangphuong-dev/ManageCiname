@@ -66,15 +66,11 @@ import { onBefore, onFinish } from "@/Uses/request-inertia";
 
 export default {
   components: { AppLayout },
-  props: {
-    showtime: Object,
-  },
+  props: {},
 
   data() {
     return {
       formData: {
-        showtime_id: "",
-        seat_id: [],
         name: "",
         email: "",
         phone: "",

@@ -1,11 +1,7 @@
-<template>
-  <admin-layout v-loading="loading">
-    <template #main>
-      <div class="bg-white min-h-full m-4 mb-0 p-4">
-        <h2 class="mb-5">Màn Bill</h2>
-      </div>
-    </template>
-  </admin-layout>
+   <template #main>
+  <div class="bg-gray-100 min-h-full m-4 mb-0 p-4 w-11/12">
+    <h2 class="mb-5">Màn Bill</h2>
+  </div>
 </template>
 
 <script>

@@ -20,11 +20,12 @@ class BillRepository extends BaseRepository
         return Bill::class;
     }
 
-    public function createBill($user_id, $tottal_money)
+    public function createBill($user_id, $data)
     {
         return $this->newQuery()->create([
             'user_id' => $user_id,
-            'total_money' => $tottal_money,
+            'total_money' => $data['total_money'],
+            'cinema_id' => $data['cinema_id'],
         ]);
     }
 }
