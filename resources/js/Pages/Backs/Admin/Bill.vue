@@ -7,7 +7,10 @@
 <script>
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 export default {
-  name: "HomeStaff",
+  name: "BillAdmin",
+  props: {
+    cinema: Object,
+  },
   components: {
     AdminLayout,
   },

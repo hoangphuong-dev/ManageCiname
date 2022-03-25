@@ -27,6 +27,11 @@ class CinemaService extends BaseService
         $this->userService = $userService;
     }
 
+    public function getCinemaByIdAdmin($admin_id)
+    {
+        return $this->cinemaRepository->getCinemaByIdAdmin($admin_id);
+    }
+
     public function getCinemaByAdmin($admin_id)
     {
         return $this->cinemaRepository->getCinemaByAdmin($admin_id);

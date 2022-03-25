@@ -15,4 +15,9 @@ class Bill extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class);
+    }
 }

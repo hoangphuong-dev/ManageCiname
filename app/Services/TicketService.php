@@ -23,9 +23,4 @@ class TicketService
     {
         return $this->ticketRepository->getTicketByBill($id);
     }
-
-    public function getTicketByCinema()
-    {
-        return $this->ticketRepository->getTicketByCinema();
-    }
 }

@@ -48,10 +48,4 @@ class TicketRepository extends BaseRepository
             ->where('bill_id', $id)
             ->get();
     }
-
-    public function getTicketByCinema()
-    {
-        return $this->newQuery()
-            ->get();
-    }
 }

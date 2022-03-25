@@ -26,4 +26,9 @@ class Cinema extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
 }
