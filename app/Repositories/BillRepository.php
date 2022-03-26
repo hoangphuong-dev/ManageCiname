@@ -20,6 +20,15 @@ class BillRepository extends BaseRepository
         return Bill::class;
     }
 
+    public function getBillCustomer($user_id)
+    {
+        return $this->model->newQuery()
+            ->with(['user'])
+            ->where('user_id', $user_id)
+            ->orderBy('id', "DESC")
+            ->paginate(12);
+    }
+
     public function getBillByCinema($admin_id, $request)
     {
         return $this->model->newQuery()

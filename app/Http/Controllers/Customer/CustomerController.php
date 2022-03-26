@@ -181,7 +181,6 @@ class CustomerController extends Controller
         dd($token);
     }
 
-
     public function authenOrder($token)
     {
         if (JwtHelper::isExpired($token) === true) {
@@ -228,5 +227,16 @@ class CustomerController extends Controller
             'tickets' => $tickets,
         ]);
         return $pdf->stream('ticket.pdf')->header('Content-Type', 'application/pdf');
+    }
+
+    public function myTicket()
+    {
+        $user = Auth::guard('customer')->user();
+
+        $bills = $this->billService->getBillCustomer($user->id);
+        // dd($bills);
+        return Inertia::render('Customer/MyTicket', [
+            'bills' => $bills,
+        ]);
     }
 }

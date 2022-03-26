@@ -105,7 +105,7 @@
               </div>
             </div>
 
-            <!-- phan trang suất chiếu  -->
+            <!-- phan trang phim  -->
             <div
               v-if="movies.total > movies.perPage"
               class="w-full justify-center my-16 flex"

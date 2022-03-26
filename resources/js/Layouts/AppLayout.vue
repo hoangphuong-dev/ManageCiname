@@ -15,7 +15,9 @@
               v-for="menu in menus"
               :key="menu.path"
             >
-              <a class="text-xl" :href="route(menu.path)">{{ menu.label }}</a>
+              <el-link :href="route(menu.path)" :underline="false">
+                {{ menu.label }}
+              </el-link>
             </li>
           </ul>
         </div>
@@ -130,7 +132,7 @@ export default defineComponent({
       menus: [
         {
           label: "Phim đang chiếu",
-          path: "movies",
+          path: "home",
         },
         {
           label: "Phim sắp chiếu",
@@ -138,7 +140,7 @@ export default defineComponent({
         },
         {
           label: "Vé của tôi",
-          path: "your_ticket",
+          path: "my_ticket",
         },
         {
           label: "Thành viên",

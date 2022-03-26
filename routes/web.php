@@ -23,10 +23,7 @@ Route::post('/order', [CustomerController::class, 'order'])->name('order');
 
 Route::get('/movies', [CustomerController::class, 'index'])->name('movies');
 
-Route::get('/your-ticket', [CustomerController::class, 'index'])->name('your_ticket');
-
 Route::get('/member', [CustomerController::class, 'index'])->name('member');
-
 
 Route::get('/login', [CustomerController::class, 'login'])->name('customer.login');
 
@@ -35,4 +32,5 @@ Route::post('/login', [CustomerController::class, 'handleLogin']);
 
 Route::group(['middleware' => ['customer']], function () {
     Route::get('/logout', [CustomerController::class, 'logout'])->name('customer.logout');
+    Route::get('/my-ticket', [CustomerController::class, 'myTicket'])->name('my_ticket');
 });
