@@ -38,7 +38,6 @@
         "element-plus": "^1.2.0-beta.5",
         "vue-axios": "^3.4.0",
         "vue-quill-editor": "^3.0.6",
-        "vue3-carousel": "^0.1.36",
         "vuex": "^4.0.2"
     }
 }

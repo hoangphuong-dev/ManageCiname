@@ -6,13 +6,21 @@
           <div class="main-jobs">
             <!-- slider -->
             <div class="w-full">
-              <div class="w-4/5 m-auto border-white h-44">
-                <carousel :items-to-show="1.5">
-                  <slide v-for="slide in 10" :key="slide">
-                    <div class="h-28 w-full bg-red-50">FFFFFF</div>
-                  </slide>
-                </carousel>
-              </div>
+              <el-carousel indicator-position="outside">
+                <el-carousel-item
+                  class="h-full"
+                  v-for="item in movie_hots"
+                  :key="item.id"
+                >
+                  <img
+                    :src="
+                      'https://i3.ytimg.com/vi/' +
+                      videoId(item) +
+                      '/maxresdefault.jpg'
+                    "
+                  />
+                </el-carousel-item>
+              </el-carousel>
             </div>
 
             <!-- button filter  -->
@@ -72,6 +80,7 @@
                   class="border rounded-md p-4"
                 >
                   <img
+                    style="width: 100%"
                     :src="
                       'https://i3.ytimg.com/vi/' +
                       videoId(item) +
@@ -122,13 +131,12 @@ import { getYoutubeId } from "@/Helpers/youtube.js";
 import { listMovie } from "@/API/main.js";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
-import "vue3-carousel/dist/carousel.css";
-import { Carousel, Slide } from "vue3-carousel";
 
 export default {
-  components: { Slide, Carousel, Pagination, AppLayout },
+  components: { Pagination, AppLayout },
   props: {
     movie_genres: Object,
+    movie_hots: Object,
   },
   created() {
     this.fetchData();
@@ -190,3 +198,9 @@ export default {
   },
 };
 </script>
+
+<style lang="css">
+.el-carousel__container {
+  height: 750px;
+}
+</style>

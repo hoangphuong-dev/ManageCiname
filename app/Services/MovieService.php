@@ -37,6 +37,11 @@ class MovieService extends BaseService
         $this->cinemaMovieRepository = $cinemaMovieRepository;
     }
 
+    public function getMovieHot()
+    {
+        return $this->movieRepository->getMovieHot();
+    }
+
     public function getProvinceShowMovie()
     {
         return $this->adminInfoRepository->getProvinceShowMovie();

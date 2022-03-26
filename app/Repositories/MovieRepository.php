@@ -21,6 +21,13 @@ class MovieRepository extends BaseRepository
         return Movie::class;
     }
 
+    public function getMovieHot()
+    {
+        return $this->model->newQuery()
+            ->select('id', 'trailler')
+            ->limit(10)->get();
+    }
+
     public function list($request)
     {
         return $this->model->query()

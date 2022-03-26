@@ -238,10 +238,6 @@ export default {
       });
     },
 
-    convertMoney(money) {
-      return money.split(",").join("");
-    },
-
     edit(item) {
       this.selectedItem = item.id;
       this.dialogFormVisibleSeatType = true;

@@ -60,8 +60,15 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $movie_genres = $this->movieGenreService->list($request);
+        // cac phim dang co suat chieu va duoc dat nhieu nhat
+        $movie_hots = $this->movieSearvice->getMovieHot();
+
+        // dd($movie_hots);
+
+
         return Inertia::render('Customer/Home', [
-            'movie_genres' => $movie_genres
+            'movie_genres' => $movie_genres,
+            'movie_hots' => $movie_hots,
         ]);
     }
 
