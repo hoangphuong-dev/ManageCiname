@@ -8,11 +8,13 @@
             <div class="w-full">
               <el-carousel indicator-position="outside">
                 <el-carousel-item
-                  class="h-full"
+                  class="cursor-pointer"
                   v-for="item in movie_hots"
                   :key="item.id"
+                  @click="detail(item.id)"
                 >
                   <img
+                    class="min-w-full h-min-h-full"
                     :src="
                       'https://i3.ytimg.com/vi/' +
                       videoId(item) +
@@ -201,6 +203,6 @@ export default {
 
 <style lang="css">
 .el-carousel__container {
-  height: 750px;
+  height: 650px;
 }
 </style>

@@ -10,12 +10,50 @@
         </div>
         <div class="app__head-menu h-full">
           <ul id="main-menu" class="flex justify-center items-center h-full">
+            <li>
+              <el-dropdown @command="handleCommand" trigger="click">
+                <el-link :underline="false">Phim</el-link>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="now_showing">
+                      <div class="w-36 flex justify-between">
+                        <div class="flex items-center justify-center">
+                          <span class="whitespace-nowrap mt-1-5"
+                            >Phim đang chiếu</span
+                          >
+                        </div>
+                        <div class="flex items-center">
+                          <el-icon><arrow-right /></el-icon>
+                        </div>
+                      </div>
+                    </el-dropdown-item>
+                    <hr />
+                    <el-dropdown-item command="coming_soon">
+                      <div class="w-36 flex justify-between">
+                        <div class="flex items-center justify-center">
+                          <span class="whitespace-nowrap mt-1"
+                            >Phim sắp chiếu</span
+                          >
+                        </div>
+                        <div class="flex items-center">
+                          <el-icon><arrow-right /></el-icon>
+                        </div>
+                      </div>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </li>
             <li
               :class="{ 'menu-active': activeMenu(menu) }"
               v-for="menu in menus"
               :key="menu.path"
             >
-              <el-link :href="route(menu.path)" :underline="false">
+              <el-link
+                class="text-red-900"
+                :href="route(menu.path)"
+                :underline="false"
+              >
                 {{ menu.label }}
               </el-link>
             </li>
@@ -71,13 +109,13 @@
             </el-dropdown>
           </template>
           <template v-else>
-            <div class="mr-4 px-6 py-2 rounded border">
+            <div class="px-6 py-2 rounded border">
               <el-link
                 :href="route('customer.login')"
                 :underline="false"
                 type="primary"
               >
-                <h3 class="text-yellowPrimary">Đăng nhập</h3>
+                <h3 class="text-red-400">Đăng nhập</h3>
               </el-link>
             </div>
           </template>
@@ -99,7 +137,7 @@
         </main>
       </div>
       <!-- footer -->
-      <div class="footer w-full bg-yellow-100 h-60">
+      <div class="w-full bg-red-200 h-60 pt-6">
         <h1 class="text-center">Footer</h1>
       </div>
     </div>
@@ -162,6 +200,12 @@ export default defineComponent({
         case "profile":
           window.location.href = this.user.role === 3 ? route("#") : route("#");
           break;
+        case "now_showing":
+          window.location.href = route("now_showing");
+          break;
+        case "coming_soon":
+          window.location.href = "?movie=comming_soon";
+          break;
 
         default:
           break;
@@ -220,5 +264,11 @@ export default defineComponent({
 
 .menu-active > a {
   color: #ff7777 !important;
+}
+</style>
+<style lang="css">
+.el-link--inner {
+  font-weight: bold;
+  font-size: 18px;
 }
 </style>

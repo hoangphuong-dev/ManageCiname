@@ -1,7 +1,7 @@
 <template>
   <app-layout>
     <div class="bg-white min-h-full m-4 mb-0 p-4">
-      <h2 class="mb-5">Lich su hoa don</h2>
+      <h2 class="mb-5">Lịch sử hóa đơn</h2>
       <view-bill :bills="bills"></view-bill>
     </div>
   </app-layout>

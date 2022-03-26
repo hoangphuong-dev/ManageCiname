@@ -29,6 +29,9 @@ Route::get('/login', [CustomerController::class, 'login'])->name('customer.login
 
 Route::post('/login', [CustomerController::class, 'handleLogin']);
 
+Route::get('/movie-now-showing', [CustomerController::class, 'getMovieNowShowing'])->name('now_showing');
+
+
 
 Route::group(['middleware' => ['customer']], function () {
     Route::get('/logout', [CustomerController::class, 'logout'])->name('customer.logout');

@@ -42,6 +42,7 @@
             gap-4
             pt-4
             pb-20
+            mb-40
           "
         >
           <div
@@ -57,6 +58,7 @@
             </div>
           </div>
         </div>
+
         <div
           v-else
           class="w-full mt-6 rounded px-4 border shadow-lg pt-4 pb-20"
@@ -66,14 +68,12 @@
           ></el-empty>
         </div>
 
-        <div class="w-7 m-auto bg-red-600 mt-8">
-          <el-button
-            class="m-auto"
-            size="small"
-            @click="chooseSeat()"
-            type="danger"
-          >
-            Chonn ghe
+        <div
+          v-if="show_times.length > 0"
+          class="w-7 m-auto bg-red-600 rounded mt-8"
+        >
+          <el-button class="m-auto" @click="chooseSeat()" type="danger">
+            Chọn ghế
           </el-button>
         </div>
         <!-- Danh sach suat chieu  -->

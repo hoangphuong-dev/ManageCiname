@@ -36,7 +36,6 @@ class ShowTimeRepository extends BaseRepository
             if (strtotime($showtime['time_start']) < strtotime($data['time_start']) && strtotime($data['time_start']) < strtotime($showtime['time_end'])) {
                 return true;
             }
-
             if (strtotime($showtime['time_start']) < strtotime($data['time_end']) && strtotime($data['time_end']) < strtotime($showtime['time_end'])) {
                 return true;
             }
@@ -44,7 +43,6 @@ class ShowTimeRepository extends BaseRepository
             if (strtotime($data['time_start']) < strtotime($showtime['time_start']) && strtotime($showtime['time_start']) < strtotime($data['time_end'])) {
                 return true;
             }
-
             if (strtotime($data['time_start']) < strtotime($showtime['time_end']) && strtotime($showtime['time_end']) < strtotime($data['time_end'])) {
                 return true;
             }

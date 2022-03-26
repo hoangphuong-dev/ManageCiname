@@ -24,7 +24,6 @@ class ShowTimeService extends BaseService
         $this->cinemaRepository = $cinemaRepository;
     }
 
-
     public function getRoomByShowTime($showTimeId)
     {
         return $this->showTimeRepository->getRoomByShowTime($showTimeId);

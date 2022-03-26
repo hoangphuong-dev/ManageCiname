@@ -21,6 +21,16 @@ class MovieRepository extends BaseRepository
         return Movie::class;
     }
 
+    public function getMovieNowShowing($request)
+    {
+        return $this->model->newQuery()
+            ->with(['showtimes' => function ($q) {
+                $q->where('time_start', '>=', now());
+            }])
+            ->orderBy('id', "DESC")
+            ->paginate($request->query('limit', 12));
+    }
+
     public function getMovieHot()
     {
         return $this->model->newQuery()
@@ -43,6 +53,11 @@ class MovieRepository extends BaseRepository
                 return $query
                     ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
                     ->where("movie_genre_id", "=", $request->movie_genre);
+            })
+            ->when($request->movie, function ($q) use ($request) {
+                if ($request->movie == "now_showing") {
+                    return $q->with('showtimes')->where('time_start', '>', now());
+                }
             })
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 12));

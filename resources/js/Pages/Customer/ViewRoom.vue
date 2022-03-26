@@ -2,37 +2,61 @@
   <app-layout>
     <div class="pb-12 pt-6">
       <div class="mx-auto">
-        <h2 class="pb-4">Chon ghe xem</h2>
-        <div class="w-full shadow-lg p-4">
-          <div class="w-full">
-            <img style="width: 100%" src="/uploads/man_hinh_chieu.png" />
-          </div>
+        <h2 class="pb-4">Chọn ghế xem</h2>
 
-          <!-- show seat of room -->
-          <div
-            class="w-full mt-16 grid gap-4"
-            :style="{
-              'grid-template-columns':
-                'repeat(' + showtime.room.column_number + ', minmax(0, 1fr))',
-            }"
-          >
+        <div class="flex">
+          <div class="w-3/4 shadow-lg p-4 mr-6">
+            <div class="w-full">
+              <img style="width: 100%" src="/uploads/man_hinh_chieu.png" />
+            </div>
+            <!-- show seat of room -->
             <div
-              class="rounded border p-2 text-center cursor-pointer"
-              v-for="(item, index) in showtime.room.seats"
-              :key="index"
-              @click="chooseSeat(item.id)"
-              :class="{ active: active_seat[index] === item.id }"
+              class="w-full mt-16 grid gap-4"
+              :style="{
+                'grid-template-columns':
+                  'repeat(' + showtime.room.column_number + ', minmax(0, 1fr))',
+              }"
             >
-              <div class="w-1/2 m-auto">
-                <img
-                  style="height: 60px"
-                  :src="getImage(item.seat_type.image)"
-                />
+              <div
+                class="rounded border p-1 text-center cursor-pointer"
+                v-for="(item, index) in showtime.room.seats"
+                :key="index"
+                @click="chooseSeat(item.id)"
+                :class="{ active: active_seat[index] === item.id }"
+              >
+                <div class="w-full m-auto text-center">
+                  <img
+                    style="height: 50px; display: inline-block"
+                    :src="getImage(item.seat_type.image)"
+                  />
+                </div>
+                <div class="text-base mt-2">
+                  <!-- {{ item.row_name + item.columns_number }} -->
+                  {{ index }}
+                </div>
               </div>
-              <div class="text-base mt-2">
-                <!-- {{ item.row_name + item.columns_number }} -->
-                {{ index }}
+            </div>
+          </div>
+          <div class="w-1/4">
+            <div class="w-full shadow-lg p-4">
+              <h2 class="pb-4">Chú thích</h2>
+
+              <div
+                class="rounded border-b-2 mb-4 flex"
+                v-for="item in 6"
+                :key="item"
+              >
+                <div class="rounded border p-2 text-center w-16 mb-4">
+                  <div class="w-1/2 m-auto">
+                    <img style="height: 40px" />
+                  </div>
+                  <div class="text-base mt-2">A1</div>
+                </div>
+                <div>Ghế Thường</div>
               </div>
+            </div>
+            <div class="w-full shadow-lg p-4 mt-8">
+              <h2 class="pb-4">Thông tin ghế vừa chọn</h2>
             </div>
           </div>
         </div>
@@ -40,7 +64,7 @@
         <!-- submit form -->
         <div class="text-center mt-10">
           <el-button size="small" @click="submit()" type="danger">
-            Tiep tuc
+            Tiếp tục
           </el-button>
         </div>
       </div>

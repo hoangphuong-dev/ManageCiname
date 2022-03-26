@@ -12,13 +12,14 @@
       <div class="w-1/2 pl-4">
         <h2 class="text-center">{{ movie.name }}</h2>
         <p class="pb-2">Đạo diễn : {{ movie.director }}</p>
-        <p class="pb-2">Thể loại phim : {{ movie.id }}</p>
-        <p class="pb-2">Diễn viên : {{ movie.id }}</p>
+        <p class="pb-2">Thể loại phim : Bom tấn, Hài hước</p>
+        <p class="pb-2">Diễn viên : Hoàng Phi Hồng , Thanh Vân</p>
         <p class="pb-2">
           Rated : Cấm trẻ em dưới
           <span class="text-red-500">{{ movie.rated }}</span>
           tuổi
         </p>
+        <h3>Ngày khởi chiếu: 22/12/2022</h3>
         <div class="text-center mt-4">
           <el-button size="small" @click="openDialog(movie.id)" type="danger">
             Đặt vé

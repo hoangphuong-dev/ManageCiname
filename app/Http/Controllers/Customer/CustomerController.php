@@ -87,6 +87,7 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
+
         $movie_genres = $this->movieGenreService->list($request);
         // cac phim dang co suat chieu va duoc dat nhieu nhat
         $movie_hots = $this->movieSearvice->getMovieHot();
@@ -238,5 +239,13 @@ class CustomerController extends Controller
         return Inertia::render('Customer/MyTicket', [
             'bills' => $bills,
         ]);
+    }
+
+    // lay phim đang chiếu và sắp chiếu 
+    public function getMovieNowShowing(Request $request)
+    {
+        $movies = $this->movieSearvice->getMovieNowShowing($request);
+
+        dd($movies);
     }
 }
