@@ -19,7 +19,7 @@ class BillResource extends JsonResource
             'id' => $this->id,
             'cinema_id' => $this->cinema_id,
             'user' => $this->user ? UserResource::make($this->user)->resolve() : [],
-            'total_money' => $this->total_money,
+            'total_money' => number_format($this->total_money),
             'created_at' => Carbon::parse($this->created_at)->format('c'),
             'updated_at' => Carbon::parse($this->updated_at)->format('c'),
         ];

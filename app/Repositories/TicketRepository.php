@@ -33,7 +33,7 @@ class TicketRepository extends BaseRepository
 
     public function getTicketByBill($id)
     {
-        return $this->newQuery()
+        return $this->model->newQuery()
             ->with([
                 'seat' => function ($query) {
                     $query->with('seat_type');

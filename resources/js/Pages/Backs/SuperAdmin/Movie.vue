@@ -175,7 +175,7 @@ export default {
       movies: [],
       filter: {
         page: 1,
-        limit: 10,
+        limit: 12,
       },
       fields: [
         { key: "image", label: "Ảnh", width: "300" },
