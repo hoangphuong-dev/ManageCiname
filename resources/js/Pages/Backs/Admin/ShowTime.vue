@@ -127,6 +127,7 @@
           <el-form-item class="text-left" label="Ngày chiếu" prop="day">
             <el-date-picker
               v-model="formData.day"
+              :disabled-date="disabledDate"
               type="date"
               placeholder="Chọn ngày chiếu"
             />
@@ -296,6 +297,10 @@ export default {
   },
 
   methods: {
+    disabledDate(time) {
+      return time.getTime() < new Date();
+    },
+
     async fetchDataShowTimeByRoom(room_id) {
       this.loading = true;
       listShowTimeByRoom(room_id)
@@ -343,10 +348,6 @@ export default {
       this.movieCurrent = item;
     },
 
-    createEventId() {
-      return String(this.eventGuid++);
-    },
-
     handleDateSelect(selectInfo) {
       if (this.roomCurrent === "") {
         alert("Vui lòng chọn phòng chiếu");
@@ -354,22 +355,22 @@ export default {
         return false;
       }
       if (selectInfo.start > new Date()) {
-        this.formData.day = selectInfo.start.toISOString().replace(/T.*$/, "");
+        // this.formData.day = selectInfo.start;
         this.formData.time_start = selectInfo.start.toLocaleTimeString();
         this.formData.time_end = selectInfo.end.toLocaleTimeString();
         this.dialogForm = !this.dialogForm;
       }
     },
 
-    handleEventClick(clickInfo) {
-      if (
-        confirm(
-          `Are you sure you want to delete the event '${clickInfo.event.title}'`
-        )
-      ) {
-        clickInfo.event.remove();
-      }
-    },
+    // handleEventClick(clickInfo) {
+    //   if (
+    //     confirm(
+    //       `Are you sure you want to delete the event '${clickInfo.event.title}'`
+    //     )
+    //   ) {
+    //     clickInfo.event.remove();
+    //   }
+    // },
   },
 };
 </script>

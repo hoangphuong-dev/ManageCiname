@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backs\Admin;
 
+use App\Exceptions\CustomerException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowTimeRequest;
 use App\Services\CinemaService;
@@ -29,12 +30,19 @@ class ShowTimeController extends Controller
 
     public function store(ShowTimeRequest $request)
     {
-        $check = $this->showTimeService->checkShowTime($request);
-
-        // dd($check);
+        // dd($request->all());
         try {
+            $check = $this->showTimeService->checkShowTime($request);
+
+            if ($check) {
+                throw new CustomerException($message = ['error' => __('Thời gian chiếu phim không không hợp lệ !')]);
+            }
+
             $this->showTimeService->store($request);
+
             $message = ['success' => __('Tạo suất chiếu thành công !')];
+        } catch (CustomerException $e) {
+            throw $e;
         } catch (\Exception $e) {
             $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {

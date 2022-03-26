@@ -23,7 +23,6 @@ class ShowTimeRepository extends BaseRepository
 
     public function checkShowTime($data)
     {
-
         // lay ra tat ca suat chieu cua ngay duoc truyen vao 
         $showtimes = $this->model->newQuery()
             ->selectRaw('DATE_FORMAT(time_start, "%H:%i") as time_start, DATE_FORMAT(time_end, "%H:%i") as time_end')
@@ -32,44 +31,25 @@ class ShowTimeRepository extends BaseRepository
             ->orderBy('time_start')
             ->get()->toArray();
 
-        foreach ($showtimes as $key => $showtime) {
-            dd($showtime);
-            if ($key != 0) {
-                if (strtotime($showtime[$data['time_start']]) < strtotime($showtime[$key - 1][$data['time_end']])) {
-                    return true;
-                }
+        foreach ($showtimes as $showtime) {
+            // kiem tra suat chieu trong suat chieu da co 
+            if (strtotime($showtime['time_start']) < strtotime($data['time_start']) && strtotime($data['time_start']) < strtotime($showtime['time_end'])) {
+                return true;
+            }
+
+            if (strtotime($showtime['time_start']) < strtotime($data['time_end']) && strtotime($data['time_end']) < strtotime($showtime['time_end'])) {
+                return true;
+            }
+            // kiem tra suat chieu da co trong suat chieu truyen vao 
+            if (strtotime($data['time_start']) < strtotime($showtime['time_start']) && strtotime($showtime['time_start']) < strtotime($data['time_end'])) {
+                return true;
+            }
+
+            if (strtotime($data['time_start']) < strtotime($showtime['time_end']) && strtotime($showtime['time_end']) < strtotime($data['time_end'])) {
+                return true;
             }
         }
         return false;
-
-
-        // return $this->model->newQuery()
-        // ->where('time_start')
-        // $start_time_key = "11:00";
-        // $end_time_key = "12:00";
-
-        // $periods = [
-        //     ["start_time" => "09:00", "end_time" => "10:30"],
-        //     ["start_time" => "14:30", "end_time" => "16:30"],
-        //     ["start_time" => "11:30", "end_time" => "13:00"],
-        //     ["start_time" => "10:30", "end_time" => "11:30"],
-        // ];
-
-        // usort($periods, function ($a, $b) use ($start_time_key, $end_time_key) {
-        //     return strtotime($start_time_key) <=> strtotime($end_time_key);
-        // });
-
-
-        // foreach ($periods as $key => $period) {
-        //     if ($key != 0) {
-        //         if (strtotime($start_time_key) < strtotime($periods[$key - 1][$end_time_key])) {
-        //             return true;
-        //         }
-        //     }
-        // }
-        // return false;
-
-
     }
 
     public function getRoomByShowTime($showTimeId)
@@ -93,7 +73,7 @@ class ShowTimeRepository extends BaseRepository
     {
         $this->model->create([
             'movie_id' => $data['movie_id'],
-            'room_id' => $data['romm_id'],
+            'room_id' => $data['room_id'],
             'time_start' => $data['time_start'],
             'time_end' => $data['time_end'],
         ]);

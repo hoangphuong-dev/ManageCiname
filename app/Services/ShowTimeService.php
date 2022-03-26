@@ -48,7 +48,7 @@ class ShowTimeService extends BaseService
     {
         $fill = $this->convertTime($request->validated());
         $data = [
-            'romm_id' => $fill['romm_id'],
+            'room_id' => $fill['room_id'],
             'movie_id' => $fill['movie_id'],
             'time_start' => $fill["day"] . ' ' . $fill['time_start'],
             'time_end' =>  $fill["day"] . ' ' . $fill["time_end"],
