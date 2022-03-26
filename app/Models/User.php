@@ -90,6 +90,9 @@ class User extends Authenticatable
         if ($this->IsStaff()) {
             return route('staff.home');
         }
+        if ($this->IsCustomer()) {
+            return route('home');
+        }
     }
 
     // relationship

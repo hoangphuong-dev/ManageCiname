@@ -92,8 +92,13 @@ export default {
   mixins: [AlertNoticeMixin],
   computed: {
     user() {
-      return this.$page.props.user;
+      if (this.$page.props.user?.role !== 3) {
+        // neu user khach thang khach hang
+        return this.$page.props.user;
+      }
+      return null;
     },
+
     menus() {
       if (this.user?.role === 0) {
         return this.menuSuper;

@@ -178,7 +178,7 @@ class UserService
     public function login($fill)
     {
         try {
-            auth('customer')->logout();
+            $this->logoutCustomer();
 
             $email = $fill['email'];
             $password = $fill['password'];
@@ -186,18 +186,21 @@ class UserService
             $user = $this->userRepository->findByEmail($email);
 
             //check status
-            if ($user->IsAccountDeActive()) {
-                throw new LoginFailException(__("your account has been suspended. please contact admin support"));
-            }
+            // if ($user->IsAccountDeActive()) {
+            //     throw new LoginFailException(__("Tài khoản của bạn đang bị khóa . Liên hệ admin để được hỗ trợ !"));
+            // }
 
             //check password
             if (!Hash::check($password, $user->password) || !$user->IsCustomer() || $user === null) {
-                throw new LoginFailException(__('email or password is incorrect'));
+                throw new LoginFailException(__('Email hoặc mật khẩu không chính xác !'));
             }
 
             //check role
             $guard = $user->guardName();
+
             Auth::guard($guard)->loginUsingId($user->id, $isRemember);
+
+            return $user->routeRedirect();
         } catch (LoginFailException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -236,11 +239,11 @@ class UserService
             $user = $this->userRepository->findByEmail($email);
             //check password
             if ($user === null || !Hash::check($password, $user->password) || $user->IsCustomer()) {
-                throw new LoginFailException(__('email or password is incorrect'));
+                throw new LoginFailException(__('Email hoặc mật khẩu không chính xác !'));
             }
             //check status
             if ($user->IsAccountDeActive()) {
-                throw new LoginFailException(__("your account has been suspended. please contact admin support"));
+                throw new LoginFailException(__("Tài khoản của bạn đang bị khóa . Liên hệ admin để được hỗ trợ !"));
             }
 
             $guard = $user->guardName();
@@ -254,12 +257,14 @@ class UserService
             throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
         }
     }
+
+
+
     // logout hệ thống
     private function logoutAllGuard()
     {
         auth('admin')->logout();
         auth('superadmin')->logout();
-        auth('customer')->logout();
         auth('staff')->logout();
     }
 

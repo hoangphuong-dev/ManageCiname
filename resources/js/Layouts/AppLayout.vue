@@ -20,20 +20,15 @@
           </ul>
         </div>
         <div class="grid-content h-full flex items-center justify-end">
-          <template v-if="user !== null">
-            <!-- <div class="app__head-user-name">{{ user.name }}</div> -->
-
-            <!-- <el-dropdown @command="handleCommand" trigger="click">
+          <!-- role = 3 : Khach hang dang dang nhap -->
+          <template v-if="user?.role === 3">
+            <div class="app__head-user-name">{{ user.name }}</div>
+            <el-dropdown @command="handleCommand" trigger="click">
               <span class="el-dropdown-link">
                 <div class="flex justify-center items-center">
                   <div class="app__head-profile rounded">
-                    <img
-                      class="w-full h-full rounded"
-                      :src="
-                        getImage(user.avatar) || '/images/avatar/default.png'
-                      "
-                      alt=""
-                    />
+                    <img src="/uploads/customer.png" alt="" />
+                    <!-- {{ user?.name?.substring(0, 2).toUpperCase() }} -->
                   </div>
                   <el-icon class="el-icon--right">
                     <arrow-down />
@@ -48,9 +43,7 @@
                   >
                     <div class="w-36 flex justify-between">
                       <div class="flex items-center justify-center">
-                        <img width="12" src="/images/svg/user.svg" alt="" />
-                        &nbsp;&nbsp;
-                        <span class="whitespace-nowrap mt-1-5">共通設定</span>
+                        <span class="whitespace-nowrap mt-1-5">Tài khoản</span>
                       </div>
                       <div class="flex items-center">
                         <el-icon><arrow-right /></el-icon>
@@ -64,8 +57,6 @@
                   >
                     <div class="w-36 flex justify-between">
                       <div class="flex items-center justify-center">
-                        <img width="12" src="/images/svg/logout.svg" alt="" />
-                        &nbsp;&nbsp;
                         <span class="whitespace-nowrap mt-1">Đăng xuất</span>
                       </div>
                       <div class="flex items-center">
@@ -75,17 +66,17 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
-            </el-dropdown> -->
+            </el-dropdown>
           </template>
           <template v-else>
             <div class="mr-4 px-6 py-2 rounded border">
-              <!-- <el-link
-                :href="route('show_login')"
+              <el-link
+                :href="route('customer.login')"
                 :underline="false"
                 type="primary"
               >
-                <h3 class="text-yellowPrimary">Đăng nhập</h3> -->
-              <!-- </el-link> -->
+                <h3 class="text-yellowPrimary">Đăng nhập</h3>
+              </el-link>
             </div>
           </template>
         </div>
@@ -128,7 +119,7 @@ export default defineComponent({
   mixins: [AlertNoticeMixin],
   computed: {
     user() {
-      return this.$page.props.user;
+      return this.$page.props.customer;
     },
   },
 
@@ -164,10 +155,10 @@ export default defineComponent({
     handleCommand(command) {
       switch (command) {
         case "logout":
-          window.location.href = this.user.role === 1 ? route("#") : route("#");
+          window.location.href = route("customer.logout");
           break;
         case "profile":
-          window.location.href = this.user.role === 1 ? route("#") : route("#");
+          window.location.href = this.user.role === 3 ? route("#") : route("#");
           break;
 
         default:
@@ -218,7 +209,6 @@ export default defineComponent({
 
 #main-menu li:hover a {
   font-style: normal;
-  font-weight: bold;
   color: #ff7777;
 }
 

@@ -49,22 +49,27 @@ class HandleInertiaRequests extends Middleware
         ]);
     }
 
-    private function makeData($guard) {
+    private function makeData($guard)
+    {
         $user = Auth::guard($guard)->user();
         return [
             $user
         ];
     }
 
-    private function getCurrentUserLogin() {
-        if(Auth::guard('staff')->check()) {
+    private function getCurrentUserLogin()
+    {
+        if (Auth::guard('staff')->check()) {
             return $this->makeData('staff');
         }
-        if(Auth::guard('admin')->check()) {
+        if (Auth::guard('admin')->check()) {
             return $this->makeData('admin');
         }
-        if(Auth::guard('superadmin')->check()) {
+        if (Auth::guard('superadmin')->check()) {
             return $this->makeData('superadmin');
+        }
+        if (Auth::guard('customer')->check()) {
+            return $this->makeData('customer');
         }
         return null;
     }

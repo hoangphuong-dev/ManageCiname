@@ -7,6 +7,7 @@ use App\Exceptions\CustomerException;
 use App\Helper\FormatDate;
 use App\Helper\JwtHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use App\Mail\AuthenOrder;
 use App\Repositories\CinemaRepository;
 use App\Repositories\ProvinceRepository;
@@ -19,6 +20,7 @@ use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -55,6 +57,32 @@ class CustomerController extends Controller
         $this->provinceRepository = $provinceRepository;
         $this->cinemaRepository = $cinemaRepository;
         $this->showTimeService = $showTimeService;
+    }
+
+    public function login()
+    {
+        return Inertia::render("Customer/Login");
+    }
+
+    public function handleLogin(LoginRequest $request)
+    {
+        try {
+            $fill = $request->validated();
+            $route = $this->userService->login($fill);
+        } catch (\Exception $e) {
+            $message = ['error' => $e->getMessage()];
+        } finally {
+            if (isset($message)) {
+                return back()->with($message);
+            }
+            return redirect($route);
+        }
+    }
+
+    public function logout()
+    {
+        $this->userService->logoutCustomer();
+        return redirect()->route('customer.login');
     }
 
     public function index(Request $request)
