@@ -2,13 +2,35 @@
   <app-layout>
     <div class="pb-12 pt-6">
       <div class="mx-auto">
-        <h2 class="pb-4">Xac nhan thong tin</h2>
+        <h2 class="pb-4">Xác nhận thông tin</h2>
         <div class="w-full shadow-lg p-4 my-6">
-          <h2>Thong tin phim</h2>
+          <h2>Thông tin phim</h2>
+          <div class="flex mt-6">
+            <div class="w-1/2">
+              <div class="w-full flex">
+                <div class="w-1/3 border-dashed border-2 p-2 border-b-0">
+                  Ngày tạo
+                </div>
+                <div
+                  class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
+                >
+                  2022/08/08
+                </div>
+              </div>
+              <div class="w-full flex">
+                <div class="w-1/3 border-dashed border-2 p-2">Trạng thái</div>
+                <div class="w-2/3 border-dashed border-2 p-2 border-l-0">
+                  dsvsvddsvsdv
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-red-500 w-1/2">asfsafasfas</div>
+          </div>
         </div>
 
         <div class="w-full shadow-lg p-4 my-6">
-          <h2>Thong tin phim</h2>
+          <h2>Thông tin phim</h2>
         </div>
 
         <div class="w-full shadow-lg p-4 my-6">

@@ -158,9 +158,18 @@ class CustomerController extends Controller
     {
         $data = $request->all();
 
+        dd($data);
+
         session()->put(self::SESSION_KEY, $data);
 
-        return Inertia::render('Customer/ConfirmOrder');
+        // $cinema = $this->
+
+
+
+
+        return Inertia::render('Customer/ConfirmOrder', [
+            // 'cinema' => $cinema,
+        ]);
     }
 
     public function order(Request $request)
