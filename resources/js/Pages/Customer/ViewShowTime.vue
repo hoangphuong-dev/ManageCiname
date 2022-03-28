@@ -109,6 +109,7 @@ import MovieDetail from "@/Components/MovieDetail.vue";
 import { getYoutubeId } from "@/Helpers/youtube.js";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
+import { ElMessage } from "element-plus";
 
 export default {
   components: { AppLayout, MovieDetail },
@@ -139,10 +140,17 @@ export default {
 
   methods: {
     chooseSeat() {
-      Inertia.get(route("show_seat_by_showtime", { ...this.formData }), {
-        onBefore,
-        onFinish,
-      });
+      if (this.active_showtime > 0) {
+        Inertia.get(route("show_seat_by_showtime", { ...this.formData }), {
+          onBefore,
+          onFinish,
+        });
+      } else {
+        ElMessage({
+          message: "Vui lòng chọn suất chiếu !",
+          type: "warning",
+        });
+      }
     },
 
     chooseDate(item) {
@@ -163,9 +171,7 @@ export default {
         onFinish,
       });
     },
-    // chooseDate: function (el) {
-    //
-    // },
+
     detail(id) {
       Inertia.get(route("movie.detail", id), { onBefore, onFinish });
     },

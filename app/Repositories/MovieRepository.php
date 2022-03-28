@@ -98,6 +98,9 @@ class MovieRepository extends BaseRepository
     public function show($id)
     {
         return $movie = $this->model
+            ->with(['showtimes' => function ($query) {
+                $query->orderBy('time_start')->first();
+            }])
             ->findOrFail($id);
     }
 

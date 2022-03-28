@@ -19,11 +19,19 @@
           <span class="text-red-500">{{ movie.rated }}</span>
           tuổi
         </p>
-        <h3>Ngày khởi chiếu: 22/12/2022</h3>
+        <h3 v-if="movie.showtimes.length > 0">
+          Ngày khởi chiếu:
+          {{ formatDate(movie.showtimes[0].time_start) }}
+        </h3>
         <div class="text-center mt-4">
-          <el-button size="small" @click="openDialog(movie.id)" type="danger">
-            Đặt vé
-          </el-button>
+          <div v-if="movie.showtimes.length > 0">
+            <el-button @click="openDialog(movie.id)" type="danger">
+              Đặt vé
+            </el-button>
+          </div>
+          <div v-else class="text-red-200">
+            <el-alert title="Phim đang chưa khởi chiếu !" type="warning" />
+          </div>
           <el-dialog title="Chọn rạp" v-model="dialogForm">
             <el-form
               class="text-center w-full"
@@ -147,6 +155,10 @@ export default {
     };
   },
   methods: {
+    formatDate(day) {
+      var now = new Date(day);
+      return now.toLocaleDateString();
+    },
     videoId(row) {
       return getYoutubeId(row);
     },

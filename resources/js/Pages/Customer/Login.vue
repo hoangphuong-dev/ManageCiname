@@ -1,56 +1,61 @@
 <template>
-  <div class="login-form py-12 mt-32">
-    <el-row :gutter="20">
-      <el-col :sm="{ span: 12, offset: 6 }" :xs="{ span: 24, offset: 0 }">
-        <el-card class="box-card">
-          <h1 class="text-center">Đăng nhập</h1>
-          <el-form
-            :ref="setFormRef"
-            :model="formData"
-            label-width="120px"
-            label-position="top"
-            :rules="rules"
-          >
-            <el-form-item prop="email" label="Email" class="cs-lbl">
-              <el-input
-                autocomplete="off"
-                v-model="formData.email"
-                @keyup.enter="handleLogin"
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              label="Mật khẩu"
-              prop="password"
-              class="none-margin cs-lbl"
-            >
-              <el-input
-                v-model="formData.password"
-                type="password"
-                autocomplete="off"
-                @keyup.enter="handleLogin"
-              ></el-input>
-            </el-form-item>
-            <div class="w-full mt-1 mb-3 flex justify-between">
-              <el-checkbox
-                v-model="formData.isRemember"
-                label="Ghi nhớ đăng nhập"
-              ></el-checkbox>
-            </div>
-            <el-form-item>
-              <button
-                class="btn-warning w-full"
-                type="button"
-                @click="handleLogin"
+  <app-layout>
+    <div class="py-12">
+      <div class="mx-auto messenger-window__custom">
+        <div class="w-full">
+          <div class="main-jobs">
+            <el-card class="box-card w-1/2 m-auto my-20">
+              <h1 class="text-center">Đăng nhập</h1>
+              <el-form
+                :ref="setFormRef"
+                :model="formData"
+                label-width="120px"
+                label-position="top"
+                :rules="rules"
               >
-                Đăng nhập
-              </button>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
-    </el-row>
-  </div>
+                <el-form-item prop="email" label="Email" class="cs-lbl">
+                  <el-input
+                    autocomplete="off"
+                    v-model="formData.email"
+                    @keyup.enter="handleLogin"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item
+                  label="Mật khẩu"
+                  prop="password"
+                  class="none-margin cs-lbl"
+                >
+                  <el-input
+                    v-model="formData.password"
+                    type="password"
+                    autocomplete="off"
+                    @keyup.enter="handleLogin"
+                  ></el-input>
+                </el-form-item>
+                <div class="w-full mt-1 mb-3 flex justify-between">
+                  <el-checkbox
+                    v-model="formData.isRemember"
+                    label="Ghi nhớ đăng nhập"
+                  ></el-checkbox>
+                </div>
+                <el-form-item>
+                  <button
+                    class="btn-warning w-full"
+                    type="button"
+                    @click="handleLogin"
+                  >
+                    Đăng nhập
+                  </button>
+                </el-form-item>
+              </el-form>
+            </el-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-layout>
 </template>
+
 
 <script>
 import { reactive, ref } from "vue";

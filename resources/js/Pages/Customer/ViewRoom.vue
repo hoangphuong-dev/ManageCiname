@@ -21,8 +21,8 @@
                 class="rounded border p-1 text-center cursor-pointer"
                 v-for="(item, index) in showtime.room.seats"
                 :key="index"
-                @click="chooseSeat(item.id)"
-                :class="{ active: active_seat[index] === item.id }"
+                :class="{ active: formData.seat_id[index] === item.id }"
+                @click="chooseSeat(index)"
               >
                 <div class="w-full m-auto text-center">
                   <img
@@ -32,7 +32,7 @@
                 </div>
                 <div class="text-base mt-2">
                   <!-- {{ item.row_name + item.columns_number }} -->
-                  {{ index }}
+                  FFF
                 </div>
               </div>
             </div>
@@ -86,7 +86,6 @@ export default {
 
   data() {
     return {
-      active_seat: [],
       formData: {
         cinema_id: this.showtime.room.cinema.id,
         showtime_id: this.showtime.id,
@@ -103,19 +102,17 @@ export default {
     },
 
     chooseSeat(id) {
-      if (this.active_seat.includes(id)) {
+      if (this.formData.seat_id.includes(id)) {
         console.log("Delete");
-        const index = this.active_seat.indexOf(id);
+        const index = this.formData.seat_id.indexOf(id);
         if (index > -1) {
-          this.active_seat.splice(index, 1);
+          this.formData.seat_id.splice(index, 1);
         }
       } else {
         console.log("Add");
-        this.active_seat.push(id);
+        this.formData.seat_id.push(id);
       }
-
-      // this.active_seat = id;
-      this.formData.seat_id = this.active_seat;
+      console.log(`activeTag[i]: ${this.formData.seat_id}`);
     },
 
     videoId(row) {
