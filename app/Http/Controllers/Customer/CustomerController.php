@@ -144,7 +144,6 @@ class CustomerController extends Controller
         // dd($data);
         $showtimes =  ($this->showTimeService->listShowTimeByCinema($data)->collection);
 
-
         $formatDate = new FormatDate();
         $twoWeeks = $formatDate->getTwoWeek();
         return Inertia::render('Customer/ViewShowTime', [
@@ -158,14 +157,10 @@ class CustomerController extends Controller
     {
         $data = $request->all();
 
-        dd($data);
-
+        // dd($data);
         session()->put(self::SESSION_KEY, $data);
 
         // $cinema = $this->
-
-
-
 
         return Inertia::render('Customer/ConfirmOrder', [
             // 'cinema' => $cinema,
@@ -178,17 +173,11 @@ class CustomerController extends Controller
         $fill['total_money'] = "500000";
         $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
 
-        // dd($data);
-
-        // generate token from JWT
         $token = JwtHelper::make($data);
 
         Mail::to($data['email'])->send(new AuthenOrder($token));
-        // dua ra trang thong bao vua gui mail
 
-        // return redirect()->back();
-
-        dd($token);
+        return Inertia::render('Customer/NoticationSendMail', []);
     }
 
     public function authenOrder($token)
@@ -199,25 +188,23 @@ class CustomerController extends Controller
         $data = JwtHelper::parse($token);
 
         $flag = true;
-        // try {
-        //     DB::beginTransaction();
-        $user = $this->userService->checkOrderCustomer($data);
+        try {
+            DB::beginTransaction();
+            $user = $this->userService->checkOrderCustomer($data);
 
-        $bill = $this->billService->createBill($user->id, $data);
+            $bill = $this->billService->createBill($user->id, $data);
 
-        $this->ticketService->createTicket($data, $bill->id);
-        //     DB::commit();
-        // } catch (\Exception $e) {
-        //     $flag = false;
-        //     DB::rollback();
-        //     return back()->with($e);
-        // }
+            $this->ticketService->createTicket($data, $bill->id);
+            DB::commit();
+        } catch (\Exception $e) {
+            $flag = false;
+            DB::rollback();
+            return back()->with($e);
+        }
         if ($flag) {
             event(new CustomerOrder($bill, $user));
 
             return redirect()->route('order-success', $bill->id);
-
-            // dd("success");
         }
         session()->forget(self::SESSION_KEY);
     }
