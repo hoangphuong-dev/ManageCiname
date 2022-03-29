@@ -87,14 +87,9 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
-
         $movie_genres = $this->movieGenreService->list($request);
-        // cac phim dang co suat chieu va duoc dat nhieu nhat
+        // lấy các phim có suất chiếu và được đặt nhiều nhất
         $movie_hots = $this->movieSearvice->getMovieHot();
-
-        // dd($movie_hots);
-
-
         return Inertia::render('Customer/Home', [
             'movie_genres' => $movie_genres,
             'movie_hots' => $movie_hots,
@@ -127,6 +122,10 @@ class CustomerController extends Controller
     {
         // lay ra thong tin cua suat chieu hien tai (phong , so ghe trong, daban, id_rap )
         $showtime = $this->showTimeService->getRoomByShowTime($request->current_showtime);
+
+        // lấy các ghế đã bán của suất chiếu hiện tại 
+        $seat_ordered = $this->ticketService->getSeatOrdered($request->current_showtime);
+        dd($seat_ordered);
 
         return Inertia::render('Customer/ViewRoom', [
             'showtime' => $showtime,

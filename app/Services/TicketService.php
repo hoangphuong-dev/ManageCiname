@@ -23,4 +23,9 @@ class TicketService
     {
         return $this->ticketRepository->getTicketByBill($id);
     }
+
+    public function getSeatOrdered($showtime_id)
+    {
+        return $this->ticketRepository->getSeatOrdered($showtime_id);
+    }
 }

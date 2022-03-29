@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Customer\ProfileController;
+
 // Customer
 Route::get('/', [CustomerController::class, 'index'])->name('home');
 
@@ -31,9 +33,13 @@ Route::post('/login', [CustomerController::class, 'handleLogin']);
 
 Route::get('/movie-now-showing', [CustomerController::class, 'getMovieNowShowing'])->name('now_showing');
 
+Route::get('/movie-comming-soon', [CustomerController::class, 'getMovieCommingSoon'])->name('comming_soon');
+
 
 
 Route::group(['middleware' => ['customer']], function () {
     Route::get('/logout', [CustomerController::class, 'logout'])->name('customer.logout');
     Route::get('/my-ticket', [CustomerController::class, 'myTicket'])->name('my_ticket');
+
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 });

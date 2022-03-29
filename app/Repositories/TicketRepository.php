@@ -48,4 +48,11 @@ class TicketRepository extends BaseRepository
             ->where('bill_id', $id)
             ->get();
     }
+
+    public function getSeatOrdered($showtime_id)
+    {
+        return $this->model->newQuery()
+            ->where('showtime_id', $showtime_id)
+            ->pluck('id')->toArray();
+    }
 }
