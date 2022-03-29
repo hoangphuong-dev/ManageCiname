@@ -239,15 +239,22 @@ class CustomerController extends Controller
     // lấy phim đang chiếu
     public function getMovieNowShowing(Request $request)
     {
+        $movie_genres = $this->movieGenreService->list($request);
         $movies = $this->movieSearvice->getMovieNowShowing($request);
-
-        dd($movies);
+        return Inertia::render('Customer/MovieNowShowing', [
+            'movies' => $movies,
+            'movie_genres' => $movie_genres,
+        ]);
     }
     // sắp chiếu
     public function getMovieCommingSoon(Request $request)
     {
         $movies = $this->movieSearvice->getMovieCommingSoon($request);
-
-        dd($movies);
+        $movie_genres = $this->movieGenreService->list($request);
+        return Inertia::render('Customer/MovieNowShowing', [
+            'movies' => $movies,
+            'movie_genres' => $movie_genres,
+            'title' => 'Phim sắp chiếu'
+        ]);
     }
 }

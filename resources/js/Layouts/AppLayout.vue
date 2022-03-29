@@ -204,7 +204,7 @@ export default defineComponent({
           window.location.href = route("now_showing");
           break;
         case "coming_soon":
-          window.location.href = "?movie=comming_soon";
+          window.location.href = route("comming_soon");
           break;
 
         default:
