@@ -22,3 +22,10 @@ class MasterDataRepository
         return $hospitalTypes;
     }
 }
+
+
+// \DB::connection()->enableQueryLog(); 
+
+
+
+// dd(\DB::getQueryLog());

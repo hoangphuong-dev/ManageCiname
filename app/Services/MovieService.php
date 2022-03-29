@@ -41,7 +41,14 @@ class MovieService extends BaseService
     {
         $movies = $this->movieRepository->getMovieNowShowing($request);
 
-        dd($movies);
+        return MovieResource::collection($movies);
+    }
+
+    public function getMovieCommingSoon($request)
+    {
+        $movies = $this->movieRepository->getMovieCommingSoon($request);
+
+        return MovieResource::collection($movies);
     }
 
     public function getMovieHot()

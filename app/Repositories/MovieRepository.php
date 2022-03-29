@@ -24,9 +24,40 @@ class MovieRepository extends BaseRepository
     public function getMovieNowShowing($request)
     {
         return $this->model->newQuery()
-            ->with(['showtimes' => function ($q) {
-                $q->where('time_start', '>=', now());
-            }])
+            ->select('movies.*', 'show_times.time_start')
+            ->distinct()
+            ->join('show_times', 'show_times.movie_id', '=', 'movies.id')
+            ->when($request->name, function ($query) use ($request) {
+                return $query->where("name", "like", "%{$request->name}%");
+            })
+            ->when($request->movie_genre, function ($query) use ($request) {
+                return $query
+                    ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
+                    ->where("movie_genre_id", "=", $request->movie_genre);
+            })
+            ->where('time_start', '>=', date_format(now(), "Y-m-d H:i:s"))
+            ->where('status', Movie::MOVIE_ACTIVE)
+            ->orderBy('id', "DESC")
+            ->paginate($request->query('limit', 12));
+    }
+
+    public function getMovieCommingSoon($request)
+    {
+        return $this->model->newQuery()->select('movies.*', 'show_times.time_start')
+            ->distinct()
+            ->when(
+                $request->name,
+                function ($query) use ($request) {
+                    return $query->where("name", "like", "%{$request->name}%");
+                }
+            )
+            ->when($request->movie_genre, function ($query) use ($request) {
+                return $query
+                    ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
+                    ->where("movie_genre_id", "=", $request->movie_genre);
+            })
+            ->leftJoin('show_times', 'show_times.movie_id', '=', 'movies.id')
+            ->whereNull('show_times.time_start')
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 12));
     }

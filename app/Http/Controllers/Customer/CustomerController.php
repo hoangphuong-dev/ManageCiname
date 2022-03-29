@@ -237,10 +237,17 @@ class CustomerController extends Controller
         ]);
     }
 
-    // lay phim đang chiếu và sắp chiếu 
+    // lấy phim đang chiếu
     public function getMovieNowShowing(Request $request)
     {
         $movies = $this->movieSearvice->getMovieNowShowing($request);
+
+        dd($movies);
+    }
+    // sắp chiếu
+    public function getMovieCommingSoon(Request $request)
+    {
+        $movies = $this->movieSearvice->getMovieCommingSoon($request);
 
         dd($movies);
     }
