@@ -39,32 +39,85 @@
           <div class="w-1/4">
             <div class="w-full shadow-lg p-4">
               <h2 class="pb-4">Chú thích</h2>
-
               <div
                 class="rounded border-b-2 mb-4 flex"
-                v-for="item in 6"
+                v-for="item in seat_types.data"
                 :key="item"
               >
-                <div class="rounded border p-2 text-center w-16 mb-4">
-                  <div class="w-1/2 m-auto">
-                    <img style="height: 40px" />
+                <div class="rounded border text-center mb-4 w-32">
+                  <div class="w-3/4 m-auto p-2">
+                    <img style="height: 40px" :src="getImage(item.image)" />
                   </div>
                   <div class="text-base mt-2">A1</div>
                 </div>
-                <div>Ghế Thường</div>
+                <div class="ml-3 mt-8">
+                  <h3>{{ item.name }}</h3>
+                </div>
+              </div>
+
+              <!-- Chú thích màu  -->
+              <div
+                class="rounded border-b-2 mb-4 flex"
+                v-for="item in notes"
+                :key="item.name"
+              >
+                <div
+                  class="rounded border text-center mb-4 w-32"
+                  :class="item.color"
+                >
+                  <div class="w-3/4 m-auto p-2">
+                    <img
+                      style="height: 40px"
+                      :src="getImage(seat_types.data[0].image)"
+                    />
+                  </div>
+                  <div class="text-base mt-2">A1</div>
+                </div>
+                <div class="ml-3 mt-8">
+                  <h3>{{ item.name }}</h3>
+                </div>
+              </div>
+
+              <!-- end chú thích  -->
+            </div>
+
+            <!-- Thông tin ghế -->
+            <div class="w-full shadow-lg p-4 mt-8">
+              <h2 class="pb-4 text-center">Thông tin vừa chọn</h2>
+              <h3 class="text-right text-lg">Phòng 202</h3>
+
+              <div class="w-full flex">
+                <div class="w-1/3 border-dashed border-2 p-2 border-b-0">
+                  Ghế
+                </div>
+                <div
+                  class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
+                >
+                  A1, A2, A3
+                </div>
+              </div>
+              <div class="w-full flex">
+                <div class="w-1/3 border-dashed border-2 p-2">Tổng tiền</div>
+                <div class="w-2/3 border-dashed border-2 p-2 border-l-0">
+                  1000.000 VNĐ
+                </div>
               </div>
             </div>
+            <!-- end thông tin Ghế -->
+
+            <!-- Count down  -->
             <div class="w-full shadow-lg p-4 mt-8">
-              <h2 class="pb-4">Thông tin ghế vừa chọn</h2>
+              <h2 class="pb-4 text-center">Count down</h2>
+
+              <div class="w-full flex">{{ countDown }}</div>
             </div>
+            <!-- end count down -->
           </div>
         </div>
 
         <!-- submit form -->
         <div class="text-center mt-10">
-          <el-button size="small" @click="submit()" type="danger">
-            Tiếp tục
-          </el-button>
+          <el-button @click="submit()" type="danger"> Tiếp tục </el-button>
         </div>
       </div>
     </div>
@@ -82,23 +135,53 @@ export default {
   props: {
     showtime: Object,
     seat_ordered: Object,
+    seat_types: Object,
+  },
+  created() {
+    this.countDownTimer();
   },
 
   data() {
     return {
+      countDown: 1000,
       formData: {
         cinema_id: this.showtime.room.cinema.id,
         showtime_id: this.showtime.id,
         seat_id: [],
       },
+      notes: [
+        {
+          name: "Ghế đã bán",
+          color: "bg-red-400",
+        },
+        {
+          name: "Ghế trống",
+          color: "",
+        },
+        {
+          name: "Ghế đang chọn",
+          color: "bg-blue-400",
+        },
+      ],
     };
   },
+
   methods: {
     submit() {
       Inertia.get(route("get_info_customer", { ...this.formData }), {
         onBefore,
         onFinish,
       });
+    },
+    countDownTimer() {
+      console.log("FFFFFFFF");
+
+      if (this.countDown > 0) {
+        setTimeout(() => {
+          this.countDown -= 1;
+          this.countDownTimer();
+        }, 1000);
+      }
     },
 
     chooseSeat(id) {

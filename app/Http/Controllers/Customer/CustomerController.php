@@ -14,6 +14,7 @@ use App\Repositories\ProvinceRepository;
 use App\Services\BillService;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
+use App\Services\SeatTypeService;
 use App\Services\ShowTimeService;
 use App\Services\TicketService;
 use App\Services\UserService;
@@ -38,6 +39,7 @@ class CustomerController extends Controller
     public $userService;
     public $ticketService;
     public $showTimeService;
+    public $seatTypeService;
 
     public function __construct(
         MovieGenreService $movieGenreService,
@@ -48,6 +50,7 @@ class CustomerController extends Controller
         TicketService $ticketService,
         BillService $billService,
         UserService $userService,
+        SeatTypeService $seatTypeService,
     ) {
         $this->billService = $billService;
         $this->userService = $userService;
@@ -57,6 +60,7 @@ class CustomerController extends Controller
         $this->provinceRepository = $provinceRepository;
         $this->cinemaRepository = $cinemaRepository;
         $this->showTimeService = $showTimeService;
+        $this->seatTypeService = $seatTypeService;
     }
 
     public function login()
@@ -126,9 +130,12 @@ class CustomerController extends Controller
         // lấy các ghế đã bán của suất chiếu hiện tại 
         $seat_ordered = $this->ticketService->getSeatOrdered($request->current_showtime);
 
+        $seat_types = $this->seatTypeService->list($request);
+
         return Inertia::render('Customer/ViewRoom', [
             'showtime' => $showtime,
             'seat_ordered' => $seat_ordered,
+            'seat_types' => $seat_types,
         ]);
     }
 
@@ -181,10 +188,9 @@ class CustomerController extends Controller
     public function authenOrder($token)
     {
         if (JwtHelper::isExpired($token) === true) {
-            return "Token đã die . Vui lòng đặt lại vé khác !";
+            return "Token đã hết hạn . Vui lòng đặt lại vé khác !";
         }
         $data = JwtHelper::parse($token);
-
         $flag = true;
         try {
             DB::beginTransaction();
