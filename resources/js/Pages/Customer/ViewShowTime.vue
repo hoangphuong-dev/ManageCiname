@@ -55,6 +55,8 @@
           >
             <div class="font-bold text-center">
               {{ item.time_start }} - {{ item.time_end }}
+              <p>{{ item.name }}</p>
+              {{}}
             </div>
           </div>
         </div>

@@ -21,7 +21,7 @@
                 class="rounded border p-1 text-center cursor-pointer"
                 v-for="(item, index) in showtime.room.seats"
                 :key="index"
-                :class="{ active: formData.seat_id[index] === item.id }"
+                :class="{ seat_order: seat_ordered[index] === item.id }"
                 @click="chooseSeat(index)"
               >
                 <div class="w-full m-auto text-center">
@@ -31,8 +31,7 @@
                   />
                 </div>
                 <div class="text-base mt-2">
-                  <!-- {{ item.row_name + item.columns_number }} -->
-                  FFF
+                  {{ item.row_name + item.columns_number }}
                 </div>
               </div>
             </div>
@@ -82,6 +81,7 @@ export default {
   components: { AppLayout },
   props: {
     showtime: Object,
+    seat_ordered: Object,
   },
 
   data() {
@@ -131,5 +131,8 @@ export default {
 <style lang="css">
 .active {
   background: #0909ff;
+}
+.seat_order {
+  background: red;
 }
 </style>

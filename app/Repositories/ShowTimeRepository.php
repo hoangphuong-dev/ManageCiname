@@ -81,7 +81,7 @@ class ShowTimeRepository extends BaseRepository
     {
         // có thể lấy ra tên phòng và số ghế trống nếu cần 
         return $this->model
-            ->select("show_times.*")
+            ->select("show_times.*", 'rooms.name')
             ->join("rooms", "rooms.id", "=", "show_times.room_id")
             ->where('show_times.movie_id', $data['movie_id'])
             ->where('rooms.cinema_id', $data['cinema_id'])

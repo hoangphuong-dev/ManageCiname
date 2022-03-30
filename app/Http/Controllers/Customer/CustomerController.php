@@ -125,10 +125,10 @@ class CustomerController extends Controller
 
         // lấy các ghế đã bán của suất chiếu hiện tại 
         $seat_ordered = $this->ticketService->getSeatOrdered($request->current_showtime);
-        dd($seat_ordered);
 
         return Inertia::render('Customer/ViewRoom', [
             'showtime' => $showtime,
+            'seat_ordered' => $seat_ordered,
         ]);
     }
 
@@ -140,7 +140,6 @@ class CustomerController extends Controller
         if (!isset($data['current_date'])) {
             $data['current_date'] = $date;
         }
-        // dd($data);
         $showtimes =  ($this->showTimeService->listShowTimeByCinema($data)->collection);
 
         $formatDate = new FormatDate();
@@ -182,7 +181,7 @@ class CustomerController extends Controller
     public function authenOrder($token)
     {
         if (JwtHelper::isExpired($token) === true) {
-            return "Token da het han , Vui long dat lai ve khac !";
+            return "Token đã die . Vui lòng đặt lại vé khác !";
         }
         $data = JwtHelper::parse($token);
 

@@ -16,6 +16,7 @@ class ShowTimeResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'name' => $this->name,
             'movie_id' => $this->movie_id,
             'room_id' => $this->room_id,
             'time_start' => date_format(date_create($this->time_start), "H:i"),
