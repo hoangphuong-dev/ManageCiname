@@ -93,7 +93,9 @@
                 <div
                   class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
                 >
-                  A1, A2, A3
+                  <span v-for="item in formData.seat_id" :key="item"
+                    >{{ item }},
+                  </span>
                 </div>
               </div>
               <div class="w-full flex">
@@ -109,7 +111,17 @@
             <div class="w-full shadow-lg p-4 mt-8">
               <h2 class="pb-4 text-center">Count down</h2>
 
-              <div class="w-full flex">{{ countDown }}</div>
+              <div class="w-full flex">
+                <Countdown
+                  :deadline="count_down"
+                  :labels="{
+                    minutes: 'Phút',
+                    seconds: 'Giây',
+                  }"
+                  :showDays="false"
+                  :showHours="false"
+                />
+              </div>
             </div>
             <!-- end count down -->
           </div>
@@ -129,21 +141,21 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { getYoutubeId } from "@/Helpers/youtube.js";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
+import { Countdown } from "vue3-flip-countdown";
+import { ElMessage } from "element-plus";
 
 export default {
-  components: { AppLayout },
+  components: { AppLayout, Countdown },
   props: {
     showtime: Object,
     seat_ordered: Object,
     seat_types: Object,
-  },
-  created() {
-    this.countDownTimer();
+    count_down: String,
   },
 
   data() {
     return {
-      countDown: 1000,
+      seat_name: [],
       formData: {
         cinema_id: this.showtime.room.cinema.id,
         showtime_id: this.showtime.id,
@@ -165,36 +177,40 @@ export default {
       ],
     };
   },
-
   methods: {
     submit() {
-      Inertia.get(route("get_info_customer", { ...this.formData }), {
-        onBefore,
-        onFinish,
-      });
-    },
-    countDownTimer() {
-      console.log("FFFFFFFF");
-
-      if (this.countDown > 0) {
-        setTimeout(() => {
-          this.countDown -= 1;
-          this.countDownTimer();
-        }, 1000);
+      if (this.formData.seat_id.length > 0) {
+        Inertia.get(route("get_info_customer", { ...this.formData }), {
+          onBefore,
+          onFinish,
+        });
+      } else {
+        ElMessage({
+          message: "Vui lòng chọn ít nhất 1 ghế xem !",
+          type: "error",
+        });
       }
     },
 
     chooseSeat(id) {
-      if (this.formData.seat_id.includes(id)) {
-        console.log("Delete");
-        const index = this.formData.seat_id.indexOf(id);
-        if (index > -1) {
-          this.formData.seat_id.splice(index, 1);
+      if (this.formData.seat_id.length < 8) {
+        if (this.formData.seat_id.includes(id)) {
+          console.log("Delete");
+          const index = this.formData.seat_id.indexOf(id);
+          if (index > -1) {
+            this.formData.seat_id.splice(index, 1);
+          }
+        } else {
+          console.log("Add");
+          this.formData.seat_id.push(id);
         }
       } else {
-        console.log("Add");
-        this.formData.seat_id.push(id);
+        ElMessage({
+          message: "Chỉ chọn tối đa 8 ghế !",
+          type: "error",
+        });
       }
+
       console.log(`activeTag[i]: ${this.formData.seat_id}`);
     },
 

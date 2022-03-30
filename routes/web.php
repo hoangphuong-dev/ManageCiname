@@ -23,6 +23,8 @@ Route::get('/download-bill-pdf/{id}', [CustomerController::class, 'downloadPDF']
 
 Route::post('/order', [CustomerController::class, 'order'])->name('order');
 
+Route::get('/order-send-mail', [CustomerController::class, 'NoticationSendMail'])->name('notication-send-mail');
+
 Route::get('/movies', [CustomerController::class, 'index'])->name('movies');
 
 Route::get('/member', [CustomerController::class, 'index'])->name('member');

@@ -1,11 +1,12 @@
 @component('mail::message')
-# Introduction
+# Thông báo xác thực email
+Cảm ơn bạn đã tin tưởng và sử dụng các dịch vụ xem phim của PHC <br>
+Để tiếp tục quy trình đặt vé . Vui lòng click vào đường link bên dưới để tiếp tục
 
-The body of your message.
+<div>
+    <a style=" word-wrap: break-word;" href="{{route('authen_order', $token)}}">{{route('authen_order', $token)}}</a>
+</div>
 
 
-<a href="{{route('authen_order', $token)}}">{{route('authen_order', $token)}}</a>
-
-Thanks,<br>
-{{ config('app.name') }}
+{{ config('app.name') }} xin chân thành cảm ơn !<br>
 @endcomponent

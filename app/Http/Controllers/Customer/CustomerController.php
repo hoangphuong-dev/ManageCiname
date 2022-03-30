@@ -131,11 +131,14 @@ class CustomerController extends Controller
         $seat_ordered = $this->ticketService->getSeatOrdered($request->current_showtime);
 
         $seat_types = $this->seatTypeService->list($request);
+        $time = strtotime('+1 minute', strtotime(date_format(now(), "Y-m-d H:i:s")));
+        $count_down = date('Y-m-d H:i:s', $time);
 
         return Inertia::render('Customer/ViewRoom', [
             'showtime' => $showtime,
             'seat_ordered' => $seat_ordered,
             'seat_types' => $seat_types,
+            'count_down' => $count_down,
         ]);
     }
 
@@ -161,14 +164,11 @@ class CustomerController extends Controller
     public function getInfoCustomer(Request $request)
     {
         $data = $request->all();
-
-        // dd($data);
+        $showtime = $this->showTimeService->getRoomByShowTime($data['showtime_id']);
         session()->put(self::SESSION_KEY, $data);
 
-        // $cinema = $this->
-
         return Inertia::render('Customer/ConfirmOrder', [
-            // 'cinema' => $cinema,
+            'showtime' => $showtime,
         ]);
     }
 
@@ -182,7 +182,12 @@ class CustomerController extends Controller
 
         Mail::to($data['email'])->send(new AuthenOrder($token));
 
-        return Inertia::render('Customer/NoticationSendMail', []);
+        return redirect()->route('notication-send-mail');
+    }
+
+    public function NoticationSendMail()
+    {
+        return Inertia::render('Customer/NoticationSendMail');
     }
 
     public function authenOrder($token)
@@ -191,19 +196,19 @@ class CustomerController extends Controller
             return "Token đã hết hạn . Vui lòng đặt lại vé khác !";
         }
         $data = JwtHelper::parse($token);
+
         $flag = true;
         try {
             DB::beginTransaction();
             $user = $this->userService->checkOrderCustomer($data);
-
             $bill = $this->billService->createBill($user->id, $data);
-
             $this->ticketService->createTicket($data, $bill->id);
             DB::commit();
         } catch (\Exception $e) {
+            $message = ['error' => __('Ghế này đã được đặt , Vui lòng chọn ghế khác')];
             $flag = false;
             DB::rollback();
-            return back()->with($e);
+            return redirect()->route('home')->with($message);
         }
         if ($flag) {
             event(new CustomerOrder($bill, $user));

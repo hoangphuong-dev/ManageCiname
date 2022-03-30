@@ -38,6 +38,7 @@
         "element-plus": "^1.2.0-beta.5",
         "vue-axios": "^3.4.0",
         "vue-quill-editor": "^3.0.6",
+        "vue3-flip-countdown": "^0.1.6",
         "vuex": "^4.0.2"
     }
 }

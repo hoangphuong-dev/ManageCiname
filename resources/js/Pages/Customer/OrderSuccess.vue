@@ -2,12 +2,18 @@
   <app-layout>
     <div class="pb-12 pt-6">
       <div class="mx-auto">
-        <div class="w-full shadow-lg p-4">
-          Success Tai ve PDF :
-
-          <el-button size="small" @click="downloadPDF(bill_id)" type="danger">
-            PDF
-          </el-button>
+        <h2 class="mt-4 mb-10">Đặt vé thành công</h2>
+        <div class="w-full shadow-lg p-4 h-96">
+          <p class="text-center">
+            Cảm ơn bạn đã tin tưởng và sử dụng các dịch vụ xem phim của PHP .
+            Bạn có thể xem thông tin chi tiết vé vừa đặt trong Email hoặc tải
+            bản PDF để xem chi tiết vé vừa đặt
+          </p>
+          <div class="text-center my-10">
+            <el-button @click="downloadPDF(bill_id)" type="danger">
+              PDF Ticket
+            </el-button>
+          </div>
         </div>
       </div>
     </div>
