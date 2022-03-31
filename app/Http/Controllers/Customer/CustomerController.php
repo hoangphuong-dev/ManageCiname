@@ -169,13 +169,13 @@ class CustomerController extends Controller
 
         return Inertia::render('Customer/ConfirmOrder', [
             'showtime' => $showtime,
+            'data' => $data,
         ]);
     }
 
     public function order(Request $request)
     {
         $fill = $request->all();
-        $fill['total_money'] = "500000";
         $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
 
         $token = JwtHelper::make($data);

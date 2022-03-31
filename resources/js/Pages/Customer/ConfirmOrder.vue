@@ -89,18 +89,28 @@
               <h3>Suất chiếu</h3>
               <div class="w-full flex">
                 <div class="w-1/3 border-dashed border-2 p-2 border-b-0">
+                  Ngày chiếu
+                </div>
+                <div
+                  class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
+                >
+                  <h3>{{ showtime.time_start.slice(0, 10) }}</h3>
+                </div>
+              </div>
+              <div class="w-full flex">
+                <div class="w-1/3 border-dashed border-2 p-2 border-b-0">
                   Giờ bắt đầu
                 </div>
                 <div
                   class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
                 >
-                  <h3>{{ showtime.time_start }}</h3>
+                  <h3>{{ showtime.time_start.slice(11, 16) }}</h3>
                 </div>
               </div>
               <div class="w-full flex">
                 <div class="w-1/3 border-dashed border-2 p-2">Giờ kết thúc</div>
                 <div class="w-2/3 border-dashed border-2 p-2 border-l-0">
-                  <h3>{{ showtime.time_end }}</h3>
+                  <h3>{{ showtime.time_end.slice(11, 16) }}</h3>
                 </div>
               </div>
             </div>
@@ -126,13 +136,22 @@
                 <div
                   class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
                 >
-                  A2, A3, A4
+                  <p v-for="item in data['seat_name']" :key="item">
+                    {{ item }}
+                  </p>
                 </div>
               </div>
               <div class="w-full flex">
                 <div class="w-1/3 border-dashed border-2 p-2">Tổng tiền</div>
                 <div class="w-2/3 border-dashed border-2 p-2 border-l-0">
-                  <h3>100.000 VNĐ</h3>
+                  <h3>
+                    {{
+                      Number(data["total_money"]).toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })
+                    }}
+                  </h3>
                 </div>
               </div>
             </div>
@@ -198,6 +217,7 @@ export default {
   components: { AppLayout },
   props: {
     showtime: Object,
+    data: Object,
   },
 
   data() {

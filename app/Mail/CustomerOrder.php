@@ -2,8 +2,11 @@
 
 namespace App\Mail;
 
+use PDF;
 use App\Models\Bill;
+use App\Models\Ticket;
 use App\Models\User;
+use App\Services\TicketService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +20,7 @@ class CustomerOrder extends Mailable implements ShouldQueue
 
     public $user;
     public $bill;
+
     /**
      * Create a new message instance.
      *
@@ -35,11 +39,30 @@ class CustomerOrder extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->markdown('mail.customer-order')
+        // $tickets = Ticket::with([
+        //     'seat' => function ($query) {
+        //         $query->with('seat_type');
+        //     },
+        //     'bill' => function ($query) {
+        //         $query->with('user');
+        //     },
+        //     'showtime' => function ($query) {
+        //         $query->with(['room', 'movie']);
+        //     },
+        // ])
+        //     ->where('bill_id', $this->bill->id)
+        //     ->get();
+
+        // $pdf = PDF::loadView('user.view_ticket_pdf', [
+        //     'tickets' => $tickets,
+        // ]);
+
+        // return $this->subject("[PHC] Đặt vé thành công")
+        //     ->text('mail.customer-order', [])->attachData($pdf->output(), "ticket.pdf");
+
+        return $this
             ->subject("[PHC] Đặt vé thành công")
-            ->with([
-                'bill' => $this->bill,
-                'user' => $this->user,
+            ->text('mail.customer-order', [
                 'check_password' => $this->checkPassword(),
             ]);
     }

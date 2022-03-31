@@ -18,11 +18,17 @@
               }"
             >
               <div
-                class="rounded border p-1 text-center cursor-pointer"
-                v-for="(item, index) in showtime.room.seats"
-                :key="index"
-                :class="{ seat_order: seat_ordered[index] === item.id }"
-                @click="chooseSeat(index)"
+                class="rounded border p-1 text-center"
+                v-for="item in showtime.room.seats"
+                :key="item"
+                :class="{
+                  active: -1 < formData.seat_id.indexOf(item.id),
+                  seat_order: -1 < seat_ordered.indexOf(item.id),
+                  cursor: !(-1 < seat_ordered.indexOf(item.id)),
+                }"
+                @click="
+                  !(-1 < seat_ordered.indexOf(item.id)) ? chooseSeat(item) : ''
+                "
               >
                 <div class="w-full m-auto text-center">
                   <img
@@ -38,7 +44,7 @@
           </div>
           <div class="w-1/4">
             <div class="w-full shadow-lg p-4">
-              <h2 class="pb-4">Chú thích</h2>
+              <h2 class="pb-4 text-center">Chú thích</h2>
               <div
                 class="rounded border-b-2 mb-4 flex"
                 v-for="item in seat_types.data"
@@ -93,15 +99,20 @@
                 <div
                   class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
                 >
-                  <span v-for="item in formData.seat_id" :key="item"
-                    >{{ item }},
-                  </span>
+                  <p v-for="item in formData.seat_name" :key="item">
+                    {{ item }}
+                  </p>
                 </div>
               </div>
               <div class="w-full flex">
                 <div class="w-1/3 border-dashed border-2 p-2">Tổng tiền</div>
                 <div class="w-2/3 border-dashed border-2 p-2 border-l-0">
-                  1000.000 VNĐ
+                  {{
+                    formData.total_money.toLocaleString("it-IT", {
+                      style: "currency",
+                      currency: "VND",
+                    })
+                  }}
                 </div>
               </div>
             </div>
@@ -160,6 +171,8 @@ export default {
         cinema_id: this.showtime.room.cinema.id,
         showtime_id: this.showtime.id,
         seat_id: [],
+        seat_name: [],
+        total_money: 0,
       },
       notes: [
         {
@@ -192,25 +205,35 @@ export default {
       }
     },
 
-    chooseSeat(id) {
-      if (this.formData.seat_id.length < 8) {
-        if (this.formData.seat_id.includes(id)) {
-          console.log("Delete");
-          const index = this.formData.seat_id.indexOf(id);
-          if (index > -1) {
-            this.formData.seat_id.splice(index, 1);
-          }
-        } else {
-          console.log("Add");
-          this.formData.seat_id.push(id);
+    chooseSeat(item) {
+      if (this.formData.seat_id.includes(item.id)) {
+        // console.log("Delete");
+        const index = this.formData.seat_id.indexOf(item.id);
+
+        if (index > -1) {
+          this.formData.seat_id.splice(index, 1);
+          this.formData.seat_name.splice(index, 1);
+          this.formData.total_money -= Number(item.seat_type.price);
         }
       } else {
-        ElMessage({
-          message: "Chỉ chọn tối đa 8 ghế !",
-          type: "error",
-        });
+        if (this.formData.seat_id.length >= 8) {
+          ElMessage({
+            message: "Chỉ chọn tối đa 8 ghế !",
+            type: "error",
+          });
+        } else {
+          // console.log("Add");
+          this.formData.seat_id.push(item.id);
+          this.formData.seat_name.push(
+            item.row_name +
+              item.columns_number +
+              " ( " +
+              item.seat_type.name +
+              " )"
+          );
+          this.formData.total_money += Number(item.seat_type.price);
+        }
       }
-
       console.log(`activeTag[i]: ${this.formData.seat_id}`);
     },
 
@@ -229,9 +252,12 @@ export default {
 
 <style lang="css">
 .active {
-  background: #0909ff;
+  background: #60a5fa;
 }
 .seat_order {
-  background: red;
+  background: #f87171;
+}
+.cursor {
+  cursor: pointer;
 }
 </style>
