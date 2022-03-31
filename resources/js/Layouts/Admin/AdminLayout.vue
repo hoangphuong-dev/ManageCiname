@@ -162,9 +162,14 @@ export default {
           path: "staff.home",
         },
         {
-          label: "Xem suất chiếu",
+          label: "Phim đang chiếu",
           icon: "cinema",
-          path: "staff.showtime",
+          path: "now_showing",
+        },
+        {
+          label: "Phim sắp chiếu",
+          icon: "cinema",
+          path: "comming_soon",
         },
       ],
     };

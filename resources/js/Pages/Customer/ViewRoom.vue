@@ -17,11 +17,11 @@
                   'repeat(' + showtime.room.column_number + ', minmax(0, 1fr))',
               }"
             >
-              <!-- <div
-                class="rounded seat_order border p-1 text-center cursor-pointer"
+              <div
+                class="rounded border p-1 text-center cursor-pointer"
                 v-for="(item, index) in showtime.room.seats"
                 :key="index"
-                :class="{ seat_order: seat_ordered[index] === item.id }"  
+                :class="{ seat_order: seat_ordered[index] === item.id }"
                 @click="chooseSeat(index)"
               >
                 <div class="w-full m-auto text-center">
@@ -33,19 +33,7 @@
                 <div class="text-base mt-2">
                   {{ item.row_name + item.columns_number }}
                 </div>
-              </div> -->
-
-              <!-- demo click tag  -->
-              <ul v-if="tags">
-                <li
-                  v-for="(tag, i) in tags"
-                  :key="i"
-                  :class="{ active: activeTag[i] === i }"
-                >
-                  <p @click="onTagClick(i)">{{ tag }}</p>
-                </li>
-              </ul>
-              <!-- end demo -->
+              </div>
             </div>
           </div>
           <div class="w-1/4">
@@ -167,8 +155,6 @@ export default {
 
   data() {
     return {
-      tags: ["tag-1", "tag-2", "tag-3", "tag-4"],
-      activeTag: [],
       seat_name: [],
       formData: {
         cinema_id: this.showtime.room.cinema.id,
@@ -192,19 +178,6 @@ export default {
     };
   },
   methods: {
-    onTagClick: function (i) {
-      if (this.activeTag.includes(i)) {
-        console.log("Delete");
-        const index = this.activeTag.indexOf(i);
-        if (index > -1) {
-          this.activeTag.splice(index, 1);
-        }
-      } else {
-        console.log("Add");
-        this.activeTag.push(i);
-      }
-      console.log(`activeTag[i]: ${this.activeTag}`);
-    },
     submit() {
       if (this.formData.seat_id.length > 0) {
         Inertia.get(route("get_info_customer", { ...this.formData }), {
@@ -259,21 +232,6 @@ export default {
   background: #0909ff;
 }
 .seat_order {
-  background: rgba(248, 113, 113);
-}
-
-li {
-  display: inline-block;
-  padding: 8px 10px;
-  margin-right: 0.5rem;
-}
-
-a {
-  color: #000;
-  text-decoration: none;
-}
-
-li.active > a {
-  color: red;
+  background: red;
 }
 </style>
