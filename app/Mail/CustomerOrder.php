@@ -39,31 +39,34 @@ class CustomerOrder extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        // $tickets = Ticket::with([
-        //     'seat' => function ($query) {
-        //         $query->with('seat_type');
-        //     },
-        //     'bill' => function ($query) {
-        //         $query->with('user');
-        //     },
-        //     'showtime' => function ($query) {
-        //         $query->with(['room', 'movie']);
-        //     },
-        // ])
-        //     ->where('bill_id', $this->bill->id)
-        //     ->get();
+        $tickets = Ticket::with([
+            'seat' => function ($query) {
+                $query->with('seat_type');
+            },
+            'bill' => function ($query) {
+                $query->with('user');
+            },
+            'showtime' => function ($query) {
+                $query->with(['room', 'movie']);
+            },
+        ])
+            ->where('bill_id', $this->bill->id)
+            ->get();
 
-        // $pdf = PDF::loadView('user.view_ticket_pdf', [
-        //     'tickets' => $tickets,
-        // ]);
+        $pdf = PDF::loadView('user.view_ticket_pdf', [
+            'tickets' => $tickets,
+        ]);
 
         // return $this->subject("[PHC] Đặt vé thành công")
-        //     ->text('mail.customer-order', [])->attachData($pdf->output(), "ticket.pdf");
+        //     ->text('mail.customer-order', []);
 
         return $this
-            ->subject("[PHC] Đặt vé thành công")
-            ->text('mail.customer-order', [
+
+            ->view('mail.customer-order', [
                 'check_password' => $this->checkPassword(),
+            ])
+            ->attachData($pdf->output(), 'ticket.pdf', [
+                'mime' => 'application/pdf',
             ]);
     }
 
