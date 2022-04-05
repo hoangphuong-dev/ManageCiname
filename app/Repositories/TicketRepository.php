@@ -53,6 +53,6 @@ class TicketRepository extends BaseRepository
     {
         return $this->model->newQuery()
             ->where('showtime_id', $showtime_id)
-            ->pluck('id')->toArray();
+            ->pluck('seat_id')->toArray();
     }
 }
