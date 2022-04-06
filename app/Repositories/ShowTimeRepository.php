@@ -23,6 +23,10 @@ class ShowTimeRepository extends BaseRepository
 
     public function checkShowTime($data)
     {
+        $time_start = strtotime($data['day'] . ' ' . $data['time_start']);
+        $now = strtotime(now());
+        if ($time_start <= $now) return true;
+
         // lay ra tat ca suat chieu cua ngay duoc truyen vao 
         $showtimes = $this->model->newQuery()
             ->selectRaw('DATE_FORMAT(time_start, "%H:%i") as time_start, DATE_FORMAT(time_end, "%H:%i") as time_end')
