@@ -46,6 +46,7 @@ class ShowTimeService extends BaseService
     public function store($request)
     {
         $fill = $this->convertTime($request->validated());
+
         $data = [
             'room_id' => $fill['room_id'],
             'movie_id' => $fill['movie_id'],

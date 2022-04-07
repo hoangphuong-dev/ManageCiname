@@ -57,9 +57,6 @@ class CustomerOrder extends Mailable implements ShouldQueue
             'tickets' => $tickets,
         ]);
 
-        // return $this->subject("[PHC] Đặt vé thành công")
-        //     ->text('mail.customer-order', []);
-
         return $this->markdown('mail.customer-order')
             ->subject("[PHC] Đặt vé thành công")
             ->with([

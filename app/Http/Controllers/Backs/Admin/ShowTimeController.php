@@ -30,7 +30,6 @@ class ShowTimeController extends Controller
 
     public function store(ShowTimeRequest $request)
     {
-        // dd($request->all());
         try {
             $check = $this->showTimeService->checkShowTime($request);
 
@@ -42,7 +41,7 @@ class ShowTimeController extends Controller
 
             $message = ['success' => __('Tạo suất chiếu thành công !')];
         } catch (CustomerException $e) {
-            throw $e;
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } catch (\Exception $e) {
             $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
         } finally {

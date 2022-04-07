@@ -355,7 +355,7 @@ export default {
         return false;
       }
       if (selectInfo.start > new Date()) {
-        // this.formData.day = selectInfo.start;
+        this.formData.day = selectInfo.start.toLocaleDateString();
         this.formData.time_start = selectInfo.start.toLocaleTimeString();
         this.formData.time_end = selectInfo.end.toLocaleTimeString();
         this.dialogForm = !this.dialogForm;
