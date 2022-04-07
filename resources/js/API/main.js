@@ -11,6 +11,9 @@ export const listMovie = async (params = {}) => {
 export const deleteMovie = async (id) => {
     return await axios.delete("/movies/" + id);
 };
+export const detailBill = async (id) => {
+    return await axios.get("/bill/" + id);
+};
 
 export const updateStatusMovie = async (id, status) => {
     return await axios.put('/movies/' + id + '/update-status', { status })

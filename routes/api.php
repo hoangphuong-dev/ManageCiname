@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\MovieGenreController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\SeatTypeController;
 use App\Http\Controllers\Api\ShowTimeController;
+use App\Http\Controllers\Backs\Admin\BillController;
 use App\Http\Controllers\Customer\CustomerController;
 
 Route::apiResource('moviegenres', MovieGenreController::class);
@@ -28,6 +29,8 @@ Route::put('/rooms/{id}/update-status', [RoomController::class, 'changeStatus'])
     ->name('rooms.change_status');
 Route::get('/showtimes/room/{id}', [ShowTimeController::class, 'listShowTimeByRoom'])
     ->name('showtimes.rooms');
+
+Route::get('/bill/{id}', [BillController::class, 'getBillById']);
 
 Route::apiResource('showtimes', ShowTimeController::class);
 Route::get('provinces', [CustomerController::class, 'getProvince']);

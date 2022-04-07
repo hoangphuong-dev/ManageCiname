@@ -58,15 +58,6 @@ class UserSeeder extends Seeder
                 'role' => User::ROLE_STAFF,
                 'status' => User::ACCOUNT_ACTIVE
             ],
-            //Customer
-            [
-                'name' => 'Khách hàng',
-                'email' => 'customer@gmail.com',
-                'phone' => '0968785323',
-                'password' => Hash::make('abc@12345'),
-                'role' => User::ROLE_CUSTOMER,
-                'status' => User::ACCOUNT_ACTIVE
-            ],
         ]);
 
         DB::beginTransaction();

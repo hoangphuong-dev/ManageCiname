@@ -2,7 +2,7 @@
   <admin-layout v-loading="loading">
     <template #main>
       <div class="bg-white min-h-full m-4 mb-0 p-4">
-        <h2 class="mb-5">Quản lý hoa don</h2>
+        <h2 class="mb-5">Quản lý hóa đơn</h2>
         <view-bill :bills="bills"></view-bill>
       </div>
     </template>
