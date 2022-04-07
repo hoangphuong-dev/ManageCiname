@@ -15,11 +15,12 @@ class CreateMemberCardsTable extends Migration
     {
         Schema::create('member_cards', function (Blueprint $table) {
             $table->id();
+            $table->integer('number_card')->unsigned();
             $table->bigInteger('user_id')->unsigned();
-            $table->tinyInteger('role')->unsigned()->comment('0: Nomal, 1: Vip');
-            $table->bigInteger('accumulating_point')->unsigned();
-            $table->bigInteger('used_point')->unsigned();
-            $table->tinyInteger('status')->comment('0: DeActive, 1: active');
+            $table->tinyInteger('role')->unsigned()->comment('0: Nomal, 1: Vip')->default(0);
+            $table->bigInteger('accumulating_point')->unsigned()->default(0);
+            $table->bigInteger('used_point')->unsigned()->default(0);
+            $table->tinyInteger('status')->comment('0: DeActive, 1: active')->default(1);
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');

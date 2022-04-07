@@ -41,8 +41,6 @@ class UserService
         return $this->userRepository->createCustomer($data);
     }
 
-
-
     public function updateUserById($fill, $user_id)
     {
         return $this->userRepository->updateUserById($fill, $user_id);
@@ -52,8 +50,6 @@ class UserService
     {
         return $this->userRepository->updateStatus($id, $request->status);
     }
-
-
 
     public function changePassword($fill)
     {

@@ -13,9 +13,9 @@ class TicketService
         $this->ticketRepository = $ticketRepository;
     }
 
-    public function createTicket($data, $bill_id)
+    public function createTicket($data, $bill_id, $user_id)
     {
-        return $this->ticketRepository->createTicket($data, $bill_id);
+        return $this->ticketRepository->createTicket($data, $bill_id, $user_id);
     }
 
     public function getTicketByBill($id)

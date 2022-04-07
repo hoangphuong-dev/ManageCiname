@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Filters\UserFilters;
+use App\Models\MemberCard;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -26,6 +27,11 @@ class UserRepository
                 'email' => $data['email'],
                 'phone' => $data['phone'],
                 'role' => User::ROLE_CUSTOMER,
+            ]);
+
+            MemberCard::create([
+                'number_card' => rand(),
+                'user_id' => $user->id
             ]);
         }
         return $user;

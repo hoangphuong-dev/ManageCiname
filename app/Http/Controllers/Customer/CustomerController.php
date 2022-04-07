@@ -195,14 +195,13 @@ class CustomerController extends Controller
         if (JwtHelper::isExpired($token) === true) {
             return "Token đã hết hạn . Vui lòng đặt lại vé khác !";
         }
-        $data = JwtHelper::parse($token);
-
         $flag = true;
         try {
+            $data = JwtHelper::parse($token);
             DB::beginTransaction();
             $user = $this->userService->checkOrderCustomer($data);
             $bill = $this->billService->createBill($user->id, $data);
-            $this->ticketService->createTicket($data, $bill->id);
+            $this->ticketService->createTicket($data, $bill->id, $user->id);
             DB::commit();
         } catch (\Exception $e) {
             $message = ['error' => __('Ghế này đã được đặt , Vui lòng chọn ghế khác')];
