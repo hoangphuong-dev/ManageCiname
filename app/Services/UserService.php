@@ -200,7 +200,7 @@ class UserService
         } catch (LoginFailException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
+            throw new \Exception(__('Email hoặc mật khẩu không chính xác !'));
         }
     }
     // tao tai khoan admin 
@@ -250,11 +250,9 @@ class UserService
         } catch (LoginFailException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
+            throw new \Exception(__('Email hoặc mật khẩu không chính xác !'));
         }
     }
-
-
 
     // logout hệ thống
     private function logoutAllGuard()
