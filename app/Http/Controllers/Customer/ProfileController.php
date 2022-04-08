@@ -29,7 +29,10 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::guard('customer')->user();
-        dd($user);
+
+        return Inertia::render('Customer/Profile', [
+            'user' => $user,
+        ]);
     }
 
 

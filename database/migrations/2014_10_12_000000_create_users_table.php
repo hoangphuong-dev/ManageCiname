@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            $table->tinyInteger('status')->default(10)->comment('Set state 0: deactive, 1: active');
+            $table->tinyInteger('status')->default(10)->comment('Set state 11: deactive, 10: active');
 
 
             $table->timestamps();
