@@ -41,9 +41,9 @@ Route::get('/movie-comming-soon', [CustomerController::class, 'getMovieCommingSo
 
 Route::group(['middleware' => ['customer']], function () {
     Route::get('/logout', [CustomerController::class, 'logout'])->name('customer.logout');
-    Route::get('/my-ticket', [CustomerController::class, 'myTicket'])->name('my_ticket');
+    Route::get('/my-ticket', [CustomerController::class, 'myTicket'])->name('ticket');
 
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/my-profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/my-voucher', [ProfileController::class, 'myVoucher'])->name('voucher');
     Route::post('/exchange-point', [ProfileController::class, 'exchangePoint'])->name('customer.exchange-point');
 });

@@ -178,11 +178,7 @@ export default defineComponent({
         },
         {
           label: "Vé của tôi",
-          path: "my_ticket",
-        },
-        {
-          label: "Thành viên",
-          path: "member",
+          path: "ticket",
         },
       ],
     };
