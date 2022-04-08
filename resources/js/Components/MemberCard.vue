@@ -18,6 +18,16 @@
       {{ member_card.status == 1 ? "Đang sử dụng" : "Ngừng sử dụng" }}
     </div>
   </el-card>
+
+  <div class="mt-4">
+    <h3 class="my-4">Bạn cần sử dụng 500.000 điểm để lên khách hàng VIP</h3>
+    <el-progress
+      :text-inside="true"
+      :stroke-width="30"
+      :percentage="(member_card.used_point / 500000) * 100"
+      status="success"
+    />
+  </div>
 </template>
 
 
@@ -34,3 +44,11 @@ export default {
   methods: {},
 };
 </script>
+
+
+<style lang="css">
+.el-progress-bar__innerText {
+  color: black;
+  font-weight: bold;
+}
+</style>

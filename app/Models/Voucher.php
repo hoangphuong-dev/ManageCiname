@@ -10,4 +10,7 @@ class Voucher extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public const NOTUSED = 0;
+    public const USED = 1;
 }

@@ -9,6 +9,7 @@ use App\Helper\JwtHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Mail\AuthenOrder;
+use App\Models\Voucher;
 use App\Repositories\CinemaRepository;
 use App\Repositories\ProvinceRepository;
 use App\Services\BillService;
@@ -176,6 +177,17 @@ class CustomerController extends Controller
     public function order(Request $request)
     {
         $fill = $request->all();
+        if (isset($fill['voucher'])) {
+            try {
+                $voucher = Voucher::where('code', $fill['voucher'])->where('status', Voucher::NOTUSED)
+                    ->where('expiration_date', '>=', now())->where('user_id', $fill['user_id'])->firstOrFail();
+                $fill['voucher_type'] = $voucher->type;
+            } catch (\Exception $e) {
+                $message = ['error' => __('Voucher không hợp lệ hoặc đã được sử dụng !')];
+                return redirect()->back()->with($message);
+            }
+        }
+
         $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
 
         $token = JwtHelper::make($data);
@@ -196,12 +208,29 @@ class CustomerController extends Controller
             return "Token đã hết hạn . Vui lòng đặt lại vé khác !";
         }
         $flag = true;
+        $flag_voucher = false;
         try {
             $data = JwtHelper::parse($token);
+
             DB::beginTransaction();
+
+            if (isset($data['user_id']) && isset($data['voucher_type'])) {
+                $voucher = Voucher::where('user_id', $data['user_id'])
+                    ->where('code', $data['voucher'])
+                    ->where('expiration_date', '>=', now())->first();
+                if ($voucher != null) {
+                    $flag_voucher = true;
+                    $data['total_money'] *= ($data['voucher_type'] / 100);
+                    $voucher->update(['status' => Voucher::USED]);
+                }
+            }
             $user = $this->userService->checkOrderCustomer($data);
             $bill = $this->billService->createBill($user->id, $data);
             $this->ticketService->createTicket($data, $bill->id, $user->id);
+
+            if ($flag_voucher) {
+                $voucher->update(['bill_id' => $bill->id]);
+            }
             DB::commit();
         } catch (\Exception $e) {
             $message = ['error' => __('Ghế này đã được đặt , Vui lòng chọn ghế khác')];
@@ -211,7 +240,6 @@ class CustomerController extends Controller
         }
         if ($flag) {
             event(new CustomerOrder($bill, $user));
-
             return redirect()->route('order-success', $bill->id);
         }
         session()->forget(self::SESSION_KEY);

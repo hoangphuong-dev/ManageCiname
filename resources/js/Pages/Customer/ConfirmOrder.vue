@@ -197,6 +197,21 @@
               ></el-input>
             </el-form-item>
 
+            <!-- mã giảm giá -->
+            <el-form-item v-if="user != null" label="Mã giảm giá">
+              <el-input
+                v-model="formData.voucher"
+                autocomplete="off"
+                placeholder="Nhập mã giảm giá"
+              ></el-input>
+            </el-form-item>
+            <div v-else class="my-4">
+              <el-alert
+                title="Nếu có tài khoản hãy đăng nhập để sử dụng mã giảm giá trong voucher của bạn !"
+                type="warning"
+              />
+            </div>
+
             <div class="text-center">
               <el-button type="danger" @click="submit()">Thanh toán</el-button>
             </div>
@@ -218,6 +233,22 @@ export default {
   props: {
     showtime: Object,
     data: Object,
+  },
+
+  computed: {
+    user() {
+      return this.$page.props.customer;
+    },
+  },
+
+  created() {
+    if (this.user != null) {
+      let user = this.$page.props.customer;
+      this.formData.user_id = user?.id;
+      this.formData.name = user?.name;
+      this.formData.email = user?.email;
+      this.formData.phone = user?.phone;
+    }
   },
 
   data() {

@@ -67,7 +67,7 @@ class ProfileController extends Controller
 
             $member_card->update([
                 'accumulating_point' => $member_card->accumulating_point - $data['need_point'],
-                'used_point' => $member_card->accumulating_point + $data['need_point'],
+                'used_point' => $member_card->used_point + $data['need_point'],
             ]);
             DB::commit();
             $message = ['success' => __('Đổi voucher thành công!')];
