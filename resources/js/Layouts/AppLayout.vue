@@ -169,12 +169,12 @@ export default defineComponent({
       expandMenuMobile: false,
       menus: [
         {
-          label: "Phim đang chiếu",
+          label: "Rạp",
           path: "home",
         },
         {
-          label: "Phim sắp chiếu",
-          path: "movies",
+          label: "Voucher",
+          path: "voucher",
         },
         {
           label: "Vé của tôi",
@@ -198,7 +198,8 @@ export default defineComponent({
           window.location.href = route("customer.logout");
           break;
         case "profile":
-          window.location.href = this.user.role === 3 ? route("#") : route("#");
+          window.location.href =
+            this.user.role === 3 ? route("profile") : route("customer.login");
           break;
         case "now_showing":
           window.location.href = route("now_showing");

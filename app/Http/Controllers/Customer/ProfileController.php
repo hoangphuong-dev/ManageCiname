@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\MemberCard;
+use App\Models\Voucher;
+use Illuminate\Support\Facades\DB;
 use App\Services\UserService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -23,16 +29,54 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::guard('customer')->user();
+        dd($user);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+
+    public function myVoucher()
     {
-        //
+        $user = Auth::guard('customer')->user();
+        $member_card = MemberCard::where('user_id', $user->id)->first();
+
+        $vouchers =  Voucher::paginate(10);
+
+        return Inertia::render('Customer/MyVoucher', [
+            'vouchers' => $vouchers,
+            'member_card' => $member_card,
+        ]);
+    }
+
+    public function exchangePoint(Request $request)
+    {
+        $data = $request->all();
+
+        $user = Auth::guard('customer')->user();
+        $code_date = strtotime('+1 week', strtotime(Carbon::now()));
+        $expiration_date = date('Y-m-d H:i:s', $code_date);
+        $member_card = MemberCard::where('user_id', $user->id)->first();
+        try {
+            DB::beginTransaction();
+            Voucher::create([
+                'user_id' => $user->id,
+                'code' => Str::random(10),
+                'title' =>  $data['title'],
+                'type' =>  $data['chooseVoucher'],
+                'expiration_date' =>  $expiration_date,
+            ]);
+
+            $member_card->update([
+                'accumulating_point' => $member_card->accumulating_point - $data['need_point'],
+                'used_point' => $member_card->accumulating_point + $data['need_point'],
+            ]);
+            DB::commit();
+            $message = ['success' => __('Đổi voucher thành công!')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
+            DB::rollback();
+        } finally {
+            return back()->with($message);
+        }
     }
 
     /**

@@ -20,6 +20,7 @@ class CreateVouchersTable extends Migration
             $table->string('title');
             $table->tinyInteger('type');
             $table->string('expiration_date');
+            $table->tinyInteger('status')->unsigned()->comment('0: not used, 1: used')->default(0);
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');

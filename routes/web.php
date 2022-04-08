@@ -44,4 +44,6 @@ Route::group(['middleware' => ['customer']], function () {
     Route::get('/my-ticket', [CustomerController::class, 'myTicket'])->name('my_ticket');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/my-voucher', [ProfileController::class, 'myVoucher'])->name('voucher');
+    Route::post('/exchange-point', [ProfileController::class, 'exchangePoint'])->name('customer.exchange-point');
 });

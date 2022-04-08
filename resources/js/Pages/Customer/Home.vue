@@ -6,7 +6,7 @@
           <div class="main-jobs">
             <!-- slider -->
             <div class="w-full">
-              <el-carousel indicator-position="outside">
+              <!-- <el-carousel indicator-position="outside">
                 <el-carousel-item
                   class="cursor-pointer"
                   v-for="item in movie_hots"
@@ -22,7 +22,7 @@
                     "
                   />
                 </el-carousel-item>
-              </el-carousel>
+              </el-carousel> -->
             </div>
 
             <!-- button filter  -->
