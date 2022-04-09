@@ -205,7 +205,8 @@ class CustomerController extends Controller
     public function authenOrder($token)
     {
         if (JwtHelper::isExpired($token) === true) {
-            return "Token đã hết hạn . Vui lòng đặt lại vé khác !";
+            $message = ['error' => __('Token đã hết hạn . Vui lòng đặt lại vé khác !')];
+            return redirect()->route("home")->with($message);
         }
         $flag = true;
         $flag_voucher = false;
@@ -267,8 +268,9 @@ class CustomerController extends Controller
         $user = Auth::guard('customer')->user();
 
         $bills = $this->billService->getBillCustomer($user->id);
-        // dd($bills);
+
         return Inertia::render('Customer/MyTicket', [
+
             'bills' => $bills,
         ]);
     }

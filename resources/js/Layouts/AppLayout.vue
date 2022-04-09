@@ -11,6 +11,17 @@
         <div class="app__head-menu h-full">
           <ul id="main-menu" class="flex justify-center items-center h-full">
             <li>
+              <el-link
+                class="text-red-900"
+                :href="route('home')"
+                :underline="false"
+              >
+                Trang chủ
+              </el-link>
+            </li>
+
+            <!-- menu phim  -->
+            <li>
               <el-dropdown @command="handleCommand" trigger="click">
                 <el-link :underline="false">Phim</el-link>
                 <template #dropdown>
@@ -168,10 +179,6 @@ export default defineComponent({
       showingNavigationDropdown: false,
       expandMenuMobile: false,
       menus: [
-        {
-          label: "Trang chủ",
-          path: "home",
-        },
         {
           label: "Rạp",
           path: "home",

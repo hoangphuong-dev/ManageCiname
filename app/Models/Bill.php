@@ -24,4 +24,8 @@ class Bill extends Model
     {
         return $this->hasMany(Ticket::class);
     }
+    public function voucher()
+    {
+        return $this->hasOne(Voucher::class);
+    }
 }

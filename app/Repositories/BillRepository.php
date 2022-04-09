@@ -23,7 +23,7 @@ class BillRepository extends BaseRepository
     public function getBillCustomer($user_id)
     {
         return $this->model->newQuery()
-            ->with(['user'])
+            ->with(['user', 'voucher'])
             ->where('user_id', $user_id)
             ->orderBy('id', "DESC")
             ->paginate(12);

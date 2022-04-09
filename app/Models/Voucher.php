@@ -13,4 +13,9 @@ class Voucher extends Model
 
     public const NOTUSED = 0;
     public const USED = 1;
+
+    public function bill()
+    {
+        return $this->belongsTo(Bill::class);
+    }
 }

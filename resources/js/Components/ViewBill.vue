@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <div style="min-height: 400px" class="mt-5">
+  <div style="min-height: 500px" class="mt-5">
     <!-- datatable  -->
     <data-table
       :fields="fields"

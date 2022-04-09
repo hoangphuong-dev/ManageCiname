@@ -32,7 +32,10 @@
         </template>
         <template #status="{ row }">
           <div class="text-center">
-            <el-button v-if="row?.status == 0" type="success"
+            <el-button
+              @click="copyCode(row?.code)"
+              v-if="row?.status == 0"
+              type="success"
               >Chưa dùng</el-button
             >
             <el-button v-if="row?.status == 1" type="danger"
@@ -101,6 +104,9 @@ import DataTable from "@/Components/DataTable.vue";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import { detailBill } from "@/API/main.js";
 import { formatDateTime } from "@/libs/datetime.js";
+import { copyText } from "vue3-clipboard";
+import { ref } from "vue";
+import { ElMessage } from "element-plus";
 
 export default {
   name: "ViewBillComponent",
@@ -119,6 +125,7 @@ export default {
   },
   data() {
     return {
+      container: ref(null),
       dialogForm: false,
       bill_detail: "",
       filter: {
@@ -170,6 +177,17 @@ export default {
     };
   },
   methods: {
+    copyCode(code) {
+      copyText(code, undefined, (error, event) => {
+        if (event) {
+          ElMessage({
+            showClose: true,
+            message: "Copied",
+            type: "success",
+          });
+        }
+      });
+    },
     exchangePoint() {
       this.dialogForm = true;
     },
