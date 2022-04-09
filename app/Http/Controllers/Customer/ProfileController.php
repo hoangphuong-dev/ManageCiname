@@ -35,18 +35,22 @@ class ProfileController extends Controller
         ]);
     }
 
-
-
-    public function myVoucher()
+    public function myVoucher(Request $request)
     {
         $user = Auth::guard('customer')->user();
         $member_card = MemberCard::where('user_id', $user->id)->first();
 
-        $vouchers =  Voucher::paginate(10);
+        $vouchers =  Voucher::when($request->keyword, function ($q) use ($request) {
+            return $q->where("vouchers.code", "=", $request->keyword);
+        })
+            ->orderBy('status')
+            ->orderBy('id', "DESC")
+            ->paginate($request->query('limit', 12));
 
         return Inertia::render('Customer/MyVoucher', [
             'vouchers' => $vouchers,
             'member_card' => $member_card,
+            'filterBE' => $request->all(),
         ]);
     }
 
@@ -72,6 +76,9 @@ class ProfileController extends Controller
                 'accumulating_point' => $member_card->accumulating_point - $data['need_point'],
                 'used_point' => $member_card->used_point + $data['need_point'],
             ]);
+            if ($member_card->used_point >= MemberCard::POINT_VIP) {
+                $member_card->update(['role' => MemberCard::ROLE_VIP]);
+            }
             DB::commit();
             $message = ['success' => __('Đổi voucher thành công!')];
         } catch (\Exception $e) {

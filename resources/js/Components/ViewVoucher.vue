@@ -2,7 +2,13 @@
   <div class="w-full flex relative">
     <div class="w-11/12 flex items-end">
       <div class="search flex">
-        <search-input :filter="filter" label="Tìm kiếm"></search-input>
+        <el-input
+          ref="search"
+          placeholder="Tìm kiếm ... "
+          clearable
+          v-model="filter.keyword"
+          @keyup.enter="inertia()"
+        />
       </div>
     </div>
     <div class="w-1/12 text-center">
@@ -113,6 +119,7 @@ export default {
   props: {
     vouchers: Object,
     member_card: Object,
+    filterBE: Object,
   },
   components: {
     SearchInput,
@@ -131,6 +138,7 @@ export default {
       filter: {
         page: 1,
         limit: 12,
+        keyword: "",
       },
       listVoucher: [
         {
@@ -177,6 +185,18 @@ export default {
     };
   },
   methods: {
+    handleCurrentPage(value) {
+      this.filter.page = value;
+      this.inertia();
+    },
+    inertia() {
+      Inertia.get(
+        route("voucher", this.filter),
+        {},
+        { onBefore, onFinish, preserveScroll: true }
+      );
+    },
+
     copyCode(code) {
       copyText(code, undefined, (error, event) => {
         if (event) {
@@ -215,10 +235,6 @@ export default {
           );
         }
       });
-    },
-
-    handleCurrentPage() {
-      return 1;
     },
 
     videoId(row) {

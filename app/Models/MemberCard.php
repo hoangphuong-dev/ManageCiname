@@ -13,6 +13,7 @@ class MemberCard extends Model
 
     public const ROLE_NOMAL = 0;
     public const ROLE_VIP = 1;
+    public const POINT_VIP = 500000;
 
     public function user()
     {

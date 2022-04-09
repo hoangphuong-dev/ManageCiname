@@ -12,6 +12,7 @@
             <view-voucher
               :member_card="member_card"
               :vouchers="vouchers"
+              :filterBE="filterBE"
             ></view-voucher>
           </div>
         </div>
@@ -30,6 +31,7 @@ export default {
   props: {
     vouchers: Object,
     member_card: Object,
+    filterBE: Object,
   },
 
   data() {

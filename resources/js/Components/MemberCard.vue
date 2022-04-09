@@ -22,11 +22,22 @@
   </el-card>
 
   <div class="mt-4">
-    <h3 class="my-4">Bạn cần sử dụng 500.000 điểm để lên khách hàng VIP</h3>
+    <h3 v-if="500000 - member_card.used_point >= 0" class="my-4">
+      Bạn cần sử dụng
+      {{ 500000 - member_card.used_point }}
+      điểm để lên khách hàng VIP
+    </h3>
+    <div class="my-4" v-else>
+      <el-alert title="Chúc mừng bạn đang là khách hàng VIP" type="success" />
+    </div>
     <el-progress
       :text-inside="true"
       :stroke-width="30"
-      :percentage="(member_card.used_point / 500000) * 100"
+      :percentage="
+        (member_card.used_point / 500000) * 100 <= 100
+          ? (member_card.used_point / 500000) * 100
+          : 100
+      "
       status="success"
     />
   </div>

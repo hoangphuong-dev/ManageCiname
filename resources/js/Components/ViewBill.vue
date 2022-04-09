@@ -40,6 +40,12 @@
         <div>{{ row?.total_money }} VNĐ</div>
       </template>
 
+      <template #voucher="{ row }">
+        <div class="cursor-pointer hover:text-red-300">
+          {{ row?.voucher?.code }}
+        </div>
+      </template>
+
       <template #action="{ row }">
         <div>
           <el-button size="small" @click="detailBill(row?.id)" type="danger">
@@ -228,6 +234,7 @@ export default {
         { key: "phone", label: "Số điện thoại" },
         { key: "email", label: "Email" },
         { key: "total_money", label: "Tổng tiền" },
+        { key: "voucher", label: "Voucher đã dùng" },
         { key: "action", label: "Thao tác" },
       ],
     };
