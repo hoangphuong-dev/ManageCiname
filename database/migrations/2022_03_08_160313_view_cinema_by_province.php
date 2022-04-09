@@ -13,29 +13,10 @@ class ViewCinemaByProvince extends Migration
      */
     public function up()
     {
-        \DB::statement($this->createView());
     }
 
-    private function createView(): string
-    {
-        return <<<SQL
-            CREATE VIEW view_cinema_by_province AS
-                SELECT 
-                provinces.*,
-                COUNT(*) as count_cinema
-                FROM `cinemas`
-                JOIN provinces on provinces.id = cinemas.province_id
-                GROUP by id, name;
-            SQL;
-    }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        \DB::statement("DROP VIEW IF EXISTS view_cinema_by_province");
     }
 }
