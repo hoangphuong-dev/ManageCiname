@@ -169,6 +169,10 @@ export default defineComponent({
       expandMenuMobile: false,
       menus: [
         {
+          label: "Trang chủ",
+          path: "home",
+        },
+        {
           label: "Rạp",
           path: "home",
         },

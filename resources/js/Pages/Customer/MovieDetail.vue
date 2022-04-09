@@ -8,7 +8,7 @@
           <movie-detail :movie="movie"></movie-detail>
 
           <!-- Danh sách phim liên quan  -->
-          <div class="w-1/4 shadow-xl">
+          <div class="w-1/4 shadow-xl ml-6">
             <h2 class="text-center mb-6">Phim cùng thể loại đang chiếu</h2>
             <div
               class="p-2 w-11/12 m-auto mb-6 border-b-2 cursor-pointer"

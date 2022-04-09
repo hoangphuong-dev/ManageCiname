@@ -61,7 +61,7 @@ export default {
 }
 
 .el-pagination-custom li:hover {
-  color: #a5c242 !important;
+  color: #ff7777 !important;
 }
 
 .el-pagination-custom li {
@@ -76,8 +76,8 @@ export default {
 }
 
 .el-pagination-custom li.active {
-  border-color: #a5c242 !important;
-  color: #a5c242 !important;
+  border-color: #ff7777 !important;
+  color: #ff7777 !important;
 }
 
 @media (max-width: 640px) {

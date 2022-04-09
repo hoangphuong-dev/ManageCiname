@@ -24,6 +24,12 @@
         enable-select-box
         @page="handleCurrentPage"
       >
+        <template #created_at="{ row }">
+          <div>{{ formatDateTime(row?.created_at) }}</div>
+        </template>
+        <template #expiration_date="{ row }">
+          <div>{{ formatDateTime(row?.expiration_date) }}</div>
+        </template>
         <template #status="{ row }">
           <div class="text-center">
             <el-button v-if="row?.status == 0" type="success"
@@ -93,8 +99,9 @@ import { getYoutubeId } from "@/Helpers/youtube.js";
 import { Inertia } from "@inertiajs/inertia";
 import DataTable from "@/Components/DataTable.vue";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
-import { ref } from "vue";
 import { detailBill } from "@/API/main.js";
+import { formatDateTime } from "@/libs/datetime.js";
+
 export default {
   name: "ViewBillComponent",
   props: {
@@ -104,6 +111,11 @@ export default {
   components: {
     SearchInput,
     DataTable,
+  },
+  setup() {
+    return {
+      formatDateTime,
+    };
   },
   data() {
     return {

@@ -13,7 +13,7 @@
           :rules="rules"
         >
           <el-form-item
-          v-if="user.role === 1"
+            v-if="user.role === 1"
             label="病院名"
             prop="company_name"
             :error="$errors.first('company_name')"
@@ -31,7 +31,7 @@
           </el-form-item>
 
           <el-form-item
-          v-if="user.role === 2"
+            v-if="user.role === 2"
             label="氏名 "
             prop="name"
             :error="$errors.first('name')"
@@ -251,7 +251,7 @@ export default {
   font-weight: bold;
   font-size: 36px;
   line-height: 42px;
-  color: #a5c242;
+  color: #ff7777;
 }
 .main {
   padding: 0px 88px;

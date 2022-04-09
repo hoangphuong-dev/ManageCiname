@@ -1,5 +1,5 @@
 <template>
-  <div class="w-3/4 p-2 shadow-inner">
+  <div class="w-3/4 p-2 shadow-xl">
     <div class="flex">
       <div class="w-1/2">
         <img

@@ -7,49 +7,47 @@
     </div>
   </div>
 
-  <div class="mt-5">
+  <div style="min-height: 400px" class="mt-5">
     <!-- datatable  -->
-    <div class="mt-5">
-      <data-table
-        :fields="fields"
-        :items="bills.data"
-        :paginate="bills.meta"
-        :current-page="filter.page || 1"
-        disable-table-info
-        footer-center
-        paginate-background
-        enable-select-box
-        @page="handleCurrentPage"
-      >
-        <template #name="{ row }">
-          <div>{{ row?.user.name }}</div>
-        </template>
+    <data-table
+      :fields="fields"
+      :items="bills.data"
+      :paginate="bills.meta"
+      :current-page="filter.page || 1"
+      disable-table-info
+      footer-center
+      paginate-background
+      enable-select-box
+      @page="handleCurrentPage"
+    >
+      <template #name="{ row }">
+        <div>{{ row?.user.name }}</div>
+      </template>
 
-        <template #created_at="{ row }">
-          <div>{{ row?.created_at }}</div>
-        </template>
+      <template #created_at="{ row }">
+        <div>{{ formatDateTime(row?.created_at) }}</div>
+      </template>
 
-        <template #phone="{ row }">
-          <div>{{ row?.user.phone }}</div>
-        </template>
+      <template #phone="{ row }">
+        <div>{{ row?.user.phone }}</div>
+      </template>
 
-        <template #email="{ row }">
-          <div>{{ row?.user.email }}</div>
-        </template>
+      <template #email="{ row }">
+        <div>{{ row?.user.email }}</div>
+      </template>
 
-        <template #total_money="{ row }">
-          <div>{{ row?.total_money }} VNĐ</div>
-        </template>
+      <template #total_money="{ row }">
+        <div>{{ row?.total_money }} VNĐ</div>
+      </template>
 
-        <template #action="{ row }">
-          <div>
-            <el-button size="small" @click="detailBill(row?.id)" type="danger">
-              Xem chi tiết
-            </el-button>
-          </div>
-        </template>
-      </data-table>
-    </div>
+      <template #action="{ row }">
+        <div>
+          <el-button size="small" @click="detailBill(row?.id)" type="danger">
+            Xem chi tiết
+          </el-button>
+        </div>
+      </template>
+    </data-table>
 
     <!-- chi tiết hóa đơn  -->
     <el-dialog title="Chi tiết hóa đơn" v-model="dialogForm">
@@ -134,7 +132,9 @@
               <div
                 class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
               >
-                <h3>{{ bill_detail.bill?.showtime?.time_start }}</h3>
+                <h3>
+                  {{ bill_detail.bill?.showtime?.time_start.substr(0, 10) }}
+                </h3>
               </div>
             </div>
             <div class="w-full flex">
@@ -144,13 +144,17 @@
               <div
                 class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0"
               >
-                <h3>{{ bill_detail.bill?.showtime?.time_start }}</h3>
+                <h3>
+                  {{ bill_detail.bill?.showtime?.time_start.substr(10, 6) }}
+                </h3>
               </div>
             </div>
             <div class="w-full flex">
               <div class="w-1/3 border-dashed border-2 p-2">Giờ kết thúc</div>
               <div class="w-2/3 border-dashed border-2 p-2 border-l-0">
-                <h3>{{ bill_detail.bill?.showtime?.time_end }}</h3>
+                <h3>
+                  {{ bill_detail.bill?.showtime?.time_end.substr(10, 6) }}
+                </h3>
               </div>
             </div>
           </div>
@@ -192,6 +196,7 @@
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import { getYoutubeId } from "@/Helpers/youtube.js";
 import DataTable from "@/Components/DataTable.vue";
+import { formatDateTime } from "@/libs/datetime.js";
 import { detailBill } from "@/API/main.js";
 export default {
   name: "ViewBillComponent",
@@ -202,6 +207,12 @@ export default {
     SearchInput,
     DataTable,
   },
+  setup() {
+    return {
+      formatDateTime,
+    };
+  },
+
   data() {
     return {
       dialogForm: false,

@@ -7,7 +7,9 @@
     </template>
     <div class="mb-4">Số thẻ : {{ member_card.number_card }}</div>
 
-    <div class="mb-4">Ngày kích hoạt : {{ member_card.created_at }}</div>
+    <div class="mb-4">
+      Ngày kích hoạt : {{ formatDateTime(member_card.created_at) }}
+    </div>
     <div class="mb-4">Điểm khả dụng: {{ member_card.accumulating_point }}</div>
     <div class="mb-4">Điểm đã dùng: {{ member_card.used_point }}</div>
     <div class="mb-4">
@@ -32,10 +34,16 @@
 
 
 <script>
+import { formatDateTime } from "@/libs/datetime.js";
 export default {
   components: {},
   props: {
     member_card: Object,
+  },
+  setup() {
+    return {
+      formatDateTime,
+    };
   },
 
   data() {
