@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\CreateAdmin;
+use App\Events\CustomerOrder;
+use App\Listeners\SendCreateAdminNotice;
+use App\Listeners\SendOrderCustomerNotice;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,15 +22,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-    ];
+        CreateAdmin::class => [
+            SendCreateAdminNotice::class,
+        ],
+        CustomerOrder::class => [
+            SendOrderCustomerNotice::class,
+        ],
 
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
+    ];
 }

@@ -1,29 +1,49 @@
 <?php
 
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Customer\ProfileController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+// Customer
+Route::get('/', [CustomerController::class, 'index'])->name('home');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+Route::get('/movie-detail/{id}', [CustomerController::class, 'detailMovie'])->name('movie.detail');
+
+Route::get('/order-ticket.html', [CustomerController::class, 'orderTicket'])->name('order.ticket');
+
+Route::get('/show-seats-by-showtimes.html', [CustomerController::class, 'showSeatByShowTime'])->name('show_seat_by_showtime');
+
+Route::get('/customer-order.html', [CustomerController::class, 'getInfoCustomer'])->name('get_info_customer');
+
+Route::get('/order-success-bill-{id}', [CustomerController::class, 'orderSuccess'])->name('order-success');
+
+Route::get('/authentication-token/{token}', [CustomerController::class, 'authenOrder'])->name('authen_order');
+
+Route::get('/download-bill-pdf/{id}', [CustomerController::class, 'downloadPDF'])->name('download_bill_pdf');
+
+Route::post('/order.html', [CustomerController::class, 'order'])->name('order');
+
+Route::get('/order-send-mail.html', [CustomerController::class, 'NoticationSendMail'])->name('notication-send-mail');
+
+Route::get('/movies.html', [CustomerController::class, 'index'])->name('movies');
+
+Route::get('/member.html', [CustomerController::class, 'index'])->name('member');
+
+Route::get('/login.html', [CustomerController::class, 'login'])->name('customer.login');
+
+Route::post('/login', [CustomerController::class, 'handleLogin']);
+
+Route::get('/movie-now-showing.html', [CustomerController::class, 'getMovieNowShowing'])->name('now_showing');
+
+Route::get('/movie-comming-soon.html', [CustomerController::class, 'getMovieCommingSoon'])->name('comming_soon');
+
+
+
+Route::group(['middleware' => ['customer']], function () {
+    Route::get('/logout', [CustomerController::class, 'logout'])->name('customer.logout');
+    Route::get('/my-ticket.html', [CustomerController::class, 'myTicket'])->name('ticket');
+
+    Route::get('/my-profile.html', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/my-voucher.html', [ProfileController::class, 'myVoucher'])->name('voucher');
+    Route::post('/exchange-point', [ProfileController::class, 'exchangePoint'])->name('customer.exchange-point');
 });
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');

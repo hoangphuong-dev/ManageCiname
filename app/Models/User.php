@@ -2,60 +2,112 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
     use HasFactory;
-    use HasProfilePhoto;
     use Notifiable;
-    use TwoFactorAuthenticatable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    public const ROLE_SUPERADMIN = 0;
+    public const ROLE_ADMIN = 4;
+    public const ROLE_STAFF = 2;
+    public const ROLE_CUSTOMER = 3;
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
+    public const ACCOUNT_ACTIVE = 10;
+    public const ACCOUNT_DEACTIVE = 11;
+
+    protected $guarded = [];
+
+    // protected $fillable = [
+    //     'id',
+    //     'user_id',
+    //     'province_id',
+    // ];
+
     protected $hidden = [
         'password',
-        'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'status' => 'integer',
+        'role' => 'integer',
+        'created_at'  => 'date:Y/m/d H:i',
+        'updated_at' => 'date:Y/m/d H:i',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    public function scopeIsAdmin()
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function scopeIsSuperAdmin()
+    {
+        return $this->role === self::ROLE_SUPERADMIN;
+    }
+
+    public function scopeIsStaff()
+    {
+        return $this->role === self::ROLE_STAFF;
+    }
+
+    public function scopeIsCustomer()
+    {
+        return $this->role === self::ROLE_CUSTOMER;
+    }
+
+    public function scopeGuardName()
+    {
+        switch ($this->role) {
+            case self::ROLE_ADMIN:
+                return 'admin';
+            case self::ROLE_SUPERADMIN:
+                return 'superadmin';
+            case self::ROLE_STAFF:
+                return 'staff';
+            case self::ROLE_CUSTOMER:
+                return 'customer';
+        }
+        return null;
+    }
+
+    public function scopeIsAccountDeActive()
+    {
+        return $this->status === self::ACCOUNT_DEACTIVE;
+    }
+
+    public function routeRedirect()
+    {
+        if ($this->IsAdmin()) {
+            return route('admin.home_admin');
+        }
+        if ($this->IsSuperAdmin()) {
+            return route('superadmin.home_super');
+        }
+        if ($this->IsStaff()) {
+            return route('staff.home');
+        }
+        if ($this->IsCustomer()) {
+            return route('home');
+        }
+    }
+
+    // relationship
+    // public function adminInfo()
+    // {
+    //     return $this->hasOne(AdminInfo::class);
+    // }
+
+    public function cinema()
+    {
+        return $this->hasOne(Cinema::class);
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
 }

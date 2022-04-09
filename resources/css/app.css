@@ -1,3 +1,72 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+    h1 {
+        @apply text-4xl font-bold;
+        line-height: 42px;
+    }
+    h2 {
+        @apply text-2xl font-bold;
+        line-height: 42px;
+    }
+    h3 {
+        @apply text-base font-bold;
+    }
+    h4 {
+        @apply text-base leading-5 font-bold;
+    }
+    h5 {
+        @apply text-base leading-5 font-bold;
+    }
+    h6 {
+        @apply text-base leading-5;
+    }
+}
+
+@layer components {
+    /* buttons */
+    .btn-primary {
+        @apply bg-lightGreen rounded px-4 py-2 text-white;
+    }
+    .btn-info {
+        @apply bg-blackPrimary-100 rounded px-4 py-2 text-blackPrimary-400;
+    }
+    .btn-success {
+        @apply bg-greenPrimary rounded px-4 py-2 text-white;
+    }
+    .btn-danger {
+        @apply bg-redPrimary rounded px-4 py-2 text-white;
+    }
+    .btn-warning {
+        @apply bg-yellowPrimary rounded px-4 py-2 text-white;
+    }
+    .btn-light-green {
+        @apply bg-lightGreen rounded px-4 py-2 text-white;
+    }
+    .border-gray {
+        @apply border border-dashed border-blackPrimary-200;
+    }
+}
+
+@layer utilities {
+    .border-gray-dashed {
+        @apply border border-dashed border-blackPrimary-200;
+    }
+    .border-t-gray-dashed {
+        @apply border-t border-dashed border-blackPrimary-200;
+    }
+    .border-b-gray-dashed {
+        @apply border-b border-dashed border-blackPrimary-200;
+    }
+    .border-r-gray-dashed {
+        @apply border-r border-dashed border-blackPrimary-200;
+    }
+    .border-l-gray-dashed {
+        @apply border-l border-dashed border-blackPrimary-200;
+    }
+    .border-b-gray {
+        @apply border-b border-solid border-grayPrimary;
+    }
+}
