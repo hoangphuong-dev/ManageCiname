@@ -41,7 +41,10 @@
       </template>
 
       <template #voucher="{ row }">
-        <div class="cursor-pointer hover:text-red-300">
+        <div
+          @click="viewVoucher(row?.voucher?.code)"
+          class="cursor-pointer hover:text-red-300"
+        >
           {{ row?.voucher?.code }}
         </div>
       </template>
@@ -203,6 +206,8 @@ import SearchInput from "@/Components/Element/SearchInput.vue";
 import { getYoutubeId } from "@/Helpers/youtube.js";
 import DataTable from "@/Components/DataTable.vue";
 import { formatDateTime } from "@/libs/datetime.js";
+import { Inertia } from "@inertiajs/inertia";
+import { onBefore, onFinish } from "@/Uses/request-inertia";
 import { detailBill } from "@/API/main.js";
 export default {
   name: "ViewBillComponent",
@@ -221,6 +226,9 @@ export default {
 
   data() {
     return {
+      filterVoucher: {
+        keyword: "",
+      },
       dialogForm: false,
       bill_detail: "",
       filter: {
@@ -242,6 +250,14 @@ export default {
   methods: {
     handleCurrentPage() {
       return 1;
+    },
+    viewVoucher(code) {
+      this.filterVoucher.keyword = code;
+      Inertia.get(
+        route("voucher", this.filterVoucher),
+        {},
+        { onBefore, onFinish, preserveScroll: true }
+      );
     },
 
     videoId(row) {
