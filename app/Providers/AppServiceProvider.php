@@ -16,7 +16,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         if (env('REDIRECT_HTTPS')) {
-            dd(555);
             $this->app['request']->server->set('HTTPS', true);
         }
     }
@@ -32,7 +31,6 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
-        // Register `filters` macro
         Builder::macro('filters', function (Filters $filters) {
             return $filters->getQuery($this);
         });
