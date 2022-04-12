@@ -97,7 +97,7 @@ class CustomerController extends Controller
             $user->update(['password' => Hash::make($fill['password'])]);
             $message = ['success' => __('Thay đổi mật khẩu thành công !')];
         } catch (\Exception $e) {
-            $message = ['error' => $e->getMessage()];
+            $message = ['error' => __('Email chưa được kích hoạt !')];
             return back()->with($message);
         }
         return $user->role == User::ROLE_CUSTOMER
