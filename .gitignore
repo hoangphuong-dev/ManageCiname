@@ -14,5 +14,3 @@ package-lock.json
 yarn-error.log
 /.idea
 /.vscode
-/public/css
-/public/js
