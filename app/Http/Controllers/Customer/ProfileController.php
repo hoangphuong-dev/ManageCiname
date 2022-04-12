@@ -43,6 +43,7 @@ class ProfileController extends Controller
         $vouchers =  Voucher::when($request->keyword, function ($q) use ($request) {
             return $q->where("vouchers.code", "=", $request->keyword);
         })
+            ->where('user_id', $user->id)
             ->orderBy('status')
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 12));
