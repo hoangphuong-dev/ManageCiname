@@ -7,8 +7,11 @@ use App\Exceptions\CustomerException;
 use App\Helper\FormatDate;
 use App\Helper\JwtHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Mail\AuthenOrder;
+use App\Mail\ForgotPassword;
+use App\Models\User;
 use App\Models\Voucher;
 use App\Repositories\CinemaRepository;
 use App\Repositories\ProvinceRepository;
@@ -67,6 +70,32 @@ class CustomerController extends Controller
     public function login()
     {
         return Inertia::render("Customer/Login");
+    }
+
+    public function forgotPasword()
+    {
+        return Inertia::render("Customer/ForgotPassword");
+    }
+
+    public function confirmForgotPassword(Request $request)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(401);
+        }
+        return Inertia::render('Customer/ChangePassword');
+    }
+
+    public function handleForgotPassword(ForgotPasswordRequest $request)
+    {
+        $fill = $request->validated();
+        try {
+            User::where('email', $fill['email'])->firstOrFail();
+        } catch (\Exception $e) {
+            $message = ['error' => $e->getMessage()];
+            return back()->with($message);
+        }
+        // return redirect($route);
+        Mail::to($fill['email'])->send(new ForgotPassword());
     }
 
     public function handleLogin(LoginRequest $request)

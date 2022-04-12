@@ -48,6 +48,11 @@
                   </button>
                 </el-form-item>
               </el-form>
+              <div class="text-right">
+                <a class="cursor-pointer" @click="forgotPass()"
+                  >Quên mật khẩu</a
+                >
+              </div>
             </el-card>
           </div>
         </div>
@@ -131,12 +136,17 @@ export default {
       });
     };
 
+    const forgotPass = () => {
+      Inertia.get(route("customer.forgot_pasword"), {});
+    };
+
     return {
       formData,
       rules,
       formRef,
       setFormRef,
       handleLogin,
+      forgotPass,
     };
   },
 };
