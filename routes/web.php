@@ -30,11 +30,13 @@ Route::get('/movies.html', [CustomerController::class, 'index'])->name('movies')
 Route::get('/member.html', [CustomerController::class, 'index'])->name('member');
 
 Route::get('/login.html', [CustomerController::class, 'login'])->name('customer.login');
-Route::post('/login', [CustomerController::class, 'handleLogin']);
+Route::post('/login.html', [CustomerController::class, 'handleLogin']);
 
 Route::get('/forgot-password.html', [CustomerController::class, 'forgotPasword'])->name('customer.forgot_pasword');
-Route::get('/confirm-forgot-password', [CustomerController::class, 'confirmForgotPassword'])->name('confirm-forgot-password');
 Route::post('/forgot-password.html', [CustomerController::class, 'handleForgotPassword']);
+
+Route::get('/confirm-forgot-password', [CustomerController::class, 'confirmForgotPassword'])->name('confirm_forgot_password');
+Route::post('/confirm-forgot-password', [CustomerController::class, 'handleConfirmForgotPassword']);
 
 Route::get('/movie-now-showing.html', [CustomerController::class, 'getMovieNowShowing'])->name('now_showing');
 

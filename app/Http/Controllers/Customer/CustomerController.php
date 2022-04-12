@@ -7,6 +7,7 @@ use App\Exceptions\CustomerException;
 use App\Helper\FormatDate;
 use App\Helper\JwtHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePassWordRequest;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Mail\AuthenOrder;
@@ -27,6 +28,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use PDF;
@@ -82,20 +84,38 @@ class CustomerController extends Controller
         if (!$request->hasValidSignature()) {
             abort(401);
         }
-        return Inertia::render('Customer/ChangePassword');
+        return Inertia::render('Customer/ChangePassword', [
+            'id' => $request->id,
+        ]);
+    }
+
+    public function handleConfirmForgotPassword(ChangePassWordRequest $request)
+    {
+        $fill = $request->validated();
+        try {
+            $user = User::findOrFail($fill['id']);
+            $user->update(['password' => Hash::make($fill['password'])]);
+            $message = ['success' => __('Thay đổi mật khẩu thành công !')];
+        } catch (\Exception $e) {
+            $message = ['error' => $e->getMessage()];
+            return back()->with($message);
+        }
+        return $user->role == User::ROLE_CUSTOMER
+            ? redirect()->route('customer.login')->with($message)
+            : redirect()->route('back.login.get')->with($message);
     }
 
     public function handleForgotPassword(ForgotPasswordRequest $request)
     {
         $fill = $request->validated();
         try {
-            User::where('email', $fill['email'])->firstOrFail();
+            $user = User::where('email', $fill['email'])->firstOrFail();
+            Mail::to($fill['email'])->send(new ForgotPassword($user->id));
+            $message = ['success' => __('Vui lòng xác thực email để thay đổi mật khẩu !')];
         } catch (\Exception $e) {
             $message = ['error' => $e->getMessage()];
-            return back()->with($message);
         }
-        // return redirect($route);
-        Mail::to($fill['email'])->send(new ForgotPassword());
+        return back()->with($message);
     }
 
     public function handleLogin(LoginRequest $request)

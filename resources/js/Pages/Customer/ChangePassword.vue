@@ -3,7 +3,7 @@
     <div class="pb-12 pt-6">
       <div class="mx-auto">
         <div style="height: 35rem" class="w-full shadow-lg p-4">
-          <forgot-password></forgot-password>
+          <change-password :id="id"></change-password>
         </div>
       </div>
     </div>
@@ -12,10 +12,14 @@
 
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ForgotPassword from "@/Components/ForgotPassword.vue";
+import ChangePassword from "@/Components/ChangePassword.vue";
 
 export default {
-  components: { AppLayout, ForgotPassword },
+  components: { AppLayout, ChangePassword },
+
+  props: {
+    id: String,
+  },
 
   data() {
     return {};
