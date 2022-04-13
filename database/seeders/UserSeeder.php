@@ -59,6 +59,18 @@ class UserSeeder extends Seeder
                 'status' => User::ACCOUNT_ACTIVE
             ],
         ]);
+        $faker = \Faker\Factory::create();
+
+        // for ($i = 1; $i < 50; $i++) {
+        //     User::create([
+        //         'name' => $faker->name,
+        //         'email' => $faker->email,
+        //         'phone' => $faker->phone,
+        //         'role' => 1,
+        //         'row_number' => 10,
+        //         'column_number' => 10,
+        //     ]);
+        // }
 
         DB::beginTransaction();
 
@@ -66,10 +78,6 @@ class UserSeeder extends Seeder
             User::insert($dataUser);
             $seat_type = SeatType::all()->pluck('id')->toArray();
             $admin = User::where('role', User::ROLE_ADMIN)->firstOrFail();
-
-
-
-            $faker = \Faker\Factory::create();
 
             Cinema::create([
                 'user_id' => $admin->id,
