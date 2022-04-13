@@ -14,6 +14,11 @@ class BillService
         $this->billRepository = $billRepository;
     }
 
+    public function getDataByMonth($request)
+    {
+        return $data = $this->billRepository->getDataByMonth($request);
+    }
+
     public function getBillCustomer($user_id)
     {
         try {

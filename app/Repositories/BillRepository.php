@@ -20,6 +20,20 @@ class BillRepository extends BaseRepository
         return Bill::class;
     }
 
+    // thống kê 
+    public function getDataByMonth($request)
+    {
+        return $this->model->newQuery()
+            ->selectRaw('DATE_FORMAT(created_at, "%m-%Y") as month')
+            ->selectRaw('sum(total_money) as revenua')
+            ->when($request->date_from && $request->date_to, function ($query) use ($request) {
+                return $query->whereBetween('created_at', [$request->date_from, $request->date_to]);
+            })
+            ->groupBy('month')
+            ->get()->toArray();
+    }
+    // end thống kê 
+
     public function getBillCustomer($user_id)
     {
         return $this->model->newQuery()

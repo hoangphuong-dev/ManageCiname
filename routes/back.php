@@ -56,7 +56,7 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
-    Route::get('/home', [AdminController::class, 'index'])->name('home_admin');
+    Route::get('/index.html', [AdminController::class, 'index'])->name('home_admin');
 
     // start manage cinema
     Route::get('showtimes', [ShowTimeController::class, 'index'])->name('showtime.index');
@@ -77,6 +77,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 
     Route::get('bills', [BillController::class, 'index'])->name('bill.index');
     Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
+
+    // thống kê 
+    Route::get('get-data-by-month', [AdminController::class, 'getDataByMonth'])->name('get-data-by-month');
 });
 
 Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {

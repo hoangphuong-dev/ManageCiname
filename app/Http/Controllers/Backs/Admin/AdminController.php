@@ -3,13 +3,35 @@
 namespace App\Http\Controllers\Backs\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\BillService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class AdminController extends Controller
 {
-    public function index()
+
+
+    public $billService;
+
+    public function __construct(BillService $billService)
     {
-        return Inertia::render('Backs/Admin/Index');
+        $this->billService = $billService;
     }
+
+    public function index(Request $request)
+    {
+        $request['date_from'] = substr($request->date_from, 0, -14);
+        $request['date_to'] = substr($request->date_to, 0, -14);
+        $data = $this->billService->getDataByMonth($request);
+        return Inertia::render('Backs/Admin/Index', [
+            'data' => $data,
+        ]);
+    }
+
+    // thống kê 
+    // public function getDataByMonth(Request $request)
+    // {
+    //     $data = $this->billService->getDataByMonth($request);
+    //     // return back();
+    // }
 }
