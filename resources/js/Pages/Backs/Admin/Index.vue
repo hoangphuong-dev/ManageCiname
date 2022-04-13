@@ -4,15 +4,10 @@
       <div class="bg-white min-h-full m-4 mb-0 p-4">
         <h2 class="mb-5">Thống kê</h2>
 
-        <div class="w-full shadow-xl p-4">
+        <div class="w-full shadow-xl p-4 mb-6">
           <h3 class="text-center py-2">Doanh thu của rạp theo tháng</h3>
           <!-- lọc theo tháng  -->
-          <el-form
-            label-position="top"
-            ref="filter"
-            :model="filter"
-            :rules="rules"
-          >
+          <el-form label-position="top" ref="filter" :model="filter">
             <div class="flex">
               <el-form-item class="mr-4" label="Từ tháng">
                 <el-date-picker
@@ -34,17 +29,71 @@
           </el-form>
           <!-- end lọc theo tháng  -->
           <!-- Biểu đồ doanh thu theo tháng  -->
-          <div v-if="data.length !== 0">
+          <div v-if="data_avenua.length !== 0">
             <Chart
-              :size="{ width: 150 * data.length, height: 600 }"
-              :data="data"
+              :size="{
+                width: 150 * data_avenua.length,
+                height: 200 * data_avenua.length,
+              }"
+              :data="data_avenua"
+              :margin="margin"
+              :direction="direction"
+            >
+              <template #layers>
+                <Bar
+                  :dataKeys="['month', 'revenua']"
+                  :barStyle="{ fill: 'rgba(243, 244, 200)' }"
+                />
+              </template>
+            </Chart>
+          </div>
+          <el-empty
+            v-else
+            description="Không có dữ liệu cho các tháng này"
+          ></el-empty>
+          <!-- Kết thúc biểu đồ doanh thu theo tháng -->
+        </div>
+
+        <!-- thống kê số vé đã bán theo phim  -->
+        <div class="w-full shadow-xl p-4 mb-6">
+          <h3 class="text-center py-2">Số vé đã bán của phim theo tháng</h3>
+          <!-- lọc theo tháng  -->
+          <el-form label-position="top" ref="filter" :model="filter">
+            <div class="flex">
+              <el-form-item class="mr-4" label="Từ tháng">
+                <el-date-picker
+                  v-model="filter.date_from_ticket"
+                  type="month"
+                  placeholder="Chọn tháng"
+                />
+              </el-form-item>
+
+              <el-form-item label="Đến tháng">
+                <el-date-picker
+                  v-model="filter.date_to_ticket"
+                  type="month"
+                  placeholder="Chọn tháng"
+                  @change="inertia()"
+                />
+              </el-form-item>
+            </div>
+          </el-form>
+          <!-- end lọc theo tháng  -->
+          <!-- Biểu đồ doanh thu theo tháng  -->
+          <div v-if="data_ticket.length !== 0">
+            <Chart
+              :size="{
+                width: 150 * data_ticket.length,
+                height: 200 * data_ticket.length,
+              }"
+              :data="data_ticket"
               :margin="margin"
               :direction="direction"
             >
               <template #layers>
                 <Grid strokeDasharray="2,2" />
-                <Bar
-                  :dataKeys="['month', 'revenua']"
+                <Line
+                  :dataKeys="['name', 'ticket_ordered']"
                   :barStyle="{ fill: 'rgba(243, 244, 200)' }"
                 />
               </template>
@@ -72,7 +121,8 @@ export default defineComponent({
   name: "HomeStaff",
   components: { Chart, Grid, Bar, Line, AdminLayout },
   props: {
-    data: Object,
+    data_avenua: Object,
+    data_ticket: Object,
   },
 
   setup() {
@@ -83,6 +133,7 @@ export default defineComponent({
       right: 20,
       bottom: 0,
     });
+
     return { direction, margin };
   },
 
@@ -91,6 +142,8 @@ export default defineComponent({
       filter: {
         date_from: "",
         date_to: "",
+        date_from_ticket: "",
+        date_to_ticket: "",
       },
     };
   },

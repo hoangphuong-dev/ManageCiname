@@ -21,6 +21,20 @@ class ShowTimeRepository extends BaseRepository
         return ShowTime::class;
     }
 
+    public function getDataTicketByMonth($request)
+    {
+        return $this->model->newQuery()
+            ->select('show_times.movie_id', 'movies.name')
+            ->selectRaw('count(*) as ticket_ordered')
+            ->when($request->date_from_ticket && $request->date_to_ticket, function ($query) use ($request) {
+                return $query->whereBetween('tickets.created_at', [$request->date_from_ticket, $request->date_to_ticket]);
+            })
+            ->join('tickets', 'tickets.showtime_id', '=', 'show_times.id')
+            ->join('movies', 'movies.id', '=', 'show_times.movie_id')
+            ->groupBy('movie_id', 'name')
+            ->get()->toArray();
+    }
+
     public function checkShowTime($data)
     {
         $time_start = strtotime($data['day'] . ' ' . $data['time_start']);

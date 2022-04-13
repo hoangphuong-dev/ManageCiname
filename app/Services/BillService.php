@@ -4,19 +4,27 @@ namespace App\Services;
 
 use App\Http\Resources\BillResource;
 use App\Repositories\BillRepository;
+use App\Repositories\ShowTimeRepository;
 
 class BillService
 {
     public $billRepository;
+    public $showTimeRepository;
 
-    public function __construct(BillRepository $billRepository)
+    public function __construct(BillRepository $billRepository, ShowTimeRepository $showTimeRepository)
     {
         $this->billRepository = $billRepository;
+        $this->showTimeRepository = $showTimeRepository;
     }
 
     public function getDataByMonth($request)
     {
         return $data = $this->billRepository->getDataByMonth($request);
+    }
+
+    public function getDataTicketByMonth($request)
+    {
+        return $data = $this->showTimeRepository->getDataTicketByMonth($request);
     }
 
     public function getBillCustomer($user_id)

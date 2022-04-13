@@ -77,9 +77,6 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 
     Route::get('bills', [BillController::class, 'index'])->name('bill.index');
     Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
-
-    // thống kê 
-    Route::get('get-data-by-month', [AdminController::class, 'getDataByMonth'])->name('get-data-by-month');
 });
 
 Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {

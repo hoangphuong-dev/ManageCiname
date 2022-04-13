@@ -193,6 +193,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { Inertia } from "@inertiajs/inertia";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import { listShowTimeByRoom } from "@/API/main.js";
+import { ElMessage } from "element-plus";
 
 export default {
   components: {
@@ -350,7 +351,10 @@ export default {
 
     handleDateSelect(selectInfo) {
       if (this.roomCurrent === "") {
-        alert("Vui lòng chọn phòng chiếu");
+        ElMessage({
+          message: "Vui lòng chọn phòng chiếu !",
+          type: "error",
+        });
         selectInfo.view.calendar.unselect(); // bỏ chọn suất chiếu khi chưa chọn phòng
         return false;
       }

@@ -22,16 +22,15 @@ class AdminController extends Controller
     {
         $request['date_from'] = substr($request->date_from, 0, -14);
         $request['date_to'] = substr($request->date_to, 0, -14);
-        $data = $this->billService->getDataByMonth($request);
+        $request['date_from_ticket'] = substr($request->date_from_ticket, 0, -14);
+        $request['date_to_ticket'] = substr($request->date_to_ticket, 0, -14);
+
+        $data_avenua = $this->billService->getDataByMonth($request);
+        $data_ticket = $this->billService->getDataTicketByMonth($request);
+
         return Inertia::render('Backs/Admin/Index', [
-            'data' => $data,
+            'data_avenua' => $data_avenua,
+            'data_ticket' => $data_ticket,
         ]);
     }
-
-    // thống kê 
-    // public function getDataByMonth(Request $request)
-    // {
-    //     $data = $this->billService->getDataByMonth($request);
-    //     // return back();
-    // }
 }
