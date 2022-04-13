@@ -15,7 +15,13 @@ class CreateStaffInfosTable extends Migration
     {
         Schema::create('staff_infos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('cinema_id')->unsigned();
+
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('cinema_id')->references('id')->on('cinemas')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

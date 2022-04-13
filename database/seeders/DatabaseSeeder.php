@@ -12,6 +12,9 @@ class DatabaseSeeder extends Seeder
             BaseSeeder::class,
             UserSeeder::class,
             MovieSeeder::class,
+            AdminSeeder::class,
+            ShowTimeSeeder::class,
+            BillSeeder::class
         ]);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\MovieGenre;
 use App\Models\Room;
 use App\Models\Seat;
 use App\Models\SeatType;
+use App\Models\StaffInfo;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +27,7 @@ class UserSeeder extends Seeder
             //SuperAdmin
             [
                 'name' => 'SuperAdmin',
-                'phone' => '0968 222 320',
+                'phone' => '0968222320',
                 'email' => 'superadmin@gmail.com',
                 'password' => Hash::make('abc@12345'),
                 'role' => User::ROLE_SUPERADMIN,
@@ -42,15 +43,6 @@ class UserSeeder extends Seeder
                 'status' => User::ACCOUNT_ACTIVE
             ],
             [
-                'name' => 'Admin2',
-                'phone' => '0968385320',
-                'email' => 'admin2@gmail.com',
-                'password' => Hash::make('abc@12345'),
-                'role' => User::ROLE_ADMIN,
-                'status' => User::ACCOUNT_ACTIVE
-            ],
-            //Staff
-            [
                 'name' => 'Nhân viên',
                 'email' => 'staff@gmail.com',
                 'phone' => '0968444320',
@@ -60,17 +52,6 @@ class UserSeeder extends Seeder
             ],
         ]);
         $faker = \Faker\Factory::create();
-
-        // for ($i = 1; $i < 50; $i++) {
-        //     User::create([
-        //         'name' => $faker->name,
-        //         'email' => $faker->email,
-        //         'phone' => $faker->phone,
-        //         'role' => 1,
-        //         'row_number' => 10,
-        //         'column_number' => 10,
-        //     ]);
-        // }
 
         DB::beginTransaction();
 
