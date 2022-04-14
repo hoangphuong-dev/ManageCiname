@@ -33,7 +33,7 @@
             <Chart
               :size="{
                 width: 150 * data_avenua.length,
-                height: 200 * data_avenua.length,
+                height: 300,
               }"
               :data="data_avenua"
               :margin="margin"
@@ -83,8 +83,8 @@
           <div v-if="data_ticket.length !== 0">
             <Chart
               :size="{
-                width: 150 * data_ticket.length,
-                height: 200 * data_ticket.length,
+                width: 110 * data_ticket.length,
+                height: 300,
               }"
               :data="data_ticket"
               :margin="margin"
