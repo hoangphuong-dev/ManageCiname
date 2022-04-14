@@ -27,7 +27,7 @@ class MovieRequest extends FormRequest
             'name' => ['required', 'max:255'],
             'director' => ['required', 'max:255'],
             'description' => ['required'],
-            'trailler' => ['required', 'max:255'],
+            'trailer' => ['required', 'max:255'],
             'movie_length' => ['required', 'max:100'],
             'rated' => 'required',
             'movie_genre' => 'required|array',

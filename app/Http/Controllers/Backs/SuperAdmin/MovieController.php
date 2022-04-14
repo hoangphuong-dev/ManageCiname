@@ -68,12 +68,12 @@ class MovieController extends Controller
 
     public function edit($id)
     {
-        $movie = $this->movieService->edit($id);
-        return Inertia::render(
-            'Backs/SuperAdmin/EditMovie',
-            [
-                'movie' => $movie
-            ]
-        );
+        // $movie = $this->movieService->edit($id);
+        // return Inertia::render(
+        //     'Backs/SuperAdmin/EditMovie',
+        //     [
+        //         'movie' => $movie
+        //     ]
+        // );
     }
 }

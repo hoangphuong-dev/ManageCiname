@@ -83,7 +83,7 @@ class MovieSeeder extends Seeder
                     'name' => $faker->name,
                     'director' => $faker->name,
                     'description' => $data_description,
-                    'trailler' =>  $dataUrlYoutube[array_rand($dataUrlYoutube)],
+                    'trailer' =>  $dataUrlYoutube[array_rand($dataUrlYoutube)],
                     'movie_length' => 120,
                     'rated' => 16,
                     'status' => array_rand([0, 1]),

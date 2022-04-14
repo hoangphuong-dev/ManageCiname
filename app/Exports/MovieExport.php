@@ -11,7 +11,6 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
 class MovieExport implements
-    FromQuery,
     WithHeadings,
     ShouldAutoSize,
     WithMapping
@@ -27,10 +26,10 @@ class MovieExport implements
     //         'format_movies' => 1111,
     //     ];
     // }
-    public function query()
-    {
-        return Movie::query();
-    }
+    // public function query()
+    // {
+    //     return Movie::query();
+    // }
 
 
     public function map($row): array
@@ -45,7 +44,7 @@ class MovieExport implements
             'name'  => $row->name,
             'director'  => $row->director,
             'description'  => $row->description,
-            'trailler'  => $row->trailler,
+            'trailer'  => $row->trailer,
             'movie_length'  => $row->movie_length,
             'rated'  => $row->rated,
             'casts' => $cast
@@ -53,12 +52,12 @@ class MovieExport implements
         ];
     }
 
-    // public function collection()
-    // {
-    //     return Movie::select('name', 'director', 'description', 'trailler', 'movie_length', 'rated')
-    //         ->limit(1)
-    //         ->get();
-    // }
+    public function collection()
+    {
+        return Movie::select('name', 'director', 'description', 'trailer', 'movie_length', 'rated')
+            ->limit(1)
+            ->get();
+    }
 
 
     public function headings(): array
@@ -67,7 +66,7 @@ class MovieExport implements
             'name',
             'director',
             'description',
-            'trailler',
+            'trailer',
             'movie_length',
             'rated',
             'casts'

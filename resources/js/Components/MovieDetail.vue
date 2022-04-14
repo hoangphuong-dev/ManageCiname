@@ -87,7 +87,7 @@
         </el-tab-pane>
         <!-- Tab Phòng chiếu  -->
 
-        <el-tab-pane label="Trailler">
+        <el-tab-pane label="trailer">
           <div class="w-full p-8">
             <iframe
               class="rounded"

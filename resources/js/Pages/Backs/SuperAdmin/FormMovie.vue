@@ -22,9 +22,9 @@
                 <el-input v-model="formData.director"></el-input>
               </el-form-item>
 
-              <!-- Trailler -->
-              <el-form-item label="Trailler" prop="trailler">
-                <el-input v-model="formData.trailler"></el-input>
+              <!-- trailer -->
+              <el-form-item label="trailer" prop="trailer">
+                <el-input v-model="formData.trailer"></el-input>
               </el-form-item>
 
               <!-- Thời lượng -->
@@ -278,7 +278,7 @@ export default {
         name: "",
         director: "",
         description: "",
-        trailler: "",
+        trailer: "",
         movie_length: "",
         rated: "",
         format: [],
@@ -315,17 +315,18 @@ export default {
           message: "Trường này không được trống ",
           trigger: "change",
         },
-        trailler: [
+        trailer: [
           {
             required: true,
             message: "Trường này không được trống ",
             trigger: "blur",
           },
-          // {
-          //     pattern: /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/,
-          //     message: "Đường link không phải của youtube",
-          //     trigger: "blur",
-          // },
+          {
+            pattern:
+              /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/,
+            message: "Đường link không phải của youtube",
+            trigger: "blur",
+          },
         ],
         movie_length: {
           required: true,

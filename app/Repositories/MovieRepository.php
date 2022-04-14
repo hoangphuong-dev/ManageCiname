@@ -65,7 +65,7 @@ class MovieRepository extends BaseRepository
     public function getMovieHot()
     {
         return $this->model->newQuery()
-            ->select('id', 'trailler')
+            ->select('id', 'trailer')
             ->limit(10)->get();
     }
 
@@ -119,7 +119,7 @@ class MovieRepository extends BaseRepository
             'name' => $fill['name'],
             'director' => $fill['director'],
             'description' => $fill['description'],
-            'trailler' => $fill['trailler'],
+            'trailer' => $fill['trailer'],
             'movie_length' => $fill['movie_length'],
             'rated' => $fill['rated'],
             'status' => $fill['status'],

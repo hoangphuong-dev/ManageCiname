@@ -16,7 +16,7 @@ class ViewShowTimeResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'trailler' => $this->trailler,
+            'trailer' => $this->trailer,
             'movie_id' => $this->movie_id,
             'cinema_id' => $this->cinema_id,
             'day' => $this->day,

@@ -27,7 +27,7 @@ class MovieImport implements WithHeadingRow, ToCollection
                     'name' => $row['name'],
                     'director' => $row['director'],
                     'description' => $row['description'],
-                    'trailler' => $row['trailler'],
+                    'trailer' => $row['trailer'],
                     'movie_length' => $row['movie_length'],
                     'rated' => $row['rated'],
                     'status' => Movie::MOVIE_DEACTIVE,

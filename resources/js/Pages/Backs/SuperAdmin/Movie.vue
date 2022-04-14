@@ -85,7 +85,7 @@
             enable-select-box
             @page="handleCurrentPage"
           >
-            <!-- <template #trailler="{ row }">
+            <!-- <template #trailer="{ row }">
               <iframe
                 width="300"
                 height="150"

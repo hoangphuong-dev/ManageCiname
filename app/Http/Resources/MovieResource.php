@@ -21,7 +21,7 @@ class MovieResource extends JsonResource
             'name' => $this->name,
             'director' => $this->director,
             'description' => $this->description,
-            'trailler' => $this->trailler,
+            'trailer' => $this->trailer,
             'movie_length' => $this->movie_length,
             'rated' => $this->rated,
             'status_switch' => $this->status === Movie::MOVIE_ACTIVE
