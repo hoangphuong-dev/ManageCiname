@@ -83,16 +83,7 @@
             paginate-background
             enable-select-box
             @page="handleCurrentPage"
-          >Import thành công !Import thành công !Import thành công !
-            <!-- <template #trailer="{ row }">
-              <iframe
-                width="300"
-                height="150"
-                :src="'https://www.youtube.com/embed/' + videoId(row)"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-            </template> -->
+          >
             <template #image="{ row }">
               <img
                 :src="
