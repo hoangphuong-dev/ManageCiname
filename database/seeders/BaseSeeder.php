@@ -131,7 +131,7 @@ class BaseSeeder extends Seeder
             [
                 'name' => ' Ghế Thường',
                 'image' => 'ghe-thuong.png',
-                'price' => '100000',
+                'price' => '80000',
             ],
             [
                 'name' => 'Ghế Vip',
@@ -141,7 +141,7 @@ class BaseSeeder extends Seeder
             [
                 'name' => 'Ghế Đôi',
                 'image' => 'ghe-doi.png',
-                'price' => '100000',
+                'price' => '150000',
             ],
         ]);
 

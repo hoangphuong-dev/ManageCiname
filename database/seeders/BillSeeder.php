@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Bill;
 use App\Models\Cinema;
+use App\Models\MemberCard;
 use App\Models\Province;
 use App\Models\Room;
 use App\Models\Seat;
@@ -11,6 +12,7 @@ use App\Models\ShowTime;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class BillSeeder extends Seeder
 {
@@ -25,40 +27,53 @@ class BillSeeder extends Seeder
 
         $faker = \Faker\Factory::create();
 
-        for ($i = 1; $i < 50; $i++) {
-            $user = User::create([
-                'name' => $faker->name,
-                'email' => $faker->email,
-                'phone' => $faker->phoneNumber,
-                'role' => User::ROLE_CUSTOMER,
-                'status' => User::ACCOUNT_ACTIVE
-            ]);
+        try {
+            DB::beginTransaction();
 
-            $bill = Bill::create([
-                'user_id' => $user->id,
-                'cinema_id' => $cinema[array_rand($cinema)],
-                'total_money' => $faker->randomDigitNotZero() * 10000,
-            ]);
+            for ($i = 1; $i < 50; $i++) {
+                $user = User::create([
+                    'name' => $faker->name,
+                    'email' => $faker->email,
+                    'phone' => $faker->phoneNumber,
+                    'role' => User::ROLE_CUSTOMER,
+                    'status' => User::ACCOUNT_ACTIVE
+                ]);
 
-            $showtime = ShowTime::all()->pluck('id')->toArray();
+                MemberCard::create([
+                    'number_card' => rand(),
+                    'user_id' => $user->id,
+                    'role' => MemberCard::ROLE_NOMAL,
+                ]);
 
-            $showtime_current = $showtime[array_rand($showtime)];
 
-            $room_of_current = ShowTime::where('id', $showtime_current)->first()->room_id;
+                $bill = Bill::create([
+                    'user_id' => $user->id,
+                    'cinema_id' => $cinema[array_rand($cinema)],
+                    'total_money' => $faker->randomDigitNotZero() * 10000,
+                ]);
 
-            $ticket = Ticket::where('showtime_id', $showtime_current)->pluck('seat_id');
+                $showtime = ShowTime::all()->pluck('id')->toArray();
 
-            // for ($j = 0; $j < 2; $j++) {
-            $seat = Seat::all()
-                ->where('room_id', $room_of_current)
-                ->whereNotIn('seat_id', $ticket)
-                ->pluck('id')->toArray();
-            Ticket::create([
-                'bill_id' => $bill->id,
-                'showtime_id' => $showtime_current,
-                'seat_id' => $seat[array_rand($seat)],
-            ]);
-            // }
+                $showtime_current = $showtime[array_rand($showtime)];
+
+                $room_of_current = ShowTime::where('id', $showtime_current)->first()->room_id;
+
+                $ticket = Ticket::where('showtime_id', $showtime_current)->pluck('seat_id');
+
+                $seat = Seat::where('room_id', $room_of_current)
+                    ->whereNotIn('id', $ticket)
+                    ->pluck('id')->toArray();
+
+                Ticket::create([
+                    'bill_id' => $bill->id,
+                    'showtime_id' => $showtime_current,
+                    'seat_id' => $seat[array_rand($seat)],
+                ]);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return dd($e);
         }
     }
 }
