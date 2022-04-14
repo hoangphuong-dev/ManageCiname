@@ -34,7 +34,7 @@
             Ngày tạo
           </div>
           <div class="w-2/3 border-dashed border-2 p-2 border-b-0 border-l-0">
-            2022/08/08
+            14-04-2022
           </div>
         </div>
         <div class="w-full flex">

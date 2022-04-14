@@ -2,15 +2,30 @@
   <admin-layout>
     <template #main>
       <div class="bg-white min-h-full m-4 mb-0 p-4">
-        <h2>Xem chi tiết rạp</h2>
-        <h1 class="text-center my-4">{{ cinema.name }}</h1>
-        <div class="w-full flex mb-10 text-red-400">
+        <div class="flex">
+          <div class="w-1/2"><h2>Chi tiết rạp</h2></div>
+          <div class="w-1/2 text-right">
+            <el-tag type="success">
+              {{ cinema.name }}
+            </el-tag>
+          </div>
+        </div>
+
+        <div class="w-full flex mb-10">
           <div class="w-1/2">
             <p class="my-2">
-              <el-icon><video-camera-filled /></el-icon> 115 phim công chiếu
+              <el-icon><video-camera-filled /></el-icon>
+              <span class="text-red-400 font-bold">{{
+                " " + cinema.movies.length
+              }}</span>
+              phim công chiếu
             </p>
             <p>
-              <el-icon><school /></el-icon> 115 phòng
+              <el-icon><school /></el-icon>
+              <span class="text-red-400 font-bold">{{
+                " " + rooms.length
+              }}</span>
+              phòng
             </p>
           </div>
 

@@ -141,7 +141,7 @@ export default {
         },
         {
           label: "Quản lý rạp",
-          icon: "cinema",
+          icon: "bill",
           path: "admin.cinemas.show",
         },
         {
