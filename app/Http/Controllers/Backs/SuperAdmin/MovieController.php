@@ -42,7 +42,8 @@ class MovieController extends Controller
 
     public function exportCsv()
     {
-        return Excel::download(new MovieExport, 'movies.xlsx');
+        // return Excel::download(new , 'movies.xlsx');
+        
     }
 
     public function create()

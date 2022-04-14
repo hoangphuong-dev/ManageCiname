@@ -64,10 +64,9 @@
                 như file mẫu
                 <a
                   class="text-red-400 hover:underline"
-                  :href="route('superadmin.movies.export')"
+                  href="/uploads/movies-model.xlsx"
+                  >Export Movie Data</a
                 >
-                  Export Movie Data
-                </a>
               </h3>
             </div>
           </el-dialog>
@@ -84,7 +83,7 @@
             paginate-background
             enable-select-box
             @page="handleCurrentPage"
-          >
+          >Import thành công !Import thành công !Import thành công !
             <!-- <template #trailer="{ row }">
               <iframe
                 width="300"
@@ -118,14 +117,16 @@
             </template>
             <template #action="{ row }">
               <div class="flex">
-                <div class="mx-4">Xem</div>
+                <div class="mx-4">
+                  <el-button size="small" type="info">Xem</el-button>
+                </div>
                 <div
                   class="mx-4"
                   @click="
                     $inertia.get(route('superadmin.movies.edit', row?.id))
                   "
                 >
-                  Sửa
+                  <el-button size="small" type="warning">Sửa</el-button>
                 </div>
                 <div
                   v-if="row?.status_switch == MOVIE_DEACTIVE"
