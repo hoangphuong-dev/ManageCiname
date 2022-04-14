@@ -45,7 +45,9 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     Route::post('movies/import', [MovieController::class, 'importCsv'])->name('movies.import');
     Route::get('movies/export', [MovieController::class, 'exportCsv'])->name('movies.export');
 
-    // Route::get('/admin_infos', [CinemaController::class, 'getMasterCinema'])->name('admin_info.index');
+    // Quản lý hệ thống rạp
+    Route::get('/master-cinema.html', [CinemaController::class, 'getMasterCinema'])->name('admin_info.index');
+
     Route::get('/cinemas', [CinemaController::class, 'getListCinemaByProvince'])->name('cinema.province');
     Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
     Route::post('cinemas', [CinemaController::class, 'store'])->name('cinemas.store');

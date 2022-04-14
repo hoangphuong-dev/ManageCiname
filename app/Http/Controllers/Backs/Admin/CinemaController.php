@@ -42,6 +42,8 @@ class CinemaController extends Controller
     public function getMasterCinema(Request $request)
     {
         $master_cinemas = $this->cinemaService->getMasterCinema($request);
+
+        dd($master_cinemas);
         return Inertia::render("Backs/SuperAdmin/MasterCinema", [
             'master_cinemas' => $master_cinemas,
             'filtersBE' => $request->all(),
