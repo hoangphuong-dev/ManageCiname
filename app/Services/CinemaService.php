@@ -74,7 +74,6 @@ class CinemaService extends BaseService
     public function getMasterCinema($request)
     {
         $data = $this->cinemaRepository->getMasterCinema($request);
-        dd($data);
         return ViewCinemaByProvinceResource::collection($data);
     }
 
