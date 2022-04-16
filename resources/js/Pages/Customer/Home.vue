@@ -6,6 +6,7 @@
           <div class="main-jobs">
             <!-- slider -->
             <div class="w-full">
+              <h2 class="text-center my-4">Phim Hot đang công chiếu</h2>
               <el-carousel indicator-position="outside">
                 <el-carousel-item
                   class="cursor-pointer"

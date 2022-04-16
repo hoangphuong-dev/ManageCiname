@@ -2,7 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Helper\FormatDate;
 use App\Models\Movie;
+use App\Models\ShowTime;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 //use Your Model
@@ -23,19 +26,26 @@ class MovieRepository extends BaseRepository
 
     public function getMovieNowShowing($request)
     {
+        $formatDate = new FormatDate();
+
         return $this->model->newQuery()
-            ->select('movies.*', 'show_times.time_start')
-            ->distinct()
-            ->join('show_times', 'show_times.movie_id', '=', 'movies.id')
-            ->when($request->name, function ($query) use ($request) {
-                return $query->where("name", "like", "%{$request->name}%");
-            })
-            ->when($request->movie_genre, function ($query) use ($request) {
-                return $query
-                    ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
-                    ->where("movie_genre_id", "=", $request->movie_genre);
-            })
-            ->where('time_start', '>=', date_format(now(), "Y-m-d H:i:s"))
+            // ->when(
+            //     $request->name,
+            //     function ($query) use ($request) {
+            //         return $query->where("name", "like", "%{$request->name}%");
+            //     })
+            //     ->when($request->movie_genre, function ($query) use ($request) {
+            //         return $query
+            //             ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
+            //             ->where("movie_genre_id", "=", $request->movie_genre);
+            //     })
+            ->whereIn(
+                'id',
+                ShowTime::select('movie_id')
+                    ->where('time_start', '>=', now())
+                    ->where('time_start', '<=', $formatDate->getFourteenDay())
+                    ->get()->toArray()
+            )
             ->where('status', Movie::MOVIE_ACTIVE)
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 12));
@@ -43,21 +53,20 @@ class MovieRepository extends BaseRepository
 
     public function getMovieCommingSoon($request)
     {
-        return $this->model->newQuery()->select('movies.*', 'show_times.time_start')
-            ->distinct()
-            ->when(
-                $request->name,
-                function ($query) use ($request) {
-                    return $query->where("name", "like", "%{$request->name}%");
-                }
-            )
-            ->when($request->movie_genre, function ($query) use ($request) {
-                return $query
-                    ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
-                    ->where("movie_genre_id", "=", $request->movie_genre);
-            })
-            ->leftJoin('show_times', 'show_times.movie_id', '=', 'movies.id')
-            ->whereNull('show_times.time_start')
+        return $this->model->newQuery()
+            // ->when(
+            //     $request->name,
+            //     function ($query) use ($request) {
+            //         return $query->where("name", "like", "%{$request->name}%");
+            //     }
+            // )
+            // ->when($request->movie_genre, function ($query) use ($request) {
+            //     return $query
+            //         ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
+            //         ->where("movie_genre_id", "=", $request->movie_genre);
+            // })
+            ->whereNotIn('id', ShowTime::select('movie_id')->get()->toArray())
+            ->where('status', Movie::MOVIE_ACTIVE)
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 12));
     }
@@ -66,7 +75,18 @@ class MovieRepository extends BaseRepository
     {
         return $this->model->newQuery()
             ->select('id', 'trailer')
-            ->limit(10)->get();
+            ->whereIn(
+                'id',
+                ShowTime::select('movie_id')
+                    ->whereIn(
+                        'id',
+                        Ticket::select('showtime_id')
+                            ->selectRaw('count(showtime_id) as "number"')
+                            ->groupBy('showtime_id')->orderBy('number', 'desc')->limit(10)->pluck('showtime_id')->toArray()
+                    )->get()->toArray()
+
+
+            )->get();
     }
 
     public function list($request)

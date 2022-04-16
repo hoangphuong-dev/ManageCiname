@@ -6,14 +6,20 @@ use Carbon\CarbonPeriod;
 
 class FormatDate
 {
-    function getTwoWeek()
+    public function getFourteenDay()
     {
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
-        $arr = array();
-
         $start_date = date('Y-m-d');
         $code_date = strtotime('+2 week', strtotime($start_date));
         $end_date = date('Y-m-d', $code_date);
+        return $end_date;
+    }
+
+    function getTwoWeek()
+    {
+        $arr = array();
+
+        $start_date = date('Y-m-d');
+        $end_date = $this->getFourteenDay();
         $period = CarbonPeriod::create($start_date, $end_date);
 
         foreach ($period as $item) {
