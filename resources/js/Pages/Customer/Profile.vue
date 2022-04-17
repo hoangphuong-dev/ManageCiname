@@ -122,7 +122,7 @@ export default {
                 !(val.length >= 9 && val.length <= 12) ||
                 value.includes(" ")
               ) {
-                return callback("Số ddienj thoại không đúng định dạng !");
+                return callback("Số  điện thoại không đúng định dạng !");
               }
               callback();
             },
