@@ -146,6 +146,7 @@ export default {
     },
 
     handleFileChange(e) {
+      console.log("FFF", e);
       const files = e.target.files || e.dataTransfer.files;
       if (files.length) {
         const image = files[0];
@@ -158,6 +159,8 @@ export default {
           this.imagePreview = e.target.result;
         };
         this.form.image = image;
+
+        console.log("image", image);
         reader.readAsDataURL(image);
       }
     },
