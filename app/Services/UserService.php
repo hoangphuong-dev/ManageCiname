@@ -2,16 +2,19 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Notification;
 use App\Events\CreateAdmin;
 use App\Exceptions\ChangePasswordException;
 use App\Exceptions\LoginFailException;
 use App\Helper\ImageHelper;
 use App\Http\Resources\UserResource;
+use App\Mail\AuthenticateMail;
 use App\Mail\CaretakerRegister;
 use App\Mail\ForgotPassword;
 use App\Mail\MailLoginInfo;
 use App\Models\User;
 use App\Models\UserInfo;
+use App\Notifications\ChangeMailUser;
 use App\Repositories\UserRepository;
 use App\Repositories\HospitalInfoRepository;
 use Illuminate\Support\Facades\Auth;
@@ -159,10 +162,21 @@ class UserService
     //         throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
     //     }
     // }
-    public function updateUserByEmail($fill)
+    public function updateUser($fill, $user)
     {
-        $user = $this->userRepository->findByEmail($fill['email']);
-        $this->userRepository->updateUserByEmail();
+        if ($user->email != $fill['email']) {
+            // send mail to user 
+            Notification::send($user, new ChangeMailUser($fill['email']));
+            // send mail to new email 
+            $url = URL::signedRoute('authenticate-email', [
+                'id' => $user->id,
+                'email' => $fill['email'],
+            ]);
+            Mail::to($fill['email'])->send(new AuthenticateMail($url));
+        }
+        $fill['email'] = $user->email;
+
+        return $this->userRepository->updateUserById($fill, $user->id);
     }
 
     public function confirmAdmin($admin_id)

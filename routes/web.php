@@ -43,6 +43,8 @@ Route::get('/movie-now-showing.html', [CustomerController::class, 'getMovieNowSh
 Route::get('/movie-comming-soon.html', [CustomerController::class, 'getMovieCommingSoon'])->name('comming_soon');
 
 
+Route::get('/authenticate-email', [ProfileController::class, 'AuthenticateMail'])->name('authenticate-email');
+
 
 Route::group(['middleware' => ['customer']], function () {
     Route::get('/logout', [CustomerController::class, 'logout'])->name('customer.logout');
@@ -51,4 +53,6 @@ Route::group(['middleware' => ['customer']], function () {
     Route::get('/my-profile.html', [ProfileController::class, 'index'])->name('profile');
     Route::get('/my-voucher.html', [ProfileController::class, 'myVoucher'])->name('voucher');
     Route::post('/exchange-point', [ProfileController::class, 'exchangePoint'])->name('customer.exchange-point');
+
+    Route::post('/update', [ProfileController::class, 'update'])->name('customer.update-profile');
 });

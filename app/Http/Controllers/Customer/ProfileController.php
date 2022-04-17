@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\MemberCard;
+use App\Models\User;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\DB;
 use App\Services\UserService;
@@ -28,10 +30,8 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $user = Auth::guard('customer')->user();
-
         return Inertia::render('Customer/Profile', [
-            'user' => $user,
+            'user' => Auth::guard('customer')->user(),
         ]);
     }
 
@@ -83,44 +83,11 @@ class ProfileController extends Controller
             DB::commit();
             $message = ['success' => __('Đổi voucher thành công!')];
         } catch (\Exception $e) {
-            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
+            $message = ['error' => __($e)];
             DB::rollback();
         } finally {
             return back()->with($message);
         }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -130,19 +97,37 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request)
     {
-        //
+        $fill = $request->validated();
+        $user = Auth::guard('customer')->user();
+        try {
+            $this->userService->updateUser($fill, $user);
+            $user->email != $fill['email']
+                ? $text = 'Bạn cần xác thực email để  hoàn thành việc thay đổi !'
+                : $text = 'Cập nhật thông tin thành công !';
+            $message = ['success' => __($text)];
+        } catch (\Exception $e) {
+            $message = ['error' => __($e)];
+        } finally {
+            return back()->with($message);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function AuthenticateMail(Request $request)
     {
-        //
+        $fill =  $request->validate([
+            'id' => 'required',
+            'email' => ['required', 'email'],
+        ]);
+        try {
+            User::where('id', $fill['id'])
+                ->update(['email' => $fill['email']]);
+            $message = ['success' => __('Cập nhật email thành công !')];
+        } catch (\Exception $e) {
+            $message = ['error' => __($e)];
+        } finally {
+            return redirect()->route('profile')->with($message);
+        }
     }
 }

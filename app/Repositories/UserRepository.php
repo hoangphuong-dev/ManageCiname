@@ -54,26 +54,12 @@ class UserRepository
         return $this->user->query()->where('token_life_time', $token)->first();
     }
 
-    public function hospitalList($request)
-    {
-        return $this->user->query()
-            ->roleHospital()
-            ->filters(new UserFilters($request))
-            ->paginate($request->query('limit', 12));
-    }
 
     public function updateStatus($id, $status)
     {
         return $this->user->find($id)->update(['status' => $status]);
     }
 
-    /**
-     * create user hospital
-     * @param
-     * array fill constant email and name
-     * @return boolean
-     *  Return the User model
-     */
 
     public function createUser($fillable)
     {
