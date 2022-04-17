@@ -162,8 +162,17 @@ class UserService
     //         throw new \Exception(__('Có lỗi trong quá trình thực thi !'));
     //     }
     // }
-    public function updateUser($fill, $user)
+    public function updateUser($request, $user)
     {
+        $fill = $request->validated();
+        // nếu có ảnh đại diện
+        if (isset($fill['image'])) {
+            $file = $request->file('image');
+            $filename = date('YmdHi') . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
+            $fill['image'] = $filename;
+        }
+
         if ($user->email != $fill['email']) {
             // send mail to user 
             Notification::send($user, new ChangeMailUser($fill['email']));

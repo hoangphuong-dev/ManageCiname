@@ -23,7 +23,6 @@ class SeatTypeController extends Controller
 
     public function store(SeatTypeRequest $request)
     {
-        dd($request->all());
         try {
             $this->seatTypeService->store($request);
         } catch (\Exception $e) {

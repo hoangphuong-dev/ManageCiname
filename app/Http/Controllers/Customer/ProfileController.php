@@ -100,10 +100,9 @@ class ProfileController extends Controller
     public function update(UpdateUserRequest $request)
     {
         $fill = $request->validated();
-        dd($fill);
         $user = Auth::guard('customer')->user();
         try {
-            $this->userService->updateUser($fill, $user);
+            $this->userService->updateUser($request, $user);
             $user->email != $fill['email']
                 ? $text = 'Bạn cần xác thực email để  hoàn thành việc thay đổi !'
                 : $text = 'Cập nhật thông tin thành công !';
@@ -123,7 +122,7 @@ class ProfileController extends Controller
         ]);
         try {
             User::where('id', $fill['id'])
-                ->update(['email' => $fill['email']]);
+                ->update(['email' => $fill['email'], 'email_verified_at' => now()]);
             $message = ['success' => __('Cập nhật email thành công !')];
         } catch (\Exception $e) {
             $message = ['error' => __($e)];

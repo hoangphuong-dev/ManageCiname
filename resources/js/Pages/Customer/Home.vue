@@ -1,12 +1,12 @@
 <template>
   <app-layout>
-    <div class="py-12">
+    <div class="pb-12">
       <div class="mx-auto messenger-window__custom">
         <div class="w-full">
           <div class="main-jobs">
             <!-- slider -->
             <div class="w-full">
-              <h2 class="text-center my-4">Phim Hot đang công chiếu</h2>
+              <h2 class="text-center my-6">Phim Hot đang công chiếu</h2>
               <el-carousel indicator-position="outside">
                 <el-carousel-item
                   class="cursor-pointer"

@@ -13,7 +13,7 @@ class UpdateUserRequest extends FormRequest
             'name' => ['required'],
             'phone' => ['required'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($this->id)],
-            'image' => ['required'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg']
         ];
     }
 }

@@ -78,8 +78,10 @@
               <span class="el-dropdown-link">
                 <div class="flex justify-center items-center">
                   <div class="app__head-profile rounded">
-                    <img src="/uploads/customer.png" alt="" />
-                    <!-- {{ user?.name?.substring(0, 2).toUpperCase() }} -->
+                    <img
+                      class="w-full h-full rounded"
+                      :src="getImage(user.image) || '/uploads/customer.png'"
+                    />
                   </div>
                   <el-icon class="el-icon--right">
                     <arrow-down />
@@ -207,6 +209,23 @@ export default defineComponent({
   methods: {
     home() {
       Inertia.get(route("home"), { onBefore, onFinish });
+    },
+
+    isValidHttpUrl(string) {
+      let url;
+      try {
+        url = new URL(string);
+      } catch (_) {
+        return false;
+      }
+      return url.protocol === "http:" || url.protocol === "https:";
+    },
+
+    getImage(file) {
+      console.log(file);
+      if (!file) return;
+      if (this.isValidHttpUrl(file)) return file;
+      return `/uploads/${file}`;
     },
 
     handleCommand(command) {

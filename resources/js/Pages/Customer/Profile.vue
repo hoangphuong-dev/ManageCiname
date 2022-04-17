@@ -4,11 +4,15 @@
       <h2 class="mb-5">Tài khoản của tôi</h2>
 
       <div class="w-full shadow-xl p-4 m-auto my-6">
-        <el-form ref="form" :rules="rules" :model="form" label-position="top">
-          <!-- avartar -->
-
-          <div class="w-1/6 m-auto mb-6">
-            <h3 class="mb-4">Ảnh đại diện</h3>
+        <el-form
+          ref="formData"
+          :rules="rules"
+          :model="formData"
+          label-position="top"
+        >
+          <!-- Ảnh đại diện -->
+          <div class="w-1/6 mb-2">
+            <h3 class="my-4">Ảnh đại diện</h3>
             <div
               class="
                 w-48
@@ -42,23 +46,23 @@
               />
             </div>
           </div>
-          <!-- end avartar -->
+          <!-- end ảnh đại diện -->
           <el-form-item label="Họ tên" prop="name">
-            <el-input v-model="form.name" />
+            <el-input v-model="formData.name" />
           </el-form-item>
 
           <el-form-item label="Email" prop="email">
-            <el-input v-model="form.email" />
+            <el-input v-model="formData.email" />
           </el-form-item>
 
           <el-form-item label="Số điện thoại" prop="phone">
-            <el-input v-model="form.phone" />
+            <el-input v-model="formData.phone" />
           </el-form-item>
-          {{ user }}
-
-          <el-button @click="submit()" class="text-center" type="danger">
-            Cập nhật
-          </el-button>
+          <div class="text-center">
+            <el-button @click="submit()" class="text-center" type="danger">
+              Cập nhật
+            </el-button>
+          </div>
         </el-form>
       </div>
     </div>
@@ -82,12 +86,12 @@ export default {
 
   data: function () {
     return {
-      imagePreview: "",
+      imagePreview: this.getImage(this.user.image),
       loading: false,
-      form: {
+      formData: {
+        image: "",
         id: this.user.id,
         name: this.user.name,
-        image: "",
         phone: this.user.phone,
         email: this.user.email,
       },
@@ -134,19 +138,24 @@ export default {
   },
   methods: {
     async submit() {
-      this.$refs["form"].validate((valid) => {
+      this.$refs["formData"].validate((valid) => {
         if (valid) {
           Inertia.post(
-            route("customer.update-profile", this.form),
-            {},
-            { onBefore, onFinish, preserveScroll: true }
+            route("customer.update-profile"),
+            { ...this.formData },
+            {
+              onBefore,
+              onFinish,
+              preserveScroll: true,
+              onError: (e) => console.log(e),
+              onSuccess: (_) => {},
+            }
           );
         }
       });
     },
 
     handleFileChange(e) {
-      console.log("FFF", e);
       const files = e.target.files || e.dataTransfer.files;
       if (files.length) {
         const image = files[0];
@@ -158,9 +167,7 @@ export default {
         reader.onload = (e) => {
           this.imagePreview = e.target.result;
         };
-        this.form.image = image;
-
-        console.log("image", image);
+        this.formData.image = image;
         reader.readAsDataURL(image);
       }
     },
