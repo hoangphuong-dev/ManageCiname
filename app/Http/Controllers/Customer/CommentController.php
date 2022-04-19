@@ -9,17 +9,13 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function getComment()
     {
-        //
+        return CommentMovie::with('user')
+            ->orderBy('created_at', "DESC")
+            ->get();
     }
-
-
     /**
      * Store a newly created resource in storage.
      *

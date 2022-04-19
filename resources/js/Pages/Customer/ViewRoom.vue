@@ -207,7 +207,6 @@ export default {
 
     chooseSeat(item) {
       if (this.formData.seat_id.includes(item.id)) {
-        // console.log("Delete");
         const index = this.formData.seat_id.indexOf(item.id);
 
         if (index > -1) {
@@ -222,7 +221,6 @@ export default {
             type: "error",
           });
         } else {
-          // console.log("Add");
           this.formData.seat_id.push(item.id);
           this.formData.seat_name.push(
             item.row_name +

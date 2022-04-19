@@ -31,7 +31,7 @@
         </div>
 
         <!-- comment  -->
-        <div class="w-full shadow-xl my-6 h-96 p-4">
+        <div class="w-full shadow-xl my-6 p-4 border-t-2">
           <form-comment :movie="movie" :user="user"></form-comment>
         </div>
 

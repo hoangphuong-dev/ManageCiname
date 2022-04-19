@@ -1,5 +1,20 @@
 <template>
   <div>
+    <h3 class="text-center py-6">Bình luận về phim</h3>
+    <!-- list comment  -->
+    <div v-for="item in comments" :key="item.id">
+      <div class="flex">
+        <el-avatar
+          shape="square"
+          :size="50"
+          :src="getImage(item?.user.image) || '/uploads/customer.png'"
+        />
+        <h4 class="mt-4 ml-4">{{ item?.user.name }}</h4>
+      </div>
+      <div class="w-full my-2 border p-2 rounded">{{ item.content }}</div>
+      <div class="w-full mb-10">Thích / Trả lời /{{ item.created_at }}</div>
+    </div>
+
     <div class="flex">
       <el-avatar
         shape="square"
@@ -29,7 +44,7 @@
 
 <script>
 import { Inertia } from "@inertiajs/inertia";
-import { onBefore, onFinish } from "@/Uses/request-inertia";
+import { getCommentMovie } from "@/API/main.js";
 
 export default {
   props: {
@@ -45,9 +60,7 @@ export default {
 
   data: function () {
     return {
-      province: "",
-      provinces: [],
-      cinemas: [],
+      comments: [],
       form: {
         movie_id: "",
         user_id: "",
@@ -59,14 +72,28 @@ export default {
           {
             required: true,
             message: "Nội dung bình luận không được để trống !",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
       },
     };
   },
 
+  created() {
+    this.fetchData();
+  },
+
   methods: {
+    async fetchData() {
+      console.log(99999);
+      getCommentMovie()
+        .then((res) => {
+          console.log(55555, res.data);
+          this.comments = res.data;
+        })
+        .catch(() => {});
+    },
+
     async submit() {
       if (this.user === null) {
         Inertia.get(route("customer.login"));
@@ -80,6 +107,7 @@ export default {
           this.form.content = "";
         }
       });
+      this.fetchData();
     },
 
     isValidHttpUrl(string) {

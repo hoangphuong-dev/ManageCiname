@@ -278,7 +278,6 @@ export default {
     },
 
     getImage(file) {
-      console.log(file);
       if (!file) return;
       if (this.isValidHttpUrl(file)) return file;
       return `/uploads/${file}`;

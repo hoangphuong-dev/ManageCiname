@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\SeatTypeController;
 use App\Http\Controllers\Api\ShowTimeController;
 use App\Http\Controllers\Backs\Admin\BillController;
+use App\Http\Controllers\Customer\CommentController;
 use App\Http\Controllers\Customer\CustomerController;
 
 Route::apiResource('moviegenres', MovieGenreController::class);
@@ -36,3 +37,6 @@ Route::apiResource('showtimes', ShowTimeController::class);
 Route::get('provinces', [CustomerController::class, 'getProvince']);
 
 Route::get('get-cinema-by-province/{id}', [CustomerController::class, 'getCinemaByProvince']);
+
+Route::get('/get-comments', [CommentController::class, 'getComment'])
+    ->name('movies.comment');
