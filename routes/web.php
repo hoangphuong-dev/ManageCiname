@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\ProfileController;
@@ -55,4 +56,8 @@ Route::group(['middleware' => ['customer']], function () {
     Route::post('/exchange-point', [ProfileController::class, 'exchangePoint'])->name('customer.exchange-point');
 
     Route::post('/update', [ProfileController::class, 'update'])->name('customer.update-profile');
+
+    Route::resources([
+        'comments' => CommentController::class,
+    ]);
 });

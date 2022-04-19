@@ -78,8 +78,9 @@
               <span class="el-dropdown-link">
                 <div class="flex justify-center items-center">
                   <div class="app__head-profile rounded">
-                    <img
-                      class="w-full h-full rounded"
+                    <el-avatar
+                      shape="square"
+                      :size="50"
                       :src="getImage(user.image) || '/uploads/customer.png'"
                     />
                   </div>
@@ -272,8 +273,8 @@ export default defineComponent({
 }
 
 .app__head-profile {
-  height: 64px;
-  width: 64px;
+  height: 50px;
+  width: 50px;
   border: 1px solid #cccccc;
 }
 
