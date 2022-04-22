@@ -29,17 +29,17 @@
       </div>
 
       <!-- show comment children  -->
-      <div v-for="item in comments" :key="item.id">
-        <div v-if="item.parent_id === item.id">
+      <div class="ml-20" v-for="each in comments" :key="each.id">
+        <div v-if="each.parent_id === item.id">
           <div class="flex">
             <el-avatar
               shape="square"
               :size="50"
-              :src="getImage(item?.user.image) || '/uploads/customer.png'"
+              :src="getImage(each?.user.image) || '/uploads/customer.png'"
             />
-            <h4 class="mt-4 ml-4">{{ item?.user.name }}</h4>
+            <h4 class="mt-4 ml-4">{{ each?.user.name }}</h4>
           </div>
-          <div class="w-full my-2 border p-2 rounded">{{ item.content }}</div>
+          <div class="w-full my-2 border p-2 rounded">{{ each.content }}</div>
           <div class="w-full mb-8">
             <span class="cursor-pointer mx-2 font-bold hover:text-blue-500">
               Thích
@@ -50,7 +50,7 @@
               >Trả lời
             </span>
             <span class="cursor-pointer mx-2 font-bold hover:text-blue-500">
-              {{ item.created_at }}
+              {{ each.created_at }}
             </span>
           </div>
         </div>
@@ -60,8 +60,8 @@
       <!-- rep comment  -->
       <div
         v-if="showFormReply === item.id"
-        style="width: calc(100% - 2.5rem)"
-        class="mb-6 ml-10"
+        style="width: calc(100% - 5rem)"
+        class="mb-6 ml-20"
       >
         <div>
           <div class="flex">
@@ -73,22 +73,22 @@
             <h4 class="mt-4 ml-4">{{ user?.name }}</h4>
           </div>
           <div class="w-full mt-2">
-            <el-form ref="form" :model="form" :rules="rules">
+            <el-form ref="formReply" :model="formReply" :rules="ruleReply">
               <el-form-item prop="content">
                 <el-input
-                  v-model="form.content"
+                  v-model="formReply.content"
                   :rows="5"
                   type="textarea"
                   placeholder="Viết bình luận ..."
-                  @keyup.ctrl.enter="submit()"
+                  @keyup.ctrl.enter="submitReply()"
                 />
               </el-form-item>
             </el-form>
           </div>
 
           <div class="text-center mt-4">
-            <el-button @click="submit()" type="success" plain
-              >Bình luận</el-button
+            <el-button @click="submitReply()" type="success" plain
+              >Trả lời</el-button
             >
           </div>
         </div>
@@ -98,7 +98,7 @@
     <!-- end list comment  -->
 
     <!-- form comment  -->
-    <!-- <div>
+    <div>
       <div class="flex">
         <el-avatar
           shape="square"
@@ -115,16 +115,18 @@
               :rows="5"
               type="textarea"
               placeholder="Viết bình luận ..."
-              @keyup.ctrl.enter="submit()"
+              @keyup.ctrl.enter="submitComment()"
             />
           </el-form-item>
         </el-form>
       </div>
 
       <div class="text-center mt-4">
-        <el-button @click="submit()" type="success" plain>Bình luận</el-button>
+        <el-button @click="submitComment()" type="success" plain
+          >Bình luận</el-button
+        >
       </div>
-    </div> -->
+    </div>
     <!-- end form comment  -->
   </div>
 </template>
@@ -147,7 +149,7 @@ export default {
 
   data: function () {
     return {
-      showFormReply: "",
+      showFormReply: 0,
       comments: [],
       form: {
         movie_id: "",
@@ -155,7 +157,21 @@ export default {
         content: "",
         parent_id: 0,
       },
+      formReply: {
+        movie_id: "",
+        user_id: "",
+        content: "",
+        parent_id: "",
+      },
       rules: {
+        content: [
+          {
+            required: true,
+            message: "Nội dung bình luận không được để trống !",
+          },
+        ],
+      },
+      ruleReply: {
         content: [
           {
             required: true,
@@ -173,35 +189,45 @@ export default {
   methods: {
     reply(id) {
       this.showFormReply = id;
-      this.form.parent_id = id;
-      console.log(88888, id);
+      this.formReply.parent_id = id;
     },
 
-    async fetchData() {
-      console.log(99999);
-      getCommentMovie()
-        .then((res) => {
-          console.log(55555, res.data);
-          this.comments = res.data;
-        })
-        .catch(() => {});
+    submitReply() {
+      let type = "formReply";
+      this.formReply.user_id = this.user?.id;
+      this.formReply.movie_id = this.movie?.id;
+      this.submit(this.formReply, type);
+      this.formReply.content = "";
     },
 
-    async submit() {
+    submitComment() {
+      let type = "form";
+      this.form.user_id = this.user?.id;
+      this.form.movie_id = this.movie?.id;
+      this.submit(this.form, type);
+      this.form.content = "";
+    },
+
+    async submit(paramForm, type) {
       if (this.user === null) {
         Inertia.get(route("customer.login"));
         return true;
       }
-      this.form.user_id = this.user?.id;
-      this.form.movie_id = this.movie?.id;
-      this.$refs["form"].validate((valid) => {
+      this.$refs[type][0].validate((valid) => {
         if (valid) {
-          Inertia.post(route("comments.store", this.form));
-          this.form.content = "";
+          Inertia.post(route("comments.store", paramForm));
         }
       });
       this.showFormReply = "";
       this.fetchData();
+    },
+
+    async fetchData() {
+      getCommentMovie()
+        .then((res) => {
+          this.comments = res.data;
+        })
+        .catch(() => {});
     },
 
     isValidHttpUrl(string) {

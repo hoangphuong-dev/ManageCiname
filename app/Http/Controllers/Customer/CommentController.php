@@ -13,7 +13,6 @@ class CommentController extends Controller
     public function getComment()
     {
         return CommentMovie::with('user')
-            ->orderBy('created_at', "DESC")
             ->get();
     }
     /**
@@ -25,6 +24,7 @@ class CommentController extends Controller
     public function store(CommentRequest $request)
     {
         $fill = $request->validated();
+
         try {
             CommentMovie::create($fill);
             return back();
