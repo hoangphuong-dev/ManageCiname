@@ -7,13 +7,13 @@
         <div class="flex">
           <el-avatar
             shape="square"
-            :size="50"
+            :size="30"
             :src="getImage(item?.user.image) || '/uploads/customer.png'"
           />
-          <h4 class="mt-4 ml-4">{{ item?.user.name }}</h4>
+          <h4 class="mt-2 ml-2">{{ item?.user.name }}</h4>
         </div>
         <div class="w-full my-2 border p-2 rounded">{{ item.content }}</div>
-        <div class="w-full mb-8">
+        <div class="w-full mb-6">
           <span class="cursor-pointer mx-2 font-bold hover:text-blue-500">
             Thích
           </span>
@@ -22,8 +22,8 @@
             class="cursor-pointer mx-2 font-bold hover:text-blue-500"
             >Trả lời
           </span>
-          <span class="cursor-pointer mx-2 font-bold hover:text-blue-500">
-            {{ item.created_at }}
+          <span class="cursor-pointer mx-2">
+            {{ formatDateTime(item.created_at) }}
           </span>
         </div>
       </div>
@@ -34,13 +34,13 @@
           <div class="flex">
             <el-avatar
               shape="square"
-              :size="50"
+              :size="30"
               :src="getImage(each?.user.image) || '/uploads/customer.png'"
             />
-            <h4 class="mt-4 ml-4">{{ each?.user.name }}</h4>
+            <h4 class="mt-2 ml-2">{{ each?.user.name }}</h4>
           </div>
           <div class="w-full my-2 border p-2 rounded">{{ each.content }}</div>
-          <div class="w-full mb-8">
+          <div class="w-full mb-6">
             <span class="cursor-pointer mx-2 font-bold hover:text-blue-500">
               Thích
             </span>
@@ -49,8 +49,8 @@
               class="cursor-pointer mx-2 font-bold hover:text-blue-500"
               >Trả lời
             </span>
-            <span class="cursor-pointer mx-2 font-bold hover:text-blue-500">
-              {{ each.created_at }}
+            <span class="cursor-pointer mx-2">
+              {{ formatDateTime(each.created_at) }}
             </span>
           </div>
         </div>
@@ -67,29 +67,28 @@
           <div class="flex">
             <el-avatar
               shape="square"
-              :size="50"
+              :size="30"
               :src="getImage(user?.image) || '/uploads/customer.png'"
             />
-            <h4 class="mt-4 ml-4">{{ user?.name }}</h4>
+            <h4 class="mt-2 ml-2">{{ user?.name }}</h4>
           </div>
           <div class="w-full mt-2">
             <el-form ref="formReply" :model="formReply" :rules="ruleReply">
               <el-form-item prop="content">
                 <el-input
                   v-model="formReply.content"
-                  :rows="5"
+                  :rows="2"
                   type="textarea"
                   placeholder="Viết bình luận ..."
                   @keyup.ctrl.enter="submitReply()"
                 />
               </el-form-item>
             </el-form>
-          </div>
-
-          <div class="text-center mt-4">
-            <el-button @click="submitReply()" type="success" plain
-              >Trả lời</el-button
-            >
+            <div class="text-center mt-4">
+              <el-button @click="submitReply()" type="success" plain
+                >Trả lời</el-button
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -102,17 +101,17 @@
       <div class="flex">
         <el-avatar
           shape="square"
-          :size="50"
+          :size="30"
           :src="getImage(user?.image) || '/uploads/customer.png'"
         />
-        <h4 class="mt-4 ml-4">{{ user?.name }}</h4>
+        <h4 class="mt-2 ml-2">{{ user?.name }}</h4>
       </div>
       <div class="w-full mt-2">
         <el-form ref="form" :model="form" :rules="rules">
           <el-form-item prop="content">
             <el-input
               v-model="form.content"
-              :rows="5"
+              :rows="2"
               type="textarea"
               placeholder="Viết bình luận ..."
               @keyup.ctrl.enter="submitComment()"
@@ -134,6 +133,7 @@
 <script>
 import { Inertia } from "@inertiajs/inertia";
 import { getCommentMovie } from "@/API/main.js";
+import { formatDateTime } from "@/libs/datetime.js";
 
 export default {
   props: {
@@ -145,6 +145,12 @@ export default {
       type: Object,
       require: true,
     },
+  },
+
+  setup() {
+    return {
+      formatDateTime,
+    };
   },
 
   data: function () {
