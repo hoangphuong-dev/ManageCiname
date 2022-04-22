@@ -168,6 +168,7 @@ export default {
           {
             required: true,
             message: "Nội dung bình luận không được để trống !",
+            triger: "change",
           },
         ],
       },
@@ -176,6 +177,7 @@ export default {
           {
             required: true,
             message: "Nội dung bình luận không được để trống !",
+            triger: "change",
           },
         ],
       },
@@ -193,33 +195,37 @@ export default {
     },
 
     submitReply() {
-      let type = "formReply";
+      this.checkLogin;
       this.formReply.user_id = this.user?.id;
       this.formReply.movie_id = this.movie?.id;
-      this.submit(this.formReply, type);
+      this.$refs["formReply"][0].validate((valid) => {
+        if (valid) {
+          Inertia.post(route("comments.store", this.formReply));
+        }
+      });
       this.formReply.content = "";
+      this.showFormReply = "";
+      this.fetchData();
     },
 
     submitComment() {
-      let type = "form";
+      this.checkLogin;
       this.form.user_id = this.user?.id;
       this.form.movie_id = this.movie?.id;
-      this.submit(this.form, type);
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          Inertia.post(route("comments.store", this.form));
+        }
+      });
       this.form.content = "";
+      this.fetchData();
     },
 
-    async submit(paramForm, type) {
+    checkLogin() {
       if (this.user === null) {
         Inertia.get(route("customer.login"));
         return true;
       }
-      this.$refs[type][0].validate((valid) => {
-        if (valid) {
-          Inertia.post(route("comments.store", paramForm));
-        }
-      });
-      this.showFormReply = "";
-      this.fetchData();
     },
 
     async fetchData() {
