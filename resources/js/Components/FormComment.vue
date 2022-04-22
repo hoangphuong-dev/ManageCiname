@@ -12,7 +12,7 @@
           />
           <h4 class="mt-2 ml-2">{{ item?.user.name }}</h4>
         </div>
-        <div class="w-full my-2 border p-2 rounded">{{ item.content }}</div>
+        <div class="w-full my-1 border p-2 rounded">{{ item.content }}</div>
         <div class="w-full mb-6">
           <span class="cursor-pointer mx-2 font-bold hover:text-blue-500">
             Thích
@@ -22,7 +22,7 @@
             class="cursor-pointer mx-2 font-bold hover:text-blue-500"
             >Trả lời
           </span>
-          <span class="cursor-pointer mx-2">
+          <span class="cursor-pointer mx-2 text-sm">
             {{ formatDateTime(item.created_at) }}
           </span>
         </div>
@@ -39,7 +39,7 @@
             />
             <h4 class="mt-2 ml-2">{{ each?.user.name }}</h4>
           </div>
-          <div class="w-full my-2 border p-2 rounded">{{ each.content }}</div>
+          <div class="w-full my-1 border p-2 rounded">{{ each.content }}</div>
           <div class="w-full mb-6">
             <span class="cursor-pointer mx-2 font-bold hover:text-blue-500">
               Thích
@@ -49,7 +49,7 @@
               class="cursor-pointer mx-2 font-bold hover:text-blue-500"
               >Trả lời
             </span>
-            <span class="cursor-pointer mx-2">
+            <span class="cursor-pointer mx-2 text-xs">
               {{ formatDateTime(each.created_at) }}
             </span>
           </div>
@@ -235,7 +235,7 @@ export default {
     },
 
     async fetchData() {
-      getCommentMovie()
+      getCommentMovie(this.movie?.id)
         .then((res) => {
           this.comments = res.data;
         })

@@ -87,6 +87,6 @@ export const getCinemaByProvince = async (id) => {
     return await axios.get("/get-cinema-by-province/" + id);
 };
 
-export const getCommentMovie = async (params = {}) => {
-    return await axios.get(route("movies.comment"));
+export const getCommentMovie = async (movie_id = {}) => {
+    return await axios.get(route("movies.comment", { movie_id }));
 };

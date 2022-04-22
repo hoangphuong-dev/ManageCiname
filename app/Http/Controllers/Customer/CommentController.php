@@ -10,10 +10,10 @@ use Illuminate\Http\Request;
 class CommentController extends Controller
 {
 
-    public function getComment()
+    public function getComment(Request $request)
     {
-        return CommentMovie::with('user')
-            ->get();
+        return CommentMovie::where('movie_id', $request->movie_id)
+            ->with('user')->get();
     }
     /**
      * Store a newly created resource in storage.
