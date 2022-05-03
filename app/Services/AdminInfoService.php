@@ -3,21 +3,18 @@
 namespace App\Services;
 
 use App\Http\Resources\AdminInfoResource;
-use App\Repositories\AdminInfoRepository;
 use App\Repositories\ProvinceRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\DB;
 
 class AdminInfoService
 {
-    protected $adminInfoRepository;
     protected $provinceRepository;
     protected $userRepository;
 
 
-    public function __construct(AdminInfoRepository $adminInfoRepository, ProvinceRepository $provinceRepository, UserRepository $userRepository)
+    public function __construct(ProvinceRepository $provinceRepository, UserRepository $userRepository)
     {
-        $this->adminInfoRepository = $adminInfoRepository;
         $this->provinceRepository = $provinceRepository;
         $this->userRepository = $userRepository;
     }

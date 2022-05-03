@@ -64,8 +64,6 @@ class ShowTimeService extends BaseService
 
     public function list($request)
     {
-        // $admin = Auth::guard('admin')->user();
-        // $arr_cinema_id = $this->cinemaRepository->getAllCinemaByAdmin($admin->id);
         $cinema_id = $request->cinema_id;
         $showtimes = $this->showTimeRepository->list($request, $cinema_id);
         return ViewShowTimeResource::collection($showtimes);
@@ -75,8 +73,6 @@ class ShowTimeService extends BaseService
     {
         $showtimes = $this->showTimeRepository->listShowTimeByRoom($roomId, $request);
         return CalenderResource::collection($showtimes);
-
-        // return ViewShowTimeResource::collection($showtimes);
     }
 
     public function  getShowTimeByMovieDay($cinema_id, $movie_id, $day)

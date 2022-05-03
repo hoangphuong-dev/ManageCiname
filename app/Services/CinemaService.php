@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Http\Resources\AdminInfoResource;
 use App\Http\Resources\CinemaResource;
 use App\Http\Resources\ViewCinemaByProvinceResource;
-use App\Repositories\AdminInfoRepository;
 use App\Repositories\CinemaRepository;
 use App\Repositories\ProvinceRepository;
 use App\Repositories\UserRepository;
@@ -20,10 +19,8 @@ class CinemaService extends BaseService
     public function __construct(
         CinemaRepository $cinemaRepository,
         UserService $userService,
-        AdminInfoRepository $adminInfoRepository
     ) {
         $this->cinemaRepository = $cinemaRepository;
-        $this->adminInfoRepository = $adminInfoRepository;
         $this->userService = $userService;
     }
 

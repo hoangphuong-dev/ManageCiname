@@ -95,12 +95,6 @@ class User extends Authenticatable
         }
     }
 
-    // relationship
-    // public function adminInfo()
-    // {
-    //     return $this->hasOne(AdminInfo::class);
-    // }
-
     public function cinema()
     {
         return $this->hasOne(Cinema::class);

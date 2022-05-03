@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Http\Resources\MovieResource;
 use App\Models\MovieFormatMovie;
-use App\Repositories\AdminInfoRepository;
 use App\Repositories\CastMovieRepository;
 use App\Repositories\CinemaMovieRepository;
 use App\Repositories\CinemaRepository;
@@ -15,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 class MovieService extends BaseService
 {
     protected $movieRepository;
-    protected $adminInfoRepository;
     protected $movieGnereMovieRepository;
     protected $castMovieRepository;
     protected $cinemaRepository;
@@ -23,14 +21,12 @@ class MovieService extends BaseService
 
     public function __construct(
         MovieRepository $movieRepository,
-        AdminInfoRepository $adminInfoRepository,
         MovieGnereMovieRepository $movieGnereMovieRepository,
         CastMovieRepository $castMovieRepository,
         CinemaRepository $cinemaRepository,
         CinemaMovieRepository $cinemaMovieRepository,
     ) {
         $this->movieRepository = $movieRepository;
-        $this->adminInfoRepository = $adminInfoRepository;
         $this->movieGnereMovieRepository = $movieGnereMovieRepository;
         $this->castMovieRepository = $castMovieRepository;
         $this->cinemaRepository = $cinemaRepository;

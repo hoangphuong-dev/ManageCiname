@@ -2,13 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\AdminInfo;
 use App\Models\Cinema;
-use App\Models\MovieGenre;
 use App\Models\Room;
 use App\Models\Seat;
 use App\Models\SeatType;
-use App\Models\StaffInfo;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
