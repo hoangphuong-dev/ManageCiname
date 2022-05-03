@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ApiMiddleware
 {
+    // todo : write middleware for router api 
     protected $except = [
         '/api/jobs',
     ];
@@ -41,13 +42,13 @@ class ApiMiddleware
             return $next($request);
         }
 
-        if($guard === 'common') {
-            if(Auth::guard('caretaker')->check() || Auth::guard('hospital')->check()) {
+        if ($guard === 'common') {
+            if (Auth::guard('caretaker')->check() || Auth::guard('hospital')->check()) {
                 return $next($request);
             }
         }
 
-        if(!Auth::guard($guard)->check() && !$this->inExceptArray($request)) {
+        if (!Auth::guard($guard)->check() && !$this->inExceptArray($request)) {
             abort(401);
         }
 
