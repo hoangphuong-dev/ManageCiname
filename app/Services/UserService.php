@@ -6,37 +6,23 @@ use Illuminate\Support\Facades\Notification;
 use App\Events\CreateAdmin;
 use App\Exceptions\ChangePasswordException;
 use App\Exceptions\LoginFailException;
-use App\Helper\ImageHelper;
-use App\Http\Resources\UserResource;
 use App\Mail\AuthenticateMail;
-use App\Mail\CaretakerRegister;
-use App\Mail\ForgotPassword;
-use App\Mail\MailLoginInfo;
-use App\Models\User;
-use App\Models\UserInfo;
 use App\Notifications\ChangeMailUser;
 use App\Repositories\UserRepository;
-use App\Repositories\HospitalInfoRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
-use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 
 class UserService
 {
     protected $userRepository;
-    protected $hospitalInfoRepository;
 
     public function __construct(
         UserRepository $userRepository,
-        HospitalInfoRepository $hospitalInfoRepository,
     ) {
         $this->userRepository = $userRepository;
-        $this->hospitalInfoRepository = $hospitalInfoRepository;
     }
 
     public function checkOrderCustomer($data)
@@ -165,7 +151,7 @@ class UserService
     public function updateUser($request, $user)
     {
         $fill = $request->validated();
-        // nếu có ảnh đại diện
+        // if has avatar
         if (isset($fill['image'])) {
             $file = $request->file('image');
             $filename = date('YmdHi') . $file->getClientOriginalName();
@@ -193,7 +179,7 @@ class UserService
         return $this->userRepository->confirmAdmin($admin_id);
     }
 
-    // đăng nhập khách hàng
+    // login customer
     public function login($fill)
     {
         try {
@@ -226,7 +212,7 @@ class UserService
             throw new \Exception(__('Email hoặc mật khẩu không chính xác !'));
         }
     }
-    // tao tai khoan admin 
+    // create account admin
     public function createAdmin($fill)
     {
         $password = Str::random(12);
@@ -246,7 +232,7 @@ class UserService
 
 
 
-    // đăng nhập hệ thống Admin
+    // login system admin
     public function loginSystem($fill)
     {
         try {
@@ -277,7 +263,7 @@ class UserService
         }
     }
 
-    // logout hệ thống
+    // logout system
     public function logoutAllGuard()
     {
         auth('admin')->logout();

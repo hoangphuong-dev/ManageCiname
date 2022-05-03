@@ -24,24 +24,24 @@ class AdminInfoService
         return $this->provinceRepository->all();
     }
 
-    public function store($request)
-    {
-        $fill = $request->validated();
-        try {
-            DB::beginTransaction();
-            $user = $this->userRepository->createAdminInfo($fill);
+    // public function store($request)
+    // {
+    //     $fill = $request->validated();
+    //     try {
+    //         DB::beginTransaction();
+    //         $user = $this->userRepository->createAdminInfo($fill);
 
-            $this->adminInfoRepository->store($fill, $user->id);
+    //         $this->adminInfoRepository->store($fill, $user->id);
 
-            $user->load('adminInfo');
+    //         $user->load('adminInfo');
 
-            DB::commit();
-            return $user;
-        } catch (\Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
-    }
+    //         DB::commit();
+    //         return $user;
+    //     } catch (\Exception $e) {
+    //         DB::rollback();
+    //         throw $e;
+    //     }
+    // }
 
     public function list($request)
     {
