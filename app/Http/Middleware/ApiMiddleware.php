@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ApiMiddleware
 {
-    // todo : write middleware for router api 
+    // TODO : write middleware for router api 
     protected $except = [
         '/api/jobs',
     ];
