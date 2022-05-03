@@ -4,6 +4,7 @@ use App\Http\Controllers\Customer\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\ProfileController;
+use App\Http\Middleware\IgnoreCustomerMiddleware;
 
 // Customer
 Route::get('/', [CustomerController::class, 'index'])->name('home');
@@ -30,7 +31,7 @@ Route::get('/movies.html', [CustomerController::class, 'index'])->name('movies')
 
 Route::get('/member.html', [CustomerController::class, 'index'])->name('member');
 
-Route::get('/login.html', [CustomerController::class, 'login'])->name('customer.login');
+Route::get('/login.html', [CustomerController::class, 'login'])->name('customer.login')->middleware(IgnoreCustomerMiddleware::class);
 Route::post('/login.html', [CustomerController::class, 'handleLogin']);
 
 Route::get('/forgot-password.html', [CustomerController::class, 'forgotPasword'])->name('customer.forgot_pasword');

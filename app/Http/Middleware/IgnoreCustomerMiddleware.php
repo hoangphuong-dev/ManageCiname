@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class IgnoreLoginMiddleware
+class IgnoreCustomerMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,9 +17,9 @@ class IgnoreLoginMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // if (Auth::guard('admin')->check() || Auth::guard('superadmin')->check() || Auth::guard('staff')->check()) {
-        //     return redirect()->back();
-        // }
-        // return $next($request);
+        if (Auth::guard('customer')->check()) {
+            return redirect()->back();
+        }
+        return $next($request);
     }
 }
