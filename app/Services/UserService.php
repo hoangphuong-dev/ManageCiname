@@ -278,7 +278,7 @@ class UserService
     }
 
     // logout hệ thống
-    private function logoutAllGuard()
+    public function logoutAllGuard()
     {
         auth('admin')->logout();
         auth('superadmin')->logout();
@@ -288,16 +288,19 @@ class UserService
     public function logoutAdmin()
     {
         $this->logout('admin');
+        $this->logoutAllGuard();
     }
 
     public function logoutSuperAdmin()
     {
         $this->logout('superadmin');
+        $this->logoutAllGuard();
     }
 
     public function logoutStaff()
     {
         $this->logout('staff');
+        $this->logoutAllGuard();
     }
 
     public function logoutCustomer()

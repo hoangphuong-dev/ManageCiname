@@ -13,12 +13,13 @@ use App\Http\Controllers\Backs\SuperAdmin\AdminInfoController;
 use App\Http\Controllers\Backs\SuperAdmin\MovieController;
 use App\Http\Controllers\Backs\SuperAdmin\SeatTypeController;
 use App\Http\Controllers\Backs\SuperAdmin\SuperAdminController;
+use App\Http\Middleware\IgnoreAdminLoginMiddleware;
 use App\Http\Middleware\IgnoreLoginMiddleware;
 use Illuminate\Support\Facades\Route;
 
 
 Route::group(['as' => 'back.'], function () {
-    Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login.get');
+    Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login.get')->middleware(IgnoreAdminLoginMiddleware::class);
     Route::get('/register-staff', [AuthenticationController::class, 'registerStaff'])->name('register.staff');
     // ->middleware(IgnoreLoginMiddleware::class);
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login.post');
@@ -83,6 +84,6 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 
 Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutStaff'])->name('logout');
-    Route::get('/home', [StaffController::class, 'index'])->name('home');
+    Route::get('/index.html', [StaffController::class, 'index'])->name('home_staff');
     Route::get('/showtime', [StaffShowTimeController::class, 'index'])->name('showtime');
 });

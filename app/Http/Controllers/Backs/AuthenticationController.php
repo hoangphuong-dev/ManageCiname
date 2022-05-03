@@ -71,7 +71,7 @@ class AuthenticationController extends Controller
 
     public function logoutStaff()
     {
-        $this->userService->logoutSuperAdmin();
+        $this->userService->logoutStaff();
         return redirect()->route('back.login.get');
     }
 }
