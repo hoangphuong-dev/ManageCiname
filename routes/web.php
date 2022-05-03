@@ -61,3 +61,9 @@ Route::group(['middleware' => ['customer']], function () {
         'comments' => CommentController::class,
     ]);
 });
+
+
+Route::get('abc', function () {
+    return response('Hello World', 200)
+        ->header('Content-Type', 'text/plain');
+});

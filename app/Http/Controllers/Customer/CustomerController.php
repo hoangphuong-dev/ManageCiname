@@ -226,6 +226,7 @@ class CustomerController extends Controller
     public function order(Request $request)
     {
         $fill = $request->all();
+        $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
         if (isset($fill['voucher'])) {
             try {
                 $voucher = Voucher::where('code', $fill['voucher'])->where('status', Voucher::NOTUSED)
@@ -236,13 +237,15 @@ class CustomerController extends Controller
                 return redirect()->back()->with($message);
             }
         }
+        try {
+            $token = JwtHelper::make($data);
 
-        $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
-
-        $token = JwtHelper::make($data);
-
-        Mail::to($data['email'])->send(new AuthenOrder($token));
-
+            Mail::to($data['email'])->send(new AuthenOrder($token));
+        } catch (\Exception $e) {
+            dd($e);
+            $message = ['error' => __('Có lỗi trong quá trình đặt vé !')];
+            return redirect()->back()->with($message);
+        }
         return redirect()->route('notication-send-mail');
     }
 
