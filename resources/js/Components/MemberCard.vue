@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card">
+  <el-card class="box-card el-card_background">
     <template #header>
       <div class="text-center">
         <span class="font-bold">Thẻ thành viên</span>
@@ -69,5 +69,8 @@ export default {
 .el-progress-bar__innerText {
   color: black;
   font-weight: bold;
+}
+.el-card_background {
+  background: #f08b8b !important;
 }
 </style>
