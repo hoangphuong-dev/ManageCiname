@@ -70,6 +70,11 @@
             </li>
           </ul>
         </div>
+
+        <div class="mr-3" v-if="user?.role === 3">
+          <PopupNotification />
+        </div>
+
         <div class="grid-content h-full flex items-center justify-end">
           <!-- role = 3 : Khach hang dang dang nhap -->
           <template v-if="user?.role === 3">
@@ -172,12 +177,14 @@
 import { defineComponent } from "vue";
 import AlertNoticeMixin from "@/Mixins/alert-notice";
 import { ArrowDown, ArrowRight } from "@element-plus/icons-vue";
+import PopupNotification from "@/Components/Notifications/Popup.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 
 export default defineComponent({
   components: {
     ArrowDown,
+    PopupNotification,
     ArrowRight,
   },
   mixins: [AlertNoticeMixin],
