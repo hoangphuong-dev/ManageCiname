@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class UserService
 {
@@ -21,8 +22,25 @@ class UserService
 
     public function __construct(
         UserRepository $userRepository,
+
     ) {
         $this->userRepository = $userRepository;
+    }
+
+    public function createStaff($data)
+    {
+        try {
+            DB::beginTransaction();
+            $staff = $this->userRepository->createStaff($data);
+            $cinema = $this->userRepository->createStaffInfo($data, $staff->id);
+            // todo: send notification admin
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        return $staff;
     }
 
     public function checkOrderCustomer($data)

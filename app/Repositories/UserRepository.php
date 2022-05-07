@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Filters\UserFilters;
 use App\Models\MemberCard;
+use App\Models\StaffInfo;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -18,23 +19,40 @@ class UserRepository
         $this->user = $user;
     }
 
+    public function createStaff($data)
+    {
+        return $this->createUser($data, User::ROLE_STAFF);
+    }
+
     public function createCustomer($data)
     {
         $user = $this->findByEmail($data['email']);
         if ($user == null) {
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
-                'role' => User::ROLE_CUSTOMER,
-            ]);
-
+            $user = $this->createUser($data, User::ROLE_CUSTOMER);
             MemberCard::create([
                 'number_card' => rand(),
                 'user_id' => $user->id
             ]);
         }
         return $user;
+    }
+
+    public function createUser($data, $role)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'role' => $role,
+        ]);
+    }
+
+    public function createStaffInfo($data, $staff_id)
+    {
+        return StaffInfo::create([
+            'user_id' =>  $staff_id,
+            'cinema_id' => $data['cinema_id'],
+        ]);
     }
 
     public function updateUserById($fill, $user_id)
@@ -60,15 +78,9 @@ class UserRepository
         return $this->user->find($id)->update(['status' => $status]);
     }
 
-
-    public function createUser($fillable)
-    {
-        return $this->user->query()->create($fillable);
-    }
-
     public function createAdmin($data)
     {
-        return $this->createUser([
+        return $this->user->query()->create([
             'name' => $data['name'],
             'phone' => $data['phone'],
             'email' => $data['email'],

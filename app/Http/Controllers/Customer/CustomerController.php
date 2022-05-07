@@ -169,7 +169,8 @@ class CustomerController extends Controller
 
     public function getCinemaByProvince($id)
     {
-        return $this->cinemaRepository->listCinemaByProvince($id);
+        $province = $this->cinemaRepository->listCinemaByProvince($id);
+        return response()->json($province, 200);
     }
 
     public function showSeatByShowTime(Request $request)

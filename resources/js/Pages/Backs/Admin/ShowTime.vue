@@ -423,7 +423,7 @@ b {
   flex-grow: 1;
 }
 </style>
-<style lang="css">
+<style>
 .el-select-dropdown__item {
   height: max-content;
 }

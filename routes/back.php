@@ -23,7 +23,9 @@ Route::group(['as' => 'back.'], function () {
     Route::get('/register-staff', [AuthenticationController::class, 'registerStaff'])->name('register.staff');
     // ->middleware(IgnoreLoginMiddleware::class);
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login.post');
-    Route::post('/register', [AuthenticationController::class, 'register'])->name('staff.register');
+    Route::post('/register', [AuthenticationController::class, 'registerSubmit'])->name('staff.register');
+
+
 
     Route::get('/confirm-acount/{admin_id}', [AuthenticationController::class, 'confirmAdmin'])->name('confirm.acount');
 });

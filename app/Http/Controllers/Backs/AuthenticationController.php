@@ -4,16 +4,20 @@ namespace App\Http\Controllers\Backs;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterStaffRequest;
+use App\Services\CinemaService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
 class AuthenticationController extends Controller
 {
     private $userService;
+    public $cinemaService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, CinemaService $cinemaService)
     {
         $this->userService = $userService;
+        $this->cinemaService = $cinemaService;
     }
 
     public function showLogin()
@@ -23,8 +27,26 @@ class AuthenticationController extends Controller
 
     public function registerStaff()
     {
-        return inertia('Backs/RegisterStaff');
+        $provinces = $this->cinemaService->getProvinceAllCinema();
+        return inertia('Backs/RegisterStaff', [
+            'provinces' => $provinces,
+        ]);
     }
+
+    public function registerSubmit(RegisterStaffRequest $request)
+    {
+        $data = $request->validated();
+        try {
+            $this->userService->createStaff($data);
+            $message = ['success' => 'Đăng ký thành công , Vui lòng chờ xác nhận của quản trị viên rạp phim !'];
+        } catch (\Exception $e) {
+            dd($e);
+            $message = ['error' => $e->getMessage()];
+        } finally {
+            return redirect()->route('back.login.get')->with($message);
+        }
+    }
+
 
     public function login(LoginRequest $request)
     {
@@ -50,11 +72,6 @@ class AuthenticationController extends Controller
         $this->userService->confirmAdmin($admin_id);
 
         return redirect()->route('back.login.get');
-    }
-
-    public function register(Request $request)
-    {
-        dd($request);
     }
 
     public function logoutAdmin()

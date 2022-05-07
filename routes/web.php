@@ -47,6 +47,8 @@ Route::get('/movie-comming-soon.html', [CustomerController::class, 'getMovieComm
 
 Route::get('/authenticate-email', [ProfileController::class, 'AuthenticateMail'])->name('authenticate-email');
 
+Route::post('/get-cinema-by-province/{id}', [CustomerController::class, 'getCinemaByProvince'])->name('get-cinema-by-province');
+
 
 Route::group(['middleware' => ['customer']], function () {
     Route::get('/logout', [CustomerController::class, 'logout'])->name('customer.logout');

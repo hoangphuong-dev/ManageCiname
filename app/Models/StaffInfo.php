@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class StaffInfo extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public $timestamps = false;
 }

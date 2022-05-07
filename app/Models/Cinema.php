@@ -31,4 +31,9 @@ class Cinema extends Model
     {
         return $this->hasMany(Bill::class);
     }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Cinema;
 use App\Models\Movie;
+use App\Models\Province;
 use App\Models\ViewCinemaByProvince;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 //use Your Model
@@ -22,6 +23,14 @@ class CinemaRepository extends BaseRepository
         return Cinema::class;
     }
 
+    public function getProvinceAllCinema()
+    {
+        $provinceIds = $this->model->distinct('province_id')->pluck('province_id')->all();
+
+        $province = Province::whereIn('id', $provinceIds)->get();
+        return $province;
+    }
+
     public function getCinemaByIdAdmin($admin_id)
     {
         return $this->model->newQuery()
@@ -35,7 +44,7 @@ class CinemaRepository extends BaseRepository
     public function listCinemaByProvince($id)
     {
         return $this->model
-            ->select('id', 'name')
+            ->select('id', 'name', 'address')
             ->where('province_id', $id)->get()->toArray();
     }
 
