@@ -22,8 +22,18 @@
             class="cursor-pointer mx-2 font-bold hover:text-blue-500"
             >Trả lời
           </span>
-          <span class="cursor-pointer mx-2 text-sm">
+          <span class="mx-2 text-sm">
             {{ formatDateTime(item.created_at) }}
+          </span>
+
+          <span class="cursor-pointer mx-2 font-bold hover:text-blue-500">
+            <el-badge :value="item.amount_feel" :max="2000" class="-mr-4">
+              <el-image
+                style="width: 20px; height: 20px"
+                src="/images/favorite.svg"
+                fit="fill"
+              />
+            </el-badge>
           </span>
         </div>
       </div>
@@ -49,9 +59,17 @@
               class="cursor-pointer mx-2 font-bold hover:text-blue-500"
               >Trả lời
             </span>
-            <span class="cursor-pointer mx-2 text-xs">
+            <span class="mx-2 text-xs">
               {{ formatDateTime(each.created_at) }}
             </span>
+
+            <el-badge :value="item.amount_feel" class="-mr-4">
+              <el-image
+                style="width: 20px; height: 20px"
+                src="/images/favorite.svg"
+                fit="fill"
+              />
+            </el-badge>
           </div>
         </div>
       </div>
@@ -121,9 +139,9 @@
       </div>
 
       <div class="text-center mt-4">
-        <el-button @click="submitComment()" type="success" plain
-          >Bình luận</el-button
-        >
+        <el-button @click="submitComment()" type="success" plain>
+          Bình luận
+        </el-button>
       </div>
     </div>
     <!-- end form comment  -->
