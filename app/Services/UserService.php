@@ -4,10 +4,12 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Notification;
 use App\Events\CreateAdmin;
+use App\Events\CreateStaff;
 use App\Exceptions\ChangePasswordException;
 use App\Exceptions\LoginFailException;
 use App\Mail\AuthenticateMail;
 use App\Notifications\ChangeMailUser;
+use App\Repositories\CinemaRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -19,12 +21,15 @@ use Illuminate\Support\Facades\DB;
 class UserService
 {
     protected $userRepository;
+    protected $cinemaRepository;
 
     public function __construct(
         UserRepository $userRepository,
+        CinemaRepository $cinemaRepository,
 
     ) {
         $this->userRepository = $userRepository;
+        $this->cinemaRepository = $cinemaRepository;
     }
 
     public function createStaff($data)
@@ -33,8 +38,10 @@ class UserService
             DB::beginTransaction();
             $staff = $this->userRepository->createStaff($data);
             $cinema = $this->userRepository->createStaffInfo($data, $staff->id);
-            // todo: send notification admin
+            $admin = $this->cinemaRepository->cinemaRepository($cinema->cinema_id);
+
             DB::commit();
+            event(new CreateStaff($staff, $admin));
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;

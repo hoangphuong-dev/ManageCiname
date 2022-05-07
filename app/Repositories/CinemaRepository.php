@@ -58,6 +58,15 @@ class CinemaRepository extends BaseRepository
         return $this->model->where('id', $id)->firstOrFail()->toArray();
     }
 
+    public function cinemaRepository($cinema_id)
+    {
+        $cinema = $this->model
+            ->with('user')
+            ->where('id', $cinema_id)->first();
+
+        return $cinema->user;
+    }
+
     public function getMovieByCinema($id)
     {
         return $this->model

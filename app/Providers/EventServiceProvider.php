@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\CreateAdmin;
+use App\Events\CreateStaff;
 use App\Events\CustomerOrder;
 use App\Listeners\SendCreateAdminNotice;
+use App\Listeners\SendCreateStaffNotice;
 use App\Listeners\SendOrderCustomerNotice;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -28,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         CustomerOrder::class => [
             SendOrderCustomerNotice::class,
         ],
+        CreateStaff::class => [
+            SendCreateStaffNotice::class,
+        ]
 
     ];
 }
