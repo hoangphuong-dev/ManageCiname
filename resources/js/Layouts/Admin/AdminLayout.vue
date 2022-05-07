@@ -23,9 +23,14 @@
         </div>
       </div>
     </el-aside>
+    <!-- popup thong bao  -->
+
     <el-container>
       <el-header class="h-16 border border-gray-200 flex items-center bg-white">
         <div class="ml-auto flex items-center mr-5">
+          <div class="mr-3">
+            <PopupNotification />
+          </div>
           <h3>{{ user?.name || "" }}</h3>
           <el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link flex items-center justify-center">
@@ -40,6 +45,7 @@
                 </template> </el-image
               ><el-icon class="el-icon--right"><arrow-down /></el-icon>
             </span>
+
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item
@@ -85,10 +91,11 @@
 import { Menu } from "@element-plus/icons";
 import AlertNoticeMixin from "@/Mixins/alert-notice";
 import { ArrowDown, ArrowRight, Right, Watch } from "@element-plus/icons-vue";
+import PopupNotification from "@/Components/Notifications/Popup.vue";
 
 export default {
   name: "AdminLayout",
-  components: { Menu, ArrowDown, ArrowRight, Right, Watch },
+  components: { Menu, ArrowDown, ArrowRight, Right, Watch, PopupNotification },
   mixins: [AlertNoticeMixin],
   computed: {
     user() {
