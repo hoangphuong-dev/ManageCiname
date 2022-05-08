@@ -12,7 +12,13 @@ class NotificationService
 {
     public function countNotificationUnread()
     {
-        $unreadNotifications = auth()->guard('admin')->user()->unreadNotifications;
+        $user = auth()->guard('admin')->user();
+
+        if (is_null($user)) {
+            return 0;
+        }
+
+        $unreadNotifications = $user->unreadNotifications;
 
         return count($unreadNotifications);
     }
