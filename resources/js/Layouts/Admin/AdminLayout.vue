@@ -23,12 +23,12 @@
         </div>
       </div>
     </el-aside>
-    <!-- popup thong bao  -->
 
     <el-container>
       <el-header class="h-16 border border-gray-200 flex items-center bg-white">
         <div class="ml-auto flex items-center mr-5">
           <div class="mr-3">
+            <!-- popup nitification   -->
             <PopupNotification />
           </div>
           <h3>{{ user?.name || "" }}</h3>

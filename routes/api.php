@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\ShowTimeController;
 use App\Http\Controllers\Backs\Admin\BillController;
 use App\Http\Controllers\Customer\CommentController;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\NotificationController;
 
 Route::apiResource('moviegenres', MovieGenreController::class);
 Route::apiResource('movies', MovieController::class);
@@ -40,3 +41,9 @@ Route::get('get-cinema-by-province/{id}', [CustomerController::class, 'getCinema
 
 Route::get('/get-comments', [CommentController::class, 'getComment'])
     ->name('movies.comment');
+
+
+Route::prefix('/notification')->group(function () {
+    Route::get('/', [NotificationController::class, 'getAllNotification'])->name('notification.getAll');
+    Route::get('/mark-read/{id}', [NotificationController::class, 'markRead'])->name('notification.mark-read');
+});

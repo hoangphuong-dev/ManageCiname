@@ -36,6 +36,8 @@
         "@fullcalendar/vue3": "^5.10.1",
         "@tinymce/tinymce-vue": "^4.0.5",
         "element-plus": "^1.2.0-beta.5",
+        "moment": "^2.29.3",
+        "sanitize-html": "^2.7.0",
         "vue-axios": "^3.4.0",
         "vue-quill-editor": "^3.0.6",
         "vue3-charts": "^1.1.31",

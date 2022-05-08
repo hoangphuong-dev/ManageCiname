@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         list($user) = $this->getCurrentUserLogin();
-        return array_merge(parent::share($request), [
+        return array_merge(parent::share($request), ViewComposeMiddleware::share(),  [
             'isSuccess' => Session::get('success'),
             'isError' => Session::get('error'),
             'timestamp' => time(),

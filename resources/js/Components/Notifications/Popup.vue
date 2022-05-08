@@ -1,17 +1,22 @@
 <template>
   <div>
-    <el-popover placement="bottom-end" :width="400" trigger="click">
+    <el-popover
+      placement="bottom-end"
+      :width="400"
+      trigger="click"
+      v-model:visible="isShowNotification"
+    >
       <template #reference>
-        <div @click="showNotification()" class="icon-notice flex relative">
+        <div class="icon-notice flex relative">
           <el-image
             class="cursor-pointer w-8 lg:w-10 logo-global hover-animation"
             src="/images/noti.svg"
           ></el-image>
           <span
-            v-if="countNotificationUser > 0"
             class="absolute notification-count cursor-pointer"
+            v-if="notificationCount > 0"
           >
-            {{ countNotificationUser }}
+            {{ notificationCount > 9 ? "9+" : notificationCount }}
           </span>
         </div>
       </template>
@@ -26,24 +31,44 @@
         <div
           class="notification overflow-y-auto custom-scroll"
           style="height: 400px"
+          v-loading="isLoading"
+          @scroll="onScroll"
           id="bx-nt"
         >
-          <ul v-if="notifications.length > 0">
+          <ul v-if="data.length > 0">
             <li
-              class="flex cursor-pointer border-cs notice justify-between px-1"
-              v-for="(item, index) in notifications"
+              class="
+                flex
+                cursor-pointer
+                border-cs
+                notice
+                justify-between
+                px-1
+                min-h-[55px]
+              "
+              v-for="(item, index) in data"
               :key="index"
-              @click="viewNotification(item.id)"
+              @click="showNotice(item.id, index)"
             >
+              <!-- {{ item }} -->
               <div class="flex flex-1 overflow-hidden">
+                <img width="50" height="50" src="/images/logo.png" />
                 <div class="w-2 h-1"></div>
                 <div class="content flex-1" style="width: calc(100% - 52px)">
-                  <h2 class="text-center py-4">
-                    {{ item.content }}
-                  </h2>
+                  <p
+                    class="text-black pt-1 break-all"
+                    style="overflow-wrap: anywhere"
+                    :class="{
+                      'font-bold': item.read_at === null,
+                    }"
+                    v-html="xss(item.data)"
+                  ></p>
+                  <p>{{ showTime(item.created_at) }}</p>
                 </div>
               </div>
-              <div class="flex items-center justify-center w-4"></div>
+              <div class="flex items-center justify-center w-4">
+                <span class="dot" v-if="item.read_at === null"></span>
+              </div>
             </li>
           </ul>
           <el-empty
@@ -59,37 +84,92 @@
 </template>
 
 <script>
-// import {
-//   getNotificationUserExpire,
-//   viewDatailNotification,
-// } from "@/Api/Notification";
+import { getAllNotification, markRead } from "@/API/notification.js";
+import { Inertia } from "@inertiajs/inertia";
+import { onBefore, onFinish } from "@/Uses/request-inertia";
+import xss from "@/Helpers/xss";
+import moment from "moment";
 export default {
-  props: {
-    countNotificationUser: {
-      type: Number,
-      required: false,
-    },
-  },
   data() {
     return {
+      isShowNotification: false,
+      isLoading: true,
+      isLoadingMore: false,
+      isAllowLoadMore: true,
       notifications: [],
+      data: [],
+      notificationCount: 0,
     };
   },
+  mounted() {
+    this.notificationCount = this.$page.props?.unreadNotifications || 0;
+  },
+
   methods: {
-    async viewNotification(id) {
-      await viewDatailNotification(id)
-        .then(async (res) => {
-          this.$inertia.get(route("admin.page_update_plan"));
+    xss,
+    onMountedFunc() {
+      this.page = 1;
+      this.isAllowLoadMore = true;
+      this.isLoading = true;
+      this.data = [];
+      this.loadMore();
+    },
+
+    showTime(dateTime) {
+      moment.locale("vn");
+      return moment(dateTime).fromNow();
+    },
+
+    async loadMore() {
+      await getAllNotification(this.page)
+        .then((res) => {
+          this.data = res.status === 200 ? res.data.data : [];
+          this.isLoading = false;
+          this.isLoadingMore = false;
+          if (this.data.length < res.per_page) {
+            this.isAllowLoadMore = false;
+          }
         })
         .catch(() => {});
     },
 
-    async showNotification() {
-      await getNotificationUserExpire()
-        .then(async (res) => {
-          this.notifications = res.data;
-        })
-        .catch(() => {});
+    async showNotice(id, index) {
+      const { type } = this.data[index];
+      if (this.data[index].read_at === null) {
+        if (type === "App\\Notifications\\RegisterStaff") {
+          await markRead(id).then((res) => {
+            this.notificationCount > 0 && this.notificationCount--;
+          });
+          // return Inertia.get(
+          //   "https://www.youtube.com/watch?v=Tj7YO60CG-g",
+          //   {},
+          //   {
+          //     preserveScroll: true,
+          //     onBefore,
+          //     onFinish,
+          //   }
+          // );
+        }
+      } else {
+        // return Inertia.get(
+        //   "https://www.youtube.com/watch?v=Tj7YO60CG-g",
+        //   {},
+        //   {
+        //     preserveScroll: true,
+        //     onBefore,
+        //     onFinish,
+        //   }
+        // );
+      }
+      this.isShowNotification = false;
+    },
+  },
+
+  watch: {
+    isShowNotification(val) {
+      if (val) {
+        this.onMountedFunc();
+      }
     },
   },
 };

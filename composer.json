@@ -11,6 +11,7 @@
         "fakerphp/faker": "^1.9.1",
         "firebase/php-jwt": "^5.5",
         "fruitcake/laravel-cors": "^2.0",
+        "getsolaris/laravel-make-service": "^1.0",
         "guzzlehttp/guzzle": "^7.4",
         "inertiajs/inertia-laravel": "^0.4.3",
         "jason-guru/laravel-make-repository": "^0.0.3",
