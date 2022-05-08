@@ -19,6 +19,15 @@ class UserRepository
         $this->user = $user;
     }
 
+    public function getStaffOfAdmin($request, $cinemaId)
+    {
+        $staff = StaffInfo::where('cinema_id', $cinemaId)->with('user')
+
+            ->orderBy('id', "DESC")
+            ->paginate($request->query('limit', 12));
+        return $staff;
+    }
+
     public function createStaff($data)
     {
         return $this->createUser($data, User::ROLE_STAFF);

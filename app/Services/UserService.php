@@ -7,6 +7,7 @@ use App\Events\CreateAdmin;
 use App\Events\CreateStaff;
 use App\Exceptions\ChangePasswordException;
 use App\Exceptions\LoginFailException;
+use App\Http\Resources\StaffResource;
 use App\Mail\AuthenticateMail;
 use App\Notifications\ChangeMailUser;
 use App\Repositories\CinemaRepository;
@@ -30,6 +31,16 @@ class UserService
     ) {
         $this->userRepository = $userRepository;
         $this->cinemaRepository = $cinemaRepository;
+    }
+
+    public function getStaffOfAdmin($request)
+    {
+        $user = auth()->guard('admin')->user();
+        $admin = $user->where('id', $user->id)->with('cinema')->firstOrFail();
+        $cinemaId = $admin->cinema->id;
+        $staff = $this->userRepository->getStaffOfAdmin($request, $cinemaId);
+
+        return StaffResource::collection($staff);
     }
 
     public function createStaff($data)

@@ -8,6 +8,11 @@ export const listMovie = async (params = {}) => {
     return await axios.get("/movies", { params });
 };
 
+export const listStaff = async (params = {}) => {
+    console.log(6666, params);
+    return await axios.get(route('staff.getAll'), { params });
+};
+
 export const deleteMovie = async (id) => {
     return await axios.delete("/movies/" + id);
 };

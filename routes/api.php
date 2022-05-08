@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\SeatTypeController;
 use App\Http\Controllers\Api\ShowTimeController;
 use App\Http\Controllers\Backs\Admin\BillController;
+use App\Http\Controllers\Backs\Admin\StaffController;
 use App\Http\Controllers\Customer\CommentController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\NotificationController;
@@ -19,7 +20,7 @@ Route::apiResource('movies', MovieController::class);
 Route::put('/movies/{id}/update-status', [MovieController::class, 'changeStatus'])
     ->name('movies.change_status');
 
-
+Route::get('get-all-staff', [StaffController::class, 'getAll'])->name('staff.getAll');
 Route::apiResource('admins', AdminController::class);
 
 

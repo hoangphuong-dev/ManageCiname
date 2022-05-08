@@ -109,4 +109,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(CommentMovie::class);
     }
+
+    public function staffInfo()
+    {
+        return $this->hasOne(StaffInfo::class);
+    }
 }
