@@ -44,6 +44,8 @@ class RegisterStaff extends Notification
     public function toArray($notifiable)
     {
         return [
+            'title' => 'Đăng ký nhân viên',
+            'id' => $this->user->id,
             'name' => $this->user->name,
             'email' => $this->user->email,
         ];
