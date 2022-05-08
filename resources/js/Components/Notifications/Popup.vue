@@ -24,8 +24,7 @@
       <!-- danh sach thong bao -->
       <div class="height-500">
         <div class="header flex justify-between items-center h-7">
-          <div class="p-4">Danh sách thông báo</div>
-          <div></div>
+          <div class="p-4 font-bold">Danh sách thông báo</div>
         </div>
         <hr />
         <div
@@ -50,19 +49,22 @@
               :key="index"
               @click="showNotice(item.id, index)"
             >
-              <!-- {{ item }} -->
               <div class="flex flex-1 overflow-hidden">
-                <img width="50" height="50" src="/images/logo.png" />
+                <img width="60" height="50" src="/images/logo.png" />
                 <div class="w-2 h-1"></div>
                 <div class="content flex-1" style="width: calc(100% - 52px)">
                   <p
                     class="text-black pt-1 break-all"
-                    style="overflow-wrap: anywhere"
-                    :class="{
-                      'font-bold': item.read_at === null,
-                    }"
-                    v-html="xss(item.data)"
+                    :class="{ 'font-bold': item.read_at === null }"
+                    v-html="xss(item?.data?.title)"
                   ></p>
+                  <span v-if="item.data.name !== null">
+                    <span :class="{ 'font-bold': item.read_at === null }">
+                      {{ item?.data?.name }}</span
+                    >
+                    đăng ký thành nhân viên rạp
+                  </span>
+
                   <p>{{ showTime(item.created_at) }}</p>
                 </div>
               </div>

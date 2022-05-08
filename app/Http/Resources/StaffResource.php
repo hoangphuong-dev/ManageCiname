@@ -18,6 +18,10 @@ class StaffResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
+            'name' => $this->user->name,
+            'image' => $this->user->image,
+            'email' => $this->user->email,
+            'phone' => $this->user->phone,
             'cinema_id' => $this->cinema_id,
             'type_of_work' => $this->type_of_work,
             'status' => $this->status,

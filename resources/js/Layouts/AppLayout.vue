@@ -6,7 +6,7 @@
       >
         <div class="flex grid-content bg-purple cursor-pointer" @click="home()">
           <el-image class="h-20" src="/images/logo.png"></el-image>
-          <h1 class="text-red-600 m-4">PHC</h1>
+          <h1 class="text-red-600 my-6">PHC</h1>
         </div>
         <div class="app__head-menu h-full">
           <ul id="main-menu" class="flex justify-center items-center h-full">
@@ -164,8 +164,12 @@
             <h6 class="py-2">
               Địa chỉ trụ sở:17 Tạ Quang Bửu - Hai Bà Trưng - Hà Nội
             </h6>
-            <h6 class="py-2">Hotline: 0934 632 682</h6>
             <h6 class="py-2">Email: phuonght@phc.vn</h6>
+            <h6 class="py-2 font-bold cursor-pointer">
+              <a :href="route('back.register.staff')">
+                Đăng ký thành nhân viên
+              </a>
+            </h6>
           </div>
         </div>
       </div>

@@ -3,8 +3,8 @@
     <el-aside class="AsideMenu bg-white flex-shrink-0">
       <div class="h-16 justify-items-center border-b-2">
         <a href="/" class="flex">
-          <img class="w-36 h-14" src="/images/logo.png" />
-          <h1 class="text-red-600 m-4">PHC</h1>
+          <img class="h-14" src="/images/logo.png" />
+          <h1 class="text-red-600 my-3">PHC</h1>
         </a>
       </div>
 

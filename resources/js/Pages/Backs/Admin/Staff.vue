@@ -107,7 +107,7 @@ export default {
         .getAttribute("content"),
       MOVIE_ACTIVE: MOVIE_ACTIVE,
       MOVIE_DEACTIVE: MOVIE_DEACTIVE,
-      loading: false,
+      loading: true,
       dialogForm: false,
       staffs: [],
       filter: {
