@@ -9,7 +9,6 @@ export const listMovie = async (params = {}) => {
 };
 
 export const listStaff = async (params = {}) => {
-    console.log(6666, params);
     return await axios.get(route('staff.getAll'), { params });
 };
 
