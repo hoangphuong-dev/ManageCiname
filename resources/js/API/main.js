@@ -23,6 +23,12 @@ export const updateStatusMovie = async (id, status) => {
     return await axios.put('/movies/' + id + '/update-status', { status })
 }
 
+
+export const updateStatusStaff = async (id, status) => {
+    return await axios.put(route('staff.update-status', id), { status })
+}
+
+
 export const updateMovie = async (id, formData = {}) => {
     return await axios.put("/movies/" + id + "/answer", formData);
 };

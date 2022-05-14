@@ -40,6 +40,7 @@ class UserService
         $cinemaId = $admin->cinema->id;
         $staff = $this->userRepository->getStaffOfAdmin($request, $cinemaId);
 
+
         return StaffResource::collection($staff);
     }
 

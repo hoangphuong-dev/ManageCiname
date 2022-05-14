@@ -21,8 +21,15 @@ class UserRepository
 
     public function getStaffOfAdmin($request, $cinemaId)
     {
-        $staff = StaffInfo::where('cinema_id', $cinemaId)->with('user')
-
+        $staff = $this->user
+            ->select('users.*', 'staff_infos.cinema_id', 'staff_infos.type_of_work', 'staff_infos.status')
+            ->where('role', User::ROLE_STAFF)
+            ->join('staff_infos', 'staff_infos.user_id', '=', 'users.id')
+            ->where('staff_infos.cinema_id', $cinemaId)
+            ->with(['staffInfo'])
+            ->when($request->name, function ($query) use ($request) {
+                return $query->where("email", "like", "%{$request->name}%");
+            })
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 12));
         return $staff;

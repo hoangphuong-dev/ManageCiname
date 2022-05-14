@@ -38,18 +38,11 @@
             <template #status="{ row }">
               <el-tag
                 @click="updateStatus(row, row?.status)"
-                v-if="row?.status == 0"
                 class="ml-2 cursor-pointer"
-                type="warning"
+                :type="showTypeStatus(row?.status)"
               >
-                Đang chờ duyệt
+                {{ showStatus(row?.status) }}
               </el-tag>
-              <el-tag v-if="row?.status == 1" class="ml-2" type="success">
-                Đang làm việc
-              </el-tag>
-              <el-tag v-if="row?.status == 2" class="ml-2" type="error"
-                >Nghỉ việc</el-tag
-              >
             </template>
             <template #action="{ row }">
               <div class="flex">
@@ -84,7 +77,7 @@
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import DataTable from "@/Components/DataTable.vue";
-import { listStaff, updateStatusMovie } from "@/API/main.js";
+import { listStaff, updateStatusStaff } from "@/API/main.js";
 import { MOVIE_ACTIVE, MOVIE_DEACTIVE } from "@/store/const.js";
 import { Inertia } from "@inertiajs/inertia";
 import { getYoutubeId } from "@/Helpers/youtube.js";
@@ -129,6 +122,24 @@ export default {
     this.fetchData();
   },
   methods: {
+    showStatus(status) {
+      switch(status) {
+        case 0: return 'Chờ duyệt';
+        case 1: return 'Đang làm việc';
+        case 2: return 'Nghỉ việc';
+        return 'undefined'
+      }
+
+    } ,
+    showTypeStatus(status) {
+      switch(status) {
+        case 0: return 'warning';
+        case 1: return 'success';
+        case 2: return 'danger';
+        return 'undefined'
+      }
+
+    } ,
     openDialog() {
       this.dialogForm = true;
     },
@@ -170,8 +181,11 @@ export default {
     },
 
     async updateStatus(row, status) {
+      if (status === 2) return
+      let text = ''
+      status == 0 ? text = 'đang làm việc' : text = 'nghỉ việc'
       this.$confirm(
-        `Bạn có chắc chắn thay đổi trạng thái nhân viên `,
+        `Bạn có chắc chắn thay đổi trạng thái nhân viên thành ` + text,
         "Cảnh báo",
         {
           confirmButtonText: "Chắc chắn",
@@ -181,7 +195,7 @@ export default {
       )
         .then(async () => {
           this.loading = true;
-          await updateStatusMovie(row.id, status)
+          await updateStatusStaff(row.id, status)
             .then(async (res) => {
               this.fetchData();
               this.$message.success("Cập nhật trạng thái thành công !");
