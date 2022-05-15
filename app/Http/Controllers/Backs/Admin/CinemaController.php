@@ -7,6 +7,7 @@ use App\Http\Requests\CinemaRequest;
 use App\Models\FormatMovie;
 use App\Models\MovieFormatMovie;
 use App\Models\ViewCinemaByProvince;
+use App\Repositories\ProvinceRepository;
 use App\Services\CinemaService;
 use App\Services\MovieService;
 use App\Services\RoomService;
@@ -52,10 +53,12 @@ class CinemaController extends Controller
     public function getListCinemaByProvince(Request $request)
     {
         $cinemas = $this->cinemaService->getListCinema($request, $request->province_id);
+        $provinceRepository = new ProvinceRepository();
+
         return Inertia::render("Backs/SuperAdmin/CinemaByProvince", [
             'cinemas' => $cinemas,
             'filtersBE' => $request->all(),
-            'province_id' => $request->province_id,
+            'province' => $provinceRepository->getById($request->province_id),
         ]);
     }
 

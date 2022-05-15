@@ -18,7 +18,7 @@
                   ? 'Thêm loại ghế'
                   : 'Sửa thông tin loại ghế'
               "
-              v-model="dialogFormVisibleSeatType"
+              v-model="openDialog"
             >
               <el-form
                 class="text-center w-1/2 m-auto"
@@ -81,7 +81,7 @@
               <!-- submit -->
               <div class="text-right">
                 <span class="dialog-footer">
-                  <el-button @click="dialogFormVisibleSeatType = false"
+                  <el-button @click="openDialog = false"
                     >Hủy</el-button
                   >
                   <el-button type="primary" @click="submitSeatType">
@@ -140,7 +140,7 @@ export default {
       imagePreview: "",
       selectedItem: null,
       loading: false,
-      dialogFormVisibleSeatType: false,
+      openDialog: false,
       keyword: "",
       seatTypes: [],
       formData: {
@@ -187,7 +187,7 @@ export default {
 
     openDialogSeatType() {
       this.selectedItem = null;
-      this.dialogFormVisibleSeatType = true;
+      this.openDialog = true;
       this.resetForm();
     },
 
@@ -202,7 +202,7 @@ export default {
       )
         .then(async (res) => {
           this.$message.success("Create success");
-          this.dialogFormVisibleSeatType = false;
+          this.openDialog = false;
           this.resetForm();
           this.fetchData();
         })
@@ -240,7 +240,7 @@ export default {
 
     edit(item) {
       this.selectedItem = item.id;
-      this.dialogFormVisibleSeatType = true;
+      this.openDialog = true;
       this.formData.name = item.name;
       this.formData.price = this.convertMoney(item.price);
       this.formData.image = item.image;

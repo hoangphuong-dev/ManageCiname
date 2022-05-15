@@ -2,6 +2,7 @@
   <admin-layout>
     <template #main>
       <div class="bg-white min-h-full m-4 mb-0 p-4">
+         <h2 class="mb-5">Khu vực {{ province.name }}</h2>
         <div class="w-full flex relative my-10">
           <div class="w-3/4 flex items-end">
             <div class="search">
@@ -215,11 +216,15 @@ export default {
     ZoomIn,
   },
   props: {
-    province_id: String,
-    cinemas: {
+    filtersBE: {
+      type: Object,
       required: true,
     },
-    filtersBE: {
+    province: {
+      type: Object,
+      required: true,
+    },
+    cinemas: {
       type: Object,
       required: true,
     },
@@ -248,7 +253,7 @@ export default {
         email: "",
         cinema_name: "",
         address: "",
-        province_id: this.province_id,
+        province_id: this.province.id,
       }),
       rules: {
         name: [
