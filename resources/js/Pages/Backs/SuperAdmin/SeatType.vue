@@ -12,12 +12,7 @@
           <!-- dialog lọai ghế  -->
           <div class="customer_dialog">
             <el-dialog
-              class="text-center"
-              :title="
-                selectedItem === null
-                  ? 'Thêm loại ghế'
-                  : 'Sửa thông tin loại ghế'
-              "
+              :title="selectedItem === null ? 'Thêm loại ghế': 'Sửa thông tin loại ghế'"
               v-model="openDialog"
             >
               <el-form
