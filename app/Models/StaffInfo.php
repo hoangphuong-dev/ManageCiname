@@ -17,19 +17,13 @@ class StaffInfo extends Model
 
     public $timestamps = false;
 
-    public function updateStatus($id, $status)
-    {
-        $status == self::STATUS_NOT_APPROVED ?
-            $status = self::STATUS_WORKING :
-            $status = self::STATUS_RESIGN;
-
-        return $this->where('id', $id)->update([
-            'status' => $status,
-        ]);
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class);
     }
 }
