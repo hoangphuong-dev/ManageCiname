@@ -21,17 +21,14 @@ class StaffController extends Controller
         $this->staffInfoService = $staffInfoService;
     }
 
-    public function index()
-    {
-        return Inertia::render('Backs/Admin/Staff');
-    }
-
-    public function getAll(Request $request)
+    public function index(Request $request)
     {
         $staff = $this->userService->getStaffOfAdmin($request);
-        return $staff;
+        return Inertia::render('Backs/Admin/Staff', [
+            'blogs' => $staff,
+            'filtersBE' => $request->all(),
+        ]);
     }
-
     public function updateStatus($id, Request $request)
     {
         $data = $request->validate([

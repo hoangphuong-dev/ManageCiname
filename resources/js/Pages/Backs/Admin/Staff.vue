@@ -1,215 +1,257 @@
 <template>
-  <admin-layout v-loading="loading">
-    <template #main>
-      <div class="bg-white min-h-full m-4 mb-0 p-4">
-        <h2 class="mb-5">Quản lý Nhân viên</h2>
-        <div class="w-full flex relative">
-          <div class="w-3/4 flex items-end">
-            <div class="search">
-              <search-input
-                :filter="filter"
-                @submit="fetchData"
-                label="Tìm kiếm"
-              ></search-input>
+    <admin-layout v-loading="loading">
+        <template #main>
+            <div class="bg-white min-h-full sm:m-4 mb-0 p-4">
+                <h2 class="mb-5">Quản lý nhân viên</h2>
+                <div class="w-full flex relative">
+                    <div class="w-3/4 flex items-end">
+                        <div class="mr-2">
+                            <div class="text-sm text-blackPrimary-300">
+                                Trạng thái
+                            </div>
+                            <el-select
+                                v-model="filter.status"
+                                placeholder="Trạng thái"
+                                @change="onChangeFilterStatus"
+                            >
+                                <el-option
+                                    v-for="item in statusList"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div class="mr-2">
+                            <div class="text-sm text-blackPrimary-300">
+                                Loại công việc
+                            </div>
+                            <el-select
+                                v-model="filter.status"
+                                placeholder="Loại công việc"
+                                @change="onChangeTypeOfWork"
+                            >
+                                <el-option
+                                    v-for="item in typeOfWork"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div class="search">
+                            <search-input
+                                :filter="filter"
+                                v-model="filter.title"
+                                label="Tìm kiếm"
+                                @submit="onSubmitSearch"
+                            ></search-input>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <data-table
+                        :fields="fields"
+                        :items="blogs.data"
+                        :paginate="blogs.meta"
+                        :current-page="filter.page || 1"
+                        disable-table-info
+                        footer-center
+                        paginate-background
+                        @page="handleCurrentPage"
+                    >
+                        <template #start_date="{ row }">
+                            {{ formatDateTime(row?.created_at) }}
+                        </template>
+
+                        <template #status="{ row }">
+                            {{ showPageDisplay(row?.status) }}
+                        </template>
+
+                        <template #actions="{ row }">
+                            <div v-if="row" class="flex items-center">
+                                <button
+                                    class="btn-warning bg-gray-200"
+                                    @click="confirmEventDelete(row)"
+                                >
+                                    <img
+                                        src="/images/svg/trash.svg"
+                                        alt=""
+                                        class="size-icon"
+                                    />
+                                </button>
+
+                                &nbsp;
+                                <button
+                                    class="btn-warning"
+                                    @click="detail(row)"
+                                >
+                                    詳細
+                                </button>
+                            </div>
+                        </template>
+                    </data-table>
+                </div>
             </div>
-          </div>
-          <div class="w-1/4 text-right">
-            <el-button @click="openDialog()"> Thêm nhân viên </el-button>
-          </div>
-        </div>
-
-        <!-- Dialog add -->
-        <div class="customer_dialog">
-          <el-dialog title="Thêm nhân viên" v-model="dialogForm"> </el-dialog>
-        </div>
-
-        <div class="mt-5">
-          <data-table
-            :fields="fields"
-            :items="staffs.data"
-            :paginate="staffs.meta"
-            :current-page="filter.page || 1"
-            disable-table-info
-            footer-center
-            paginate-background
-            enable-select-box
-            @page="handleCurrentPage"
-          >
-            <template #status="{ row }">
-              <el-tag
-                @click="updateStatus(row, row?.status)"
-                class="ml-2 cursor-pointer"
-                :type="showTypeStatus(row?.status)"
-              >
-                {{ showStatus(row?.status) }}
-              </el-tag>
-            </template>
-            <template #action="{ row }">
-              <div class="flex">
-                <div class="mx-4">
-                  <el-button size="small" type="info">Xem</el-button>
-                </div>
-                <div
-                  class="mx-4"
-                  @click="
-                    $inertia.get(route('superadmin.movies.edit', row?.id))
-                  "
-                >
-                  <el-button size="small" type="warning">Sửa</el-button>
-                </div>
-              </div>
-            </template>
-
-            <template #type_of_work="{ row }">
-              <el-tag v-if="row?.type_of_work == 0" class="ml-2" type="warning">
-                Partime
-              </el-tag>
-              <el-tag v-else class="ml-2" type="success">Fulltime</el-tag>
-            </template>
-          </data-table>
-        </div>
-      </div>
-    </template>
-  </admin-layout>
+        </template>
+    </admin-layout>
 </template>
 
 <script>
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import DataTable from "@/Components/DataTable.vue";
-import { listStaff, updateStatusStaff } from "@/API/main.js";
-import { MOVIE_ACTIVE, MOVIE_DEACTIVE } from "@/store/const.js";
+import { formatDateTime } from "@/libs/datetime";
 import { Inertia } from "@inertiajs/inertia";
-import { getYoutubeId } from "@/Helpers/youtube.js";
-import { Edit, Delete } from "@element-plus/icons-vue";
+import { onBefore, onFinish } from "@/Uses/request-inertia";
+import { STAFF_NOT_APPROVED, STAFF_WORKING, STAFF_RESIGN } from "@/store/const";
 
 export default {
-  name: "Movie",
-  components: {
-    AdminLayout,
-    SearchInput,
-    DataTable,
-    Edit,
-    Delete,
-  },
-
-  data() {
-    return {
-      csrf: document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content"),
-      MOVIE_ACTIVE: MOVIE_ACTIVE,
-      MOVIE_DEACTIVE: MOVIE_DEACTIVE,
-      loading: true,
-      dialogForm: false,
-      staffs: [],
-      filter: {
-        page: 1,
-        limit: 12,
-      },
-      fields: [
-        { key: "image", label: "Ảnh" },
-        { key: "name", label: "Tên nhân viên" },
-        { key: "email", label: "Email", width: "300" },
-        { key: "phone", label: "Số điện thoại" },
-        { key: "status", label: "Trạng thái" },
-        { key: "type_of_work", label: "Loại công việc" },
-        { key: "action", label: "Thao tác" },
-      ],
-    };
-  },
-  created() {
-    this.fetchData();
-  },
-  methods: {
-    showStatus(status) {
-      switch(status) {
-        case 0: return 'Chờ duyệt';
-        case 1: return 'Đang làm việc';
-        case 2: return 'Nghỉ việc';
-        return 'undefined'
-      }
-
-    } ,
-    showTypeStatus(status) {
-      switch(status) {
-        case 0: return 'warning';
-        case 1: return 'success';
-        case 2: return 'danger';
-        return 'undefined'
-      }
-
-    } ,
-    openDialog() {
-      this.dialogForm = true;
+    name: "Staff",
+    components: {
+        AdminLayout,
+        SearchInput,
+        DataTable,
     },
-    videoId(row) {
-      return getYoutubeId(row);
-    },
-    handleCurrentPage(value) {
-      this.filter.page = value;
-      this.fetchData();
-    },
-    async fetchData() {
-      this.loading = true;
-      listStaff(this.filter)
-        .then((res) => {
-          this.staffs = res.status === 200 ? res.data : [];
-        })
-        .catch(() => {
-          this.$message.error("Server Error");
-        });
-      this.loading = false;
-    },
-    confirmEventDelete({ id }) {
-      this.$confirm(
-        `Bạn có chắc xóa hết tất cả dữ liệu của phim này ?`,
-        "Cảnh báo",
-        {
-          confirmButtonText: "Chắc chắn",
-          cancelButtonText: "Hủy",
-          type: "warning",
-        }
-      ).then(async () => {
-        Inertia.delete(route("superadmin.movies.delete", { id }), {
-          onError: (e) => console.log(e),
-          onSuccess: (_) => {
-            this.fetchData();
-          },
-        });
-      });
+    props: {
+        blogs: {
+            type: Object,
+            required: true,
+        },
+        filtersBE: {
+            type: Object,
+            required: true,
+        },
     },
 
-    async updateStatus(row, status) {
-      if (status === 2) return
-      let text = ''
-      status == 0 ? text = 'đang làm việc' : text = 'nghỉ việc'
-      this.$confirm(
-        `Bạn có chắc chắn thay đổi trạng thái nhân viên thành ` + text,
-        "Cảnh báo",
-        {
-          confirmButtonText: "Chắc chắn",
-          cancelButtonText: "Hủy",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          this.loading = true;
-          await updateStatusStaff(row.id, status)
-            .then(async (res) => {
-              this.fetchData();
-              this.$message.success("Cập nhật trạng thái thành công !");
-            })
-            .catch(() => {
-              this.fetchData();
-              this.$message.error("Có lỗi trong quá trình thực thi");
+    data() {
+        return {
+            loading: false,
+            statusList: [
+                {
+                    value: STAFF_NOT_APPROVED,
+                    label: "Chờ duyệt",
+                },
+                {
+                    value: STAFF_WORKING,
+                    label: "Đang làm việc",
+                },
+                {
+                    value: STAFF_RESIGN,
+                    label: "Nghỉ việc",
+                },
+            ],
+            typeOfWork: [
+                {
+                    value: 0,
+                    label: "Partime",
+                },
+                {
+                    value: 1,
+                    label: "Fulltime",
+                },
+            ],
+
+            fields: [
+                { key: "image", label: "Ảnh" },
+                { key: "name", label: "Tên nhân viên", width: 150 },
+                { key: "email", label: "Email", width: 300 },
+                { key: "phone", label: "Số điện thoại" },
+                { key: "status", label: "Trạng thái" },
+                { key: "type_of_work", label: "Loại công việc" },
+                { key: "actions", label: "Thao tác" },
+            ],
+        };
+    },
+    computed: {
+        filter() {
+            const status = this.filtersBE?.status?.toInt();
+            const type_of_work = this.filtersBE?.type_of_work?.toInt();
+            return {
+                page: this.filtersBE.page?.toInt() || 1,
+                limit: this.filtersBE.limit?.toInt() || 10,
+                status:
+                    status == null || typeof status === "undefined"
+                        ? ""
+                        : status,
+                type_of_work:
+                    type_of_work == null || typeof type_of_work === "undefined"
+                        ? ""
+                        : type_of_work,
+                title: this.filtersBE?.title || "",
+            };
+        },
+    },
+
+    methods: {
+        inertia() {
+            Inertia.get(
+                route("admin.staff.index", this.filter),
+                {},
+                { onBefore, onFinish, preserveScroll: true }
+            );
+        },
+        onSubmitSearch() {
+            this.filter.page = 1;
+            this.inertia();
+        },
+        onChangeTypeOfWork() {
+            this.filter.page = 1;
+            this.inertia();
+        },
+        onChangeFilterStatus() {
+            this.filter.page = 1;
+            this.inertia();
+        },
+
+        handleCurrentPage(value) {
+            this.filter.page = value;
+            this.inertia();
+        },
+
+        formatDateTime,
+
+        confirmEventDelete({ id }) {
+            this.$confirm(
+                `Are you sure you want to delete this blog ?`,
+                "警告",
+                {
+                    confirmButtonText: "はい",
+                    cancelButtonText: "いいえ",
+                    type: "warning",
+                }
+            ).then(async () => {
+                Inertia.delete(route("back.blog.delete", { id }), {
+                    onBefore,
+                    onFinish,
+                    preserveScroll: true,
+                    onError: (e) => console.log(e),
+                });
             });
-          this.loading = false;
-        })
-        .catch(() => {
-          this.fetchData();
-        });
+        },
+
+        showPageDisplay(page_display) {
+            let text = "";
+            switch (page_display) {
+                case STAFF_NOT_APPROVED: {
+                    text = "Chờ duyệt";
+                    break;
+                }
+                case STAFF_WORKING: {
+                    text = "Đang làm việc";
+                    break;
+                }
+                case STAFF_RESIGN: {
+                    text = "Nghỉ việc";
+                    break;
+                }
+                default: {
+                    text = "Undefined";
+                }
+            }
+            return text;
+        },
     },
-  },
 };
 </script>

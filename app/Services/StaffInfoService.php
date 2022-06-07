@@ -40,4 +40,6 @@ class StaffInfoService
         Notification::send($staff->user, new ChangeStatusStaff($staff, $password));
         return $staff;
     }
+
+    public function getAllStaff
 }

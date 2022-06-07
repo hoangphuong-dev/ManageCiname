@@ -35,3 +35,7 @@ export const NOTIFICATION_TYPE_ALL = 'ALL'
 
 export const MOVIE_ACTIVE = 1
 export const MOVIE_DEACTIVE = 0
+
+export const STAFF_NOT_APPROVED = 0
+export const STAFF_WORKING = 1
+export const STAFF_RESIGN = 2
