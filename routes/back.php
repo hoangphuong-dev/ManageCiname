@@ -39,6 +39,10 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
 
     Route::put('seat_types/{id}', [SeatTypeController::class, 'edit'])->name('seat_types.edit');
 
+    Route::prefix('/seat_type')->as('seat_type.')->group(function () {
+        Route::delete('delete/{id}', [SeatTypeController::class, 'delete'])->name('delete');
+    });
+
     Route::get('/movies.html', [MovieController::class, 'index'])->name('movie.index');
     Route::get('/create_admin.html', [AdminInfoController::class, 'create'])->name('create_admin');
     Route::get('/create_movie.html', [MovieController::class, 'create'])->name('create_movie');

@@ -2,11 +2,8 @@
 
 namespace App\Services;
 
-use App\Helper\ImageHelper;
 use App\Http\Resources\SeatTypeResource;
 use App\Repositories\SeatTypeRepository;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class SeatTypeService extends BaseService
 {
@@ -46,5 +43,10 @@ class SeatTypeService extends BaseService
         }
 
         return $this->seatTypeRepository->make($data);
+    }
+
+    public function delete($id)
+    {
+        return $this->seatTypeRepository->deleteById($id);
     }
 }

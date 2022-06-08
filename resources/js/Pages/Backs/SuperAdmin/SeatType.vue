@@ -1,282 +1,423 @@
 <template>
-  <admin-layout>
-    <template #main>
-      <div class="bg-white min-h-full m-4 mb-0 p-4">
-        <h2 class="mb-5">Quản lý loại ghế</h2>
-        <div class="w-full flex relative">
-          <div class="w-3/4"></div>
-          <div class="w-1/4 text-right">
-            <el-button @click="openDialogSeatType">Thêm Loại ghế</el-button>
-          </div>
-
-          <!-- dialog lọai ghế  -->
-          <div class="customer_dialog">
-            <el-dialog
-              :title="selectedItem === null ? 'Thêm loại ghế': 'Sửa thông tin loại ghế'"
-              v-model="openDialog"
-            >
-              <el-form
-                class="text-center w-1/2 m-auto"
-                ref="SeatTypeForm"
-                :model="formData"
-                label-position="top"
-                :rules="rules"
-              >
-                <el-form-item label="Loại ghế" prop="name">
-                  <el-input
-                    v-model="formData.name"
-                    autocomplete="off"
-                    placeholder="Nhập tên"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="Giá tiền loại ghế" prop="price">
-                  <el-input
-                    v-model="formData.price"
-                    autocomplete="off"
-                    placeholder="Nhập giá tiền"
-                  ></el-input>
-                </el-form-item>
-
-                <div class="w-1/6 mb-2">
-                  <div
-                    class="
-                      w-48
-                      h-60
-                      flex
-                      justify-center
-                      items-center
-                      border
-                      rounded
-                      hover:cursor-pointer
-                    "
-                    @click="$refs.inputUpload.click()"
-                  >
-                    <div
-                      class="xl:flex flex-col justify-center items-center"
-                      v-if="!imagePreview"
-                    >
-                      <el-empty description="Không có dữ liệu"></el-empty>
-                      <p class="text-red-200">Chọn ảnh</p>
+    <admin-layout v-loading="loading">
+        <template #main>
+            <div class="bg-white min-h-full sm:m-4 mb-0 p-4">
+                <h2 class="mb-5 text-red-500">Danh sách thể loại ghế</h2>
+                <div class="w-full flex relative">
+                    <div class="w-3/4 flex items-end">
+                        <div class="search">
+                            <search-input
+                                :filter="filter"
+                                v-model="filter.name"
+                                label="Nhập tên thể loại"
+                                @submit="onSubmitSearch"
+                            ></search-input>
+                        </div>
                     </div>
-                    <img
-                      v-else
-                      :src="imagePreview"
-                      class="rounded w-full h-full object-cover"
-                    />
-                    <input
-                      class="hidden"
-                      ref="inputUpload"
-                      type="file"
-                      @change="handleFileChange($event)"
-                    />
-                  </div>
+                    <div class="w-1/4 flex items-end">
+                        <button
+                            class="ml-auto btn-primary"
+                            @click="onOpenDialog"
+                        >
+                            +Tạo mới
+                        </button>
+                    </div>
                 </div>
-              </el-form>
-              <!-- submit -->
-              <div class="text-right">
-                <span class="dialog-footer">
-                  <el-button @click="openDialog = false"
-                    >Hủy</el-button
-                  >
-                  <el-button type="primary" @click="submitSeatType">
-                    <span v-if="selectedItem === null">Thêm</span>
-                    <span v-else>Cập nhật</span>
-                  </el-button>
-                </span>
-              </div>
-            </el-dialog>
-          </div>
-        </div>
 
-        <div class="grid grid-cols-4 gap-4 mt-5 w-1/2 m-auto">
-          <div
-            v-for="item in seatTypes"
-            :key="item"
-            class="border rounded-md p-2 cursor-pointer"
-            @click="edit(item)"
-          >
-            <div class="w-full">
-              <img class="w-full rounded h-48" :src="getImage(item.image)" />
+                <!-- <div class="mt-5">
+                    <data-table
+                        :fields="fields"
+                        :items="seatTypes.data"
+                        :paginate="seatTypes.meta"
+                        :current-page="filter.page || 1"
+                        disable-table-info
+                        footer-center
+                        paginate-background
+                        @page="handleCurrentPage"
+                    >
+                        <template #image="{ row }">
+                            <div>
+                                <el-image
+                                    class="mr-5 cursor-pointer"
+                                    :src="getImage(row?.image)"
+                                ></el-image>
+                            </div>
+                        </template>
+                        <template #actions="{ row }">
+                            <div v-if="row" class="flex items-center">
+                                <template v-if="!row.status">
+                                    <button
+                                        class="btn-warning bg-gray-200"
+                                        @click="edit(row)"
+                                    >
+                                        <img
+                                            src="/images/svg/edit.svg"
+                                            class="size-icon"
+                                            alt=""
+                                        />
+                                    </button>
+                                    &nbsp;
+                                </template>
+                                <button
+                                    class="btn-warning bg-gray-200"
+                                    @click="confirmEventDelete(row)"
+                                >
+                                    <img
+                                        src="/images/svg/trash.svg"
+                                        alt=""
+                                        class="size-icon"
+                                    />
+                                </button>
+                            </div>
+                        </template>
+                    </data-table>
+                </div> -->
             </div>
 
-            <div class="mt-2 text-center">
-              {{ item.name }}
-            </div>
+            <!-- dialog create notification -->
+            <div class="dialog-form-notice">
+                <el-dialog
+                    v-model="dialogVisible"
+                    width="60%"
+                    :title="
+                        selectedItem === null
+                            ? 'ブログ作成'
+                            : 'ブログを編集する'
+                    "
+                    :before-close="onCloseDialog"
+                    custom-class="lg:!w-6/10 md:!w-8/10 !w-full"
+                >
+                    <el-form
+                        ref="formData"
+                        :model="formData"
+                        label-position="top"
+                        :rules="rules"
+                    >
+                        <div class="w-full flex">
+                            <div class="w-1/3">
+                                <el-form-item
+                                    label="サムネイル画像"
+                                    prop="image"
+                                    ref="file"
+                                >
+                                    <div
+                                        class="md:w-1/8 lg:w-2/10 mb-2 md:block flex justify-center"
+                                    >
+                                        <div
+                                            class="w-64 h-40 flex justify-center items-center border rounded hover:cursor-pointer"
+                                            @click="$refs.inputUpload.click()"
+                                        >
+                                            <div
+                                                class="xl:flex flex-col justify-center items-center"
+                                                v-if="!imagePreview"
+                                            >
+                                                <div
+                                                    class="flex justify-center mb-1"
+                                                >
+                                                    <el-image
+                                                        src="/images/svg/upload.svg"
+                                                    ></el-image>
+                                                </div>
+                                                <p class="text-lightGreen">
+                                                    ＋アップロード
+                                                </p>
+                                            </div>
+                                            <img
+                                                v-else
+                                                :src="imagePreview"
+                                                class="rounded w-full h-full object-cover"
+                                            />
+                                            <input
+                                                class="hidden"
+                                                ref="inputUpload"
+                                                type="file"
+                                                @change="
+                                                    handleFileChange($event)
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                </el-form-item>
+                            </div>
+                        </div>
 
-            <div class="mt-2 text-center">{{ item.price }} VND</div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </admin-layout>
+                        <el-form-item
+                            label="タイトル"
+                            :inline-message="$errors.check('title')"
+                            prop="title"
+                        >
+                            <el-input v-model="formData.title" type="text" />
+                        </el-form-item>
+                        <el-form-item
+                            label="説明"
+                            :inline-message="$errors.check('sub_title')"
+                            prop="sub_title"
+                        >
+                            <el-input
+                                v-model="formData.sub_title"
+                                type="text"
+                            />
+                        </el-form-item>
+                    </el-form>
+                    <template #footer>
+                        <span class="dialog-footer flex justify-center gap-2.5">
+                            <button
+                                class="btn-info"
+                                type="info"
+                                @click="dialogVisible = false"
+                            >
+                                キャンセル
+                            </button>
+                            <button class="btn-primary" @click="onSubmit">
+                                登録
+                            </button>
+                        </span>
+                    </template>
+                </el-dialog>
+            </div>
+        </template>
+    </admin-layout>
 </template>
 
 <script>
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
-import Pagination from "@/Components/Pagination.vue";
+import DataTable from "@/Components/DataTable.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
-import { listSeatType, createSeatType } from "@/API/main.js";
-import { toFormData } from "@/libs/form";
-
 export default {
-  name: "SeatType",
-
-  components: {
-    AdminLayout,
-    SearchInput,
-    Pagination,
-  },
-
-  data() {
-    return {
-      imagePreview: "",
-      selectedItem: null,
-      loading: false,
-      openDialog: false,
-      keyword: "",
-      seatTypes: [],
-      formData: {
-        name: "",
-        price: "",
-        image: "",
-      },
-      rules: {
-        name: {
-          required: true,
-          message: "Trường này không được trống ",
-          trigger: "blur",
+    name: "SeatType",
+    components: {
+        AdminLayout,
+        SearchInput,
+        DataTable,
+    },
+    props: {
+        seatTypes: {
+            type: Object,
+            required: true,
         },
-        price: {
-          required: true,
-          message: "Trường này không được trống ",
-          trigger: "blur",
+        filtersBE: {
+            type: Object,
+            required: true,
         },
-      },
-    };
-  },
+    },
+    data() {
+        return {
+            imagePreview: "",
+            selectedItem: null,
+            loading: false,
+            dialogVisible: false,
 
-  created() {
-    this.fetchData();
-  },
-
-  methods: {
-    handleFileChange(e) {
-      const files = e.target.files || e.dataTransfer.files;
-      if (files.length) {
-        const image = files[0];
-        if (!image.name.match(/.(jpg|jpeg|png)$/i)) {
-          return this.$message.error("Error ...");
-        }
-
-        let reader = new FileReader();
-        reader.onload = (e) => {
-          this.imagePreview = e.target.result;
+            formData: this.$inertia.form({
+                name: "",
+                price: "",
+                page_display: "",
+                start_date: "",
+                expiration_date: "",
+                content: "",
+                image: "",
+                apply: false,
+            }),
+            fields: [
+                { key: "image", label: "Ảnh" },
+                { key: "name", label: "Loại ghế", width: 350 },
+                { key: "price", label: "Giá tiền", width: 150 },
+                { key: "created_at", label: "Ngày tạo", width: 150 },
+                { key: "actions", label: "Hành động", width: 150 },
+            ],
+            rules: {
+                image: [
+                    {
+                        required: true,
+                        message: "Trường này không được để trống",
+                        trigger: "blur",
+                    },
+                ],
+                name: [
+                    {
+                        required: true,
+                        message: "Trường này không được để trống",
+                        trigger: "blur",
+                    },
+                ],
+                price: [
+                    {
+                        required: true,
+                        message: "Trường này không được để trống",
+                        trigger: "change",
+                    },
+                ],
+            },
         };
-        this.formData.image = image;
-        reader.readAsDataURL(image);
-      }
+    },
+    computed: {
+        filter() {
+            const status = this.filtersBE?.status?.toInt();
+            const display = this.filtersBE?.display?.toInt();
+            return {
+                page: this.filtersBE.page?.toInt() || 1,
+                limit: this.filtersBE.limit?.toInt() || 10,
+                status:
+                    status == null || typeof status === "undefined"
+                        ? 2
+                        : status,
+                display:
+                    display == null || typeof display === "undefined"
+                        ? 0
+                        : display,
+                name: this.filtersBE?.name || "",
+            };
+        },
+
+        detailSelected() {
+            if (this.selectedItem === null) {
+                return {};
+            }
+            return this.seatTypes.data.find(
+                (item) => item.id === this.selectedItem
+            );
+        },
     },
 
-    openDialogSeatType() {
-      this.selectedItem = null;
-      this.openDialog = true;
-      this.resetForm();
-    },
-
-    searchChange() {
-      this.filter.name = this.keyword;
-      this.$emit("handleFilter");
-    },
-
-    async createSeatType() {
-      await createSeatType(
-        toFormData({ ...this.formData }, "", { indices: true })
-      )
-        .then(async (res) => {
-          this.$message.success("Create success");
-          this.openDialog = false;
-          this.resetForm();
-          this.fetchData();
-        })
-        .catch(() => {
-          this.$message.error("Server Error");
-        });
-    },
-    async editSeaType() {
-      Inertia.put(
-        route("superadmin.seat_types.edit", { id: this.selectedItem }),
-        this.formData,
-        {
-          onBefore,
-          onFinish,
-          preserveScroll: true,
-          onError: (e) => console.log(e),
-          onSuccess: (_) => {
+    methods: {
+        inertia() {
+            Inertia.get(
+                route("back.blog.index", this.filter),
+                {},
+                { onBefore, onFinish, preserveScroll: true }
+            );
+        },
+        onSubmitSearch() {
+            this.filter.page = 1;
+            this.inertia();
+        },
+        onChangeStatus() {
+            this.filter.page = 1;
+            this.inertia();
+        },
+        onChangePageDisplay() {
+            this.filter.page = 1;
+            this.inertia();
+        },
+        disabledDate(time) {
+            let d = new Date();
+            return time.getTime() < d.setDate(d.getDate() - 1);
+        },
+        changeStartDate() {
+            this.formData.expiration_date = "";
+        },
+        onOpenDialog() {
+            this.formData.reset();
+            if (this.$refs.formData) {
+                this.$refs.formData.clearValidate();
+            }
             this.selectedItem = null;
-            this.dialogFormVisible = !this.dialogFormVisible;
-          },
-        }
-      );
-    },
-    async submitSeatType() {
-      this.$refs["SeatTypeForm"].validate((valid) => {
-        if (valid) {
-          if (this.selectedItem === null) {
-            this.createSeatType();
-          } else {
-            this.editSeaType();
-          }
-        }
-      });
-    },
+            this.imagePreview = "";
+            this.dialogVisible = !this.dialogVisible;
+        },
+        onCloseDialog() {
+            this.dialogVisible = !this.dialogVisible;
+        },
+        handleCurrentPage(value) {
+            this.filter.page = value;
+            this.inertia();
+        },
 
-    edit(item) {
-      this.selectedItem = item.id;
-      this.openDialog = true;
-      this.formData.name = item.name;
-      this.formData.price = this.convertMoney(item.price);
-      this.formData.image = item.image;
-      this.imagePreview = this.getImage(item.image);
-    },
+        createSeatType() {
+            console.log(88888);
+            Inertia.post(route("back.blog.store"), this.formData, {
+                onBefore,
+                onFinish,
+                preserveScroll: true,
+                onError: (e) => console.log(e),
+                onSuccess: (_) => {
+                    this.formData.reset();
+                    this.dialogVisible = !this.dialogVisible;
+                },
+            });
+        },
+        async onSubmit() {
+            this.$refs.formData.validate((valid) => {
+                if (valid) {
+                    if (this.selectedItem === null) {
+                        this.createSeatType();
+                    } else {
+                        this.editBlog();
+                    }
+                }
+            });
+        },
 
-    resetForm() {
-      this.formData.name =
-        this.formData.price =
-        this.formData.image =
-        this.imagePreview =
-          "";
-    },
+        confirmEventDelete({ id }) {
+            this.$confirm(`Bạn có chắc chắn muốn xóa ?`, "Cảnh báo", {
+                confirmButtonText: "Chắc chắn",
+                cancelButtonText: "Hủy",
+                type: "warning",
+            }).then(async () => {
+                Inertia.delete(route("superadmin.seat_type.delete", { id }), {
+                    onBefore,
+                    onFinish,
+                    preserveScroll: true,
+                    onError: (e) => console.log(e),
+                });
+            });
+        },
 
-    async fetchData() {
-      this.loading = true;
-      listSeatType(this.filter)
-        .then(({ status, data }) => {
-          this.seatTypes = status === 200 ? data.data : this.seatTypes;
-          this.total = data.data.meta.total;
-          this.perPage = data.data.meta.per_page;
-        })
-        .catch(() => {});
-      this.loading = false;
-    },
+        edit(row) {
+            this.imagePreview = this.getImage(row?.image);
+            this.selectedItem = row?.id;
+            this.formData.name = row?.name;
+            this.formData.image = row?.image;
+            this.formData.price = row?.price;
+            this.formData.page_display = row?.page_display;
+            this.formData.start_date = row?.start_date;
+            this.formData.expiration_date = row?.expiration_date;
+            this.formData.content = row?.content;
+            this.formData.apply = row?.apply === 1 ? true : false;
+            this.dialogVisible = true;
+        },
 
-    isValidHttpUrl(string) {
-      let url;
-      try {
-        url = new URL(string);
-      } catch (_) {
-        return false;
-      }
-      return url.protocol === "http:" || url.protocol === "https:";
-    },
+        editBlog() {
+            Inertia.post(
+                route("back.blog.update", { id: this.selectedItem }),
+                this.formData,
+                {
+                    onBefore,
+                    onFinish,
+                    preserveScroll: true,
+                    onError: (e) => console.log(e),
+                    onSuccess: (_) => {
+                        this.formData.reset();
+                        this.dialogVisible = !this.dialogVisible;
+                        this.selectedItem = null;
+                    },
+                }
+            );
+        },
 
-    getImage(file) {
-      if (!file) return;
-      if (this.isValidHttpUrl(file)) return file;
-      return `/uploads/${file}`;
+        handleFileChange(e) {
+            const files = e.target.files || e.dataTransfer.files;
+            if (files.length) {
+                const image = files[0];
+                if (!image.name.match(/.(jpg|jpeg|png)$/i)) {
+                    return this.$message.error("Lỗi định dạng file");
+                }
+
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    this.imagePreview = e.target.result;
+                };
+                this.formData.image = image;
+                reader.readAsDataURL(image);
+            }
+        },
     },
-  },
 };
 </script>
+
+<style>
+.dialog-form-notice .el-overlay {
+    z-index: 10 !important;
+}
+</style>
