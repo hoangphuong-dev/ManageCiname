@@ -16,7 +16,7 @@
                     </div>
                     <div class="w-1/4 flex items-end">
                         <button
-                            class="ml-auto btn-primary"
+                            class="ml-auto btn-primary bg-red-400"
                             @click="onOpenDialog"
                         >
                             +Tạo mới
@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <!-- <div class="mt-5">
+                <div class="mt-5">
                     <data-table
                         :fields="fields"
                         :items="seatTypes.data"
@@ -71,7 +71,7 @@
                             </div>
                         </template>
                     </data-table>
-                </div> -->
+                </div>
             </div>
 
             <!-- dialog create notification -->
@@ -81,11 +81,9 @@
                     width="60%"
                     :title="
                         selectedItem === null
-                            ? 'ブログ作成'
-                            : 'ブログを編集する'
+                            ? 'Thêm thể  loại'
+                            : 'Sửa thể loại'
                     "
-                    :before-close="onCloseDialog"
-                    custom-class="lg:!w-6/10 md:!w-8/10 !w-full"
                 >
                     <el-form
                         ref="formData"
@@ -113,13 +111,9 @@
                                             >
                                                 <div
                                                     class="flex justify-center mb-1"
-                                                >
-                                                    <el-image
-                                                        src="/images/svg/upload.svg"
-                                                    ></el-image>
-                                                </div>
-                                                <p class="text-lightGreen">
-                                                    ＋アップロード
+                                                ></div>
+                                                <p class="text-red-400">
+                                                    ＋Chọn ảnh
                                                 </p>
                                             </div>
                                             <img
@@ -142,21 +136,18 @@
                         </div>
 
                         <el-form-item
-                            label="タイトル"
-                            :inline-message="$errors.check('title')"
-                            prop="title"
+                            label="Tên thể loại"
+                            :inline-message="$errors.check('name')"
+                            prop="name"
                         >
-                            <el-input v-model="formData.title" type="text" />
+                            <el-input v-model="formData.name" type="text" />
                         </el-form-item>
                         <el-form-item
-                            label="説明"
-                            :inline-message="$errors.check('sub_title')"
-                            prop="sub_title"
+                            label="Giá tiền"
+                            :inline-message="$errors.check('price')"
+                            prop="price"
                         >
-                            <el-input
-                                v-model="formData.sub_title"
-                                type="text"
-                            />
+                            <el-input v-model="formData.price" type="text" />
                         </el-form-item>
                     </el-form>
                     <template #footer>
@@ -166,10 +157,13 @@
                                 type="info"
                                 @click="dialogVisible = false"
                             >
-                                キャンセル
+                                Hủy
                             </button>
-                            <button class="btn-primary" @click="onSubmit">
-                                登録
+                            <button
+                                class="btn-primary bg-red-400"
+                                @click="onSubmit"
+                            >
+                                Thêm
                             </button>
                         </span>
                     </template>
@@ -212,13 +206,9 @@ export default {
             formData: this.$inertia.form({
                 name: "",
                 price: "",
-                page_display: "",
-                start_date: "",
-                expiration_date: "",
-                content: "",
                 image: "",
-                apply: false,
             }),
+
             fields: [
                 { key: "image", label: "Ảnh" },
                 { key: "name", label: "Loại ghế", width: 350 },
@@ -253,37 +243,18 @@ export default {
     },
     computed: {
         filter() {
-            const status = this.filtersBE?.status?.toInt();
-            const display = this.filtersBE?.display?.toInt();
             return {
                 page: this.filtersBE.page?.toInt() || 1,
                 limit: this.filtersBE.limit?.toInt() || 10,
-                status:
-                    status == null || typeof status === "undefined"
-                        ? 2
-                        : status,
-                display:
-                    display == null || typeof display === "undefined"
-                        ? 0
-                        : display,
                 name: this.filtersBE?.name || "",
             };
-        },
-
-        detailSelected() {
-            if (this.selectedItem === null) {
-                return {};
-            }
-            return this.seatTypes.data.find(
-                (item) => item.id === this.selectedItem
-            );
         },
     },
 
     methods: {
         inertia() {
             Inertia.get(
-                route("back.blog.index", this.filter),
+                route("superadmin.seat_type.index", this.filter),
                 {},
                 { onBefore, onFinish, preserveScroll: true }
             );
@@ -292,21 +263,7 @@ export default {
             this.filter.page = 1;
             this.inertia();
         },
-        onChangeStatus() {
-            this.filter.page = 1;
-            this.inertia();
-        },
-        onChangePageDisplay() {
-            this.filter.page = 1;
-            this.inertia();
-        },
-        disabledDate(time) {
-            let d = new Date();
-            return time.getTime() < d.setDate(d.getDate() - 1);
-        },
-        changeStartDate() {
-            this.formData.expiration_date = "";
-        },
+
         onOpenDialog() {
             this.formData.reset();
             if (this.$refs.formData) {
@@ -316,17 +273,14 @@ export default {
             this.imagePreview = "";
             this.dialogVisible = !this.dialogVisible;
         },
-        onCloseDialog() {
-            this.dialogVisible = !this.dialogVisible;
-        },
+
         handleCurrentPage(value) {
             this.filter.page = value;
             this.inertia();
         },
 
         createSeatType() {
-            console.log(88888);
-            Inertia.post(route("back.blog.store"), this.formData, {
+            Inertia.post(route("superadmin.seat_type.store"), this.formData, {
                 onBefore,
                 onFinish,
                 preserveScroll: true,
@@ -337,6 +291,7 @@ export default {
                 },
             });
         },
+
         async onSubmit() {
             this.$refs.formData.validate((valid) => {
                 if (valid) {
@@ -370,11 +325,6 @@ export default {
             this.formData.name = row?.name;
             this.formData.image = row?.image;
             this.formData.price = row?.price;
-            this.formData.page_display = row?.page_display;
-            this.formData.start_date = row?.start_date;
-            this.formData.expiration_date = row?.expiration_date;
-            this.formData.content = row?.content;
-            this.formData.apply = row?.apply === 1 ? true : false;
             this.dialogVisible = true;
         },
 
@@ -415,9 +365,3 @@ export default {
     },
 };
 </script>
-
-<style>
-.dialog-form-notice .el-overlay {
-    z-index: 10 !important;
-}
-</style>

@@ -20,15 +20,6 @@ class SeatTypeRepository extends BaseRepository
         return SeatType::class;
     }
 
-    public function make($data)
-    {
-        return $this->model->create([
-            'name' => $data['name'],
-            'price' => $data['price'],
-            'image' => $data['image'],
-        ]);
-    }
-
     public function getAllSeatType()
     {
         return $this->model->select(['id', 'name'])->get()->toArray();

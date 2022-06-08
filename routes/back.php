@@ -34,13 +34,12 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     Route::get('/logout', [AuthenticationController::class, 'logoutSuperAdmin'])->name('logout_super');
     Route::get('/index.html', [SuperAdminController::class, 'index'])->name('home_super');
 
-
-    Route::get('/seat_types.html', [SeatTypeController::class, 'index'])->name('seat_type.index');
-
     Route::put('seat_types/{id}', [SeatTypeController::class, 'edit'])->name('seat_types.edit');
 
     Route::prefix('/seat_type')->as('seat_type.')->group(function () {
+        Route::get('/seat_types', [SeatTypeController::class, 'index'])->name('index');
         Route::delete('delete/{id}', [SeatTypeController::class, 'delete'])->name('delete');
+        Route::post('store', [SeatTypeController::class, 'store'])->name('store');
     });
 
     Route::get('/movies.html', [MovieController::class, 'index'])->name('movie.index');

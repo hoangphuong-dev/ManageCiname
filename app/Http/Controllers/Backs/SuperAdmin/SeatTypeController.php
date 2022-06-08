@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backs\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SeatTypeRequest;
 use App\Models\SeatType;
 use App\Services\SeatTypeService;
 use Illuminate\Http\Request;
@@ -46,16 +47,16 @@ class SeatTypeController extends Controller
         }
     }
 
-
-    public function uploadImage(Request $request)
+    public function store(SeatTypeRequest $request)
     {
-        $url = $this->seatTypeService->uploadImage($request);
-
-        dd($url);
-
-        return response()->json([
-            'status' => 200,
-            'url' => $url,
-        ]);
+        try {
+            $fill = $request->validated();
+            $this->seatTypeService->store($fill);
+            $message = ['success' => __('create seat type successful')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
     }
 }

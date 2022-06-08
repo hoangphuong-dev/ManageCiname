@@ -1,22 +1,22 @@
 export default {
-   // methods: {
-    //     isValidHttpUrl(string) {
-    //         let url;
+   methods: {
+        isValidHttpUrl(string) {
+            let url;
 
-    //         try {
-    //             url = new URL(string);
-    //         } catch (_) {
-    //             return false;
-    //         }
+            try {
+                url = new URL(string);
+            } catch (_) {
+                return false;
+            }
 
-    //         return url.protocol === "http:" || url.protocol === "https:";
-    //     },
-    //     getImage(file) {
-    //         if (!file) return;
+            return url.protocol === "http:" || url.protocol === "https:";
+        },
+        getImage(file) {
+            if (!file) return;
 
-    //         if (this.isValidHttpUrl(file)) return file;
+            if (this.isValidHttpUrl(file)) return file;
             
-    //         return `/storage/${file}`;
-    //     },
-    // },
+            return `/storage/${file}`;
+        },
+    },
 };
