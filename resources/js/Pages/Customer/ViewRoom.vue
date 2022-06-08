@@ -74,7 +74,7 @@
                   <div class="w-3/4 m-auto p-2">
                     <img
                       style="height: 40px"
-                      :src="getImage(seat_types.data[0].image)"
+                      :src="getImage(seat_types?.data[0]?.image)"
                     />
                   </div>
                   <div class="text-base mt-2">A1</div>
