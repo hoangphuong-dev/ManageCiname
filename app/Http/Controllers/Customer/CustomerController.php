@@ -19,6 +19,7 @@ use App\Repositories\ProvinceRepository;
 use App\Services\BillService;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
+use App\Services\PaymentService;
 use App\Services\SeatTypeService;
 use App\Services\ShowTimeService;
 use App\Services\TicketService;
@@ -29,8 +30,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
+use Illuminate\Support\Env;
 use PDF;
 
 class CustomerController extends Controller
@@ -348,5 +351,39 @@ class CustomerController extends Controller
             'movie_genres' => $movie_genres,
             'title' => 'Phim sắp chiếu'
         ]);
+    }
+
+    public function payment()
+    {
+        return view('payment');
+    }
+
+    public function  paymentPost(Request $request)
+    {
+        // dd(8888);
+        $fill = $request->all();
+
+        $paymentService = new PaymentService();
+
+        $result = $paymentService->createUrlPayment($fill);
+
+        // Http::get($endpoint, $query);
+
+        // return redirect($result['data']);
+        // dd($result['data']);
+
+        return $result['data'];
+
+        // return '<a hre><a>'
+        // return Http::get($result['data']);
+
+        // return $result;
+    }
+
+    public function vnpayReturn(Request $request)
+    {
+
+
+        dd($request->all());
     }
 }
