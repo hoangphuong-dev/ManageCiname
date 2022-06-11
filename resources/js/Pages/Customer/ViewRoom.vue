@@ -193,7 +193,7 @@ export default {
   methods: {
     submit() {
       if (this.formData.seat_id.length > 0) {
-        Inertia.get(route("get_info_customer", { ...this.formData }), {
+        Inertia.get(route("order.get_info_customer", { ...this.formData }), {
           onBefore,
           onFinish,
         });
