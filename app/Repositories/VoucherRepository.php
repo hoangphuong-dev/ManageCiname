@@ -38,15 +38,17 @@ class VoucherRepository extends BaseRepository
             ->first();
     }
 
-    public function appLyVoucher()
+    public function appLyVoucher($id)
     {
-        return $this->model->update(['status' => Voucher::USED]);
+        return $this->model
+            ->where('id', $id)
+            ->update(['status' => Voucher::USED]);
     }
 
-    public function updateBillId($billId)
+    public function updateBillId($billId, $id)
     {
-        return $this->model->update([
-            'bill_id' => $billId,
-        ]);
+        return $this->model
+            ->where('id', $id)
+            ->update(['bill_id' => $billId]);
     }
 }

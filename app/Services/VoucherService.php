@@ -30,7 +30,7 @@ class VoucherService
                 return redirect()->back()->with($message);
             }
         }
-        return;
+        return $fill;
     }
 
     public function applyVoucher($data)
@@ -38,18 +38,20 @@ class VoucherService
         $data['flag_voucher'] = false;
         if (isset($data['user_id']) && isset($data['voucher_type'])) {
             $voucher = $this->voucherRepository->checkApplyVoucher($data);
+
             if (!is_null($voucher)) {
                 $data['flag_voucher'] = true;
+                $data['voucher_id'] = $voucher->id;
                 $data['total_money'] *= ($data['voucher_type'] / 100);
-                $this->voucherRepository->appLyVoucher();
+                $this->voucherRepository->appLyVoucher($voucher->id);
                 return $data;
             }
         }
         return $data;
     }
 
-    public function updateBillId($billId)
+    public function updateBillId($billId, $id)
     {
-        return $this->voucherRepository->updateBillId($billId);
+        return $this->voucherRepository->updateBillId($billId, $id);
     }
 }

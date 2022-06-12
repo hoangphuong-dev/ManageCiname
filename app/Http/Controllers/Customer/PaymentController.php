@@ -47,22 +47,6 @@ class PaymentController extends Controller
         $this->ticketService = $ticketService;
     }
 
-    public function authenEmail(Request $request)
-    {
-        $fill = $request->all();
-        $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
-        $fill = $this->voucherService->checkVoucher($fill);
-
-        try {
-            $token = JwtHelper::make($data);
-            Mail::to($data['email'])->send(new MailAuthenOrder($token));
-        } catch (\Exception $e) {
-            $message = ['error' => __('Có lỗi trong quá trình đặt vé !')];
-            return redirect()->back()->with($message);
-        }
-        return redirect()->route('notication-send-mail');
-    }
-
     public function getInfoCustomer(Request $request)
     {
         $data = $request->all();
@@ -75,15 +59,26 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function authenOrder($token)
+    public function authenEmail(Request $request)
     {
-        if (JwtHelper::isExpired($token) === true) {
-            $message = ['error' => __('Token đã hết hạn . Vui lòng đặt lại vé khác !')];
-            return redirect()->route("home")->with($message);
-        }
+        $fill = $request->all();
+        $fill = $this->voucherService->checkVoucher($fill);
+        $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
 
         try {
-            $data = JwtHelper::parse($token);
+            $token = JwtHelper::make($data);
+            Mail::to($data['email'])->send(new MailAuthenOrder($token));
+        } catch (\Exception $e) {
+            $message = ['error' => __('Có lỗi trong quá trình đặt vé !')];
+            return redirect()->back()->with($message);
+        }
+        return redirect()->route('notication-send-mail');
+    }
+
+    public function authenOrder($token)
+    {
+        $data = $this->checExpiredToken($token);
+        try {
             DB::beginTransaction();
 
             $data = $this->voucherService->applyVoucher($data);
@@ -92,7 +87,7 @@ class PaymentController extends Controller
             $this->ticketService->createTicket($data, $bill->id, $user->id);
 
             if ($data['flag_voucher']) {
-                $this->voucherService->updateBillId($bill->id);
+                $this->voucherService->updateBillId($bill->id, $data['voucher_id']);
             }
 
             DB::commit();
@@ -106,5 +101,15 @@ class PaymentController extends Controller
         }
 
         session()->forget(self::SESSION_KEY);
+    }
+
+    public function checExpiredToken($token)
+    {
+        if (JwtHelper::isExpired($token) === true) {
+            $message = ['error' => __('Token đã hết hạn . Vui lòng đặt lại vé khác !')];
+            return redirect()->route("home")->with($message);
+        }
+
+        return JwtHelper::parse($token);
     }
 }
