@@ -86,15 +86,24 @@ class PaymentController extends Controller
             $bill = $this->billService->createBill($user->id, $data);
             $this->ticketService->createTicket($data, $bill->id, $user->id);
 
+            $data['bill_id'] = $bill->id;
+            unset($data['seat_id'], $data['seat_name'], $data['expired'], $data['voucher']);
+
             if ($data['flag_voucher']) {
-                $this->voucherService->updateBillId($bill->id, $data['voucher_id']);
+                $this->voucherService->updateBillId($data);
             }
 
+
+            $dataUrlPayment = $this->paymentService->createUrlPayment($data);
+
             DB::commit();
+
+            return redirect()->to($dataUrlPayment['data']);
 
             event(new CustomerOrder($bill, $user));
             return redirect()->route('order-success', $bill->id);
         } catch (\Exception $e) {
+            dd($e);
             $message = ['error' => __('Ghế này đã được đặt , Vui lòng chọn ghế khác')];
             DB::rollback();
             return redirect()->route('home')->with($message);
@@ -111,5 +120,10 @@ class PaymentController extends Controller
         }
 
         return JwtHelper::parse($token);
+    }
+
+    public function vnpayReturn($request)
+    {
+        dd($request->all());
     }
 }

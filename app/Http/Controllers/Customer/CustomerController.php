@@ -270,38 +270,4 @@ class CustomerController extends Controller
             'title' => 'Phim sắp chiếu'
         ]);
     }
-
-    public function payment()
-    {
-        return view('payment');
-    }
-
-    public function  paymentPost(Request $request)
-    {
-        // dd(8888);
-        $fill = $request->all();
-
-        $paymentService = new PaymentService();
-
-        $result = $paymentService->createUrlPayment($fill);
-
-        // Http::get($endpoint, $query);
-
-        // return redirect($result['data']);
-        // dd($result['data']);
-
-        return $result['data'];
-
-        // return '<a hre><a>'
-        // return Http::get($result['data']);
-
-        // return $result;
-    }
-
-    public function vnpayReturn(Request $request)
-    {
-
-
-        dd($request->all());
-    }
 }

@@ -46,10 +46,6 @@ Route::get('/authenticate-email', [ProfileController::class, 'AuthenticateMail']
 
 Route::post('/get-cinema-by-province/{id}', [CustomerController::class, 'getCinemaByProvince'])->name('get-cinema-by-province');
 
-Route::get('/thanh-toan', [CustomerController::class, 'payment'])->name('payment');
-Route::post('/thanh-toan-post', [CustomerController::class, 'paymentPost'])->name('payment-post');
-
-Route::get('/vnpay_return', [CustomerController::class, 'vnpayReturn'])->name('vnpayReturn');
 
 
 Route::group(['as' => 'order.', 'prefix' => 'order'], function () {
@@ -57,6 +53,8 @@ Route::group(['as' => 'order.', 'prefix' => 'order'], function () {
         ->name('get_info_customer');
     Route::post('/authen-email', [PaymentController::class, 'authenEmail'])->name('authen-email');
     Route::get('/authentication-token/{token}', [PaymentController::class, 'authenOrder'])->name('authen-token');
+
+    Route::get('/vnpay_return', [PaymentController::class, 'vnpayReturn'])->name('vnpayReturn');
 });
 
 

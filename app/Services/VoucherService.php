@@ -50,8 +50,8 @@ class VoucherService
         return $data;
     }
 
-    public function updateBillId($billId, $id)
+    public function updateBillId($data)
     {
-        return $this->voucherRepository->updateBillId($billId, $id);
+        return $this->voucherRepository->updateBillId($data['bill_id'], $data['voucher_id']);
     }
 }
