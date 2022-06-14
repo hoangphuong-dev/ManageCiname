@@ -94,7 +94,7 @@
                         <div class="w-full flex">
                             <div class="w-1/3">
                                 <el-form-item
-                                    label="サムネイル画像"
+                                    label="Ảnh loại ghế"
                                     prop="image"
                                     ref="file"
                                 >
@@ -213,7 +213,7 @@ export default {
                 { key: "image", label: "Ảnh" },
                 { key: "name", label: "Loại ghế", width: 350 },
                 { key: "price", label: "Giá tiền", width: 150 },
-                { key: "created_at", label: "Ngày tạo", width: 150 },
+                { key: "created_at", label: "Ngày tạo", width: 200 },
                 { key: "actions", label: "Hành động", width: 150 },
             ],
             rules: {
