@@ -6,6 +6,6 @@ git add .
 
 git commit -m "$comment"
 
-git pull origin develop
+git pull
 
 git push 
