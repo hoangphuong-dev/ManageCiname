@@ -213,7 +213,7 @@
             </div>
 
             <div class="text-center">
-              <el-button type="danger" @click="submit()">Thanh toán</el-button>
+              <el-button class="text-bold" type="danger" @click="submit()">Thanh toán</el-button>
             </div>
           </el-form>
         </div>
@@ -309,7 +309,7 @@ export default {
     submit() {
       this.$refs["formData"].validate((valid) => {
         if (valid) {
-          Inertia.post(route("order", { ...this.formData }), {
+          Inertia.post(route("order.authen-email", { ...this.formData }), {
             onBefore,
             onFinish,
           });

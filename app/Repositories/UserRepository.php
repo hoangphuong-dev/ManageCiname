@@ -43,7 +43,7 @@ class UserRepository
     public function createCustomer($data)
     {
         $user = $this->findByEmail($data['email']);
-        if ($user == null) {
+        if (is_null($user)) {
             $user = $this->createUser($data, User::ROLE_CUSTOMER);
             MemberCard::create([
                 'number_card' => rand(),

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Customer\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Customer\PaymentController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Middleware\IgnoreCustomerMiddleware;
 
@@ -15,15 +16,11 @@ Route::get('/order-ticket.html', [CustomerController::class, 'orderTicket'])->na
 
 Route::get('/show-seats-by-showtimes.html', [CustomerController::class, 'showSeatByShowTime'])->name('show_seat_by_showtime');
 
-Route::get('/customer-order.html', [CustomerController::class, 'getInfoCustomer'])->name('get_info_customer');
-
 Route::get('/order-success-bill-{id}', [CustomerController::class, 'orderSuccess'])->name('order-success');
 
-Route::get('/authentication-token/{token}', [CustomerController::class, 'authenOrder'])->name('authen_order');
 
 Route::get('/download-bill-pdf/{id}', [CustomerController::class, 'downloadPDF'])->name('download_bill_pdf');
 
-Route::post('/order.html', [CustomerController::class, 'order'])->name('order');
 
 Route::get('/order-send-mail.html', [CustomerController::class, 'NoticationSendMail'])->name('notication-send-mail');
 
@@ -49,10 +46,17 @@ Route::get('/authenticate-email', [ProfileController::class, 'AuthenticateMail']
 
 Route::post('/get-cinema-by-province/{id}', [CustomerController::class, 'getCinemaByProvince'])->name('get-cinema-by-province');
 
-Route::get('/thanh-toan', [CustomerController::class, 'payment'])->name('payment');
-Route::post('/thanh-toan-post', [CustomerController::class, 'paymentPost'])->name('payment-post');
 
-Route::get('/vnpay_return', [CustomerController::class, 'vnpayReturn'])->name('vnpayReturn');
+
+Route::group(['as' => 'order.', 'prefix' => 'order'], function () {
+    Route::get('/customer-order.html', [PaymentController::class, 'getInfoCustomer'])
+        ->name('get_info_customer');
+    Route::post('/authen-email', [PaymentController::class, 'authenEmail'])->name('authen-email');
+    Route::get('/authentication-token/{token}', [PaymentController::class, 'authenOrder'])->name('authen-token');
+
+    Route::get('/vnpay_return', [PaymentController::class, 'vnpayReturn'])->name('vnpayReturn');
+});
+
 
 
 Route::group(['middleware' => ['customer']], function () {

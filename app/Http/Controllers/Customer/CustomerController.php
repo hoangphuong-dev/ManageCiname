@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePassWordRequest;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
-use App\Mail\AuthenOrder;
+
 use App\Mail\ForgotPassword;
 use App\Models\User;
 use App\Models\Voucher;
@@ -215,91 +215,9 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function getInfoCustomer(Request $request)
-    {
-        $data = $request->all();
-        $showtime = $this->showTimeService->getRoomByShowTime($data['showtime_id']);
-        session()->put(self::SESSION_KEY, $data);
-
-        return Inertia::render('Customer/ConfirmOrder', [
-            'showtime' => $showtime,
-            'data' => $data,
-        ]);
-    }
-
-    public function order(Request $request)
-    {
-        $fill = $request->all();
-        $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
-        if (isset($fill['voucher'])) {
-            try {
-                $voucher = Voucher::where('code', $fill['voucher'])->where('status', Voucher::NOTUSED)
-                    ->where('expiration_date', '>=', now())->where('user_id', $fill['user_id'])->firstOrFail();
-                $fill['voucher_type'] = $voucher->type;
-            } catch (\Exception $e) {
-                $message = ['error' => __('Voucher không hợp lệ hoặc đã được sử dụng !')];
-                return redirect()->back()->with($message);
-            }
-        }
-        try {
-            $token = JwtHelper::make($data);
-
-            Mail::to($data['email'])->send(new AuthenOrder($token));
-        } catch (\Exception $e) {
-            dd($e);
-            $message = ['error' => __('Có lỗi trong quá trình đặt vé !')];
-            return redirect()->back()->with($message);
-        }
-        return redirect()->route('notication-send-mail');
-    }
-
     public function NoticationSendMail()
     {
         return Inertia::render('Customer/NoticationSendMail');
-    }
-
-    public function authenOrder($token)
-    {
-        if (JwtHelper::isExpired($token) === true) {
-            $message = ['error' => __('Token đã hết hạn . Vui lòng đặt lại vé khác !')];
-            return redirect()->route("home")->with($message);
-        }
-        $flag = true;
-        $flag_voucher = false;
-        try {
-            $data = JwtHelper::parse($token);
-
-            DB::beginTransaction();
-
-            if (isset($data['user_id']) && isset($data['voucher_type'])) {
-                $voucher = Voucher::where('user_id', $data['user_id'])
-                    ->where('code', $data['voucher'])
-                    ->where('expiration_date', '>=', now())->first();
-                if ($voucher != null) {
-                    $flag_voucher = true;
-                    $data['total_money'] *= ($data['voucher_type'] / 100);
-                    $voucher->update(['status' => Voucher::USED]);
-                }
-            }
-            $user = $this->userService->checkOrderCustomer($data);
-            $bill = $this->billService->createBill($user->id, $data);
-            $this->ticketService->createTicket($data, $bill->id, $user->id);
-
-            if ($flag_voucher) {
-                $voucher->update(['bill_id' => $bill->id]);
-            }
-            DB::commit();
-        } catch (\Exception $e) {
-            $message = ['error' => __('Ghế này đã được đặt , Vui lòng chọn ghế khác')];
-            $flag = false;
-            DB::rollback();
-            return redirect()->route('home')->with($message);
-        }
-        if ($flag) {
-            event(new CustomerOrder($bill, $user));
-            return redirect()->route('order-success', $bill->id);
-        }
-        session()->forget(self::SESSION_KEY);
     }
 
     public function orderSuccess($id)
@@ -351,39 +269,5 @@ class CustomerController extends Controller
             'movie_genres' => $movie_genres,
             'title' => 'Phim sắp chiếu'
         ]);
-    }
-
-    public function payment()
-    {
-        return view('payment');
-    }
-
-    public function  paymentPost(Request $request)
-    {
-        // dd(8888);
-        $fill = $request->all();
-
-        $paymentService = new PaymentService();
-
-        $result = $paymentService->createUrlPayment($fill);
-
-        // Http::get($endpoint, $query);
-
-        // return redirect($result['data']);
-        // dd($result['data']);
-
-        return $result['data'];
-
-        // return '<a hre><a>'
-        // return Http::get($result['data']);
-
-        // return $result;
-    }
-
-    public function vnpayReturn(Request $request)
-    {
-
-
-        dd($request->all());
     }
 }
