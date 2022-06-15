@@ -36,7 +36,6 @@ class BillService
         }
     }
 
-
     public function createBill($user_id, $data)
     {
         try {
@@ -50,5 +49,10 @@ class BillService
     {
         $bills = $this->billRepository->getBillByCinema($admin_id, $request);
         return BillResource::collection($bills);
+    }
+
+    public function getBillById($id)
+    {
+        return $this->billRepository->getById($id);
     }
 }

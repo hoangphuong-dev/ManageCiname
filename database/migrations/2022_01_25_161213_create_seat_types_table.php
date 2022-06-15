@@ -17,7 +17,7 @@ class CreateSeatTypesTable extends Migration
             $table->id();
             $table->string("name");
             $table->string("image");
-            $table->decimal("price", 13, 2);
+            $table->integer("price");
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ class CreateBillsTable extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('cinema_id')->unsigned();
-            $table->decimal("total_money", 13, 2);
+            $table->integer("total_money");
 
 
             $table->foreign('user_id')->references('id')->on('users')
