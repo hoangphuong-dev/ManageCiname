@@ -41,6 +41,6 @@ class CreateViewShowtimeByDay extends Migration
      */
     public function down()
     {
-        \DB::statement("DROP VIEW IF EXISTS view_showtime_by_day");
+        DB::statement("DROP VIEW IF EXISTS view_showtime_by_day");
     }
 }
