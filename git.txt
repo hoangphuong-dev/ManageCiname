@@ -1,0 +1,4 @@
+This file write document git 
+
+git commit --amend : Thêm file vào commit cũ 
+git commit --amend -m "new comment" : Sửa lại comment vừa viết
