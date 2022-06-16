@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Resources\BillResource;
+use App\Models\Bill;
 use App\Repositories\BillRepository;
 use App\Repositories\ShowTimeRepository;
 
@@ -54,5 +55,15 @@ class BillService
     public function getBillById($id)
     {
         return $this->billRepository->getById($id);
+    }
+
+    public function updateStatus($id)
+    {
+        $this->billRepository->updateById($id, ['status' => Bill::PAYMENTED]);
+    }
+
+    public function deleteById($id)
+    {
+        return $this->billRepository->deleteById($id);
     }
 }

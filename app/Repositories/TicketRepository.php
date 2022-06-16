@@ -26,19 +26,22 @@ class TicketRepository extends BaseRepository
 
     public function createTicket($data, $bill_id, $user_id)
     {
+        $arrTicket = [];
         $memmber = MemberCard::where('user_id', $user_id)->first();
         $point  = $memmber->accumulating_point;
         foreach ($data['seat_id'] as $item) {
-            $this->newQuery()->create([
+            $ticket = $this->newQuery()->create([
                 'bill_id' => $bill_id,
                 'showtime_id' => $data['showtime_id'],
                 'seat_id' => $item,
             ]);
             $point += 3000;
+            array_push($arrTicket, $ticket->id);
         }
         $memmber->update([
             'accumulating_point' => $point
         ]);
+        return $arrTicket;
     }
 
     public function getTicketByBill($id)

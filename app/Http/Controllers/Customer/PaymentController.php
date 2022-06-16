@@ -21,6 +21,7 @@ use Inertia\Inertia;
 class PaymentController extends Controller
 {
     private const SESSION_KEY = 'order_info';
+    private const SESSION_USER = 'user_order';
 
     private $voucherService;
     private $paymentService;
@@ -48,6 +49,9 @@ class PaymentController extends Controller
     public function getInfoCustomer(Request $request)
     {
         $data = $request->all();
+        if (empty($data)) {
+            abort(404);
+        }
         $showtime = $this->showTimeService->getRoomByShowTime($data['showtime_id']);
         session()->put(self::SESSION_KEY, $data);
 
@@ -89,7 +93,13 @@ class PaymentController extends Controller
             $data = $this->voucherService->applyVoucher($data);
             $user = $this->userService->checkOrderCustomer($data);
             $bill = $this->billService->createBill($user->id, $data);
-            $this->ticketService->createTicket($data, $bill->id, $user->id);
+            $ticket = $this->ticketService->createTicket($data, $bill->id, $user->id);
+
+            session()->put(self::SESSION_USER, [
+                'user' => $user,
+                'bill' => $bill,
+                'ticket' => $ticket,
+            ]);
 
             $data['bill_id'] = $bill->id;
             unset($data['seat_id'], $data['seat_name'], $data['expired'], $data['voucher']);
@@ -97,12 +107,10 @@ class PaymentController extends Controller
             if ($data['flag_voucher']) {
                 $this->voucherService->updateBillId($data);
             }
-
             $dataUrlPayment = $this->paymentService->createUrlPayment($data);
-            dd($dataUrlPayment);
 
             DB::commit();
-
+            session()->forget(self::SESSION_KEY);
             return redirect()->to($dataUrlPayment['data']);
         } catch (\Exception $e) {
             dd($e);
@@ -110,19 +118,32 @@ class PaymentController extends Controller
             DB::rollback();
             return redirect()->route('home')->with($message);
         }
-
-        session()->forget(self::SESSION_KEY);
     }
 
     public function vnpayReturn(Request $request)
     {
         $fill = $request->all();
-
         $result = $this->paymentService->vnpayReturn($fill);
 
-        dd($result);
+        $getSession = session()->get(self::SESSION_USER, []);
+        $bill = $getSession['bill'];
 
-        // event(new CustomerOrder($bill, $user));
-        // return redirect()->route('order-success', $bill->id);
+        if ($result['resCode'] == '00') {
+            $this->billService->updateStatus($bill->id);
+            event(new CustomerOrder($bill, $getSession['user']));
+            return redirect()->route('order-success', $bill->id);
+        } else {
+            try {
+                DB::beginTransaction();
+                $this->ticketService->deleteMultipleById($getSession['ticket']);
+                $this->billService->deleteById($bill->id);
+                DB::commit();
+            } catch (\Exception $e) {
+                dd($e);
+                DB::rollback();
+            }
+
+            return redirect()->route('home')->with(['error' => __($result['message'])]);
+        }
     }
 }

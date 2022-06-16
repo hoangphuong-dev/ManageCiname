@@ -27,4 +27,9 @@ class TicketService
     {
         return $this->ticketRepository->getSeatOrdered($showtime_id);
     }
+
+    public function deleteMultipleById($arr)
+    {
+        $this->ticketRepository->deleteMultipleById($arr);
+    }
 }
