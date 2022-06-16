@@ -67,6 +67,7 @@ class PaymentController extends Controller
             $token = JwtHelper::make($data);
             Mail::to($data['email'])->send(new AuthenOrder($token));
         } catch (\Exception $e) {
+            dd($e);
             $message = ['error' => __('Có lỗi trong quá trình đặt vé !')];
             return redirect()->back()->with($message);
         }
@@ -98,6 +99,7 @@ class PaymentController extends Controller
             }
 
             $dataUrlPayment = $this->paymentService->createUrlPayment($data);
+            dd($dataUrlPayment);
 
             DB::commit();
 

@@ -30,6 +30,13 @@ class ViewCinemaByProvince extends Migration
             SQL;
     }
 
+    private function dropView(): string
+    {
+        return <<<SQL
+            DROP VIEW  view_cinema_by_province
+            SQL;
+    }
+
     /**
      * Reverse the migrations.
      *
@@ -37,6 +44,6 @@ class ViewCinemaByProvince extends Migration
      */
     public function down()
     {
-        DB::statement("DROP VIEW IF EXISTS view_cinema_by_province");
+        DB::statement($this->dropView());
     }
 }
