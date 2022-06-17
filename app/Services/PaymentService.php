@@ -127,6 +127,7 @@ class PaymentService
                 } else $responseCode = '01';
             }
         } catch (Exception $e) {
+            dd($e);
             $responseCode = '99';
         }
         if ($responseCode == "") {
@@ -156,7 +157,7 @@ class PaymentService
             '91' => 'Không tìm thấy giao dịch yêu cầu',
             '94' => 'Yêu cầu bị trùng lặp trong thời gian giới hạn của API (Giới hạn trong 5 phút)',
             '97' => 'Chữ ký không hợp lệ',
-            '99' => 'Các lỗi khác (lỗi còn lại, không có trong danh sách mã lỗi đã liệt kê)',
+            '99' => 'Có lỗi xảy ra trong quá trình thanh toán . Vui lòng thử lại !',
             '01' => 'Không tìm thấy đơn hàng cần thanh toán',
             '04' => 'Số tiền thanh toán không phù hợp',
             '09' => 'Đơn hàng của bạn đã được thanh toán',

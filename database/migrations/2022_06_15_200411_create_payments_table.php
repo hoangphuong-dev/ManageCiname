@@ -18,7 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->bigInteger('bill_id')->unsigned();
             $table->integer("vnp_Amount");
             $table->char("vnp_BankCode", 20);
-            $table->integer("vnp_PayDate");
+            $table->timestamp("vnp_PayDate");
             $table->char("vnp_CardType", 50);
             $table->timestamps();
 
