@@ -25,8 +25,7 @@ class CreateVouchersTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('bill_id')->references('id')->on('bills')
-                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('bill_id')->references('id')->on('bills');
 
             $table->timestamps();
         });
