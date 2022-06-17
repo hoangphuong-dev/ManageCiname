@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Voucher;
 use App\Repositories\VoucherRepository;
 
 /**
@@ -53,5 +54,14 @@ class VoucherService
     public function updateBillId($data)
     {
         return $this->voucherRepository->updateBillId($data['bill_id'], $data['voucher_id']);
+    }
+
+    public function destroyUsed($id)
+    {
+        return $this->voucherRepository
+            ->updateById($id, [
+                'bill_id' => NULL,
+                'status' => Voucher::NOTUSED,
+            ]);
     }
 }

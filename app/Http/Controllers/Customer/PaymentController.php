@@ -99,6 +99,7 @@ class PaymentController extends Controller
                 'user' => $user,
                 'bill' => $bill,
                 'ticket' => $ticket,
+                'voucher_id' => isset($data['voucher_id']) ? $data['voucher_id'] : null
             ]);
 
             $data['bill_id'] = $bill->id;
@@ -126,6 +127,7 @@ class PaymentController extends Controller
         $result = $this->paymentService->vnpayReturn($fill);
 
         $getSession = session()->get(self::SESSION_USER, []);
+
         $bill = $getSession['bill'];
 
         if ($result['resCode'] == '00') {
@@ -135,8 +137,15 @@ class PaymentController extends Controller
         } else {
             try {
                 DB::beginTransaction();
+
                 $this->ticketService->deleteMultipleById($getSession['ticket']);
+
+                if (!is_null($getSession['voucher_id'])) {
+                    $this->voucherService->destroyUsed($getSession['voucher_id']);
+                }
+
                 $this->billService->deleteById($bill->id);
+
                 DB::commit();
             } catch (\Exception $e) {
                 dd($e);

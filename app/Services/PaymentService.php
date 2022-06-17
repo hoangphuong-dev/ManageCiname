@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\PaymentRepository;
+use Carbon\Carbon;
 use Exception;
 
 /**
@@ -24,14 +25,12 @@ class PaymentService
 
     public function createUrlPayment($fill)
     {
-        $exprice_date = date('YmdHis', strtotime('+15 minutes', strtotime(date("YmdHis"))));
-
         $vnp_Url = config('vnp.vnp_url');
         $vnp_HashSecret = config('vnp.vnp_hash');
 
         $inputData = array(
             "vnp_Version" => "2.1.0",
-            "vnp_ExpireDate" => $exprice_date,
+            "vnp_ExpireDate" => Carbon::now()->addMinute(15)->format('YmdHis'),
             "vnp_TmnCode" => config('vnp.vnp_code'),
             "vnp_CreateDate" => date('YmdHis'),
             "vnp_CurrCode" => "VND",
