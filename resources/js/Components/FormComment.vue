@@ -18,36 +18,40 @@
                 <div class="w-full my-1 border p-2 rounded">
                     {{ item.content }}
                 </div>
-                <div class="w-full mb-6">
-                    <span
-                        class="cursor-pointer mx-2 font-bold hover:text-blue-500"
-                    >
-                        Thích
-                    </span>
-                    <span
-                        @click="reply(item.id)"
-                        class="cursor-pointer mx-2 font-bold hover:text-blue-500"
-                        >Trả lời
-                    </span>
-                    <span class="mx-2 text-sm">
-                        {{ showTime(item.created_at) }}
-                    </span>
-
-                    <span
-                        class="cursor-pointer mx-2 font-bold hover:text-blue-500"
-                    >
-                        <el-badge
-                            :value="item.amount_feel"
-                            :max="2000"
-                            class="-mr-4"
+                <div class="w-full flex mb-6">
+                    <div class="w-8/10">
+                        <span
+                            class="cursor-pointer mx-2 font-bold hover:text-blue-500"
                         >
-                            <el-image
-                                style="width: 20px; height: 20px"
-                                src="/images/favorite.svg"
-                                fit="fill"
-                            />
-                        </el-badge>
-                    </span>
+                            Yêu thích
+                        </span>
+                        <span
+                            @click="reply(item.id)"
+                            class="cursor-pointer mx-2 font-bold hover:text-blue-500"
+                            >Trả lời
+                        </span>
+                        <span class="mx-2 text-sm">
+                            {{ showTime(item.created_at) }}
+                        </span>
+                    </div>
+
+                    <div style="width: 17.6%" class="text-right">
+                        <span
+                            class="cursor-pointer mx-2 font-bold hover:text-blue-500"
+                        >
+                            <el-badge
+                                :value="item.amount_feel"
+                                :max="2000"
+                                class="-mr-4"
+                            >
+                                <el-image
+                                    style="width: 20px; height: 20px"
+                                    src="/images/favorite.svg"
+                                    fit="fill"
+                                />
+                            </el-badge>
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -98,7 +102,6 @@
                 </div>
             </div>
             <!-- end show comment children -->
-
             <!-- rep comment  -->
             <div
                 v-if="showFormReply === item.id"
