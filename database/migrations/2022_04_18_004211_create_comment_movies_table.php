@@ -19,7 +19,6 @@ class CreateCommentMoviesTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('parent_id')->unsigned()->comment('0: comment đầu tiên , p : id của comment cha');
             $table->text('content');
-            $table->integer('amount_feel')->default(0);
 
             $table->foreign('movie_id')->references('id')->on('movies')
                 ->onUpdate('cascade')->onDelete('cascade');
