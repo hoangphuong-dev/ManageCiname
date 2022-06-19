@@ -1,3 +1,4 @@
+import moment from "moment";
 /**
  * Convert Date object to ISO string
  *
@@ -5,7 +6,12 @@
  * @returns {string} YYYY-MM-DDTHH:II:SSZ
  */
 export function datetimeToISO(dt) {
-  return dt.toJSON().replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/, '$1-$2-$3T$4:$5:$6Z')
+    return dt
+        .toJSON()
+        .replace(
+            /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/,
+            "$1-$2-$3T$4:$5:$6Z"
+        );
 }
 
 /**
@@ -15,7 +21,12 @@ export function datetimeToISO(dt) {
  * @returns {string} YYYY-MM-DD
  */
 export function dateToISO(d) {
-  return d.toJSON().replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/, '$1-$2-$3')
+    return d
+        .toJSON()
+        .replace(
+            /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/,
+            "$1-$2-$3"
+        );
 }
 
 /**
@@ -25,7 +36,7 @@ export function dateToISO(d) {
  * @param {string|undefined} locale
  */
 export function formatDate(date, locale = undefined) {
-  return new Date(date).toLocaleDateString(locale)
+    return new Date(date).toLocaleDateString(locale);
 }
 
 /**
@@ -35,17 +46,17 @@ export function formatDate(date, locale = undefined) {
  * @param {string|undefined} locale
  */
 export function formatDateTime(dt, locale = undefined) {
-  let options = {
-    hour12: false,
-    formatMatcher: 'basic',
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  }
+    let options = {
+        hour12: false,
+        formatMatcher: "basic",
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+    };
 
-  return new Date(dt).toLocaleString(locale, options)
+    return new Date(dt).toLocaleString(locale, options);
 }
 
 /**
@@ -55,8 +66,13 @@ export function formatDateTime(dt, locale = undefined) {
  * @returns {string} YYYY-MM-DDTHH:II:SSZ
  */
 export function datetimeToLocale(dt) {
-  var newDT = new Date(dt.getTime() - dt.getTimezoneOffset() * 60 * 1000)
-  return newDT.toJSON().replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/, '$1-$2-$3T$4:$5')
+    var newDT = new Date(dt.getTime() - dt.getTimezoneOffset() * 60 * 1000);
+    return newDT
+        .toJSON()
+        .replace(
+            /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/,
+            "$1-$2-$3T$4:$5"
+        );
 }
 
 /**
@@ -66,8 +82,13 @@ export function datetimeToLocale(dt) {
  * @returns {string} YYYY-MM-DDTHH:II:SSZ
  */
 export function datetimeToDateLocale(dt) {
-  var newDT = new Date(dt.getTime() - dt.getTimezoneOffset() * 60 * 1000)
-  return newDT.toJSON().replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/, '$1-$2-$3')
+    var newDT = new Date(dt.getTime() - dt.getTimezoneOffset() * 60 * 1000);
+    return newDT
+        .toJSON()
+        .replace(
+            /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/,
+            "$1-$2-$3"
+        );
 }
 
 /**
@@ -77,18 +98,28 @@ export function datetimeToDateLocale(dt) {
  * @returns {string} YYYY-MM-DDTHH:II:SSZ
  */
 export function datetimeToTimeLocale(dt) {
-  var newDT = new Date(dt.getTime() - dt.getTimezoneOffset() * 60 * 1000)
-  return newDT.toJSON().replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/, '$4:$5:$6')
+    var newDT = new Date(dt.getTime() - dt.getTimezoneOffset() * 60 * 1000);
+    return newDT
+        .toJSON()
+        .replace(
+            /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(.*)Z$/,
+            "$4:$5:$6"
+        );
 }
 
-export function isSameOrBefore($dt, $before = 'now') {
-  if ($before === 'now') {
-    return Date.now() <= Date.parse($dt)
-  }
+export function isSameOrBefore($dt, $before = "now") {
+    if ($before === "now") {
+        return Date.now() <= Date.parse($dt);
+    }
 
-  return Date.parse($before) <= Date.parse($dt)
+    return Date.parse($before) <= Date.parse($dt);
 }
 
 export function getTimezone() {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+export function showTime(dateTime) {
+    moment.locale("vn");
+    return moment(dateTime).fromNow();
 }
