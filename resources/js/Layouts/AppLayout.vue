@@ -266,7 +266,7 @@ export default defineComponent({
             setTimeout(() => {
                 loading.close();
                 Inertia.get(path);
-            }, 700);
+            }, 500);
         },
         isValidHttpUrl(string) {
             let url;
@@ -287,20 +287,19 @@ export default defineComponent({
         handleCommand(command) {
             switch (command) {
                 case "logout":
-                    Inertia.get(route("customer.logout"));
+                    this.redirectRoute(route("customer.logout"));
                     break;
                 case "profile":
                     this.user.role === 3
-                        ? Inertia.get(route("profile"))
-                        : Inertia.get(route("customer.login"));
+                        ? this.redirectRoute(route("profile"))
+                        : this.redirectRoute(route("customer.login"));
                     break;
                 case "now_showing":
-                    Inertia.get(route("now_showing"));
+                    this.redirectRoute(route("now_showing"));
                     break;
                 case "coming_soon":
-                    Inertia.get(route("comming_soon"));
+                    this.redirectRoute(route("comming_soon"));
                     break;
-
                 default:
                     break;
             }
