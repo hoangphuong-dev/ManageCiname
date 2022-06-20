@@ -72,4 +72,6 @@ Route::group(['middleware' => ['customer']], function () {
     Route::resources([
         'comments' => CommentController::class,
     ]);
+
+    Route::put('toggle-favorite', [CommentController::class, 'toggleFavorite'])->name('comment.toggle-favorite');
 });
