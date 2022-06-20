@@ -21,6 +21,7 @@
                 <div class="w-full flex mb-6">
                     <div class="w-8/10">
                         <span
+                            @click="onFavoriteClick(item.id, item.isFavorite)"
                             class="cursor-pointer mx-2 font-bold hover:text-blue-500"
                         >
                             Yêu thích
@@ -35,7 +36,7 @@
                         </span>
                     </div>
 
-                    <div style="width: 17.6%" class="text-right">
+                    <div style="width: 17.6%" class="text-right mt-2">
                         <span
                             class="cursor-pointer mx-2 font-bold hover:text-blue-500"
                         >
@@ -75,6 +76,9 @@
                     <div class="w-full mb-6 flex mt-2">
                         <div class="w-8/10">
                             <span
+                                @click="
+                                    onFavoriteClick(each.id, each.isFavorite)
+                                "
                                 class="cursor-pointer mx-2 font-bold hover:text-blue-500"
                             >
                                 Yêu thích
@@ -305,6 +309,28 @@ export default {
             if (!file) return;
             if (this.isValidHttpUrl(file)) return file;
             return `/uploads/${file}`;
+        },
+
+        onFavoriteClick(comment_id, isFavorite) {
+            if (this.user === null) {
+                Inertia.get(route("customer.login"));
+                return this.$message.warning(
+                    "Vui lòng đăng nhập để yêu thích bình luận !"
+                );
+            }
+            Inertia.put(
+                route("comment.toggle-favorite"),
+                {
+                    comment_id: comment_id,
+                    isFavorite: isFavorite,
+                },
+                {
+                    preserveScroll: true,
+                    onSuccess: (_) => {
+                        // this.blog.isFavorite = !this.blog.isFavorite;
+                    },
+                }
+            );
         },
     },
 };
