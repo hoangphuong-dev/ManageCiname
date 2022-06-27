@@ -19,7 +19,7 @@ class CreateCommentFavoritesTable extends Migration
             $table->bigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade');
+            $table->foreign('comment_id')->references('id')->on('comment_movies')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
