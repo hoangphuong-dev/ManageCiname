@@ -12,8 +12,10 @@ class CommentController extends Controller
 
     public function getComment(Request $request)
     {
-        return CommentMovie::where('movie_id', $request->movie_id)
+        $result =  CommentMovie::where('movie_id', $request->movie_id)
             ->with('user')->get();
+
+        dd($result);
     }
     /**
      * Store a newly created resource in storage.
@@ -77,5 +79,10 @@ class CommentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function toggleFavorite(Request $request)
+    {
+        dd($request->all());
     }
 }

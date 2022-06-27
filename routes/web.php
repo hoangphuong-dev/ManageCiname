@@ -57,8 +57,6 @@ Route::group(['as' => 'order.', 'prefix' => 'order'], function () {
     Route::get('/vnpay_return', [PaymentController::class, 'vnpayReturn'])->name('vnpayReturn');
 });
 
-
-
 Route::group(['middleware' => ['customer']], function () {
     Route::get('/logout', [CustomerController::class, 'logout'])->name('customer.logout');
     Route::get('/my-ticket.html', [CustomerController::class, 'myTicket'])->name('ticket');
@@ -72,4 +70,6 @@ Route::group(['middleware' => ['customer']], function () {
     Route::resources([
         'comments' => CommentController::class,
     ]);
+
+    Route::put('toggle-favorite', [CommentController::class, 'toggleFavorite'])->name('comment.toggle-favorite');
 });
