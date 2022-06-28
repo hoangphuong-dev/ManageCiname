@@ -15,8 +15,8 @@ class CreateCommentFavoritesTable extends Migration
     {
         Schema::create('comment_favorites', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('comment_id');
-            $table->bigInteger('user_id');
+            $table->bigInteger('comment_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('comment_id')->references('id')->on('comment_movies')->onDelete('cascade');
