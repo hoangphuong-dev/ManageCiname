@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\FormatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\MovieGenreController;
+use App\Http\Controllers\Api\ProvinceController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\SeatTypeController;
 use App\Http\Controllers\Api\ShowTimeController;
@@ -37,7 +38,7 @@ Route::get('/showtimes/room/{id}', [ShowTimeController::class, 'listShowTimeByRo
 Route::get('/bill/{id}', [BillController::class, 'getBillById']);
 
 Route::apiResource('showtimes', ShowTimeController::class);
-Route::get('provinces', [CustomerController::class, 'getProvince']);
+Route::get('province-has-cinemas', [ProvinceController::class, 'getProvinceHasCinema']);
 
 Route::get('get-cinema-by-province/{id}', [CustomerController::class, 'getCinemaByProvince']);
 

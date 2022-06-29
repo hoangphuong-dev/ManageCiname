@@ -50,40 +50,27 @@
                                 label="Chọn thành phố"
                                 prop="province_id"
                             >
-                                <el-select
-                                    class="w-full"
-                                    v-model="formData.province_id"
-                                    clearable
+                                <div
+                                    v-for="item in provinces"
+                                    :key="item.id"
+                                    class="shadow-lg cursor-pointer"
+                                    @click="getCineme(item.id)"
                                 >
-                                    <el-option
-                                        v-for="item in provinces"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.id"
-                                        @click="getCineme(item.id)"
-                                    ></el-option>
-                                </el-select>
+                                    {{ item.name }}
+                                </div>
                             </el-form-item>
 
                             <!-- Chọn rạp  -->
                             <el-form-item label="Chọn rạp" prop="cinema_id">
-                                <el-select
-                                    v-model="formData.cinema_id"
-                                    class="w-full"
-                                    clearable
+                                <div
+                                    v-for="item in cinemas"
+                                    :key="item.id"
+                                    @click="viewShowTime(item.id)"
+                                    class="shadow-lg cursor-pointer"
                                 >
-                                    <el-option
-                                        v-for="item in cinemas"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.id"
-                                    ></el-option>
-                                </el-select>
+                                    {{ item.name }}
+                                </div>
                             </el-form-item>
-
-                            <el-button @click="viewShowTime()"
-                                >Xem suất chiếu</el-button
-                            >
                         </el-form>
                     </el-dialog>
                 </div>
@@ -122,7 +109,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { getYoutubeId } from "@/Helpers/youtube.js";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
-import { listProvince, getCinemaByProvince } from "@/API/main.js";
+import { listProvinceHasCinema, getCinemaByProvince } from "@/API/main.js";
 
 export default {
     components: { AppLayout },
@@ -141,29 +128,6 @@ export default {
                 movie_id: "",
                 province_id: "",
                 cinema_id: "",
-            },
-            rules: {
-                movie_id: [
-                    {
-                        required: true,
-                        message: "Trường này không được để trống",
-                        trigger: "blur",
-                    },
-                ],
-                province_id: [
-                    {
-                        required: true,
-                        message: "Trường này không được để trống",
-                        trigger: "blur",
-                    },
-                ],
-                cinema_id: [
-                    {
-                        required: true,
-                        message: "Trường này không được để trống",
-                        trigger: "blur",
-                    },
-                ],
             },
         };
     },
@@ -184,14 +148,16 @@ export default {
         },
 
         async fetchDataProvince() {
-            listProvince()
+            listProvinceHasCinema()
                 .then(({ status, data }) => {
+                    console.log(5555, data);
                     this.provinces = data;
                 })
                 .catch(() => {});
         },
 
         getCineme(id) {
+            this.formData.province_id = id;
             this.fetchDataCinema(id);
         },
 
@@ -203,7 +169,8 @@ export default {
                 .catch(() => {});
         },
 
-        async viewShowTime() {
+        async viewShowTime(cinema_id) {
+            this.formData.cinema_id = cinema_id;
             this.$refs["formData"].validate(async (valid) => {
                 if (valid) {
                     Inertia.get(route("order.ticket", { ...this.formData }), {

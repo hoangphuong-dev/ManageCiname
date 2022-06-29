@@ -21,5 +21,6 @@
     "create notification successful": "Tạo thông báo thành công",
     "delete notification successful": "Xóa thông báo thành công",
     "update notification successful": "Sửa thông báo thành công",
-    "permission denied for this job": "Bạn không có quyền đối với job này"
+    "permission denied for this job": "Bạn không có quyền đối với job này",
+    "create seat type successful": "Tạo thể loại ghế thành công"
 }

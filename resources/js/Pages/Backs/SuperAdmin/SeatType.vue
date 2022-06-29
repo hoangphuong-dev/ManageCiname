@@ -37,10 +37,17 @@
                     >
                         <template #image="{ row }">
                             <div>
-                                <el-image
+                                {{ getImage(row?.image) }}
+
+                                <!-- <el-image
                                     class="mr-5 cursor-pointer"
                                     :src="getImage(row?.image)"
-                                ></el-image>
+                                ></el-image> -->
+
+                                <img
+                                    :src="getImage(row?.image)"
+                                    class="mr-5 cursor-pointer"
+                                />
                             </div>
                         </template>
                         <template #actions="{ row }">

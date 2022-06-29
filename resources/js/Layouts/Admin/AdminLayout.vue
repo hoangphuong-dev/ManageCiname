@@ -12,7 +12,7 @@
                 <div
                     v-for="menu in menus"
                     :key="menu.path"
-                    class="MenuItem min-h-64 py-3 flex text-xl hover:cursor-pointer font-bold"
+                    class="MenuItem min-h-64 py-3 flex text-2xl hover:cursor-pointer"
                     :class="{ IsActive: activeMenu(menu) }"
                     @click="onMenuClick(menu)"
                 >
