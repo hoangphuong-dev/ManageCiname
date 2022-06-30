@@ -11,13 +11,15 @@ class ImageHelper
     public const ALLOW_IMAGE = ['jpeg', 'png', 'jpg', 'gif', 'svg'];
     public const DEFAULT_PATH = 'uploads';
 
-    static public function upload($image, $fileName = null, $toPath = self::DEFAULT_PATH)
+    public static function upload($image, $fileName = null, $toPath = self::DEFAULT_PATH)
     {
         $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $image->extension();
 
         if (!in_array($extension, self::ALLOW_IMAGE)) {
-            throw new ImageUploadFailException('Image not allow, image allow with extension ' . implode(",", self::ALLOW_IMAGE));
+            throw new ImageUploadFailException(
+                'Image not allow, image allow with extension ' . implode(",", self::ALLOW_IMAGE)
+            );
         }
 
         $uuid = Str::uuid();
@@ -28,11 +30,10 @@ class ImageHelper
 
         $filePath = $image->storeAs($toPath, $fileName);
         Storage::url($filePath);
-
         return $filePath;
     }
 
-    static public function uploadMulti($images, $fileName = null, $toPath = self::DEFAULT_PATH)
+    public static function uploadMulti($images, $fileName = null, $toPath = self::DEFAULT_PATH)
     {
         try {
             $arrayImage = [];
@@ -46,19 +47,19 @@ class ImageHelper
         }
     }
 
-    static public function deleteImages(array $images)
+    public static function deleteImages(array $images)
     {
         foreach ($images as $image) {
             static::deleteImage($image);
         }
     }
 
-    static public function deleteImage($path)
+    public static function deleteImage($path)
     {
         Storage::delete($path);
     }
 
-    static public function get($path)
+    public static function get($path)
     {
         return Storage::url($path);
     }
