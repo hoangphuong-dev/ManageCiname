@@ -1,5 +1,5 @@
 export default {
-   methods: {
+    methods: {
         isValidHttpUrl(string) {
             let url;
 
@@ -15,7 +15,7 @@ export default {
             if (!file) return;
 
             if (this.isValidHttpUrl(file)) return file;
-            
+
             return `/storage/${file}`;
         },
     },
