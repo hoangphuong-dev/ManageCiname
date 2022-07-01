@@ -38,6 +38,7 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
 
     Route::prefix('/seat_type')->as('seat_type.')->group(function () {
         Route::get('/index', [SeatTypeController::class, 'index'])->name('index');
+        Route::post('edit/{id}', [SeatTypeController::class, 'edit'])->name('update');
         Route::delete('delete/{id}', [SeatTypeController::class, 'delete'])->name('delete');
         Route::post('store', [SeatTypeController::class, 'store'])->name('store');
     });

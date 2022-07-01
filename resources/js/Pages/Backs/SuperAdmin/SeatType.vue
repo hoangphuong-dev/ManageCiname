@@ -37,19 +37,17 @@
                     >
                         <template #image="{ row }">
                             <div>
-                                {{ getImage(row?.image) }}
-
-                                <!-- <el-image
-                                    class="mr-5 cursor-pointer"
+                                <el-image
+                                    class="mr-5 cursor-pointer h-32"
                                     :src="getImage(row?.image)"
-                                ></el-image> -->
-
-                                <img
-                                    :src="getImage(row?.image)"
-                                    class="mr-5 cursor-pointer"
-                                />
+                                ></el-image>
                             </div>
                         </template>
+
+                        <template #created_at="{ row }">
+                            {{ formatDateTime(row?.created_at) }}
+                        </template>
+
                         <template #actions="{ row }">
                             <div v-if="row" class="flex items-center">
                                 <template v-if="!row.status">
@@ -170,7 +168,7 @@
                                 class="btn-primary bg-red-400"
                                 @click="onSubmit"
                             >
-                                Thêm
+                                {{ selectedItem === null ? "Thêm" : "Sửa" }}
                             </button>
                         </span>
                     </template>
@@ -186,6 +184,7 @@ import SearchInput from "@/Components/Element/SearchInput.vue";
 import DataTable from "@/Components/DataTable.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
+import { formatDateTime } from "@/libs/datetime";
 export default {
     name: "SeatType",
     components: {
@@ -259,6 +258,7 @@ export default {
     },
 
     methods: {
+        formatDateTime: formatDateTime,
         inertia() {
             Inertia.get(
                 route("superadmin.seat_type.index", this.filter),
@@ -305,7 +305,7 @@ export default {
                     if (this.selectedItem === null) {
                         this.createSeatType();
                     } else {
-                        this.editBlog();
+                        this.editSeatType();
                     }
                 }
             });
@@ -335,9 +335,11 @@ export default {
             this.dialogVisible = true;
         },
 
-        editBlog() {
+        editSeatType() {
             Inertia.post(
-                route("back.blog.update", { id: this.selectedItem }),
+                route("superadmin.seat_type.update", {
+                    id: this.selectedItem,
+                }),
                 this.formData,
                 {
                     onBefore,

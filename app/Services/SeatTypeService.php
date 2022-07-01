@@ -26,10 +26,23 @@ class SeatTypeService extends BaseService
         return SeatTypeResource::collection($seatType);
     }
 
-    public function edit($request, $id)
+    public function update($id, $fill)
     {
-        // dd($request->all());
-        // return $this->seatTypeRepository->edit($request, $id);
+        $seatType = $this->seatTypeRepository->getById($id);
+        $oldImage = null;
+
+        if (isset($fill['image']) && gettype($fill['image']) == 'object') {
+            $fill['image'] = ImageHelper::upload($fill['image']);
+            $oldImage = $seatType->image;
+        } else {
+            $fill['image'] = $seatType->image;
+        }
+
+        if ($oldImage) {
+            ImageHelper::deleteImage($oldImage);
+        }
+
+        $this->seatTypeRepository->updateById($id, $fill);
     }
 
     public function store($fill)
@@ -42,6 +55,8 @@ class SeatTypeService extends BaseService
 
     public function delete($id)
     {
+        $seatType = $this->seatTypeRepository->getById($id);
+        ImageHelper::deleteImage($seatType->image);
         return $this->seatTypeRepository->deleteById($id);
     }
 }

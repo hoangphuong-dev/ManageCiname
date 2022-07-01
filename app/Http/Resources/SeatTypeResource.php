@@ -19,7 +19,7 @@ class SeatTypeResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image' => $this->image,
-            'price' => number_format($this->price),
+            'price' => $this->price,
             'created_at' => Carbon::parse($this->created_at)->format('c'),
             'updated_at' => Carbon::parse($this->updated_at)->format('c'),
         ];

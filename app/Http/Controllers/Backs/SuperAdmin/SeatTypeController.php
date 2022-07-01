@@ -28,11 +28,17 @@ class SeatTypeController extends Controller
         ]);
     }
 
-    public function edit(Request $request, $id)
+    public function edit(SeatTypeRequest $request, $id)
     {
-        // return $this->seatTypeService->edit($request, $id);
-        $message = ['error' => "Tinh nang nay van dang duoc phat trien them"];
-        return back()->with($message);
+        try {
+            $fill = $request->validated();
+            $this->seatTypeService->update($id, $fill);
+            $message = ['success' => __('update seat type successful')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
     }
 
     public function delete($id)
