@@ -18,15 +18,18 @@ class MovieService extends BaseService
     protected $castMovieRepository;
     protected $cinemaRepository;
     protected $cinemaMovieRepository;
+    protected $movieGenreService;
 
     public function __construct(
         MovieRepository $movieRepository,
+        MovieGenreService $movieGenreService,
         MovieGnereMovieRepository $movieGnereMovieRepository,
         CastMovieRepository $castMovieRepository,
         CinemaRepository $cinemaRepository,
         CinemaMovieRepository $cinemaMovieRepository,
     ) {
         $this->movieRepository = $movieRepository;
+        $this->movieGenreService = $movieGenreService;
         $this->movieGnereMovieRepository = $movieGnereMovieRepository;
         $this->castMovieRepository = $castMovieRepository;
         $this->cinemaRepository = $cinemaRepository;
@@ -62,6 +65,11 @@ class MovieService extends BaseService
     {
         $movie = $this->movieRepository->list($request);
         return MovieResource::collection($movie);
+    }
+
+    public function getListMovieGenre()
+    {
+        return $this->movieGenreService->all();
     }
 
     public function show($id)
@@ -117,7 +125,7 @@ class MovieService extends BaseService
 
     public function delete($id)
     {
-        return $this->movieRepository->destroy($id);
+        return $this->movieRepository->deleteById($id);
     }
 
     public function getAllCinemes()

@@ -24,9 +24,6 @@ Route::group(['as' => 'back.'], function () {
     // ->middleware(IgnoreLoginMiddleware::class);
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login.post');
     Route::post('/register', [AuthenticationController::class, 'registerSubmit'])->name('staff.register');
-
-
-
     Route::get('/confirm-acount/{admin_id}', [AuthenticationController::class, 'confirmAdmin'])->name('confirm.acount');
 });
 
@@ -34,23 +31,30 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     Route::get('/logout', [AuthenticationController::class, 'logoutSuperAdmin'])->name('logout_super');
     Route::get('/index.html', [SuperAdminController::class, 'index'])->name('home_super');
 
-    Route::put('seat_types/{id}', [SeatTypeController::class, 'edit'])->name('seat_types.edit');
-
     Route::prefix('/seat_type')->as('seat_type.')->group(function () {
-        Route::get('/index', [SeatTypeController::class, 'index'])->name('index');
+        Route::get('', [SeatTypeController::class, 'index'])->name('index');
         Route::post('edit/{id}', [SeatTypeController::class, 'edit'])->name('update');
         Route::delete('delete/{id}', [SeatTypeController::class, 'delete'])->name('delete');
         Route::post('store', [SeatTypeController::class, 'store'])->name('store');
     });
 
-    Route::get('/movies.html', [MovieController::class, 'index'])->name('movie.index');
-    Route::get('/create_admin.html', [AdminInfoController::class, 'create'])->name('create_admin');
-    Route::get('/create_movie.html', [MovieController::class, 'create'])->name('create_movie');
-    Route::delete('movies/{id}', [MovieController::class, 'delete'])->name('movies.delete');
-    Route::get('movies/edit/{id}', [MovieController::class, 'edit'])->name('movies.edit');
+    Route::prefix('/movie')->as('movie.')->group(function () {
+        Route::get('/', [MovieController::class, 'index'])->name('index');
+        Route::post('edit/{id}', [MovieController::class, 'edit'])->name('update');
+        Route::delete('delete/{id}', [MovieController::class, 'delete'])->name('delete');
+        Route::post('store', [MovieController::class, 'store'])->name('store');
 
-    Route::post('movies/import', [MovieController::class, 'importCsv'])->name('movies.import');
-    Route::get('movies/export', [MovieController::class, 'exportCsv'])->name('movies.export');
+        Route::post('import', [MovieController::class, 'importCsv'])->name('import');
+        Route::get('export', [MovieController::class, 'exportCsv'])->name('export');
+    });
+
+    // Route::get('/movies.html', [MovieController::class, 'index'])->name('movie.index');
+    // Route::get('/create_admin.html', [AdminInfoController::class, 'create'])->name('create_admin');
+    // Route::get('/create_movie.html', [MovieController::class, 'create'])->name('create_movie');
+    // Route::delete('movies/{id}', [MovieController::class, 'delete'])->name('movies.delete');
+    // Route::get('movies/edit/{id}', [MovieController::class, 'edit'])->name('movies.edit');
+
+
 
     // Quản lý hệ thống rạp
     Route::get('/master-cinema.html', [CinemaController::class, 'getMasterCinema'])->name('admin_info.index');

@@ -12,7 +12,7 @@ class Movie extends Model
     protected $guarded = [];
 
     public const MOVIE_ACTIVE = 1;
-    public const MOVIE_DEACTIVE = 0;
+    public const MOVIE_DEACTIVE = 2;
 
 
     public function showtimes()

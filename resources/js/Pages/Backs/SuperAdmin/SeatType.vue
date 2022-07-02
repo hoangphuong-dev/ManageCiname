@@ -38,7 +38,7 @@
                         <template #image="{ row }">
                             <div>
                                 <el-image
-                                    class="mr-5 cursor-pointer h-32"
+                                    class="mr-5 cursor-pointer h-32 w-52"
                                     :src="getImage(row?.image)"
                                 ></el-image>
                             </div>
@@ -218,8 +218,8 @@ export default {
             fields: [
                 { key: "image", label: "Ảnh" },
                 { key: "name", label: "Loại ghế", width: 350 },
-                { key: "price", label: "Giá tiền", width: 150 },
-                { key: "created_at", label: "Ngày tạo", width: 200 },
+                { key: "price", label: "Giá tiền", width: 200 },
+                { key: "created_at", label: "Ngày tạo", width: 250 },
                 { key: "actions", label: "Hành động", width: 150 },
             ],
             rules: {

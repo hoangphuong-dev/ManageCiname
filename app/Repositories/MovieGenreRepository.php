@@ -3,19 +3,22 @@
 namespace App\Repositories;
 
 use App\Models\MovieGenre;
+use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 
-class MovieGenreRepository
+class MovieGenreRepository extends BaseRepository
 {
-    protected $movieGenre;
-
-    public function __construct(MovieGenre $movieGenre)
+    /**
+     * @return string
+     *  Return the model
+     */
+    public function model()
     {
-        $this->movieGenre = $movieGenre;
+        return MovieGenre::class;
     }
 
     public function list($request)
     {
-        return $this->movieGenre->query()
+        return $this->model
             ->when($request->name, function ($query) use ($request) {
                 return $query->where("name", "like", "%{$request->name}%");
             })
@@ -24,13 +27,13 @@ class MovieGenreRepository
             })->get();
     }
 
-    public function all()
-    {
-        return $this->movieGenre->query()->get();
-    }
+    // public function all()
+    // {
+    //     return $this->model->query()->get();
+    // }
 
     public function store($fill)
     {
-        return $this->movieGenre->create($fill);
+        return $this->model->create($fill);
     }
 }

@@ -111,7 +111,7 @@ class MovieSeeder extends Seeder
                     'trailer' =>  $dataUrlYoutube[array_rand($dataUrlYoutube)],
                     'movie_length' => 120,
                     'rated' => 16,
-                    'status' => array_rand([0, 1]),
+                    'status' => random_int(1, 2),
                 ]);
                 $movie_id = $movie->id;
 

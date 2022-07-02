@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Helper\FormatDate;
+use App\Models\Filters\MovieFilters;
 use App\Models\Movie;
 use App\Models\ShowTime;
 use App\Models\Ticket;
@@ -26,24 +27,13 @@ class MovieRepository extends BaseRepository
 
     public function getMovieNowShowing($request)
     {
-        $formatDate = new FormatDate();
-
         return $this->model->newQuery()
-            // ->when(
-            //     $request->name,
-            //     function ($query) use ($request) {
-            //         return $query->where("name", "like", "%{$request->name}%");
-            //     })
-            //     ->when($request->movie_genre, function ($query) use ($request) {
-            //         return $query
-            //             ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
-            //             ->where("movie_genre_id", "=", $request->movie_genre);
-            //     })
+
             ->whereIn(
                 'id',
                 ShowTime::select('movie_id')
                     ->where('time_start', '>=', now())
-                    ->where('time_start', '<=', $formatDate->getFourteenDay())
+                    ->where('time_start', '<=', FormatDate::getFourteenDay())
                     ->get()->toArray()
             )
             ->where('status', Movie::MOVIE_ACTIVE)
@@ -54,17 +44,7 @@ class MovieRepository extends BaseRepository
     public function getMovieCommingSoon($request)
     {
         return $this->model->newQuery()
-            // ->when(
-            //     $request->name,
-            //     function ($query) use ($request) {
-            //         return $query->where("name", "like", "%{$request->name}%");
-            //     }
-            // )
-            // ->when($request->movie_genre, function ($query) use ($request) {
-            //     return $query
-            //         ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
-            //         ->where("movie_genre_id", "=", $request->movie_genre);
-            // })
+
             ->whereNotIn('id', ShowTime::select('movie_id')->get()->toArray())
             ->where('status', Movie::MOVIE_ACTIVE)
             ->orderBy('id', "DESC")
@@ -91,26 +71,9 @@ class MovieRepository extends BaseRepository
 
     public function list($request)
     {
-        return $this->model->query()
-            ->select("movies.*")
-            // ->with(['movie_genres', 'casts', 'cinemas'])
-            ->when($request->name, function ($query) use ($request) {
-                return $query->where("name", "like", "%{$request->name}%");
-            })
-            ->when($request->action, function ($query) use ($request) {
-                return $query->where("movies.status", "=", $request->action);
-            })
-            ->when($request->movie_genre, function ($query) use ($request) {
-                return $query
-                    ->join("movie_genre_movies", "movie_genre_movies.movie_id", "=", "movies.id")
-                    ->where("movie_genre_id", "=", $request->movie_genre);
-            })
-            ->when($request->movie, function ($q) use ($request) {
-                if ($request->movie == "now_showing") {
-                    return $q->with('showtimes')->where('time_start', '>', now());
-                }
-            })
+        return $this->model
             ->orderBy('id', "DESC")
+            ->filters(new MovieFilters($request))
             ->paginate($request->query('limit', 12));
     }
 
@@ -153,10 +116,5 @@ class MovieRepository extends BaseRepository
                 $query->orderBy('time_start')->first();
             }])
             ->findOrFail($id);
-    }
-
-    public function destroy($id)
-    {
-        return $this->model->where('id', $id)->where('status', Movie::MOVIE_DEACTIVE)->delete();
     }
 }

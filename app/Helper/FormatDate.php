@@ -6,7 +6,7 @@ use Carbon\CarbonPeriod;
 
 class FormatDate
 {
-    public function getFourteenDay()
+    public static function getFourteenDay()
     {
         $start_date = date('Y-m-d');
         $code_date = strtotime('+2 week', strtotime($start_date));
@@ -14,24 +14,24 @@ class FormatDate
         return $end_date;
     }
 
-    function getTwoWeek()
+    public static function getTwoWeek()
     {
         $arr = array();
 
         $start_date = date('Y-m-d');
-        $end_date = $this->getFourteenDay();
+        $end_date = self::getFourteenDay();
         $period = CarbonPeriod::create($start_date, $end_date);
 
         foreach ($period as $item) {
             $date = $item->format('Y-m-d'); // lay ngay thang nam 
             $show = $item->format('d-m');
-            $day =   $this->formatWeekday($item->format('l')); // lay thu trong tuan 
+            $day = self::formatWeekday($item->format('l')); // lay thu trong tuan 
             array_push($arr, array('week' =>  $day, 'day' => $date, 'show' => $show));
         }
         return $arr;
     }
 
-    public function formatWeekday($weekday)
+    public static function formatWeekday($weekday)
     {
         $weekday = strtolower($weekday);
         switch ($weekday) {

@@ -15,17 +15,60 @@ class MovieController extends Controller
 {
 
     protected $movieService;
-    protected $movieGenreService;
 
-    public function __construct(MovieService $movieService, MovieGenreService $movieGenreService)
+    public function __construct(MovieService $movieService)
     {
         $this->movieService = $movieService;
-        $this->movieGenreService = $movieGenreService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render("Backs/SuperAdmin/Movie");
+        $movies = $this->movieService->list($request);
+        $movieGenre  = $this->movieService->getListMovieGenre();
+
+        return Inertia::render('Backs/SuperAdmin/Movie', [
+            'movies' => $movies,
+            'movieGenre' => $movieGenre,
+            'filtersBE' => $request->all()
+        ]);
+    }
+
+    public function edit(SeatTypeRequest $request, $id)
+    {
+        try {
+            $fill = $request->validated();
+            $this->movieService->update($id, $fill);
+            $message = ['success' => __('update seat type successful')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $this->movieService->delete($id);
+            $message = ['success' => 'Xóa thành công'];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
+    }
+
+    public function store(SeatTypeRequest $request)
+    {
+        try {
+            $fill = $request->validated();
+            $this->movieService->store($fill);
+            $message = ['success' => __('create seat type successful')];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
     }
 
     public function importCsv(Request $request)
@@ -40,41 +83,42 @@ class MovieController extends Controller
         }
     }
 
-    public function exportCsv()
-    {
-        // return Excel::download(new , 'movies.xlsx');
-        
-    }
 
-    public function create()
-    {
-        $movie_genres = $this->movieGenreService->all();
 
-        return Inertia::render("Backs/SuperAdmin/FormMovie", [
-            'movie_genres' => $movie_genres,
-        ]);
-    }
 
-    public function delete($id)
-    {
-        try {
-            $this->movieService->delete($id);
-            $message = ['success' => __('Xóa thành công !')];
-        } catch (\Exception $e) {
-            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
-        } finally {
-            return back()->with($message);
-        }
-    }
 
-    public function edit($id)
-    {
-        // $movie = $this->movieService->edit($id);
-        // return Inertia::render(
-        //     'Backs/SuperAdmin/EditMovie',
-        //     [
-        //         'movie' => $movie
-        //     ]
-        // );
-    }
+
+
+
+    // public function create()
+    // {
+    //     $movie_genres = $this->movieGenreService->all();
+
+    //     return Inertia::render("Backs/SuperAdmin/FormMovie", [
+    //         'movie_genres' => $movie_genres,
+    //     ]);
+    // }
+
+    // public function delete($id)
+    // {
+    //     try {
+    //         $this->movieService->delete($id);
+    //         $message = ['success' => __('Xóa thành công !')];
+    //     } catch (\Exception $e) {
+    //         $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
+    //     } finally {
+    //         return back()->with($message);
+    //     }
+    // }
+
+    // public function edit($id)
+    // {
+    //     // $movie = $this->movieService->edit($id);
+    //     // return Inertia::render(
+    //     //     'Backs/SuperAdmin/EditMovie',
+    //     //     [
+    //     //         'movie' => $movie
+    //     //     ]
+    //     // );
+    // }
 }
