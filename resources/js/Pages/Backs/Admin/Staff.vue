@@ -43,8 +43,11 @@
                         <template #status="{ row }">
                             <div
                                 :class="{
-                                    'bg-yellow-500': row?.status === 1,
-                                    'bg-green-600': row?.status === 2,
+                                    'bg-yellow-500 text-white':
+                                        row?.status === 1,
+                                    'bg-green-600 text-white':
+                                        row?.status === 2,
+                                    'text-red-500 font-bold': row?.status === 3,
                                 }"
                                 class="p-2 text-center rounded-md"
                             >
@@ -79,6 +82,7 @@
 
                                 &nbsp;
                                 <button
+                                    v-if="row?.status != 3"
                                     class="btn-warning"
                                     @click="updateStatus(row, row?.status)"
                                 >
