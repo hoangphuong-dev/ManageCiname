@@ -258,7 +258,7 @@ export default {
     },
 
     methods: {
-        formatDateTime: formatDateTime,
+        formatDateTime,
         inertia() {
             Inertia.get(
                 route("superadmin.seat_type.index", this.filter),

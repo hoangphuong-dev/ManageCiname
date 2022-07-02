@@ -37,6 +37,9 @@ export const MOVIE_DEACTIVE = 2;
 export const MOVIE_NOW_SHOWING = 1;
 export const MOVIE_COMMING_SOON = 2;
 
-export const STAFF_NOT_APPROVED = 0;
-export const STAFF_WORKING = 1;
-export const STAFF_RESIGN = 2;
+export const STAFF_NOT_APPROVED = 1;
+export const STAFF_WORKING = 2;
+export const STAFF_RESIGN = 3;
+
+export const STAFF_FULL_TIME = 1;
+export const STAFF_PART_TIME = 2;

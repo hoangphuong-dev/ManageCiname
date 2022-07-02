@@ -11,11 +11,9 @@ class StaffInfo extends Model
 
     protected $guarded = [];
 
-    public const STATUS_NOT_APPROVED = 0;
-    public const STATUS_WORKING = 1;
-    public const STATUS_RESIGN = 2;
-
-    public $timestamps = false;
+    public const STATUS_NOT_APPROVED = 1;
+    public const STATUS_WORKING = 2;
+    public const STATUS_RESIGN = 3;
 
     public function user()
     {

@@ -27,7 +27,7 @@
                             :filter="filter"
                             v-model="filter.name"
                             label="Tìm kiếm"
-                            @submit="onSearch"
+                            @submit="onFilter"
                         />
                     </div>
                     <div class="w-1/5 flex items-end">
@@ -236,10 +236,7 @@ export default {
 
             pageDisplay: [
                 { name: "Tất cả", id: 0 },
-                {
-                    name: "Đang công chiếu",
-                    id: Movie.MOVIE_NOW_SHOWING,
-                },
+                { name: "Đang công chiếu", id: Movie.MOVIE_NOW_SHOWING },
                 { name: "Sắp công chiếu", id: Movie.MOVIE_COMMING_SOON },
             ],
             statusList: [
@@ -356,14 +353,9 @@ export default {
                 this.filter.display = value;
             } else if (type === "movie_genre") {
                 this.filter.movie_genre = value;
-            } else {
+            } else if (type === "status") {
                 this.filter.status = value;
             }
-            this.filter.page = 1;
-            this.inertia();
-        },
-
-        onSearch() {
             this.filter.page = 1;
             this.inertia();
         },

@@ -53,7 +53,11 @@ export default {
                     break;
 
                 case "status":
-                    this.title = " Trạng thái";
+                    this.title = "Trạng thái";
+                    break;
+
+                case "type_of_work":
+                    this.title = "Loại công việc";
                     break;
 
                 default:

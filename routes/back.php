@@ -48,13 +48,9 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
         Route::get('export', [MovieController::class, 'exportCsv'])->name('export');
     });
 
-    // Route::get('/movies.html', [MovieController::class, 'index'])->name('movie.index');
     // Route::get('/create_admin.html', [AdminInfoController::class, 'create'])->name('create_admin');
     // Route::get('/create_movie.html', [MovieController::class, 'create'])->name('create_movie');
-    // Route::delete('movies/{id}', [MovieController::class, 'delete'])->name('movies.delete');
     // Route::get('movies/edit/{id}', [MovieController::class, 'edit'])->name('movies.edit');
-
-
 
     // Quản lý hệ thống rạp
     Route::get('/master-cinema.html', [CinemaController::class, 'getMasterCinema'])->name('admin_info.index');
@@ -89,7 +85,14 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
     // end manage cinema
 
     Route::get('bills', [BillController::class, 'index'])->name('bill.index');
-    Route::get('staffs', [AdminStaffController::class, 'index'])->name('staff.index');
+
+
+    Route::prefix('/staff')->as('staff.')->group(function () {
+        Route::get('/', [AdminStaffController::class, 'index'])->name('staff.index');
+        // Route::post('edit/{id}', [MovieController::class, 'edit'])->name('update');
+        // Route::delete('delete/{id}', [MovieController::class, 'delete'])->name('delete');
+        // Route::post('store', [MovieController::class, 'store'])->name('store');
+    });
 });
 
 Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {

@@ -5,48 +5,24 @@
                 <h2 class="mb-5">Quản lý nhân viên</h2>
                 <div class="w-full flex relative">
                     <div class="w-3/4 flex items-end">
-                        <div class="mr-2">
-                            <div class="text-sm text-blackPrimary-300">
-                                Trạng thái
-                            </div>
-                            <el-select
-                                v-model="filter.status"
-                                placeholder="Trạng thái"
-                                @change="onChangeFilterStatus"
-                            >
-                                <el-option
-                                    v-for="item in statusList"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                                ></el-option>
-                            </el-select>
-                        </div>
-                        <div class="mr-2">
-                            <div class="text-sm text-blackPrimary-300">
-                                Loại công việc
-                            </div>
-                            <el-select
-                                v-model="filter.status"
-                                placeholder="Loại công việc"
-                                @change="onChangeTypeOfWork"
-                            >
-                                <el-option
-                                    v-for="item in typeOfWork"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                                ></el-option>
-                            </el-select>
-                        </div>
-                        <div class="search">
-                            <search-input
-                                :filter="filter"
-                                v-model="filter.title"
-                                label="Tìm kiếm"
-                                @submit="onSubmitSearch"
-                            ></search-input>
-                        </div>
+                        <SelectFilter
+                            :type="'status'"
+                            :modelSelect="filter.status"
+                            :listOption="statusList"
+                            @onchangeFilter="onFilter"
+                        />
+                        <SelectFilter
+                            :type="'type_of_work'"
+                            :modelSelect="filter.type_of_work"
+                            :listOption="typeOfWork"
+                            @onchangeFilter="onFilter"
+                        />
+                        <SearchInput
+                            :filter="filter"
+                            v-model="filter.name"
+                            label="Tìm kiếm"
+                            @submit="onFilter"
+                        />
                     </div>
                 </div>
 
@@ -61,14 +37,25 @@
                         paginate-background
                         @page="handleCurrentPage"
                     >
-                        <template #start_date="{ row }">
+                        <template #created_at="{ row }">
                             {{ formatDateTime(row?.created_at) }}
                         </template>
-
                         <template #status="{ row }">
-                            {{ showPageDisplay(row?.status) }}
+                            {{ showStatus(row?.status) }}
                         </template>
-
+                        <template #type_of_work="{ row }">
+                            {{ showTypeOfWork(row?.type_of_work) }}
+                        </template>
+                        <template #image="{ row }">
+                            <el-avatar
+                                shape="square"
+                                :size="70"
+                                :src="
+                                    getImage(row?.image) ||
+                                    '/uploads/customer.png'
+                                "
+                            />
+                        </template>
                         <template #actions="{ row }">
                             <div v-if="row" class="flex items-center">
                                 <button
@@ -101,17 +88,19 @@
 <script>
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
+import SelectFilter from "@/Components/Element/SelectFilter.vue";
 import DataTable from "@/Components/DataTable.vue";
 import { formatDateTime } from "@/libs/datetime";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
-import { STAFF_NOT_APPROVED, STAFF_WORKING, STAFF_RESIGN } from "@/store/const";
+import * as Staff from "@/store/const";
 
 export default {
     name: "Staff",
     components: {
         AdminLayout,
         SearchInput,
+        SelectFilter,
         DataTable,
     },
     props: {
@@ -129,28 +118,13 @@ export default {
         return {
             loading: false,
             statusList: [
-                {
-                    value: STAFF_NOT_APPROVED,
-                    label: "Chờ duyệt",
-                },
-                {
-                    value: STAFF_WORKING,
-                    label: "Đang làm việc",
-                },
-                {
-                    value: STAFF_RESIGN,
-                    label: "Nghỉ việc",
-                },
+                { id: Staff.STAFF_NOT_APPROVED, name: "Chờ duyệt" },
+                { id: Staff.STAFF_WORKING, name: "Đang làm việc" },
+                { id: Staff.STAFF_RESIGN, name: "Nghỉ việc" },
             ],
             typeOfWork: [
-                {
-                    value: 0,
-                    label: "Partime",
-                },
-                {
-                    value: 1,
-                    label: "Fulltime",
-                },
+                { id: 1, name: "Fulltime" },
+                { id: 2, name: "Partime" },
             ],
 
             fields: [
@@ -160,6 +134,7 @@ export default {
                 { key: "phone", label: "Số điện thoại" },
                 { key: "status", label: "Trạng thái" },
                 { key: "type_of_work", label: "Loại công việc" },
+                { key: "created_at", label: "Ngày đăng ký" },
                 { key: "actions", label: "Thao tác" },
             ],
         };
@@ -170,21 +145,22 @@ export default {
             const type_of_work = this.filtersBE?.type_of_work?.toInt();
             return {
                 page: this.filtersBE.page?.toInt() || 1,
-                limit: this.filtersBE.limit?.toInt() || 10,
+                limit: this.filtersBE.limit?.toInt() || 12,
+                name: this.filtersBE?.title || "",
                 status:
                     status == null || typeof status === "undefined"
-                        ? ""
+                        ? null
                         : status,
                 type_of_work:
                     type_of_work == null || typeof type_of_work === "undefined"
-                        ? ""
+                        ? null
                         : type_of_work,
-                title: this.filtersBE?.title || "",
             };
         },
     },
 
     methods: {
+        formatDateTime,
         inertia() {
             Inertia.get(
                 route("admin.staff.index", this.filter),
@@ -192,25 +168,11 @@ export default {
                 { onBefore, onFinish, preserveScroll: true }
             );
         },
-        onSubmitSearch() {
-            this.filter.page = 1;
-            this.inertia();
-        },
-        onChangeTypeOfWork() {
-            this.filter.page = 1;
-            this.inertia();
-        },
-        onChangeFilterStatus() {
-            this.filter.page = 1;
-            this.inertia();
-        },
 
         handleCurrentPage(value) {
             this.filter.page = value;
             this.inertia();
         },
-
-        formatDateTime,
 
         confirmEventDelete({ id }) {
             this.$confirm(
@@ -231,18 +193,18 @@ export default {
             });
         },
 
-        showPageDisplay(page_display) {
+        showStatus(page_display) {
             let text = "";
             switch (page_display) {
-                case STAFF_NOT_APPROVED: {
+                case Staff.STAFF_NOT_APPROVED: {
                     text = "Chờ duyệt";
                     break;
                 }
-                case STAFF_WORKING: {
+                case Staff.STAFF_WORKING: {
                     text = "Đang làm việc";
                     break;
                 }
-                case STAFF_RESIGN: {
+                case Staff.STAFF_RESIGN: {
                     text = "Nghỉ việc";
                     break;
                 }
@@ -251,6 +213,34 @@ export default {
                 }
             }
             return text;
+        },
+
+        showTypeOfWork(type) {
+            let text = "";
+            switch (type) {
+                case Staff.STAFF_FULL_TIME: {
+                    text = "Fulltime";
+                    break;
+                }
+                case Staff.STAFF_PART_TIME: {
+                    text = "Parttime";
+                    break;
+                }
+                default: {
+                    text = "Undefined";
+                }
+            }
+            return text;
+        },
+
+        onFilter(value, type) {
+            if (type === "type_of_work") {
+                this.filter.type_of_work = value;
+            } else if (type === "status") {
+                this.filter.status = value;
+            }
+            this.filter.page = 1;
+            this.inertia();
         },
     },
 };

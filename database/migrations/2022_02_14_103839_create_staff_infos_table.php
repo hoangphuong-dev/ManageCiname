@@ -17,10 +17,11 @@ class CreateStaffInfosTable extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('cinema_id')->unsigned();
-            $table->tinyInteger('type_of_work')->default(0)
-                ->comment('0: partime , 1: fulltime');
-            $table->tinyInteger('status')->default(0)
-                ->comment('0: not approved, 1: working, 2: resign');
+            $table->tinyInteger('type_of_work')->default(2)
+                ->comment('1: fulltime, 2: partime');
+            $table->tinyInteger('status')->default(1)
+                ->comment('1: not approved, 2: working, 3: resign');
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');

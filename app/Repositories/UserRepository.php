@@ -2,36 +2,42 @@
 
 namespace App\Repositories;
 
-use App\Models\Filters\UserFilters;
 use App\Models\MemberCard;
 use App\Models\StaffInfo;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 
-class UserRepository
+class UserRepository extends BaseRepository
 {
-    protected $user;
-
-    public function __construct(User $user)
+    /**
+     * @return string
+     *  Return the model
+     */
+    public function model()
     {
-        $this->user = $user;
+        return User::class;
     }
 
     public function getStaffOfAdmin($request, $cinemaId)
     {
-        $staff = $this->user
-            ->select('users.*', 'staff_infos.cinema_id', 'staff_infos.type_of_work', 'staff_infos.status')
-            ->where('role', User::ROLE_STAFF)
-            ->join('staff_infos', 'staff_infos.user_id', '=', 'users.id')
-            ->where('staff_infos.cinema_id', $cinemaId)
-            ->with(['staffInfo'])
-            ->when($request->name, function ($query) use ($request) {
-                return $query->where("email", "like", "%{$request->name}%");
-            })
+        // $staff = $this->model
+        //     ->select('users.*', 'staff_infos.cinema_id', 'staff_infos.type_of_work', 'staff_infos.status')
+        //     ->where('role', User::ROLE_STAFF)
+        //     ->join('staff_infos', 'staff_infos.user_id', '=', 'users.id')
+        //     ->where('staff_infos.cinema_id', $cinemaId)
+        //     ->with(['staffInfo'])
+        //     ->when($request->name, function ($query) use ($request) {
+        //         return $query->where("email", "like", "%{$request->name}%");
+        //     })
+        //     ->orderBy('id', "DESC")
+        //     ->paginate($request->query('limit', 12));
+
+        $staff = StaffInfo::query()
+            ->with(['user'])
+            ->where('cinema_id', $cinemaId)
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 12));
+
         return $staff;
     }
 
@@ -55,7 +61,7 @@ class UserRepository
 
     public function createUser($data, $role)
     {
-        return User::create([
+        return $this->model->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
@@ -73,30 +79,30 @@ class UserRepository
 
     public function updateUserById($fill, $user_id)
     {
-        return $this->user
+        return $this->model
             ->where('id', $user_id)
             ->update($fill);
     }
 
     public function findByEmail($email)
     {
-        return $this->user->query()->where('email', $email)->first();
+        return $this->model->query()->where('email', $email)->first();
     }
 
     public function findByToken($token)
     {
-        return $this->user->query()->where('token_life_time', $token)->first();
+        return $this->model->query()->where('token_life_time', $token)->first();
     }
 
 
     public function updateStatus($id, $status)
     {
-        return $this->user->find($id)->update(['status' => $status]);
+        return $this->model->find($id)->update(['status' => $status]);
     }
 
     public function createAdmin($data)
     {
-        return $this->user->query()->create([
+        return $this->model->query()->create([
             'name' => $data['name'],
             'phone' => $data['phone'],
             'email' => $data['email'],
@@ -108,7 +114,7 @@ class UserRepository
 
     public function confirmAdmin($admin_id)
     {
-        return $this->user->newQuery()
+        return $this->model->newQuery()
             ->where('email_verified_at', NULL)
             ->where('id', $admin_id)
             ->update([
