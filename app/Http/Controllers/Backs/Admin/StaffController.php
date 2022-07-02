@@ -36,4 +36,16 @@ class StaffController extends Controller
         ]);
         return $this->staffInfoService->updateStatus($id, $data);
     }
+
+    public function delete($id)
+    {
+        try {
+            $this->staffInfoService->delete($id);
+            $message = ['success' => 'Xóa thành công'];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
+    }
 }

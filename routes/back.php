@@ -86,12 +86,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 
     Route::get('bills', [BillController::class, 'index'])->name('bill.index');
 
-
     Route::prefix('/staff')->as('staff.')->group(function () {
-        Route::get('/', [AdminStaffController::class, 'index'])->name('staff.index');
-        // Route::post('edit/{id}', [MovieController::class, 'edit'])->name('update');
-        // Route::delete('delete/{id}', [MovieController::class, 'delete'])->name('delete');
-        // Route::post('store', [MovieController::class, 'store'])->name('store');
+        Route::get('/', [AdminStaffController::class, 'index'])->name('index');
+        Route::delete('delete/{id}', [AdminStaffController::class, 'delete'])->name('delete');
     });
 });
 

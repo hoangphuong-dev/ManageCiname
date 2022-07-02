@@ -16,7 +16,7 @@ class StaffResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->user->id,
+            'id' => $this->id,
             'name' => $this->user->name,
             'image' => $this->user->image,
             'email' => $this->user->email,

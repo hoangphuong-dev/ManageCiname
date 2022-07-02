@@ -72,9 +72,9 @@
                                 &nbsp;
                                 <button
                                     class="btn-warning"
-                                    @click="detail(row)"
+                                    @click="updateStatus(row, row?.status)"
                                 >
-                                    詳細
+                                    Đổi trạng thái
                                 </button>
                             </div>
                         </template>
@@ -94,6 +94,7 @@ import { formatDateTime } from "@/libs/datetime";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import * as Staff from "@/store/const";
+import { updateStatusStaff } from "@/API/main.js";
 
 export default {
     name: "Staff",
@@ -128,14 +129,14 @@ export default {
             ],
 
             fields: [
-                { key: "image", label: "Ảnh" },
-                { key: "name", label: "Tên nhân viên", width: 150 },
+                { key: "image", label: "Ảnh", width: 150 },
+                { key: "name", label: "Tên nhân viên", width: 250 },
                 { key: "email", label: "Email", width: 300 },
-                { key: "phone", label: "Số điện thoại" },
-                { key: "status", label: "Trạng thái" },
-                { key: "type_of_work", label: "Loại công việc" },
-                { key: "created_at", label: "Ngày đăng ký" },
-                { key: "actions", label: "Thao tác" },
+                { key: "phone", label: "Số điện thoại", width: 200 },
+                { key: "status", label: "Trạng thái", width: 150 },
+                { key: "type_of_work", label: "Loại công việc", width: 150 },
+                { key: "created_at", label: "Ngày đăng ký", width: 150 },
+                { key: "actions", label: "Thao tác", width: 250 },
             ],
         };
     },
@@ -176,21 +177,58 @@ export default {
 
         confirmEventDelete({ id }) {
             this.$confirm(
-                `Are you sure you want to delete this blog ?`,
-                "警告",
+                `Bạn có chắc xóa hết tất cả dữ liệu của nhân viên này ?`,
+                "Cảnh báo",
                 {
-                    confirmButtonText: "はい",
-                    cancelButtonText: "いいえ",
+                    confirmButtonText: "Chắc chắn",
+                    cancelButtonText: "Hủy",
                     type: "warning",
                 }
             ).then(async () => {
-                Inertia.delete(route("back.blog.delete", { id }), {
+                Inertia.delete(route("admin.staff.delete", { id }), {
                     onBefore,
                     onFinish,
                     preserveScroll: true,
                     onError: (e) => console.log(e),
                 });
             });
+        },
+
+        async updateStatus(row, status) {
+            if (status === Staff.STAFF_RESIGN) return;
+            let text = "";
+            status == Staff.STAFF_NOT_APPROVED
+                ? (text = "đang làm việc")
+                : (text = "nghỉ việc");
+            this.$confirm(
+                `Thay đổi trạng thái nhân viên thành ` + text + " ?",
+                "Cảnh báo",
+                {
+                    confirmButtonText: "Chắc chắn",
+                    cancelButtonText: "Hủy",
+                    type: "warning",
+                }
+            )
+                .then(async () => {
+                    this.loading = true;
+                    await updateStatusStaff(row.id, status)
+                        .then(async (res) => {
+                            this.inertia();
+                            this.$message.success(
+                                "Cập nhật trạng thái thành công !"
+                            );
+                        })
+                        .catch(() => {
+                            this.inertia();
+                            this.$message.error(
+                                "Có lỗi trong quá trình thực thi"
+                            );
+                        });
+                    this.loading = false;
+                })
+                .catch(() => {
+                    this.inertia();
+                });
         },
 
         showStatus(page_display) {

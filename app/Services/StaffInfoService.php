@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\StaffInfo;
 use App\Notifications\ChangeStatusStaff;
 use App\Repositories\StaffInfoRepository;
 use App\Repositories\UserRepository;
@@ -26,18 +27,23 @@ class StaffInfoService
 
     public function updateStatus($id, $data)
     {
-        $staff = $this->staffInfoRepository->updateStatus($id, $data);
-
         $password = NULL;
-        // update password user 
-        if ($staff->status == 1) {
+
+        if ($data['status'] == StaffInfo::STATUS_NOT_APPROVED) {
+            // update password user 
             $password = Str::random(12);
-            $this->userRepository->updateUserById(['password' => Hash::make($password)], $staff->user->id);
+            $staff = $this->staffInfoRepository->updateById($id, ['status' => StaffInfo::STATUS_WORKING]);
+            return $this->userRepository->updateUserById(['password' => Hash::make($password)], $staff->user_id);
         } else {
             // nếu nghỉ việc => set pass = NULL để hủy quyền đăng nhập
-            $this->userRepository->updateUserById(['password' => $password], $staff->user->id);
+            $staff = $this->staffInfoRepository->updateById($id, ['status' => StaffInfo::STATUS_RESIGN]);
+            $this->userRepository->updateUserById(['password' => $password], $staff->user_id);
         }
         Notification::send($staff->user, new ChangeStatusStaff($staff, $password));
-        return $staff;
+    }
+
+    public function delete($id)
+    {
+        $this->staffInfoRepository->deleteById($id);
     }
 }
