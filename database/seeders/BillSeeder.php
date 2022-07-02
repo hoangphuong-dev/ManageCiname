@@ -30,7 +30,7 @@ class BillSeeder extends Seeder
         try {
             DB::beginTransaction();
 
-            for ($i = 1; $i < 50; $i++) {
+            for ($i = 1; $i < 1000; $i++) {
                 $user = User::create([
                     'name' => $faker->name,
                     'email' => $faker->email,
