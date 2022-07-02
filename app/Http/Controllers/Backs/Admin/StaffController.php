@@ -34,7 +34,14 @@ class StaffController extends Controller
         $data = $request->validate([
             'status' => 'required',
         ]);
-        return $this->staffInfoService->updateStatus($id, $data);
+        try {
+            $this->staffInfoService->updateStatus($id, $data);
+            $message = ['success' => 'Xóa thành công'];
+        } catch (\Exception $e) {
+            $message = ['error' => __('something went wrong')];
+        } finally {
+            return back()->with($message);
+        }
     }
 
     public function delete($id)
