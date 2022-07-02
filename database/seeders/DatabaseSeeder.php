@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             MovieSeeder::class,
             AdminSeeder::class,
+            StaffInfoSeeder::class,
             ShowTimeSeeder::class,
             // BillSeeder::class,
             // CommentMovieSeeder::class

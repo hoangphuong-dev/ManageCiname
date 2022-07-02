@@ -5,7 +5,7 @@ namespace App\Models\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class UserFilters implements Filters
+class UserInfoFilters implements Filters
 {
     /**
      * @var Request
@@ -29,7 +29,7 @@ class UserFilters implements Filters
     public function getQuery(Builder $query): Builder
     {
         $this->filterByName($query);
-        $this->filterByEmail($query);
+        $this->filterByTypeOfWork($query);
         $this->filterByStatus($query);
 
         return $query;
@@ -44,22 +44,9 @@ class UserFilters implements Filters
     protected function filterByName(Builder $query): void
     {
         $query->when($this->request->query('name'), function (Builder $q, $name) {
-            if ($name || $name === '0') {
-                $q->where('name', 'LIKE', "%{$name}%");
-            }
-        });
-    }
-
-    /**
-     * Apply filter by email
-     *
-     * @param  Builder $query
-     * @return void
-     */
-    protected function filterByEmail(Builder $query): void
-    {
-        $query->when($this->request->query('email'), function (Builder $q, $email) {
-            $q->where('email', 'LIKE', "%{$email}%");
+            $q->select('staff_infos.*')
+                ->where('users.name', 'LIKE', "%{$name}%")
+                ->join('users', 'users.id', '=', 'staff_infos.user_id');
         });
     }
 
@@ -71,11 +58,20 @@ class UserFilters implements Filters
      */
     protected function filterByStatus(Builder $query): void
     {
-        $status = $this->request->query('status');
-        $check = $status || $status === '0' ? true : false;
-
-        $query->when($check, function (Builder $q) use ($status) {
-            $q->where('status', $status);
+        $query->when($this->request->query('status'), function (Builder $q, $status) {
+            $q->where('staff_infos.status', $status);
+        });
+    }
+    /**
+     * Apply filter by email
+     *
+     * @param  Builder $query
+     * @return void
+     */
+    protected function filterByTypeOfWork(Builder $query): void
+    {
+        $query->when($this->request->query('type_of_work'), function (Builder $q, $type_of_work) {
+            $q->where('type_of_work', $type_of_work);
         });
     }
 }

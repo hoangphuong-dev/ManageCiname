@@ -146,7 +146,7 @@ export default {
             return {
                 page: this.filtersBE.page?.toInt() || 1,
                 limit: this.filtersBE.limit?.toInt() || 12,
-                name: this.filtersBE?.title || "",
+                name: this.filtersBE?.name || "",
                 status:
                     status == null || typeof status === "undefined"
                         ? null

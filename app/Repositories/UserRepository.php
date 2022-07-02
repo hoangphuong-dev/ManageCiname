@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Models\Filters\UserFilters;
+use App\Models\Filters\UserInfoFilters;
 use App\Models\MemberCard;
 use App\Models\StaffInfo;
 use App\Models\User;
@@ -20,21 +22,10 @@ class UserRepository extends BaseRepository
 
     public function getStaffOfAdmin($request, $cinemaId)
     {
-        // $staff = $this->model
-        //     ->select('users.*', 'staff_infos.cinema_id', 'staff_infos.type_of_work', 'staff_infos.status')
-        //     ->where('role', User::ROLE_STAFF)
-        //     ->join('staff_infos', 'staff_infos.user_id', '=', 'users.id')
-        //     ->where('staff_infos.cinema_id', $cinemaId)
-        //     ->with(['staffInfo'])
-        //     ->when($request->name, function ($query) use ($request) {
-        //         return $query->where("email", "like", "%{$request->name}%");
-        //     })
-        //     ->orderBy('id', "DESC")
-        //     ->paginate($request->query('limit', 12));
-
         $staff = StaffInfo::query()
             ->with(['user'])
             ->where('cinema_id', $cinemaId)
+            ->filters(new UserInfoFilters($request))
             ->orderBy('id', "DESC")
             ->paginate($request->query('limit', 12));
 

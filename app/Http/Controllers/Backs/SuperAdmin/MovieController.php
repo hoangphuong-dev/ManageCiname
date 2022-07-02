@@ -83,13 +83,6 @@ class MovieController extends Controller
         }
     }
 
-
-
-
-
-
-
-
     // public function create()
     // {
     //     $movie_genres = $this->movieGenreService->all();
