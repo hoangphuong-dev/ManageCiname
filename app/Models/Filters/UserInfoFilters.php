@@ -30,6 +30,7 @@ class UserInfoFilters implements Filters
     {
         $this->filterByName($query);
         $this->filterByTypeOfWork($query);
+        $this->filterByEmail($query);
         $this->filterByStatus($query);
 
         return $query;
@@ -51,6 +52,21 @@ class UserInfoFilters implements Filters
     }
 
     /**
+     * Apply filter by email
+     *
+     * @param  Builder $query
+     * @return void
+     */
+    protected function filterByEmail(Builder $query): void
+    {
+        $query->when($this->request->query('email'), function (Builder $q, $email) {
+            $q->select('staff_infos.*')
+                ->where('users.email', $email)
+                ->join('users', 'users.id', '=', 'staff_infos.user_id');
+        });
+    }
+
+    /**
      * Apply filter by status
      *
      * @param  Builder $query
@@ -63,7 +79,7 @@ class UserInfoFilters implements Filters
         });
     }
     /**
-     * Apply filter by email
+     * Apply filter by type of work
      *
      * @param  Builder $query
      * @return void
