@@ -41,7 +41,15 @@
                             {{ formatDateTime(row?.created_at) }}
                         </template>
                         <template #status="{ row }">
-                            {{ showStatus(row?.status) }}
+                            <div
+                                :class="{
+                                    'bg-yellow-500': row?.status === 1,
+                                    'bg-green-600': row?.status === 2,
+                                }"
+                                class="p-2 text-center rounded-md"
+                            >
+                                {{ showStatus(row?.status) }}
+                            </div>
                         </template>
                         <template #type_of_work="{ row }">
                             {{ showTypeOfWork(row?.type_of_work) }}
@@ -129,12 +137,12 @@ export default {
             ],
 
             fields: [
-                { key: "image", label: "Ảnh", width: 150 },
+                { key: "image", label: "Ảnh" },
                 { key: "name", label: "Tên nhân viên", width: 250 },
                 { key: "email", label: "Email", width: 300 },
                 { key: "phone", label: "Số điện thoại", width: 200 },
-                { key: "status", label: "Trạng thái", width: 150 },
-                { key: "type_of_work", label: "Loại công việc", width: 150 },
+                { key: "status", label: "Trạng thái", width: 130 },
+                { key: "type_of_work", label: "Loại công việc", width: 130 },
                 { key: "created_at", label: "Ngày đăng ký", width: 150 },
                 { key: "actions", label: "Thao tác", width: 250 },
             ],
