@@ -43,7 +43,7 @@ class BillRepository extends BaseRepository
             ->paginate(12);
     }
 
-    public function getBillByCinema($admin_id, $request)
+    public function getBillByAdmin($admin_id, $request)
     {
         return $this->model->newQuery()
             // ->when($request->action, function ($query) use ($request) {

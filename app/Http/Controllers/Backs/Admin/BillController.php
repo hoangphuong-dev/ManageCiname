@@ -42,13 +42,10 @@ class BillController extends Controller
     }
 
 
-    public function index(Request $request)
+    public function getBillByAdmin(Request $request)
     {
         $admin = Auth::guard('admin')->user();
-
-        // $cinema = $this->cinemaService->getCinemaByIdAdmin($admin->id);
-
-        $bills = $this->billService->getBillByCinema($admin->id, $request);
+        $bills = $this->billService->getBillByAdmin($admin->id, $request);
 
         return Inertia::render('Backs/Admin/Bill', [
             'bills' => $bills,

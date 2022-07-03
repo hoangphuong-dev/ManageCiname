@@ -84,7 +84,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
         ->name('view-showtime-by-id');
     // end manage cinema
 
-    Route::get('bills', [BillController::class, 'index'])->name('bill.index');
+    Route::prefix('/bill')->as('bill.')->group(function () {
+        Route::get('/', [BillController::class, 'getBillByAdmin'])->name('index');
+    });
 
     Route::prefix('/staff')->as('staff.')->group(function () {
         Route::get('/', [AdminStaffController::class, 'index'])->name('index');

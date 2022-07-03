@@ -46,9 +46,9 @@ class BillService
         }
     }
 
-    public function getBillByCinema($admin_id, $request)
+    public function getBillByAdmin($admin_id, $request)
     {
-        $bills = $this->billRepository->getBillByCinema($admin_id, $request);
+        $bills = $this->billRepository->getBillByAdmin($admin_id, $request);
         return BillResource::collection($bills);
     }
 
