@@ -9,8 +9,8 @@ class Bill extends Model
 {
     use HasFactory;
 
-    public const NOT_PAYMENT = 0;
     public const PAYMENTED = 1;
+    public const NOT_PAYMENT = 2;
 
     protected $guarded = [];
 

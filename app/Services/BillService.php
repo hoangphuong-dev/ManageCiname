@@ -5,17 +5,23 @@ namespace App\Services;
 use App\Http\Resources\BillResource;
 use App\Models\Bill;
 use App\Repositories\BillRepository;
+use App\Repositories\CinemaRepository;
 use App\Repositories\ShowTimeRepository;
 
 class BillService
 {
     public $billRepository;
     public $showTimeRepository;
+    public $cinemaRepository;
 
-    public function __construct(BillRepository $billRepository, ShowTimeRepository $showTimeRepository)
-    {
+    public function __construct(
+        BillRepository $billRepository,
+        ShowTimeRepository $showTimeRepository,
+        CinemaRepository $cinemaRepository,
+    ) {
         $this->billRepository = $billRepository;
         $this->showTimeRepository = $showTimeRepository;
+        $this->cinemaRepository = $cinemaRepository;
     }
 
     public function getDataByMonth($request)
@@ -46,9 +52,12 @@ class BillService
         }
     }
 
-    public function getBillByAdmin($admin_id, $request)
+    public function getBillByAdmin($adminId, $request)
     {
-        $bills = $this->billRepository->getBillByAdmin($admin_id, $request);
+        $cinema = $this->cinemaRepository->getCinemaByIdAdmin($adminId);
+
+        $bills = $this->billRepository->getBillByAdmin($cinema->id, $request);
+
         return BillResource::collection($bills);
     }
 

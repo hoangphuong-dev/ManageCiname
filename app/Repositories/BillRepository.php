@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Bill;
+use App\Models\Filters\BillFilters;
+use Illuminate\Database\Eloquent\Builder;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
-//use Your Model
 
 /**
  * Class BillRepository.
@@ -43,25 +44,22 @@ class BillRepository extends BaseRepository
             ->paginate(12);
     }
 
-    public function getBillByAdmin($admin_id, $request)
-    {
-        return $this->model->newQuery()
-            // ->when($request->action, function ($query) use ($request) {
-            //     return $query->where("movies.status", "=", $request->action);
-            // })
-            ->with(['cinema' => function ($q) use ($admin_id) {
-                $q->where('user_id', $admin_id);
-            }])
-            ->orderBy('id', "DESC")
-            ->paginate($request->query('limit', 12));
-    }
-
     public function createBill($user_id, $data)
     {
-        return $this->newQuery()->create([
+        return $this->model->updateOrCreate([
             'user_id' => $user_id,
             'total_money' => $data['total_money'],
             'cinema_id' => $data['cinema_id'],
         ]);
+    }
+
+    public function getBillByAdmin($cinemaId, $request)
+    {
+        return $this->model->query()
+            ->filters(new BillFilters($request))
+            ->with(['user', 'voucher'])
+            ->where('cinema_id', $cinemaId)
+            ->orderBy('id', "DESC")
+            ->paginate(12);
     }
 }

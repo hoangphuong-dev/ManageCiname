@@ -30,7 +30,7 @@ class TicketRepository extends BaseRepository
         $memmber = MemberCard::where('user_id', $user_id)->first();
         $point  = $memmber->accumulating_point;
         foreach ($data['seat_id'] as $item) {
-            $ticket = $this->newQuery()->create([
+            $ticket = $this->model->updateOrCreate([
                 'bill_id' => $bill_id,
                 'showtime_id' => $data['showtime_id'],
                 'seat_id' => $item,

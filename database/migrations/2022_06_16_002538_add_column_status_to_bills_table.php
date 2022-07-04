@@ -15,7 +15,7 @@ class AddColumnStatusToBillsTable extends Migration
     {
         Schema::table('bills', function (Blueprint $table) {
             $table->string('status')
-                ->default(0)->comment('0 : not payment , 1: paymented')
+                ->default(2)->comment('2 : not payment , 1: paymented')
                 ->after('total_money');
         });
     }

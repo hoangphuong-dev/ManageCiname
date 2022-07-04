@@ -35,7 +35,7 @@ class CinemaRepository extends BaseRepository
     {
         return $this->model->newQuery()
             ->with(["bills" => function ($q) {
-                $q->with(['user']);
+                $q->with(['user', 'voucher']);
             }])
             ->where('user_id', $admin_id)
             ->first();

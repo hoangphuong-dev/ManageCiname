@@ -14,18 +14,15 @@ use Inertia\Inertia;
 
 class BillController extends Controller
 {
-    public $cinemaService;
     public $billService;
 
-    public function __construct(CinemaService $cinemaService, BillService $billService)
+    public function __construct(BillService $billService)
     {
-        $this->cinemaService = $cinemaService;
         $this->billService = $billService;
     }
 
     public function getBillById($id)
     {
-
         $bill = Ticket::with(['showtime' => function ($q) {
             $q->with(['movie', 'room']);
         }])->where('bill_id', $id)->first();
@@ -45,10 +42,15 @@ class BillController extends Controller
     public function getBillByAdmin(Request $request)
     {
         $admin = Auth::guard('admin')->user();
-        $bills = $this->billService->getBillByAdmin($admin->id, $request);
-
-        return Inertia::render('Backs/Admin/Bill', [
-            'bills' => $bills,
-        ]);
+        try {
+            $bills = $this->billService->getBillByAdmin($admin->id, $request);
+            return Inertia::render('Backs/Admin/Bill', [
+                'bills' => $bills,
+                'filtersBE' => $request->all(),
+            ]);
+        } catch (\Exception $e) {
+            $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
+            return back()->with($message);
+        }
     }
 }

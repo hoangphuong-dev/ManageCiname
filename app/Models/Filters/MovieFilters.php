@@ -37,7 +37,7 @@ class MovieFilters implements Filters
      * @return void
      */
 
-    public function filterByName(Builder $query): void
+    protected function filterByName(Builder $query): void
     {
         $query->when($this->request->query('name'), function (Builder $q, $name) {
             $q->where('name', 'LIKE', "%{$name}%");
@@ -52,7 +52,7 @@ class MovieFilters implements Filters
      * @return void
      */
 
-    public function filterByStatus(Builder $query): void
+    protected function filterByStatus(Builder $query): void
     {
         $query->when($this->request->query('status'), function (Builder $q, $status) {
             $q->where('status', $status);
@@ -64,7 +64,7 @@ class MovieFilters implements Filters
      * @param  Builder $query
      * @return void
      */
-    public function filterByMovieGenre(Builder $query): void
+    protected function filterByMovieGenre(Builder $query): void
     {
         $query->when($this->request->query('movie_genre'), function (Builder $q, $movieGenre) {
             $movieId = MovieGenreMovie::query()->where('movie_genre_id', $movieGenre)
@@ -81,7 +81,7 @@ class MovieFilters implements Filters
      * @return void
      */
 
-    public function filterByDisplay(Builder $query): void
+    protected function filterByDisplay(Builder $query): void
     {
 
         $query->when($this->request->query('display'), function (Builder $q, $display) {
@@ -95,7 +95,7 @@ class MovieFilters implements Filters
     }
 
     // get movie_id in now showing
-    public static function getMovieIdNowShowing()
+    protected static function getMovieIdNowShowing()
     {
         $timeNowShowing = [Carbon::now()->format('Y-m-d'), FormatDate::getFourteenDay()];
 

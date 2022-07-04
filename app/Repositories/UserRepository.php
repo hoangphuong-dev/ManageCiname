@@ -52,7 +52,7 @@ class UserRepository extends BaseRepository
 
     public function createUser($data, $role)
     {
-        return $this->model->create([
+        return $this->model->updateOrCreate([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],

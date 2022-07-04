@@ -18,7 +18,9 @@ class BillResource extends JsonResource
         return [
             'id' => $this->id,
             'cinema_id' => $this->cinema_id,
+            'status' => $this->status,
             'user' => $this->user ? UserResource::make($this->user)->resolve() : [],
+            'voucher' => $this->user ? VoucherResource::make($this->voucher)->resolve() : [],
             'total_money' => number_format($this->total_money),
             'created_at' => Carbon::parse($this->created_at)->format('c'),
             'updated_at' => Carbon::parse($this->updated_at)->format('c'),

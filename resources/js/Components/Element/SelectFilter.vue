@@ -60,6 +60,10 @@ export default {
                     this.title = "Loại công việc";
                     break;
 
+                case "voucher":
+                    this.title = "Voucher";
+                    break;
+
                 default:
                     this.title = "Undefine";
                     break;
