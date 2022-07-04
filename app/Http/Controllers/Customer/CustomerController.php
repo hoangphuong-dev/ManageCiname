@@ -2,38 +2,28 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Events\CustomerOrder;
-use App\Exceptions\CustomerException;
 use App\Helper\FormatDate;
-use App\Helper\JwtHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePassWordRequest;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
-
 use App\Mail\ForgotPassword;
 use App\Models\User;
-use App\Models\Voucher;
 use App\Repositories\CinemaRepository;
 use App\Repositories\ProvinceRepository;
 use App\Services\BillService;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
-use App\Services\PaymentService;
 use App\Services\SeatTypeService;
 use App\Services\ShowTimeService;
 use App\Services\TicketService;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
-use Illuminate\Support\Env;
 use PDF;
 
 class CustomerController extends Controller
@@ -145,10 +135,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $movie_genres = $this->movieGenreService->all();
-
-        // lấy các phim có suất chiếu và được đặt nhiều nhất
         $movieHot = $this->movieService->getMovieHot();
-
         $movies = $this->movieService->list($request);
 
         return Inertia::render('Customer/Home', [
@@ -252,28 +239,6 @@ class CustomerController extends Controller
         return Inertia::render('Customer/MyTicket', [
 
             'bills' => $bills,
-        ]);
-    }
-
-    // lấy phim đang chiếu
-    public function getMovieNowShowing(Request $request)
-    {
-        $movie_genres = $this->movieGenreService->list($request);
-        $movies = $this->movieService->getMovieNowShowing($request);
-        return Inertia::render('Customer/MovieNowShowing', [
-            'movies' => $movies,
-            'movie_genres' => $movie_genres,
-        ]);
-    }
-    // sắp chiếu
-    public function getMovieCommingSoon(Request $request)
-    {
-        $movies = $this->movieService->getMovieCommingSoon($request);
-        $movie_genres = $this->movieGenreService->list($request);
-        return Inertia::render('Customer/MovieNowShowing', [
-            'movies' => $movies,
-            'movie_genres' => $movie_genres,
-            'title' => 'Phim sắp chiếu'
         ]);
     }
 }

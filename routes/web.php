@@ -8,7 +8,7 @@ use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Middleware\IgnoreCustomerMiddleware;
 
 // Customer
-Route::get('/', [CustomerController::class, 'index'])->name('home');
+Route::get('/home', [CustomerController::class, 'index'])->name('home');
 
 Route::get('/movie-detail/{id}', [CustomerController::class, 'detailMovie'])->name('movie.detail');
 
@@ -37,16 +37,9 @@ Route::post('/forgot-password.html', [CustomerController::class, 'handleForgotPa
 Route::get('/confirm-forgot-password', [CustomerController::class, 'confirmForgotPassword'])->name('confirm_forgot_password');
 Route::post('/confirm-forgot-password', [CustomerController::class, 'handleConfirmForgotPassword']);
 
-Route::get('/movie-now-showing.html', [CustomerController::class, 'getMovieNowShowing'])->name('now_showing');
-
-Route::get('/movie-comming-soon.html', [CustomerController::class, 'getMovieCommingSoon'])->name('comming_soon');
-
-
 Route::get('/authenticate-email', [ProfileController::class, 'AuthenticateMail'])->name('authenticate-email');
 
 Route::post('/get-cinema-by-province/{id}', [CustomerController::class, 'getCinemaByProvince'])->name('get-cinema-by-province');
-
-
 
 Route::group(['as' => 'order.', 'prefix' => 'order'], function () {
     Route::get('/customer-order.html', [PaymentController::class, 'getInfoCustomer'])

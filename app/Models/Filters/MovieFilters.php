@@ -89,7 +89,12 @@ class MovieFilters implements Filters
                 $q->whereIn('id', self::getMovieIdNowShowing())
                     ->where('status', Movie::MOVIE_ACTIVE);
             } elseif ($display == 2) {
-                $q->whereNotIn('id', self::getMovieIdNowShowing());
+                $q->when($this->request->query('redirect'), function (Builder $query, $redirect) {
+                    if ($redirect == 'customer') {
+                        $query->where('status', Movie::MOVIE_ACTIVE);
+                    }
+                })
+                    ->whereNotIn('id', self::getMovieIdNowShowing());
             }
         });
     }

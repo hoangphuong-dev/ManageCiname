@@ -11,7 +11,7 @@
                             </h2>
                             <el-carousel indicator-position="outside">
                                 <el-carousel-item
-                                    class="cursor-pointer"
+                                    class="cursor-pointer rounded"
                                     v-for="item in movieHot"
                                     :key="item.id"
                                     @click="detail(item.id)"
@@ -29,7 +29,7 @@
                         </div>
 
                         <div
-                            class="w-full pt-8 pb-16 mb-2 border-dashed border-t-2 border-b-2 border-red-300"
+                            class="w-full py-10 mb-2 border-dashed border-t-2 border-b-2 border-red-300"
                         >
                             <div class="flex">
                                 <div class="w-1/2">
@@ -41,7 +41,7 @@
                                     />
                                 </div>
 
-                                <div class="w-1/2">
+                                <div class="ml-10 -mt-5 w-1/2 flex">
                                     <SelectFilter
                                         :type="'movie_genre'"
                                         :modelSelect="filter.movie_genre"
@@ -153,6 +153,7 @@ export default {
         filter() {
             const display = this.filtersBE?.display?.toInt();
             const movie_genre = this.filtersBE?.movie_genre?.toInt();
+            const redirect = this.filtersBE?.redirect;
             return {
                 page: this.filtersBE.page?.toInt() || 1,
                 limit: this.filtersBE.limit?.toInt() || 12,
@@ -165,6 +166,10 @@ export default {
                     movie_genre == null || typeof movie_genre === "undefined"
                         ? null
                         : movie_genre,
+                redirect:
+                    redirect == null || typeof redirect === "undefined"
+                        ? null
+                        : redirect,
             };
         },
     },

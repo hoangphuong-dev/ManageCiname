@@ -295,10 +295,12 @@ export default defineComponent({
                         : this.redirectRoute(route("customer.login"));
                     break;
                 case "now_showing":
-                    this.redirectRoute(route("now_showing"));
+                    this.redirectRoute(route("home", { display: 1 }));
                     break;
                 case "coming_soon":
-                    this.redirectRoute(route("comming_soon"));
+                    this.redirectRoute(
+                        route("home", { display: 2, redirect: "customer" })
+                    );
                     break;
                 default:
                     break;

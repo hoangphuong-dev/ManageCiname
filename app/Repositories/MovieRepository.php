@@ -25,32 +25,6 @@ class MovieRepository extends BaseRepository
         return Movie::class;
     }
 
-    public function getMovieNowShowing($request)
-    {
-        return $this->model->newQuery()
-
-            ->whereIn(
-                'id',
-                ShowTime::select('movie_id')
-                    ->where('time_start', '>=', now())
-                    ->where('time_start', '<=', FormatDate::getFourteenDay())
-                    ->get()->toArray()
-            )
-            ->where('status', Movie::MOVIE_ACTIVE)
-            ->orderBy('id', "DESC")
-            ->paginate($request->query('limit', 12));
-    }
-
-    public function getMovieCommingSoon($request)
-    {
-        return $this->model->newQuery()
-
-            ->whereNotIn('id', ShowTime::select('movie_id')->get()->toArray())
-            ->where('status', Movie::MOVIE_ACTIVE)
-            ->orderBy('id', "DESC")
-            ->paginate($request->query('limit', 12));
-    }
-
     public function getMovieHot()
     {
         return $this->model->newQuery()
