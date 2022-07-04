@@ -41,7 +41,7 @@ class CustomerController extends Controller
     private const SESSION_KEY = 'order_info';
 
     public $movieGenreService;
-    public $movieSearvice;
+    public $movieService;
     public $provinceRepository;
     public $cinemaRepository;
     public $billService;
@@ -65,7 +65,7 @@ class CustomerController extends Controller
         $this->userService = $userService;
         $this->ticketService = $ticketService;
         $this->movieGenreService = $movieGenreService;
-        $this->movieSearvice = $movieService;
+        $this->movieService = $movieService;
         $this->provinceRepository = $provinceRepository;
         $this->cinemaRepository = $cinemaRepository;
         $this->showTimeService = $showTimeService;
@@ -144,21 +144,27 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
-        $movie_genres = $this->movieGenreService->list($request);
+        $movie_genres = $this->movieGenreService->all();
+
         // lấy các phim có suất chiếu và được đặt nhiều nhất
-        $movie_hots = $this->movieSearvice->getMovieHot();
+        $movieHot = $this->movieService->getMovieHot();
+
+        $movies = $this->movieService->list($request);
+
         return Inertia::render('Customer/Home', [
-            'movie_genres' => $movie_genres,
-            'movie_hots' => $movie_hots,
+            'movieHot' => $movieHot,
+            'movieGenre' => $movie_genres,
+            'movies' => $movies,
+            'filtersBE' => $request->all(),
         ]);
     }
 
     public function detailMovie($id)
     {
-        $movie = $this->movieSearvice->show($id);
+        $movie = $this->movieService->show($id);
         // todo : lay id the loai truyen vao day 
         $arr_movie_genre_id = ["1", "2"];
-        $movie_relates = $this->movieSearvice->getMovieRelated($arr_movie_genre_id);
+        $movie_relates = $this->movieService->getMovieRelated($arr_movie_genre_id);
         return Inertia::render('Customer/MovieDetail', [
             'movie' => $movie,
             'movie_relates' => $movie_relates,
@@ -253,7 +259,7 @@ class CustomerController extends Controller
     public function getMovieNowShowing(Request $request)
     {
         $movie_genres = $this->movieGenreService->list($request);
-        $movies = $this->movieSearvice->getMovieNowShowing($request);
+        $movies = $this->movieService->getMovieNowShowing($request);
         return Inertia::render('Customer/MovieNowShowing', [
             'movies' => $movies,
             'movie_genres' => $movie_genres,
@@ -262,7 +268,7 @@ class CustomerController extends Controller
     // sắp chiếu
     public function getMovieCommingSoon(Request $request)
     {
-        $movies = $this->movieSearvice->getMovieCommingSoon($request);
+        $movies = $this->movieService->getMovieCommingSoon($request);
         $movie_genres = $this->movieGenreService->list($request);
         return Inertia::render('Customer/MovieNowShowing', [
             'movies' => $movies,

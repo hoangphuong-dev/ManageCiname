@@ -1,209 +1,211 @@
 <template>
-  <app-layout>
-    <div class="pb-12">
-      <div class="mx-auto messenger-window__custom">
-        <div class="w-full">
-          <div class="main-jobs">
-            <!-- slider -->
-            <div class="w-full">
-              <h2 class="text-center my-6">Phim Hot đang công chiếu</h2>
-              <el-carousel indicator-position="outside">
-                <el-carousel-item
-                  class="cursor-pointer"
-                  v-for="item in movie_hots"
-                  :key="item.id"
-                  @click="detail(item.id)"
-                >
-                  <img
-                    class="min-w-full h-min-h-full"
-                    :src="
-                      'https://i3.ytimg.com/vi/' +
-                      videoId(item) +
-                      '/maxresdefault.jpg'
-                    "
-                  />
-                </el-carousel-item>
-              </el-carousel>
-            </div>
+    <app-layout>
+        <div class="pb-12">
+            <div class="mx-auto messenger-window__custom">
+                <div class="w-full">
+                    <div class="main-jobs">
+                        <!-- slider -->
+                        <div class="w-full">
+                            <h2 class="text-center my-6">
+                                Phim Hot đang công chiếu
+                            </h2>
+                            <el-carousel indicator-position="outside">
+                                <el-carousel-item
+                                    class="cursor-pointer"
+                                    v-for="item in movieHot"
+                                    :key="item.id"
+                                    @click="detail(item.id)"
+                                >
+                                    <img
+                                        class="min-w-full h-min-h-full"
+                                        :src="
+                                            'https://i3.ytimg.com/vi/' +
+                                            videoId(item) +
+                                            '/maxresdefault.jpg'
+                                        "
+                                    />
+                                </el-carousel-item>
+                            </el-carousel>
+                        </div>
 
-            <!-- button filter  -->
-            <div
-              class="
-                w-full
-                pt-8
-                pb-16
-                mb-2
-                border-dashed border-t-2 border-b-2 border-red-300
-              "
-            >
-              <el-form>
-                <div class="flex">
-                  <div class="w-1/2">
-                    <el-form-item label="Tìm theo từ khóa">
-                      <el-input
-                        ref="search"
-                        v-model="movies.keyword"
-                        placeholder="Tìm tên phim ... "
-                        clearable
-                        @keyup.enter="searchChange()"
-                      />
-                    </el-form-item>
-                  </div>
+                        <div
+                            class="w-full pt-8 pb-16 mb-2 border-dashed border-t-2 border-b-2 border-red-300"
+                        >
+                            <div class="flex">
+                                <div class="w-1/2">
+                                    <SearchInput
+                                        :filter="filter"
+                                        v-model="filter.name"
+                                        label="Tìm tên phim ... "
+                                        @submit="onFilter"
+                                    />
+                                </div>
 
-                  <div class="w-1/2">
-                    <el-select
-                      class="ml-4"
-                      v-model="movies.search_movie_genre"
-                      clearable
-                      placeholder="Chọn thể loại"
-                    >
-                      <el-option
-                        v-for="item in movie_genres.data"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id"
-                        @click="searchType()"
-                      ></el-option>
-                    </el-select>
-                  </div>
+                                <div class="w-1/2">
+                                    <SelectFilter
+                                        :type="'movie_genre'"
+                                        :modelSelect="filter.movie_genre"
+                                        :listOption="movieGenre"
+                                        @onchangeFilter="onFilter"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- show phim -->
+                        <div class="w-full">
+                            <h2 class="text-center">Danh sách chọn phim</h2>
+                            <div
+                                v-if="movies.data.length > 0"
+                                class="grid grid-cols-4 gap-6 mt-5"
+                            >
+                                <div
+                                    v-for="item in movies.data"
+                                    :key="item.id"
+                                    class="border rounded-md p-4"
+                                >
+                                    <img
+                                        style="width: 100%"
+                                        :src="
+                                            'https://i3.ytimg.com/vi/' +
+                                            videoId(item) +
+                                            '/maxresdefault.jpg'
+                                        "
+                                    />
+
+                                    <h2 class="text-center my-2">
+                                        {{ item.name }}
+                                    </h2>
+                                    <div class="w-full text-center">
+                                        <el-button
+                                            size="small"
+                                            @click="detail(item.id)"
+                                            type="danger"
+                                        >
+                                            Xem chi tiết
+                                        </el-button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <el-empty
+                                    description="Không có dữ liệu"
+                                ></el-empty>
+                            </div>
+                        </div>
+
+                        <div
+                            v-if="movies.meta.total > movies.meta.per_page"
+                            class="w-full justify-center my-16 flex"
+                        >
+                            <Pagination
+                                v-model="movies.meta.current_page"
+                                @current-change="handleCurrentPage"
+                                :page-size="Number(movies.meta.per_page)"
+                                :total="Number(movies.meta.total)"
+                            />
+                        </div>
+                    </div>
                 </div>
-              </el-form>
             </div>
-
-            <!-- show phim -->
-            <div class="w-full">
-              <h2 class="text-center">Danh sách chọn phim</h2>
-              <div
-                v-if="movies.data.length > 0"
-                class="grid grid-cols-4 gap-6 mt-5"
-              >
-                <div
-                  v-for="item in movies.data"
-                  :key="item.id"
-                  class="border rounded-md p-4"
-                >
-                  <img
-                    style="width: 100%"
-                    :src="
-                      'https://i3.ytimg.com/vi/' +
-                      videoId(item) +
-                      '/maxresdefault.jpg'
-                    "
-                  />
-
-                  <h2 class="text-center my-2">{{ item.name }}</h2>
-                  <div class="w-full text-center">
-                    <el-button
-                      size="small"
-                      @click="detail(item.id)"
-                      type="danger"
-                    >
-                      Xem chi tiết
-                    </el-button>
-                  </div>
-                </div>
-              </div>
-              <div v-else>
-                <el-empty description="Không có dữ liệu"></el-empty>
-              </div>
-            </div>
-
-            <!-- phan trang phim  -->
-            <div
-              v-if="movies.total > movies.perPage"
-              class="w-full justify-center my-16 flex"
-            >
-              <pagination
-                v-model="movies.current_page"
-                @current-change="handleCurrentPage"
-                :page-size="Number(movies.perPage)"
-                :total="Number(movies.total)"
-              />
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </app-layout>
+    </app-layout>
 </template>
 
 <script>
+import SelectFilter from "@/Components/Element/SelectFilter.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
+import SearchInput from "@/Components/Element/SearchInput.vue";
 import { getYoutubeId } from "@/Helpers/youtube.js";
-import { listMovie } from "@/API/main.js";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 
 export default {
-  components: { Pagination, AppLayout },
-  props: {
-    movie_genres: Object,
-    movie_hots: Object,
-  },
-  created() {
-    this.fetchData();
-  },
-  data: function () {
-    return {
-      loading: false,
-      movies: {
-        data: [],
-        total: "",
-        current_page: "",
-        keyword: "",
-        search_movie_genre: "",
-        perPage: "",
-        filter: {
-          page: 1,
-          limit: 12,
-          action: "1", // lấy những film active
+    components: { Pagination, AppLayout, SearchInput, SelectFilter },
+
+    props: {
+        movies: {
+            type: Object,
+            required: true,
         },
-      },
-    };
-  },
-  methods: {
-    detail(id) {
-      Inertia.get(route("movie.detail", id), { onBefore, onFinish });
+        movieGenre: {
+            type: Object,
+            required: true,
+        },
+        movieHot: {
+            type: Object,
+            required: true,
+        },
+        filtersBE: {
+            type: Object,
+            required: true,
+        },
     },
 
-    videoId(row) {
-      return getYoutubeId(row);
+    data: function () {
+        return {
+            loading: false,
+        };
     },
 
-    handleCurrentPage(value) {
-      this.movies.filter.page = value;
-      this.fetchData();
+    computed: {
+        filter() {
+            const display = this.filtersBE?.display?.toInt();
+            const movie_genre = this.filtersBE?.movie_genre?.toInt();
+            return {
+                page: this.filtersBE.page?.toInt() || 1,
+                limit: this.filtersBE.limit?.toInt() || 12,
+                name: this.filtersBE?.name || null,
+                display:
+                    display == null || typeof display === "undefined"
+                        ? null
+                        : display,
+                movie_genre:
+                    movie_genre == null || typeof movie_genre === "undefined"
+                        ? null
+                        : movie_genre,
+            };
+        },
     },
 
-    searchChange() {
-      this.movies.filter.name = this.movies.keyword;
-      this.fetchData();
-    },
+    methods: {
+        inertia() {
+            Inertia.get(
+                route("home", this.filter),
+                {},
+                { onBefore, onFinish, preserveScroll: true }
+            );
+        },
 
-    searchType() {
-      this.movies.filter.movie_genre = this.movies.search_movie_genre;
-      this.fetchData();
-    },
+        detail(id) {
+            Inertia.get(route("movie.detail", id), { onBefore, onFinish });
+        },
 
-    async fetchData() {
-      this.loading = true;
-      listMovie(this.movies.filter)
-        .then(({ status, data }) => {
-          this.movies.data = status === 200 ? data.data : this.movies.data;
-          this.movies.total = data.meta.total;
-          this.movies.perPage = data.meta.per_page;
-          this.movies.current_page = data.meta.current_page;
-        })
-        .catch(() => {});
-      this.loading = false;
+        videoId(row) {
+            return getYoutubeId(row);
+        },
+
+        handleCurrentPage(value) {
+            this.filter.page = value;
+            this.inertia();
+        },
+
+        onFilter(value, type) {
+            if (type === "display") {
+                this.filter.display = value;
+            } else if (type === "movie_genre") {
+                this.filter.movie_genre = value;
+            }
+            this.filter.page = 1;
+            this.inertia();
+        },
     },
-  },
 };
 </script>
 
 <style lang="css">
 .el-carousel__container {
-  height: 650px;
+    height: 650px;
 }
 </style>
