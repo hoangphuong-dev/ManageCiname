@@ -37,26 +37,28 @@
                             type="warning"
                         />
                     </div>
-                    <el-dialog title="Chọn rạp" v-model="dialogForm">
+                    <el-dialog
+                        title="Chọn rạp"
+                        width="80%"
+                        v-model="dialogForm"
+                    >
                         <el-form
                             class="text-center w-full"
                             ref="formData"
                             :model="formData"
                             label-position="top"
-                            :rules="rules"
                         >
                             <!-- Chọn tỉnh  -->
-                            <el-form-item
-                                label="Chọn thành phố"
-                                prop="province_id"
-                            >
-                                <div
-                                    v-for="item in provinces"
-                                    :key="item.id"
-                                    class="shadow-lg cursor-pointer"
-                                    @click="getCineme(item.id)"
-                                >
-                                    {{ item.name }}
+                            <el-form-item label="Chọn thành phố">
+                                <div class="w-full grid grid-cols-9 gap-4">
+                                    <div
+                                        v-for="item in provinces"
+                                        :key="item.id"
+                                        class="shadow-lg mb-6 border-2 rounded cursor-pointer grid w-36 p-2 mr-4 hover:border-red-200"
+                                        @click="getCineme(item.id)"
+                                    >
+                                        {{ item.name }}
+                                    </div>
                                 </div>
                             </el-form-item>
 
@@ -197,5 +199,8 @@ export default {
 }
 .el-tabs__active-bar {
     background-color: #f56c6c;
+}
+.isActive {
+    background: red;
 }
 </style>
