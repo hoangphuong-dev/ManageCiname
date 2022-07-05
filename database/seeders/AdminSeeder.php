@@ -22,7 +22,7 @@ class AdminSeeder extends Seeder
         for ($i = 1; $i < 50; $i++) {
             $admin = User::create([
                 'name' => $faker->name,
-                'email' => $faker->email,
+                'email' => $faker->unique()->email,
                 'phone' => $faker->phoneNumber,
                 'role' => User::ROLE_ADMIN,
                 'status' => User::ACCOUNT_ACTIVE

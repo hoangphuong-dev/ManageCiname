@@ -33,7 +33,7 @@ class BillSeeder extends Seeder
             for ($i = 1; $i < 1000; $i++) {
                 $user = User::create([
                     'name' => $faker->name,
-                    'email' => $faker->email,
+                    'email' => $faker->unique()->email,
                     'phone' => $faker->phoneNumber,
                     'role' => User::ROLE_CUSTOMER,
                     'status' => User::ACCOUNT_ACTIVE

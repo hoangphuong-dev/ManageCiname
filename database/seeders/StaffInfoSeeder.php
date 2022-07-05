@@ -22,7 +22,7 @@ class StaffInfoSeeder extends Seeder
         for ($i = 0; $i < 2000; $i++) {
             $user = User::create([
                 'name' => $faker->name,
-                'email' => $faker->email,
+                'email' => $faker->unique()->email,
                 'phone' => $faker->phoneNumber,
                 'role' => User::ROLE_STAFF,
                 'status' => User::ACCOUNT_ACTIVE
