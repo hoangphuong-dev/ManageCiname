@@ -39,7 +39,7 @@
                         </button>
                         <button
                             class="btn-primary bg-red-400"
-                            @click="onOpenDialog"
+                            @click="createMovie()"
                         >
                             + Taọ mới phim
                         </button>
@@ -286,8 +286,6 @@ export default {
             );
         },
 
-        onOpenDialog() {},
-
         handleCurrentPage(value) {
             this.filter.page = value;
             this.inertia();
@@ -311,6 +309,10 @@ export default {
                 });
             });
         },
+        createMovie() {
+            Inertia.get(route("superadmin.movie.create_movie"));
+        },
+
         detail({ id }) {},
 
         edit(row) {},

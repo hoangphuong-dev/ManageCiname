@@ -29,7 +29,7 @@ Route::group(['as' => 'back.'], function () {
 
 Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => ['superadmin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutSuperAdmin'])->name('logout_super');
-    Route::get('/index.html', [SuperAdminController::class, 'index'])->name('home_super');
+    Route::get('/', [SuperAdminController::class, 'index'])->name('home_super');
 
     Route::prefix('/seat_type')->as('seat_type.')->group(function () {
         Route::get('', [SeatTypeController::class, 'index'])->name('index');
@@ -43,17 +43,17 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
         Route::post('edit/{id}', [MovieController::class, 'edit'])->name('update');
         Route::delete('delete/{id}', [MovieController::class, 'delete'])->name('delete');
         Route::post('store', [MovieController::class, 'store'])->name('store');
+        Route::get('/create-movie', [MovieController::class, 'create'])->name('create_movie');
 
         Route::post('import', [MovieController::class, 'importCsv'])->name('import');
         Route::get('export', [MovieController::class, 'exportCsv'])->name('export');
     });
 
-    // Route::get('/create_admin.html', [AdminInfoController::class, 'create'])->name('create_admin');
-    // Route::get('/create_movie.html', [MovieController::class, 'create'])->name('create_movie');
+    // Route::get('/create_admin', [AdminInfoController::class, 'create'])->name('create_admin');
     // Route::get('movies/edit/{id}', [MovieController::class, 'edit'])->name('movies.edit');
 
     // Quản lý hệ thống rạp
-    Route::get('/master-cinema.html', [CinemaController::class, 'getMasterCinema'])->name('admin_info.index');
+    Route::get('/master-cinema', [CinemaController::class, 'getMasterCinema'])->name('admin_info.index');
 
     Route::get('/cinemas', [CinemaController::class, 'getListCinemaByProvince'])->name('cinema.province');
     Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
@@ -65,7 +65,7 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
-    Route::get('/index.html', [AdminController::class, 'index'])->name('home_admin');
+    Route::get('/', [AdminController::class, 'index'])->name('home_admin');
 
     // start manage cinema
     Route::get('showtimes', [ShowTimeController::class, 'index'])->name('showtime.index');
@@ -96,6 +96,6 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 
 Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutStaff'])->name('logout');
-    Route::get('/index.html', [StaffController::class, 'index'])->name('home_staff');
+    Route::get('/', [StaffController::class, 'index'])->name('home_staff');
     Route::get('/showtime', [StaffShowTimeController::class, 'index'])->name('showtime');
 });

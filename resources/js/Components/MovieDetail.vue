@@ -38,7 +38,7 @@
                         />
                     </div>
                     <el-dialog
-                        title="Chọn rạp"
+                        title="Chọn rạp xem"
                         width="80%"
                         v-model="dialogForm"
                     >
@@ -49,30 +49,39 @@
                             label-position="top"
                         >
                             <!-- Chọn tỉnh  -->
-                            <el-form-item label="Chọn thành phố">
-                                <div class="w-full grid grid-cols-9 gap-4">
-                                    <div
-                                        v-for="item in provinces"
-                                        :key="item.id"
-                                        class="shadow-lg mb-6 border-2 rounded cursor-pointer grid w-36 p-2 mr-4 hover:border-red-200"
-                                        @click="getCineme(item.id)"
-                                    >
+                            <h3 class="text-center my-4">Chọn thành phố</h3>
+                            <div
+                                class="w-full grid grid-cols-9 gap-4 border-b-2"
+                            >
+                                <div
+                                    v-for="item in provinces"
+                                    :key="item.id"
+                                    class="shadow-lg mb-6 border-2 rounded cursor-pointer grid w-36 p-2 h-14 mr-4 hover:border-red-200"
+                                    :class="{
+                                        isActive: activeProvince == item.id,
+                                    }"
+                                    @click="getCineme(item.id)"
+                                >
+                                    <span class="mt-1 text-base">
                                         {{ item.name }}
-                                    </div>
+                                    </span>
                                 </div>
-                            </el-form-item>
+                            </div>
 
                             <!-- Chọn rạp  -->
-                            <el-form-item label="Chọn rạp" prop="cinema_id">
+                            <h3 class="text-center my-4">Chọn rạp</h3>
+                            <div class="w-full grid grid-cols-6 gap-4 min-h-64">
                                 <div
                                     v-for="item in cinemas"
                                     :key="item.id"
                                     @click="viewShowTime(item.id)"
-                                    class="shadow-lg cursor-pointer"
+                                    class="shadow-lg mb-6 border-2 rounded cursor-pointer grid w-56 p-2 h-20 mr-4"
                                 >
-                                    {{ item.name }}
+                                    <span class="mt-2 text-base">
+                                        {{ item.name }}
+                                    </span>
                                 </div>
-                            </el-form-item>
+                            </div>
                         </el-form>
                     </el-dialog>
                 </div>
@@ -123,6 +132,7 @@ export default {
         return {
             loading: false,
             dialogForm: false,
+            activeProvince: "",
             province: "",
             provinces: [],
             cinemas: [],
@@ -159,6 +169,7 @@ export default {
         },
 
         getCineme(id) {
+            this.activeProvince = id;
             this.formData.province_id = id;
             this.fetchDataCinema(id);
         },
@@ -201,6 +212,7 @@ export default {
     background-color: #f56c6c;
 }
 .isActive {
-    background: red;
+    background: #f56c6c;
+    color: white;
 }
 </style>

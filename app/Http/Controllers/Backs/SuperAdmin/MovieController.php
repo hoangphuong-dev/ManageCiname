@@ -33,6 +33,15 @@ class MovieController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        $movie_genres = $this->movieService->getListMovieGenre();
+
+        return Inertia::render("Backs/SuperAdmin/FormMovie", [
+            'movie_genres' => $movie_genres,
+        ]);
+    }
+
     public function edit(SeatTypeRequest $request, $id)
     {
         try {
@@ -82,27 +91,6 @@ class MovieController extends Controller
             return back()->with($message);
         }
     }
-
-    // public function create()
-    // {
-    //     $movie_genres = $this->movieGenreService->all();
-
-    //     return Inertia::render("Backs/SuperAdmin/FormMovie", [
-    //         'movie_genres' => $movie_genres,
-    //     ]);
-    // }
-
-    // public function delete($id)
-    // {
-    //     try {
-    //         $this->movieService->delete($id);
-    //         $message = ['success' => __('Xóa thành công !')];
-    //     } catch (\Exception $e) {
-    //         $message = ['error' => __('Có lỗi trong quá trình thực thi !')];
-    //     } finally {
-    //         return back()->with($message);
-    //     }
-    // }
 
     // public function edit($id)
     // {

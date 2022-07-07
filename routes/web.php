@@ -12,9 +12,9 @@ Route::get('/home', [CustomerController::class, 'index'])->name('home');
 
 Route::get('/movie-detail/{id}', [CustomerController::class, 'detailMovie'])->name('movie.detail');
 
-Route::get('/order-ticket.html', [CustomerController::class, 'orderTicket'])->name('order.ticket');
+Route::get('/order-ticke', [CustomerController::class, 'orderTicket'])->name('order.ticket');
 
-Route::get('/show-seats-by-showtimes.html', [CustomerController::class, 'showSeatByShowTime'])->name('show_seat_by_showtime');
+Route::get('/show-seats-by-showtime', [CustomerController::class, 'showSeatByShowTime'])->name('show_seat_by_showtime');
 
 Route::get('/order-success-bill-{id}', [CustomerController::class, 'orderSuccess'])->name('order-success');
 
@@ -22,17 +22,17 @@ Route::get('/order-success-bill-{id}', [CustomerController::class, 'orderSuccess
 Route::get('/download-bill-pdf/{id}', [CustomerController::class, 'downloadPDF'])->name('download_bill_pdf');
 
 
-Route::get('/order-send-mail.html', [CustomerController::class, 'NoticationSendMail'])->name('notication-send-mail');
+Route::get('/order-send-mai', [CustomerController::class, 'NoticationSendMail'])->name('notication-send-mail');
 
-Route::get('/movies.html', [CustomerController::class, 'index'])->name('movies');
+Route::get('/movie', [CustomerController::class, 'index'])->name('movies');
 
-Route::get('/member.html', [CustomerController::class, 'index'])->name('member');
+Route::get('/membe', [CustomerController::class, 'index'])->name('member');
 
-Route::get('/login.html', [CustomerController::class, 'login'])->name('customer.login')->middleware(IgnoreCustomerMiddleware::class);
-Route::post('/login.html', [CustomerController::class, 'handleLogin']);
+Route::get('/logi', [CustomerController::class, 'login'])->name('customer.login')->middleware(IgnoreCustomerMiddleware::class);
+Route::post('/logi', [CustomerController::class, 'handleLogin']);
 
-Route::get('/forgot-password.html', [CustomerController::class, 'forgotPasword'])->name('customer.forgot_pasword');
-Route::post('/forgot-password.html', [CustomerController::class, 'handleForgotPassword']);
+Route::get('/forgot-passwor', [CustomerController::class, 'forgotPasword'])->name('customer.forgot_pasword');
+Route::post('/forgot-passwor', [CustomerController::class, 'handleForgotPassword']);
 
 Route::get('/confirm-forgot-password', [CustomerController::class, 'confirmForgotPassword'])->name('confirm_forgot_password');
 Route::post('/confirm-forgot-password', [CustomerController::class, 'handleConfirmForgotPassword']);
@@ -42,7 +42,7 @@ Route::get('/authenticate-email', [ProfileController::class, 'AuthenticateMail']
 Route::post('/get-cinema-by-province/{id}', [CustomerController::class, 'getCinemaByProvince'])->name('get-cinema-by-province');
 
 Route::group(['as' => 'order.', 'prefix' => 'order'], function () {
-    Route::get('/customer-order.html', [PaymentController::class, 'getInfoCustomer'])
+    Route::get('/customer-orde', [PaymentController::class, 'getInfoCustomer'])
         ->name('get_info_customer');
     Route::post('/authen-email', [PaymentController::class, 'authenEmail'])->name('authen-email');
     Route::get('/authentication-token/{token}', [PaymentController::class, 'authenOrder'])->name('authen-token');
@@ -52,10 +52,10 @@ Route::group(['as' => 'order.', 'prefix' => 'order'], function () {
 
 Route::group(['middleware' => ['customer']], function () {
     Route::get('/logout', [CustomerController::class, 'logout'])->name('customer.logout');
-    Route::get('/my-ticket.html', [CustomerController::class, 'myTicket'])->name('ticket');
+    Route::get('/my-ticke', [CustomerController::class, 'myTicket'])->name('ticket');
 
-    Route::get('/my-profile.html', [ProfileController::class, 'index'])->name('profile');
-    Route::get('/my-voucher.html', [ProfileController::class, 'myVoucher'])->name('voucher');
+    Route::get('/my-profil', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/my-vouche', [ProfileController::class, 'myVoucher'])->name('voucher');
     Route::post('/exchange-point', [ProfileController::class, 'exchangePoint'])->name('customer.exchange-point');
 
     Route::post('/update', [ProfileController::class, 'update'])->name('customer.update-profile');
