@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\PaymentController;
 use App\Http\Controllers\Customer\ProfileController;
+use App\Http\Controllers\ErrorPageController;
 use App\Http\Middleware\IgnoreCustomerMiddleware;
 
 // Customer
@@ -65,4 +66,8 @@ Route::group(['middleware' => ['customer']], function () {
     ]);
 
     Route::put('toggle-favorite', [CommentController::class, 'toggleFavorite'])->name('comment.toggle-favorite');
+});
+
+Route::prefix('/')->group(function () {
+    Route::get('404', [ErrorPageController::class, 'Error404'])->name('404-page');
 });
