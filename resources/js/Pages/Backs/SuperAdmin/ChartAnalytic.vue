@@ -2,11 +2,8 @@
     <div>
         <Bar
             :chart-data="dataChart"
-            :width="width"
-            :height="height"
             :chart-options="chartOptions"
-            :max_post="max_post"
-            :max_engagement="max_engagement"
+            :height="200"
         />
     </div>
 </template>
@@ -43,15 +40,7 @@ export default {
     name: "BarChart",
     components: { Bar, Line },
     props: {
-        chartId: { type: String, default: "bar-chart" },
-        datasetIdKey: { type: String, default: "label" },
-        width: { type: Number, default: 400 },
-        height: { type: Number, default: 400 },
-        cssClasses: { default: "", type: String },
-        styles: { type: Object, default: () => {} },
         dataChart: { label: [], datasets: [] },
-        max_post: { type: Number, default: 0 },
-        max_engagement: { type: Number, default: 0 },
     },
     data() {
         return {
