@@ -3,14 +3,30 @@
 namespace App\Http\Controllers\Backs\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Services\SuperAdminAnalysisService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class SuperAdminController extends Controller
 {
-    public function index()
+    protected $superAdminAnalysisService;
+
+    public function __construct(SuperAdminAnalysisService $superAdminAnalysisService)
     {
-        return Inertia::render('Backs/SuperAdmin/Index');
+        $this->superAdminAnalysisService = $superAdminAnalysisService;
     }
 
+
+    public function index(Request $request)
+    {
+        $revenuaProvince = $this->superAdminAnalysisService->getDataAnalysis($request);
+
+        // dd($revenuaProvince);
+
+        return Inertia::render('Backs/SuperAdmin/Index', [
+            'filtersBE' => $request->all(),
+            'revenuaProvince' => $revenuaProvince,
+        ]);
+    }
 }

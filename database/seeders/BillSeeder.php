@@ -5,8 +5,6 @@ namespace Database\Seeders;
 use App\Models\Bill;
 use App\Models\Cinema;
 use App\Models\MemberCard;
-use App\Models\Province;
-use App\Models\Room;
 use App\Models\Seat;
 use App\Models\ShowTime;
 use App\Models\Ticket;
@@ -33,7 +31,7 @@ class BillSeeder extends Seeder
             for ($i = 1; $i < 1000; $i++) {
                 $user = User::create([
                     'name' => $faker->name,
-                    'email' => $faker->unique()->email,
+                    'email' => $faker->unique()->safeEmail,
                     'phone' => $faker->phoneNumber,
                     'role' => User::ROLE_CUSTOMER,
                     'status' => User::ACCOUNT_ACTIVE

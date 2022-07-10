@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="my-6">
         <Bar
             :chart-data="dataChart"
             :chart-options="chartOptions"
@@ -51,17 +51,17 @@ export default {
                     },
                     tooltip: {
                         enabled: true,
-                        callbacks: {
-                            label: function (context) {
-                                let label = context.dataset.label || "";
-                                if (label == "エンゲージメント率") {
-                                    label += ": " + context.parsed.y + " %";
-                                } else {
-                                    label += ": " + context.parsed.y;
-                                }
-                                return label;
-                            },
-                        },
+                        // callbacks: {
+                        //     label: function (context) {
+                        //         let label = context.dataset.label || "";
+                        //         if (label == "エンゲージメント率") {
+                        //             label += ": " + context.parsed.y + " %";
+                        //         } else {
+                        //             label += ": " + context.parsed.y;
+                        //         }
+                        //         return label;
+                        //     },
+                        // },
                     },
                 },
             },

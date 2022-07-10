@@ -17,11 +17,8 @@ class ShowTimeSeeder extends Seeder
      */
     public function run()
     {
-        $movie = Movie::all()->where('status', Movie::MOVIE_ACTIVE)->pluck('id')->toArray();
-        $room = Room::all()->where(
-            'status',
-            Room::STATUS_OPEN
-        )->pluck('id')->toArray();
+        $movie = Movie::query()->where('status', Movie::MOVIE_ACTIVE)->orderBy('id', 'DESC')->limit(4)->pluck('id')->toArray();
+        $room = Room::all()->where('status', Room::STATUS_OPEN)->pluck('id')->toArray();
 
         for ($i = 1; $i <= 500; $i += 2) {
             ShowTime::create([

@@ -13,7 +13,7 @@ Route::get('/home', [CustomerController::class, 'index'])->name('home');
 
 Route::get('/movie-detail/{id}', [CustomerController::class, 'detailMovie'])->name('movie.detail');
 
-Route::get('/order-ticke', [CustomerController::class, 'orderTicket'])->name('order.ticket');
+Route::get('/order-ticket', [CustomerController::class, 'orderTicket'])->name('order.ticket');
 
 Route::get('/show-seats-by-showtime', [CustomerController::class, 'showSeatByShowTime'])->name('show_seat_by_showtime');
 

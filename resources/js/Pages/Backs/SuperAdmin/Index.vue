@@ -2,6 +2,19 @@
     <admin-layout>
         <template #main>
             <div class="bg-white min-h-full m-4 mb-0 p-4">
+                <h2 class="mb-5">Doanh thu theo khu vực</h2>
+                <div class="p-2 shadow-lg">
+                    <div class="w-2/10 float-right mb-6">
+                        <el-date-picker
+                            v-model="currentMonth"
+                            type="month"
+                            placeholder="Chọn tháng"
+                        />
+                    </div>
+                    <ChartAnalytic :dataChart="chartDataByProvince" />
+                </div>
+            </div>
+            <div class="bg-white min-h-full m-4 mb-0 p-4">
                 <h2 class="mb-5">màn thống kê toàn hệ thống</h2>
                 <div class="p-2 shadow-lg">
                     <ChartAnalytic :dataChart="chartData" />
@@ -14,15 +27,44 @@
 <script>
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import ChartAnalytic from "./ChartAnalytic.vue";
+import { Inertia } from "@inertiajs/inertia";
+import { onBefore, onFinish } from "@/Uses/request-inertia";
+
 export default {
-    name: "HomeStaff",
+    name: "Index",
     components: {
         AdminLayout,
         ChartAnalytic,
     },
 
+    props: {
+        revenuaProvince: { type: Object, require: true },
+    },
+
     data() {
         return {
+            currentMonth: new Date(),
+            chartDataByProvince: {
+                datasets: [
+                    // {
+                    //     label: "chart 1",
+                    //     data: [1, 5, 3, 7, 9, 5, 3, 2],
+                    //     type: "line",
+                    //     backgroundColor: "#C71585",
+                    //     borderColor: "#C71585",
+                    //     lineTension: 0.5,
+                    // },
+                    {
+                        label: "Doanh thu",
+                        data: this.revenuaProvince.revenua,
+                        type: "bar",
+                        backgroundColor: "#F0C478",
+                        lineTension: 0.5,
+                    },
+                ],
+                labels: this.revenuaProvince.provinces,
+            },
+
             chartData: {
                 datasets: [
                     {
@@ -55,6 +97,36 @@ export default {
             },
         };
     },
-    methods: {},
+
+    watch: {
+        currentMonth() {
+            this.filter.type = "by-province";
+            this.filter.selected_month = new Date(
+                this.currentMonth
+            ).toISOString;
+            this.inertia();
+
+            // new Date(this.currentMonth).toISOString
+        },
+    },
+
+    computed: {
+        filter() {
+            return {
+                type: this.filtersBE?.type || "",
+                selected_month: this.filtersBE?.selected_month || "",
+            };
+        },
+    },
+
+    methods: {
+        inertia() {
+            Inertia.get(
+                route("superadmin.home_super", this.filter),
+                {},
+                { onBefore, onFinish, preserveScroll: true }
+            );
+        },
+    },
 };
 </script>

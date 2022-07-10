@@ -9,7 +9,6 @@ use App\Http\Controllers\Backs\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Backs\AuthenticationController;
 use App\Http\Controllers\Backs\Staff\ShowTimeController as StaffShowTimeController;
 use App\Http\Controllers\Backs\Staff\StaffController;
-use App\Http\Controllers\Backs\SuperAdmin\AdminInfoController;
 use App\Http\Controllers\Backs\SuperAdmin\MovieController;
 use App\Http\Controllers\Backs\SuperAdmin\SeatTypeController;
 use App\Http\Controllers\Backs\SuperAdmin\SuperAdminController;
