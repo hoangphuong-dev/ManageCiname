@@ -27,11 +27,6 @@ class MovieGenreRepository extends BaseRepository
             })->get();
     }
 
-    // public function all()
-    // {
-    //     return $this->model->query()->get();
-    // }
-
     public function store($fill)
     {
         return $this->model->create($fill);
