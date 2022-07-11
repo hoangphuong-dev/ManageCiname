@@ -254,7 +254,6 @@ import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import Editor from "@tinymce/tinymce-vue";
 import { CirclePlus } from "@element-plus/icons-vue";
 import {
-  createMovie,
   createMovieGenre,
   listMovieGenre,
   createFormat,
@@ -262,6 +261,7 @@ import {
   createCast,
   listCast,
 } from "@/API/main.js";
+import { Inertia } from '@inertiajs/inertia';
 
 export default {
   name: "FormAdminInfo",
@@ -315,19 +315,19 @@ export default {
           message: "Trường này không được trống ",
           trigger: "change",
         },
-        trailer: [
-          {
-            required: true,
-            message: "Trường này không được trống ",
-            trigger: "blur",
-          },
-          {
-            pattern:
-              /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/,
-            message: "Đường link không phải của youtube",
-            trigger: "blur",
-          },
-        ],
+        // trailer: [
+        //   {
+        //     required: true,
+        //     message: "Trường này không được trống ",
+        //     trigger: "blur",
+        //   },
+        //   {
+        //     pattern:
+        //       /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/,
+        //     message: "Đường link không phải của youtube",
+        //     trigger: "blur",
+        //   },
+        // ],
         movie_length: {
           required: true,
           message: "Trường này không được trống ",
@@ -395,16 +395,7 @@ export default {
       this.dialogFormVisibleMovieGenre = false;
       this.$refs["formMovie"].validate(async (valid) => {
         if (valid) {
-          await createMovie(
-            toFormData({ ...this.formData }, "", { indices: true })
-          )
-            .then(async (res) => {
-              this.$message.success("Create success");
-              this.$inertia.visit(route("superadmin.movie.index"));
-            })
-            .catch(() => {
-              this.$message.error("Server Error");
-            });
+          Inertia.post(route('superadmin.movie.store'), { ...this.formData }) 
         }
       });
     },

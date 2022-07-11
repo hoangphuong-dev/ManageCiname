@@ -1,13 +1,5 @@
 import axios from "@/plugins/axios";
 
-export const createMovie = async (formData = {}) => {
-    return await axios.post("/movies", formData);
-};
-
-export const listMovie = async (params = {}) => {
-    return await axios.get("/movies", { params });
-};
-
 export const listStaff = async (params = {}) => {
     return await axios.get(route("staff.getAll"), { params });
 };

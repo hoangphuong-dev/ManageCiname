@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\CastController;
 use App\Http\Controllers\Api\FormatController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\MovieGenreController;
 use App\Http\Controllers\Api\ProvinceController;
 use App\Http\Controllers\Api\RoomController;
@@ -17,9 +16,6 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\NotificationController;
 
 Route::apiResource('moviegenres', MovieGenreController::class);
-Route::apiResource('movies', MovieController::class);
-Route::put('/movies/{id}/update-status', [MovieController::class, 'changeStatus'])
-    ->name('movies.change_status');
 
 Route::get('get-all-staff', [StaffController::class, 'getAll'])->name('staff.getAll');
 Route::put('update-status-staff/{id}', [StaffController::class, 'updateStatus'])->name('staff.update-status');

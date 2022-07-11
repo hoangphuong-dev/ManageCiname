@@ -40,17 +40,16 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
 
     Route::prefix('/movie')->as('movie.')->group(function () {
         Route::get('/', [MovieController::class, 'index'])->name('index');
-        Route::post('edit/{id}', [MovieController::class, 'edit'])->name('update');
         Route::delete('delete/{id}', [MovieController::class, 'delete'])->name('delete');
         Route::post('store', [MovieController::class, 'store'])->name('store');
         Route::get('/create-movie', [MovieController::class, 'create'])->name('create_movie');
+        Route::get('/edit/{id}', [MovieController::class, 'edit'])->name('edit');
 
         Route::post('import', [MovieController::class, 'importCsv'])->name('import');
         Route::get('export', [MovieController::class, 'exportCsv'])->name('export');
     });
 
     // Route::get('/create_admin', [AdminInfoController::class, 'create'])->name('create_admin');
-    // Route::get('movies/edit/{id}', [MovieController::class, 'edit'])->name('movies.edit');
 
     // Quản lý hệ thống rạp
     Route::get('/master-cinema', [CinemaController::class, 'getMasterCinema'])->name('admin_info.index');
