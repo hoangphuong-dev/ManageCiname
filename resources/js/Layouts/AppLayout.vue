@@ -194,25 +194,7 @@
                     <slot></slot>
                 </main>
             </div>
-            <!-- footer -->
-            <div class="w-full bg-red-100 h-60 pt-6">
-                <div class="w-5/6 flex m-auto">
-                    <div class="w-1/3 mr-4 p-2" v-for="item in 3" :key="item">
-                        <h2>LIÊN HỆ</h2>
-                        <h4 class="py-2">CÔNG TY CỔ PHẦN PHC MEDIA</h4>
-                        <h6 class="py-2">
-                            Địa chỉ trụ sở:17 Tạ Quang Bửu - Hai Bà Trưng - Hà
-                            Nội
-                        </h6>
-                        <h6 class="py-2">Email: phuonght@phc.vn</h6>
-                        <h6 class="py-2 font-bold cursor-pointer">
-                            <a :href="route('back.register.staff')">
-                                Đăng ký thành nhân viên
-                            </a>
-                        </h6>
-                    </div>
-                </div>
-            </div>
+            <Footer />
         </div>
     </div>
 </template>
@@ -224,12 +206,14 @@ import { ArrowDown, ArrowRight } from "@element-plus/icons-vue";
 import PopupNotification from "@/Components/Notifications/Popup.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { ElLoading } from "element-plus";
+import Footer from "./Footer.vue";
 
 export default defineComponent({
     components: {
         ArrowDown,
         PopupNotification,
         ArrowRight,
+        Footer,
     },
     mixins: [AlertNoticeMixin],
     computed: {
