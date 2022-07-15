@@ -15,5 +15,5 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { computed } from 'vue';
 
-const isAdmin = computed(_ => Inertia?.page?.props?.user?.role != 3);
+const isAdmin = computed(_ => Inertia?.page?.props?.user?.role == 0 || Inertia?.page?.props?.user?.role == 4 || Inertia?.page?.props?.user?.role == 2);
 </script>
