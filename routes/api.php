@@ -42,7 +42,7 @@ Route::get('/get-comments', [CommentController::class, 'getComment'])
     ->name('movies.comment');
 
 
-Route::prefix('/notification')->group(function () {
-    Route::get('/', [NotificationController::class, 'getAllNotification'])->name('notification.getAll');
-    Route::get('/mark-read/{id}', [NotificationController::class, 'markRead'])->name('notification.mark-read');
+Route::prefix('/notification')->as('notification.')->group(function () {
+    Route::get('/', [NotificationController::class, 'getAllNotification'])->name('getAll');
+    Route::get('/mark-read/{id}', [NotificationController::class, 'markRead'])->name('mark-read');
 });

@@ -45,11 +45,10 @@ class RevenuaCinemaByMonth extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'title' => 'Thông báo doanh thu của rạp theo tháng',
+            'title' => 'Thông báo doanh thu',
             'cinema_id' => $this->cinema->id,
-            'cinema_name' => $this->cinema->name,
-            'revenua' => $this->revenua,
             'month' => Carbon::now()->format('m-Y'),
+            'content' => 'Rạp ' . $this->cinema->name . ' đạt doanh thu ' . number_format($this->revenua) . ' trong tháng ' . Carbon::now()->format('m-Y'),
         ];
     }
 }

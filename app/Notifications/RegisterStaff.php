@@ -48,6 +48,7 @@ class RegisterStaff extends Notification implements ShouldQueue
             'id' => $this->user->id,
             'name' => $this->user->name,
             'email' => $this->user->email,
+            'content' => $this->user->name . 'đăng ký thành nhân viên rạp',
         ];
     }
 }

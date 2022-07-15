@@ -130,7 +130,6 @@ export default {
     computed: {
         user() {
             if (this.$page.props.user?.role !== 3) {
-                // neu user khach thang khach hang
                 return this.$page.props.user;
             }
             return null;
