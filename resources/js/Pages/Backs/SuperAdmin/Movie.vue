@@ -39,7 +39,11 @@
                         </button>
                         <button
                             class="btn-primary bg-red-400"
-                            @click="this.$inertia.visit(route('superadmin.movie.create_movie'))"
+                            @click="
+                                this.$inertia.visit(
+                                    route('superadmin.movie.create_movie')
+                                )
+                            "
                         >
                             + Taọ mới phim
                         </button>
@@ -87,7 +91,14 @@
                                 <template v-if="!row.status">
                                     <button
                                         class="btn-warning bg-gray-200"
-                                        @click="this.$inertia.visit(route('superadmin.movie.edit',row?.id))"
+                                        @click="
+                                            this.$inertia.visit(
+                                                route(
+                                                    'superadmin.movie.edit',
+                                                    row?.id
+                                                )
+                                            )
+                                        "
                                     >
                                         <img src="/images/svg/edit.svg" />
                                     </button>
@@ -116,6 +127,7 @@
             </div>
 
             <!-- dialog import movie -->
+
             <div class="customer_dialog">
                 <el-dialog
                     title="Hướng dẫn import file csv"
@@ -313,7 +325,7 @@ export default {
         async updateStatus(row, status) {
             this.$confirm(
                 `Bạn có chắc chắn thay đổi trạng thái phim `,
-                "Cảnh báo", 
+                "Cảnh báo",
                 {
                     confirmButtonText: "Chắc chắn",
                     cancelButtonText: "Hủy",

@@ -151,7 +151,7 @@ export default {
                 {
                     label: "Trang chủ",
                     icon: "home",
-                    path: "superadmin.home_super",
+                    path: "superadmin.home",
                 },
                 {
                     label: "Quản lý phim",
@@ -173,7 +173,7 @@ export default {
                 {
                     label: "Trang chủ",
                     icon: "home",
-                    path: "admin.home_admin",
+                    path: "admin.home",
                 },
                 {
                     label: "Quản lý rạp",
@@ -199,13 +199,20 @@ export default {
                 },
                 {
                     label: "Phim đang chiếu",
-                    icon: "cinema",
-                    path: "now_showing",
+                    icon: "movie",
+                    path: "staff.movie",
+                    param: {
+                        display: 1,
+                    },
                 },
                 {
                     label: "Phim sắp chiếu",
-                    icon: "cinema",
-                    path: "comming_soon",
+                    icon: "movie",
+                    path: "staff.fff",
+                    param: {
+                        display: 2,
+                        redirect: "customer",
+                    },
                 },
             ],
         };
@@ -217,7 +224,7 @@ export default {
             });
             setTimeout(() => {
                 loading.close();
-                this.$inertia.visit(route(menu.path));
+                this.$inertia.visit(route(menu.path), menu?.param);
             }, 500);
         },
         activeMenu(menu) {
