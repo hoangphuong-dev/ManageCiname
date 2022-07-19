@@ -2,6 +2,7 @@
     <div class="w-full flex relative">
         <div class="w-3/4 flex items-end">
             <SelectFilter
+                v-if="!isCustomer"
                 :type="'status'"
                 :modelSelect="filter.status"
                 :listOption="statusList"
@@ -22,7 +23,7 @@
         </div>
     </div>
 
-    <div class="mt-5">
+    <div class="mt-5" style="min-height: 500px">
         <data-table
             :fields="fields"
             :items="bills.data"
@@ -323,6 +324,9 @@ export default {
                         ? null
                         : voucher,
             };
+        },
+        isCustomer() {
+            return Inertia?.page?.props?.user?.role == 3;
         },
     },
 

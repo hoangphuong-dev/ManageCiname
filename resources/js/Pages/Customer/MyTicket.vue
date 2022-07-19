@@ -1,10 +1,10 @@
 <template>
-  <app-layout>
-    <div class="bg-white min-h-full m-4 mb-0 p-4">
-      <h2 class="mb-5">Lịch sử hóa đơn</h2>
-      <view-bill :bills="bills"></view-bill>
-    </div>
-  </app-layout>
+    <app-layout>
+        <div class="bg-white min-h-full m-4 mb-0 p-4">
+            <h2 class="mb-5">Lịch sử hóa đơn</h2>
+            <view-bill :bills="bills" :filtersBE="filtersBE"></view-bill>
+        </div>
+    </app-layout>
 </template>
 
 <script>
@@ -15,24 +15,25 @@ import { onBefore, onFinish } from "@/Uses/request-inertia";
 import ViewBill from "@/Components/ViewBill.vue";
 
 export default {
-  components: { AppLayout, ViewBill },
-  props: {
-    provinces: Array,
-    bills: Object,
-  },
+    components: { AppLayout, ViewBill },
+    props: {
+        provinces: { type: Array, require: true },
+        bills: { type: Object, require: true },
+        filtersBE: { type: Object, require: true },
+    },
 
-  data: function () {
-    return {
-      loading: false,
-    };
-  },
-  methods: {
-    detail(id) {
-      Inertia.get(route("movie.detail", id), { onBefore, onFinish });
+    data: function () {
+        return {
+            loading: false,
+        };
     },
-    videoId(row) {
-      return getYoutubeId(row);
+    methods: {
+        detail(id) {
+            Inertia.get(route("movie.detail", id), { onBefore, onFinish });
+        },
+        videoId(row) {
+            return getYoutubeId(row);
+        },
     },
-  },
 };
 </script>

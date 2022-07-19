@@ -230,15 +230,15 @@ class CustomerController extends Controller
         return $pdf->stream('ticket.pdf')->header('Content-Type', 'application/pdf');
     }
 
-    public function myTicket()
+    public function myTicket(Request $request)
     {
         $user = Auth::guard('customer')->user();
 
         $bills = $this->billService->getBillCustomer($user->id);
 
         return Inertia::render('Customer/MyTicket', [
-
             'bills' => $bills,
+            'filtersBE' => $request->all(),
         ]);
     }
 

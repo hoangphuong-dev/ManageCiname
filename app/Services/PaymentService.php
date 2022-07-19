@@ -116,7 +116,7 @@ class PaymentService
                 $bill = $this->billService->getBillById($inputData['vnp_TxnRef']);
                 if (!(is_null($bill))) {
                     if ($bill->total_money == $inputData['vnp_Amount']) {
-                        if ($bill->status == 0) {
+                        if ($bill->status == 2) {
                             if ($inputData['vnp_ResponseCode'] == '00' || $inputData['vnp_TransactionStatus'] == '00') {
                                 $this->paymentRepository->make($inputData);
                                 $responseCode = '00';
