@@ -5,7 +5,7 @@ namespace App\Imports;
 use App\Models\Cast;
 use App\Models\CastMovie;
 use App\Models\Cinema;
-use App\Models\CinemaMovie;
+// use App\Models\CinemaMovie;
 use App\Models\FormatMovie;
 use App\Models\Movie;
 use App\Models\MovieFormatMovie;
@@ -36,7 +36,6 @@ class MovieImport implements WithHeadingRow, ToCollection
                 $this->addDataCast(explode(",", $row['casts']), $movie->id);
                 $this->addDataMovieGenre(explode(",", $row['movie_genres']), $movie->id);
                 $this->addDataFormatMovie(explode(",", $row['format_movies']), $movie->id);
-                $this->addDataCinemaMovie($movie->id);
             }
             DB::commit();
         } catch (\Exception $e) {
@@ -45,13 +44,6 @@ class MovieImport implements WithHeadingRow, ToCollection
         }
     }
 
-    public function addDataCinemaMovie($movie_id)
-    {
-        $cinemas = Cinema::select('id')->get();
-        foreach ($cinemas as $item) {
-            CinemaMovie::create(['cinema_id' => $item->id, 'movie_id' => $movie_id]);
-        }
-    }
 
 
     public function checkCast($name)

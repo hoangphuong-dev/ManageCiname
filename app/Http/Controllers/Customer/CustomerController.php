@@ -241,4 +241,15 @@ class CustomerController extends Controller
             'bills' => $bills,
         ]);
     }
+
+    public function showCinemaFromCustomer()
+    {
+        $provinces = $this->cinemaRepository->getProvinceAllCinema();
+
+        return Inertia::render('Customer/SystemCinema', [
+            'provinces' => $provinces,
+        ]);
+
+        dd($provinces);
+    }
 }

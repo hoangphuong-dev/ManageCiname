@@ -17,10 +17,6 @@ class Cinema extends Model
         return $this->belongsToMany(Movie::class, 'cinema_movies', 'cinema_id', 'movie_id');
     }
 
-    public function cinemaMovie()
-    {
-        return $this->hasMany(CinemaMovie::class);
-    }
 
     public function user()
     {

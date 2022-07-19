@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Cast;
 use App\Models\CastMovie;
 use App\Models\Cinema;
-use App\Models\CinemaMovie;
 use App\Models\FormatMovie;
 use App\Models\Movie;
 use App\Models\MovieFormatMovie;
@@ -137,21 +136,6 @@ class MovieSeeder extends Seeder
         } catch (\Exception $e) {
             DB::rollback();
             return dd($e);
-        }
-
-        $arr_movie_id = Movie::where('status', Movie::MOVIE_ACTIVE)
-            ->limit(10)->get()
-            ->pluck('id')->toArray();
-
-        $arr_cinema_id = Cinema::all()->pluck('id')->toArray();
-
-        foreach ($arr_movie_id as $key) {
-            foreach ($arr_cinema_id as $item) {
-                CinemaMovie::create([
-                    'cinema_id' => $item,
-                    'movie_id' => $key,
-                ]);
-            }
         }
     }
 }

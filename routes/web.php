@@ -10,7 +10,8 @@ use App\Http\Middleware\IgnoreCustomerMiddleware;
 
 // Customer
 Route::get('/home', [CustomerController::class, 'index'])->name('home');
-Route::get('/cinema', [CustomerController::class, 'cinema'])->name('cinema');
+
+Route::get('/cinema', [CustomerController::class, 'showCinemaFromCustomer'])->name('cinema');
 
 Route::get('/movie-detail/{id}', [CustomerController::class, 'detailMovie'])->name('movie.detail');
 

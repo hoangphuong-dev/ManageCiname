@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Http\Resources\MovieResource;
 use App\Models\MovieFormatMovie;
 use App\Repositories\CastMovieRepository;
-use App\Repositories\CinemaMovieRepository;
 use App\Repositories\CinemaRepository;
 use App\Repositories\MovieGnereMovieRepository;
 use App\Repositories\MovieRepository;
@@ -17,7 +16,6 @@ class MovieService extends BaseService
     protected $movieGnereMovieRepository;
     protected $castMovieRepository;
     protected $cinemaRepository;
-    protected $cinemaMovieRepository;
     protected $movieGenreService;
 
     public function __construct(
@@ -26,14 +24,12 @@ class MovieService extends BaseService
         MovieGnereMovieRepository $movieGnereMovieRepository,
         CastMovieRepository $castMovieRepository,
         CinemaRepository $cinemaRepository,
-        CinemaMovieRepository $cinemaMovieRepository,
     ) {
         $this->movieRepository = $movieRepository;
         $this->movieGenreService = $movieGenreService;
         $this->movieGnereMovieRepository = $movieGnereMovieRepository;
         $this->castMovieRepository = $castMovieRepository;
         $this->cinemaRepository = $cinemaRepository;
-        $this->cinemaMovieRepository = $cinemaMovieRepository;
     }
 
     public function getMovieHot()
@@ -86,9 +82,6 @@ class MovieService extends BaseService
             $this->movieGnereMovieRepository->make($movie_genre, $movie->id);
             $this->castMovieRepository->make($cast, $movie->id);
 
-            if (count($id_cinema) > 0) {
-                $this->cinemaMovieRepository->make($id_cinema, $movie->id);
-            }
 
             foreach ($fill['format'] as $item) {
                 MovieFormatMovie::create([
