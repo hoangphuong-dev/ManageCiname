@@ -15,7 +15,26 @@
                 </div>
             </div>
             <div class="bg-white min-h-full m-4 mb-0 p-4">
-                <h2 class="mb-5">màn thống kê toàn hệ thống</h2>
+                <h2 class="mb-5">Doanh thu chi tiết khu vực</h2>
+                <el-select
+                    v-model="provinceSelected"
+                    placeholder="Chọn khu vực"
+                >
+                    <el-option
+                        v-for="item in listProvince"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
+                    ></el-option>
+                </el-select>
+
+                <div class="w-2/10 float-right mb-6">
+                    <el-date-picker
+                        v-model="month_detail"
+                        type="month"
+                        placeholder="Chọn tháng"
+                    />
+                </div>
                 <div class="p-2 shadow-lg">
                     <ChartAnalytic :dataChart="chartData" />
                 </div>
@@ -39,21 +58,25 @@ export default {
 
     props: {
         revenuaProvince: { type: Object, require: true },
+        listProvince: { type: Object, require: true },
+        filtersBE: { type: Object, require: true },
     },
 
     data() {
         return {
-            currentMonth: new Date(),
+            provinceSelected: "",
+            currentMonth: this.filtersBE?.selected_month,
+            month_detail: "",
             chartDataByProvince: {
                 datasets: [
-                    // {
-                    //     label: "chart 1",
-                    //     data: [1, 5, 3, 7, 9, 5, 3, 2],
-                    //     type: "line",
-                    //     backgroundColor: "#C71585",
-                    //     borderColor: "#C71585",
-                    //     lineTension: 0.5,
-                    // },
+                    {
+                        label: "Số vé đã bán",
+                        data: this.revenuaProvince.ticketOrdered,
+                        type: "line",
+                        backgroundColor: "#C71585",
+                        borderColor: "#C71585",
+                        lineTension: 0.5,
+                    },
                     {
                         label: "Doanh thu",
                         data: this.revenuaProvince.revenua,
@@ -75,14 +98,14 @@ export default {
                         borderColor: "#C71585",
                         lineTension: 0.5,
                     },
-                    {
-                        label: "chart 2",
-                        data: [1, 5, 3, 7, 9, 5, 3, 2],
-                        type: "bar",
-                        borderColor: "#000D8D",
-                        backgroundColor: "#000D8D",
-                        lineTension: 0.5,
-                    },
+                    // {
+                    //     label: "chart 2",
+                    //     data: [1, 5, 3, 7, 9, 5, 3, 2],
+                    //     type: "bar",
+                    //     borderColor: "#000D8D",
+                    //     backgroundColor: "#000D8D",
+                    //     lineTension: 0.5,
+                    // },
                 ],
                 labels: [
                     "2022/05/29",
@@ -100,12 +123,8 @@ export default {
 
     watch: {
         currentMonth() {
-            this.filter.type = "by-province";
-            this.filter.selected_month = new Date(
-                this.currentMonth
-            ).toISOString;
+            this.filter.selected_month = this.currentMonth;
             this.inertia();
-
             // new Date(this.currentMonth).toISOString
         },
     },
@@ -114,7 +133,8 @@ export default {
         filter() {
             return {
                 type: this.filtersBE?.type || "",
-                selected_month: this.filtersBE?.selected_month || "",
+                selected_month: this.filtersBE?.selected_month || new Date(),   
+                month_detail: this.filtersBE?.month_detail || new Date(),   
             };
         },
     },

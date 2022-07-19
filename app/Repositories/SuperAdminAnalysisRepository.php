@@ -15,7 +15,7 @@ class SuperAdminAnalysisRepository extends ProvinceRepository
 
     public function analysisByProvince($request)
     {
-        $arrRevenuaProvince = [];
+        $arrRevenuaProvince = $arrTicketOrdered = [];
         $provinces = $this->getProvinceHasCinema();
 
         foreach ($provinces as $province) {
@@ -25,20 +25,23 @@ class SuperAdminAnalysisRepository extends ProvinceRepository
 
             $arrCinemaId = $data->cinemas->pluck('id')->toArray();
 
-            $revenuaProvince = $this->getRevenuaProvinceByMonth($arrCinemaId, $request->selected_month);
+            $result = $this->getDataByProvince($arrCinemaId, $request->selected_month);
 
-            array_push($arrRevenuaProvince, $revenuaProvince);
+            array_push($arrRevenuaProvince, $result['revenua']);
+            array_push($arrTicketOrdered, $result['ticket']);
         }
 
         return [
+            'ticketOrdered' => $arrTicketOrdered,
             'revenua' => $arrRevenuaProvince,
             'provinces' => $provinces->pluck('name')->toArray(),
         ];
     }
 
-    public function getRevenuaProvinceByMonth($arrCinemaId, $month)
+    public function getDataByProvince($arrCinemaId, $month)
     {
-        $result = 0;
+        $revenua = 0;
+        $ticket = 0;
 
         $monthFormat = Carbon::parse($month)->format('Y-m');
 
@@ -46,9 +49,35 @@ class SuperAdminAnalysisRepository extends ProvinceRepository
             $bills = Bill::query()
                 ->where('created_at', 'LIKE', "{$monthFormat}%")
                 ->where('cinema_id', $item)->get();
-            $result += $bills->sum('total_money');
+
+            $ticket += $this->getCountTicker($bills);
+            $revenua += $bills->sum('total_money');
+        }
+
+        return [
+            'revenua' => $revenua,
+            'ticket' => $ticket,
+        ];
+    }
+
+    public function getCountTicker($arrBill)
+    {
+        $result = 0;
+
+        foreach ($arrBill as $item) {
+            $bill = Bill::query()->with('tickets')->where('id', $item->id)->first();
+            $result += $bill->tickets->count();
         }
 
         return $result;
+    }
+
+    public function getListProvince()
+    {
+        return $this->getProvinceHasCinema();
+    }
+
+    public function analysisByProvinceDetail()
+    {
     }
 }
