@@ -229,7 +229,7 @@ export default defineComponent({
             menus: [
                 {
                     label: "Rạp",
-                    path: "home",
+                    path: "cinema",
                 },
                 {
                     label: "Voucher",
