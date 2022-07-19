@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backs\SuperAdmin;
 
 use App\Exports\MovieExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MovieRequest;
 use App\Imports\MovieImport;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
@@ -35,6 +36,11 @@ class MovieController extends Controller
 
     public function create()
     {
+        return Inertia::render("Backs/SuperAdmin/FormMovie");
+    }
+
+    public function edit()
+    {
         $movie_genres = $this->movieService->getListMovieGenre();
 
         return Inertia::render("Backs/SuperAdmin/FormMovie", [
@@ -42,18 +48,18 @@ class MovieController extends Controller
         ]);
     }
 
-    public function edit(SeatTypeRequest $request, $id)
-    {
-        try {
-            $fill = $request->validated();
-            $this->movieService->update($id, $fill);
-            $message = ['success' => __('update seat type successful')];
-        } catch (\Exception $e) {
-            $message = ['error' => __('something went wrong')];
-        } finally {
-            return back()->with($message);
-        }
-    }
+    // public function edit(SeatTypeRequest $request, $id)
+    // {
+    //     try {
+    //         $fill = $request->validated();
+    //         $this->movieService->update($id, $fill);
+    //         $message = ['success' => __('update seat type successful')];
+    //     } catch (\Exception $e) {
+    //         $message = ['error' => __('something went wrong')];
+    //     } finally {
+    //         return back()->with($message);
+    //     }
+    // }
 
     public function delete($id)
     {
@@ -67,16 +73,16 @@ class MovieController extends Controller
         }
     }
 
-    public function store(SeatTypeRequest $request)
+    public function store(MovieRequest $request)
     {
         try {
             $fill = $request->validated();
             $this->movieService->store($fill);
-            $message = ['success' => __('create seat type successful')];
+            $message = ['success' => __('create movie successful')];
         } catch (\Exception $e) {
             $message = ['error' => __('something went wrong')];
         } finally {
-            return back()->with($message);
+            return redirect()->route('superadmin.movie.index')->with($message);
         }
     }
 
@@ -91,15 +97,4 @@ class MovieController extends Controller
             return back()->with($message);
         }
     }
-
-    // public function edit($id)
-    // {
-    //     // $movie = $this->movieService->edit($id);
-    //     // return Inertia::render(
-    //     //     'Backs/SuperAdmin/EditMovie',
-    //     //     [
-    //     //         'movie' => $movie
-    //     //     ]
-    //     // );
-    // }
 }

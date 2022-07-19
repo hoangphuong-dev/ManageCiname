@@ -59,17 +59,7 @@
                                         }"
                                         v-html="xss(item?.data?.title)"
                                     ></p>
-                                    <span v-if="item.data.name !== null">
-                                        <span
-                                            :class="{
-                                                'font-bold':
-                                                    item.read_at === null,
-                                            }"
-                                        >
-                                            {{ item?.data?.name }}</span
-                                        >
-                                        đăng ký thành nhân viên rạp
-                                    </span>
+                                    <p v-html="xss(item?.data?.content)"></p>
 
                                     <p>{{ showTime(item.created_at) }}</p>
                                 </div>

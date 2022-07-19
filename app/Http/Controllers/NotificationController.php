@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
+    private $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+
     public function getAllNotification(Request $request)
     {
-        $notification = auth()->guard('admin')->user()->notifications()->paginate(10);
-
-        return $notification;
+        return $this->notificationService->getAllNoti($request);
     }
 
     public function markRead($id)
     {
-        auth()->guard('admin')->user()->unreadNotifications->where('id', $id)->markAsRead();
-
+        $this->notificationService->readNoti($id);
         return response()->noContent();
     }
 }

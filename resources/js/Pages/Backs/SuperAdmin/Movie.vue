@@ -39,7 +39,11 @@
                         </button>
                         <button
                             class="btn-primary bg-red-400"
-                            @click="createMovie()"
+                            @click="
+                                this.$inertia.visit(
+                                    route('superadmin.movie.create_movie')
+                                )
+                            "
                         >
                             + Taọ mới phim
                         </button>
@@ -87,7 +91,14 @@
                                 <template v-if="!row.status">
                                     <button
                                         class="btn-warning bg-gray-200"
-                                        @click="edit(row)"
+                                        @click="
+                                            this.$inertia.visit(
+                                                route(
+                                                    'superadmin.movie.edit',
+                                                    row?.id
+                                                )
+                                            )
+                                        "
                                     >
                                         <img src="/images/svg/edit.svg" />
                                     </button>
@@ -116,6 +127,7 @@
             </div>
 
             <!-- dialog import movie -->
+
             <div class="customer_dialog">
                 <el-dialog
                     title="Hướng dẫn import file csv"
@@ -309,13 +321,6 @@ export default {
                 });
             });
         },
-        createMovie() {
-            Inertia.get(route("superadmin.movie.create_movie"));
-        },
-
-        detail({ id }) {},
-
-        edit(row) {},
 
         async updateStatus(row, status) {
             this.$confirm(

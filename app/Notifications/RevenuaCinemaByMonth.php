@@ -2,26 +2,27 @@
 
 namespace App\Notifications;
 
-use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class RegisterStaff extends Notification implements ShouldQueue
+class RevenuaCinemaByMonth extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $user;
+    public $cinema;
+    public $revenua;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct($cinema, string $revenua)
     {
-        $this->user = $user;
+        $this->cinema = $cinema;
+        $this->revenua = $revenua;
     }
 
     /**
@@ -44,11 +45,10 @@ class RegisterStaff extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'title' => 'Đăng ký nhân viên',
-            'id' => $this->user->id,
-            'name' => $this->user->name,
-            'email' => $this->user->email,
-            'content' => $this->user->name . 'đăng ký thành nhân viên rạp',
+            'title' => 'Thông báo doanh thu',
+            'cinema_id' => $this->cinema->id,
+            'month' => Carbon::now()->format('m-Y'),
+            'content' => 'Rạp ' . $this->cinema->name . ' đạt doanh thu ' . number_format($this->revenua) . ' trong tháng ' . Carbon::now()->format('m-Y'),
         ];
     }
 }

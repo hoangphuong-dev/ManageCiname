@@ -55,43 +55,7 @@
                         <!-- show phim -->
                         <div class="w-full">
                             <h2 class="text-center">Danh sách chọn phim</h2>
-                            <div
-                                v-if="movies.data.length > 0"
-                                class="grid grid-cols-4 gap-6 mt-5"
-                            >
-                                <div
-                                    v-for="item in movies.data"
-                                    :key="item.id"
-                                    class="border rounded-md p-4"
-                                >
-                                    <img
-                                        style="width: 100%"
-                                        :src="
-                                            'https://i3.ytimg.com/vi/' +
-                                            videoId(item) +
-                                            '/maxresdefault.jpg'
-                                        "
-                                    />
-
-                                    <h2 class="text-center my-2">
-                                        {{ item.name }}
-                                    </h2>
-                                    <div class="w-full text-center">
-                                        <el-button
-                                            size="small"
-                                            @click="detail(item.id)"
-                                            type="danger"
-                                        >
-                                            Xem chi tiết
-                                        </el-button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <el-empty
-                                    description="Không có dữ liệu"
-                                ></el-empty>
-                            </div>
+                            <MovieItem :movies="movies" />e
                         </div>
 
                         <div
@@ -114,15 +78,15 @@
 
 <script>
 import SelectFilter from "@/Components/Element/SelectFilter.vue";
+import MovieItem from "@/Components/MovieItem.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
-import { getYoutubeId } from "@/Helpers/youtube.js";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 
 export default {
-    components: { Pagination, AppLayout, SearchInput, SelectFilter },
+    components: { Pagination, AppLayout, SearchInput, SelectFilter, MovieItem },
 
     props: {
         movies: {
@@ -181,14 +145,6 @@ export default {
                 {},
                 { onBefore, onFinish, preserveScroll: true }
             );
-        },
-
-        detail(id) {
-            Inertia.get(route("movie.detail", id), { onBefore, onFinish });
-        },
-
-        videoId(row) {
-            return getYoutubeId(row);
         },
 
         handleCurrentPage(value) {
