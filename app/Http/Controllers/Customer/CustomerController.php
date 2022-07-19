@@ -249,7 +249,21 @@ class CustomerController extends Controller
         return Inertia::render('Customer/SystemCinema', [
             'provinces' => $provinces,
         ]);
+    }
 
-        dd($provinces);
+    public function viewMovieByCinema(Request $request, $cinemaId)
+    {
+        $request['cinema'] = $cinemaId;
+        $movies = $this->movieService->list($request);
+
+        $movie_genres = $this->movieGenreService->all();
+        $movieHot = $this->movieService->getMovieHot();
+
+        return Inertia::render('Customer/Home', [
+            'movieHot' => $movieHot,
+            'movieGenre' => $movie_genres,
+            'movies' => $movies,
+            'filtersBE' => $request->all(),
+        ]);
     }
 }

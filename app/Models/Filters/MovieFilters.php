@@ -5,6 +5,7 @@ namespace App\Models\Filters;
 use App\Helper\FormatDate;
 use App\Models\Movie;
 use App\Models\MovieGenreMovie;
+use App\Models\Room;
 use App\Models\ShowTime;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,6 +27,7 @@ class MovieFilters implements Filters
         $this->filterByStatus($query);
         $this->filterByDisplay($query);
         $this->filterByMovieGenre($query);
+        $this->filterByCinema($query);
 
         return $query;
     }
@@ -99,15 +101,33 @@ class MovieFilters implements Filters
         });
     }
 
+    /**
+     * Apply filter by cinema now Showing
+     *
+     * @param  Builder $query
+     * @return void
+     */
+
+    protected function filterByCinema(Builder $query): void
+    {
+        $query->when($this->request->cinema, function (Builder $q, $cinemaId) {
+            // get cinema's room 
+            $arrRoom = Room::query()->where('cinema_id', $cinemaId)->get()->pluck('id');
+
+            $q->whereIn('id', self::getMovieIdNowShowing($arrRoom))
+                ->where('status', Movie::MOVIE_ACTIVE);
+        });
+    }
+
     // get movie_id in now showing
-    protected static function getMovieIdNowShowing()
+    protected static function getMovieIdNowShowing($arrRoom = null)
     {
         $timeNowShowing = [Carbon::now()->format('Y-m-d'), FormatDate::getFourteenDay()];
+        $movieId = ShowTime::query()->whereBetween('time_start', $timeNowShowing);
 
-        $movieId = ShowTime::query()
-            ->whereBetween('time_start', $timeNowShowing)
-            ->get('movie_id')->pluck('movie_id')->toArray();
-
-        return $movieId;
+        if (!is_null($arrRoom)) {
+            $movieId = $movieId->whereIn('room_id', $arrRoom);
+        }
+        return $movieId->distinct()->get('movie_id')->pluck('movie_id')->toArray();
     }
 }

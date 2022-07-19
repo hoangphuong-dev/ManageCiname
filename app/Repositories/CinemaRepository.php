@@ -27,8 +27,9 @@ class CinemaRepository extends BaseRepository
     {
         $provinceIds = $this->model->distinct('province_id')->pluck('province_id')->all();
 
-        $province = Province::whereIn('id', $provinceIds)->get();
-        return $province;
+        return Province::query()
+            ->whereIn('id', $provinceIds)
+            ->withCount('cinemas')->get();
     }
 
     public function getCinemaByIdAdmin($admin_id)
