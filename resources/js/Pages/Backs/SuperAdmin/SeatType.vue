@@ -56,7 +56,7 @@
                                         @click="edit(row)"
                                     >
                                         <img
-                                            src="/images/svg/edit.svg"
+                                            src="/images/edit.svg"
                                             class="size-icon"
                                             alt=""
                                         />
@@ -68,7 +68,7 @@
                                     @click="confirmEventDelete(row)"
                                 >
                                     <img
-                                        src="/images/svg/trash.svg"
+                                        src="/images/trash.svg"
                                         alt=""
                                         class="size-icon"
                                     />
@@ -216,11 +216,11 @@ export default {
             }),
 
             fields: [
-                { key: "image", label: "Ảnh" },
-                { key: "name", label: "Loại ghế", width: 350 },
-                { key: "price", label: "Giá tiền", width: 200 },
+                { key: "image", label: "Ảnh", width: 250 },
+                { key: "name", label: "Loại ghế" },
+                { key: "price", label: "Giá tiền", width: 250 },
                 { key: "created_at", label: "Ngày tạo", width: 250 },
-                { key: "actions", label: "Hành động", width: 150 },
+                { key: "actions", label: "Hành động", width: 250 },
             ],
             rules: {
                 image: [

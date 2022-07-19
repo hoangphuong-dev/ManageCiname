@@ -13,7 +13,7 @@
             class="hover-animation btn-primary bg-red-400 h-10 -ml-1 z-10"
             @click.prevent="submit"
         >
-            <img src="/images/svg/search.svg" />
+            <img src="/images/search.svg" />
         </button>
     </div>
 </template>

@@ -100,7 +100,7 @@
                                             )
                                         "
                                     >
-                                        <img src="/images/svg/edit.svg" />
+                                        <img src="/images/edit.svg" />
                                     </button>
                                     &nbsp;
                                 </template>
@@ -118,7 +118,7 @@
                                     class="btn-warning bg-gray-200"
                                     @click="confirmEventDelete(row)"
                                 >
-                                    <img src="/images/svg/trash.svg" />
+                                    <img src="/images/trash.svg" />
                                 </button>
                             </div>
                         </template>

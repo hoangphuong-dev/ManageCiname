@@ -74,7 +74,7 @@
                                     @click="confirmEventDelete(row)"
                                 >
                                     <img
-                                        src="/images/svg/trash.svg"
+                                        src="/images/trash.svg"
                                         alt=""
                                         class="size-icon"
                                     />
