@@ -55,7 +55,7 @@
                         <!-- show phim -->
                         <div class="w-full">
                             <h2 class="text-center">Danh sách chọn phim</h2>
-                            <MovieItem :movies="movies" />e
+                            <MovieItem :movies="movies" />
                         </div>
 
                         <div
@@ -84,6 +84,7 @@ import Pagination from "@/Components/Pagination.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
+import { getYoutubeId } from "@/Helpers/youtube.js";
 
 export default {
     components: { Pagination, AppLayout, SearchInput, SelectFilter, MovieItem },
@@ -160,6 +161,14 @@ export default {
             }
             this.filter.page = 1;
             this.inertia();
+        },
+
+        detail(id) {
+            Inertia.get(route("movie.detail", id), { onBefore, onFinish });
+        },
+
+        videoId(row) {
+            return getYoutubeId(row);
         },
     },
 };

@@ -82,10 +82,10 @@ class User extends Authenticatable
     public function routeRedirect()
     {
         if ($this->IsAdmin()) {
-            return route('admin.home_admin');
+            return route('admin.home');
         }
         if ($this->IsSuperAdmin()) {
-            return route('superadmin.home_super');
+            return route('superadmin.home');
         }
         if ($this->IsStaff()) {
             return route('staff.home');

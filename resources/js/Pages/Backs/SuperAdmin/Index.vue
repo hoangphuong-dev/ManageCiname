@@ -133,8 +133,8 @@ export default {
         filter() {
             return {
                 type: this.filtersBE?.type || "",
-                selected_month: this.filtersBE?.selected_month || new Date(),   
-                month_detail: this.filtersBE?.month_detail || new Date(),   
+                selected_month: this.filtersBE?.selected_month || new Date(),
+                month_detail: this.filtersBE?.month_detail || new Date(),
             };
         },
     },
@@ -142,7 +142,7 @@ export default {
     methods: {
         inertia() {
             Inertia.get(
-                route("superadmin.home_super", this.filter),
+                route("superadmin.home", this.filter),
                 {},
                 { onBefore, onFinish, preserveScroll: true }
             );

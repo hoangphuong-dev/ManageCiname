@@ -5,14 +5,14 @@
             :key="item.id"
             class="border rounded-md p-4"
         >
-            <!-- <img
+            <img
                 style="width: 100%"
                 :src="
                     'https://i3.ytimg.com/vi/' +
-                    videoId(eitem) +
+                    videoId(item) +
                     '/maxresdefault.jpg'
                 "
-            /> -->
+            />
 
             <h2 class="text-center my-2">
                 {{ item.name }}
