@@ -78,7 +78,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
     Route::get('cinemas/{cinema_id}/movie/{movie_id}/day/{day}', [ShowTimeController::class, 'viewDetailShowTimes'])
         ->name('view_detail_showtimes');
 
-    Route::get('cinemas/{cinema_id}/showtime/{showtime_id}', [ShowTimeController::class, 'viewDetailShowTimeById'])
+    Route::get('cinemas/{cinema_id}/showtime/{show_time_id}', [ShowTimeController::class, 'viewDetailShowTimeById'])
         ->name('view-showtime-by-id');
     // end manage cinema
 

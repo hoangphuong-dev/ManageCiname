@@ -26,4 +26,9 @@ class ShowTime extends Model
     {
         return $this->belongsTo(Movie::class);
     }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

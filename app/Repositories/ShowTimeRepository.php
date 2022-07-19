@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\ShowTime;
 use App\Models\ViewShowTimeByDay;
+use Illuminate\Database\Eloquent\Builder;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 //use Your Model
 
@@ -29,7 +30,7 @@ class ShowTimeRepository extends BaseRepository
             ->when($request->date_from_ticket && $request->date_to_ticket, function ($query) use ($request) {
                 return $query->whereBetween('tickets.created_at', [$request->date_from_ticket, $request->date_to_ticket]);
             })
-            ->join('tickets', 'tickets.showtime_id', '=', 'show_times.id')
+            ->join('tickets', 'tickets.show_time_id', '=', 'show_times.id')
             ->join('movies', 'movies.id', '=', 'show_times.movie_id')
             ->groupBy('movie_id', 'name')
             ->get()->toArray();
@@ -97,13 +98,16 @@ class ShowTimeRepository extends BaseRepository
 
     public function listShowTimeByCinema($data)
     {
-        // có thể lấy ra tên phòng và số ghế trống nếu cần 
         return $this->model
-            ->select("show_times.*", 'rooms.name')
-            ->join("rooms", "rooms.id", "=", "show_times.room_id")
-            ->where('show_times.movie_id', $data['movie_id'])
-            ->where('rooms.cinema_id', $data['cinema_id'])
+            ->whereHas('room', function (Builder $query) use ($data) {
+                $query->where('rooms.cinema_id', $data['cinema_id']);
+            })
+            ->with(['room' => function ($query) {
+                $query->withCount('seats');
+            }])
+            ->withCount('tickets')
             ->where('time_start', '>=', now())
+            ->where('show_times.movie_id', $data['movie_id'])
             ->whereRaw("time_start like '" . $data['current_date'] . "%'")
             ->get();
     }

@@ -206,7 +206,7 @@ export default {
             seat_name: [],
             formData: {
                 cinema_id: this.showtime.room.cinema.id,
-                showtime_id: this.showtime.id,
+                show_time_id: this.showtime.id,
                 seat_id: [],
                 seat_name: [],
                 total_money: 0,

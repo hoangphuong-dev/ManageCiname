@@ -56,7 +56,7 @@ class BillSeeder extends Seeder
 
                 $room_of_current = ShowTime::where('id', $showtime_current)->first()->room_id;
 
-                $ticket = Ticket::where('showtime_id', $showtime_current)->pluck('seat_id');
+                $ticket = Ticket::where('show_time_id', $showtime_current)->pluck('seat_id');
 
                 $seat = Seat::where('room_id', $room_of_current)
                     ->whereNotIn('id', $ticket)
@@ -64,7 +64,7 @@ class BillSeeder extends Seeder
 
                 Ticket::create([
                     'bill_id' => $bill->id,
-                    'showtime_id' => $showtime_current,
+                    'show_time_id' => $showtime_current,
                     'seat_id' => $seat[array_rand($seat)],
                 ]);
             }

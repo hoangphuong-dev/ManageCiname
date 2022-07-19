@@ -16,13 +16,13 @@ class CreateTicketsTable extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('bill_id')->unsigned();
-            $table->bigInteger('showtime_id')->unsigned();
+            $table->bigInteger('show_time_id')->unsigned();
             $table->bigInteger('seat_id')->unsigned();
-            $table->unique(array('showtime_id', 'seat_id'));
+            $table->unique(array('show_time_id', 'seat_id'));
 
             $table->foreign('bill_id')->references('id')->on('bills')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('showtime_id')->references('id')->on('show_times')
+            $table->foreign('show_time_id')->references('id')->on('show_times')
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('seat_id')->references('id')->on('seats')
                 ->onUpdate('cascade')->onDelete('cascade');

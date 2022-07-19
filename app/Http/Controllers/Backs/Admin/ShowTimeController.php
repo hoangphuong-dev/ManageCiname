@@ -63,7 +63,7 @@ class ShowTimeController extends Controller
         ]);
     }
 
-    public function viewDetailShowTimeById($cinema_id, $showtime_id)
+    public function viewDetailShowTimeById($cinema_id, $show_time_id)
     {
         $cinema = $this->cinemaService->getMovieByCinema($cinema_id);
         return Inertia::render('Backs/Admin/ShowTimeDetailById', [

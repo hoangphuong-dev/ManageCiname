@@ -32,7 +32,7 @@ class TicketRepository extends BaseRepository
         foreach ($data['seat_id'] as $item) {
             $ticket = $this->model->updateOrCreate([
                 'bill_id' => $bill_id,
-                'showtime_id' => $data['showtime_id'],
+                'show_time_id' => $data['show_time_id'],
                 'seat_id' => $item,
             ]);
             $point += 3000;
@@ -62,10 +62,10 @@ class TicketRepository extends BaseRepository
             ->get();
     }
 
-    public function getSeatOrdered($showtime_id)
+    public function getSeatOrdered($show_time_id)
     {
         return $this->model->newQuery()
-            ->where('showtime_id', $showtime_id)
+            ->where('show_time_id', $show_time_id)
             ->pluck('seat_id')->toArray();
     }
 }

@@ -22,7 +22,7 @@
                 <h2 class="text-center my-4">Chọn suất chiếu</h2>
                 <div
                     v-if="show_times.length > 0"
-                    class="w-full mt-6 rounded px-4 border shadow-lg grid grid-cols-8 gap-4 pt-4 pb-20 mb-40"
+                    class="w-full mt-6 rounded px-4 border shadow-lg grid grid-cols-7 gap-4 pt-4 pb-20 mb-40"
                 >
                     <div
                         :model="active_showtime"
@@ -32,11 +32,14 @@
                         v-for="item in show_times"
                         :key="item"
                     >
-                        <div class="font-bold text-center">
+                        <div class="font-bold text-center mb-4">
                             {{ item.time_start }} - {{ item.time_end }}
                             <p>{{ item.name }}</p>
-                            {{}}
                         </div>
+                        <p class="text-center">
+                            Ghế trống :
+                            {{ item.seat_empty }}/{{ item.sum_seat }}
+                        </p>
                     </div>
                 </div>
 
@@ -61,28 +64,6 @@
                         Chọn ghế
                     </el-button>
                 </div>
-                <!-- Danh sach suat chieu  -->
-                <!-- <div
-          class="
-            w-full
-            mt-6
-            rounded
-            px-4
-            border
-            grid grid-cols-12
-            gap-4
-            pt-4
-            pb-20
-          "
-        >
-          <div
-            class="rounded hover:border-red-200 border-2 p-2"
-            v-for="item in 30"
-            :key="item"
-          >
-            FFFF
-          </div>
-        </div> -->
             </div>
         </div>
     </app-layout>

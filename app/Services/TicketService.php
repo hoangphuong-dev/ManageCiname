@@ -23,9 +23,9 @@ class TicketService
         return $this->ticketRepository->getTicketByBill($id);
     }
 
-    public function getSeatOrdered($showtime_id)
+    public function getSeatOrdered($show_time_id)
     {
-        return $this->ticketRepository->getSeatOrdered($showtime_id);
+        return $this->ticketRepository->getSeatOrdered($show_time_id);
     }
 
     public function deleteMultipleById($arr)

@@ -52,7 +52,7 @@ class PaymentController extends Controller
         if (empty($data)) {
             abort(404);
         }
-        $showtime = $this->showTimeService->getRoomByShowTime($data['showtime_id']);
+        $showtime = $this->showTimeService->getRoomByShowTime($data['show_time_id']);
         session()->put(self::SESSION_KEY, $data);
 
         return Inertia::render('Customer/ConfirmOrder', [

@@ -34,9 +34,9 @@ class MovieRepository extends BaseRepository
                 ShowTime::select('movie_id')
                     ->whereIn(
                         'id',
-                        Ticket::select('showtime_id')
-                            ->selectRaw('count(showtime_id) as "number"')
-                            ->groupBy('showtime_id')->orderBy('number', 'desc')->limit(10)->pluck('showtime_id')->toArray()
+                        Ticket::select('show_time_id')
+                            ->selectRaw('count(show_time_id) as "number"')
+                            ->groupBy('show_time_id')->orderBy('number', 'desc')->limit(10)->pluck('show_time_id')->toArray()
                     )->get()->toArray()
 
 
