@@ -445,7 +445,9 @@ b {
     grid-template-areas:
         "title movie_length"
         "desc  movie_length";
-    line-height: 2 .title, .desc {
+    line-height: 2;
+    .title,
+    .desc {
         font-size: 14px;
     }
     .title,

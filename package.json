@@ -1,14 +1,14 @@
 {
     "private": true,
     "scripts": {
-        "postinstall": "npm run development",
+        "postinstall": "npm run production",
         "dev": "npm run development",
         "development": "mix",
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
-        "prod": "npm run development",
-        "production": "mix --development"
+        "prod": "npm run production",
+        "production": "mix --production"
     },
     "devDependencies": {
         "@inertiajs/inertia": "^0.10.0",
@@ -38,13 +38,17 @@
         "@tinymce/tinymce-vue": "^4.0.5",
         "element-plus": "^1.2.0-beta.5",
         "moment": "^2.29.3",
+        "node-sass": "^7.0.1",
         "sanitize-html": "^2.7.0",
+        "sass-loader": "^13.0.2",
         "vue-axios": "^3.4.0",
+        "vue-chartjs": "^4.0.5",
         "vue-quill-editor": "^3.0.6",
         "vue3-charts": "^1.1.31",
-        "vue-chartjs": "^4.0.5",
         "vue3-clipboard": "^1.0.0",
         "vue3-flip-countdown": "^0.1.6",
-        "vuex": "^4.0.2"
+        "vuex": "^4.0.2",
+        "postcss": "^8.1.14",
+        "postcss-import": "^12.0.1"
     }
 }
