@@ -8,7 +8,7 @@
                     <movie-detail :movie="movie"></movie-detail>
 
                     <!-- Danh sách phim liên quan  -->
-                    <!-- <div class="w-1/4 shadow-xl ml-6">
+                    <div class="w-1/4 shadow-xl ml-6">
                         <h2 class="text-center mb-6">
                             Phim cùng thể loại đang chiếu
                         </h2>
@@ -28,7 +28,7 @@
                             />
                             <h2 class="text-center my-2">{{ item.name }}</h2>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- end danh sách liên quan  -->
                 </div>
 

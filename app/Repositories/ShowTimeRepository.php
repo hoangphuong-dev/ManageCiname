@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\ShowTime;
 use App\Models\ViewShowTimeByDay;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 //use Your Model
@@ -106,7 +107,7 @@ class ShowTimeRepository extends BaseRepository
                 $query->withCount('seats');
             }])
             ->withCount('tickets')
-            ->where('time_start', '>=', now())
+            ->where('time_start', '>=', Carbon::now()->format('Y-m-d'))
             ->where('show_times.movie_id', $data['movie_id'])
             ->whereRaw("time_start like '" . $data['current_date'] . "%'")
             ->get();
