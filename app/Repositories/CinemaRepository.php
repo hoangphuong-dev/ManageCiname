@@ -89,14 +89,6 @@ class CinemaRepository extends BaseRepository
         ]);
     }
 
-    public function getMasterCinema($request)
-    {
-        return ViewCinemaByProvince::when($request->name, function ($query) use ($request) {
-            return $query->where("name", "like", "%{$request->name}%");
-        })
-            ->paginate($request->query('limit', 12));
-    }
-
     public function getListCinema($request, $province_id)
     {
         return $this->model->newQuery()

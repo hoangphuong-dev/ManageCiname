@@ -74,12 +74,6 @@ class CinemaService extends BaseService
         return CinemaResource::collection($cinemas);
     }
 
-    public function getMasterCinema($request)
-    {
-        $data = $this->cinemaRepository->getMasterCinema($request);
-        return ViewCinemaByProvinceResource::collection($data);
-    }
-
     public function updateCinema($id, $fill)
     {
         return $this->cinemaRepository->updateById($id, [

@@ -5,15 +5,12 @@ namespace App\Http\Controllers\Backs\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CinemaRequest;
 use App\Models\FormatMovie;
-use App\Models\MovieFormatMovie;
-use App\Models\ViewCinemaByProvince;
 use App\Repositories\ProvinceRepository;
 use App\Services\CinemaService;
 use App\Services\MovieService;
 use App\Services\RoomService;
 use App\Services\SeatTypeService;
 use App\Services\UserService;
-use Faker\Core\Number;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -42,11 +39,13 @@ class CinemaController extends Controller
 
     public function getMasterCinema(Request $request)
     {
-        $master_cinemas = $this->cinemaService->getMasterCinema($request);
+        dd("đang bảo trì");
+
+        // $master_cinemas = $this->cinemaService->getMasterCinema($request);
 
         return Inertia::render("Backs/SuperAdmin/MasterCinema", [
-            'master_cinemas' => $master_cinemas,
-            'filtersBE' => $request->all(),
+            // 'master_cinemas' => $master_cinemas,
+            // 'filtersBE' => $request->all(),
         ]);
     }
 
