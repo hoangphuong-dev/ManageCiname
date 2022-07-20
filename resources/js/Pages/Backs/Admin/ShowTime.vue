@@ -17,12 +17,12 @@
                 </el-select>
             </div>
 
-            <FullCalendar :options="calendarOptions">
+            <!-- <FullCalendar :options="calendarOptions">
                 <template v-slot:eventContent="arg">
                     <b>{{ arg.timeText }}</b>
                     <i>{{ arg.event.title }}</i>
                 </template>
-            </FullCalendar>
+            </FullCalendar> -->
         </div>
 
         <div>
@@ -195,21 +195,21 @@
 </template>
 
 <script>
-import FullCalendar from "@fullcalendar/vue3";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
+// import FullCalendar from "@fullcalendar/vue3";
+// import dayGridPlugin from "@fullcalendar/daygrid";
+// import timeGridPlugin from "@fullcalendar/timegrid";
 import { getYoutubeId } from "@/Helpers/youtube.js";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
-import interactionPlugin from "@fullcalendar/interaction";
+// import interactionPlugin from "@fullcalendar/interaction";
 import { Inertia } from "@inertiajs/inertia";
-import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+// import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import { listShowTimeByRoom } from "@/API/main.js";
 import { ElMessage } from "element-plus";
 
 export default {
-    components: {
-        FullCalendar, // make the <FullCalendar> tag available
-    },
+    // components: {
+    //     FullCalendar, // make the <FullCalendar> tag available
+    // },
     props: {
         cinema: {
             type: Object,
@@ -230,36 +230,36 @@ export default {
 
     data: function () {
         return {
-            calendarOptions: {
-                plugins: [
-                    dayGridPlugin,
-                    timeGridPlugin,
-                    interactionPlugin,
-                    resourceTimeGridPlugin, // needed for dateClick
-                ],
-                headerToolbar: {
-                    left: "prev,next today",
-                    center: "title",
-                    right: "dayGridMonth,timeGridWeek,timeGridDay",
-                },
-                buttonText: {
-                    today: "Hôm nay",
-                    month: "Tháng",
-                    week: "Tuần",
-                    day: "Ngày",
-                },
-                locale: "vi",
-                initialView: "timeGridWeek", // swithch this to resourceTimeGridDay to see resource bug
-                selectable: true,
-                // editable: true,
-                selectMirror: true,
-                dayMaxEvents: true,
-                weekends: true,
-                select: this.handleDateSelect,
-                eventClick: this.handleEventClick, // sự kiện khi click vào suất chiếu
-                resources: this.myResources,
-                events: [],
-            },
+            // calendarOptions: {
+            //     plugins: [
+            //         dayGridPlugin,
+            //         timeGridPlugin,
+            //         interactionPlugin,
+            //         resourceTimeGridPlugin, // needed for dateClick
+            //     ],
+            //     headerToolbar: {
+            //         left: "prev,next today",
+            //         center: "title",
+            //         right: "dayGridMonth,timeGridWeek,timeGridDay",
+            //     },
+            //     buttonText: {
+            //         today: "Hôm nay",
+            //         month: "Tháng",
+            //         week: "Tuần",
+            //         day: "Ngày",
+            //     },
+            //     locale: "vi",
+            //     initialView: "timeGridWeek", // swithch this to resourceTimeGridDay to see resource bug
+            //     selectable: true,
+            //     // editable: true,
+            //     selectMirror: true,
+            //     dayMaxEvents: true,
+            //     weekends: true,
+            //     select: this.handleDateSelect,
+            //     eventClick: this.handleEventClick, // sự kiện khi click vào suất chiếu
+            //     resources: this.myResources,
+            //     events: [],
+            // },
 
             dialogForm: false,
 
