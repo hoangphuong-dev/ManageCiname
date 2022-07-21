@@ -107,7 +107,7 @@ class ShowTimeRepository extends BaseRepository
                 $query->withCount('seats');
             }])
             ->withCount('tickets')
-            ->where('time_start', '>=', Carbon::now()->format('Y-m-d'))
+            ->where('time_start', '>=', Carbon::now()->format('Y-m-d H:i:s'))
             ->where('show_times.movie_id', $data['movie_id'])
             ->whereRaw("time_start like '" . $data['current_date'] . "%'")
             ->get();
