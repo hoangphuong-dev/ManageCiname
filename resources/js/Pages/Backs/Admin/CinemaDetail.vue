@@ -34,7 +34,7 @@
                         </p>
                         <p>
                             <el-icon><location-information /></el-icon>
-                            <span> Địa chỉ : {{ cinema.address }}</span>
+                            <span> Địa chỉ   : {{ cinema.address }}</span>
                         </p>
                     </div>
                 </div>
