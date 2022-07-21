@@ -66,7 +66,7 @@ class MovieService extends BaseService
         return MovieResource::collection($movies);
     }
 
-    public function  updateStatus($id, $request)
+    public function updateStatus($id, $request)
     {
         return $this->movieRepository->updateStatus($id, $request);
     }
@@ -110,5 +110,10 @@ class MovieService extends BaseService
     public function getAllCinemes()
     {
         return $this->cinemaRepository->getAllArrayIdCinema();
+    }
+
+    public function getMovieActive()
+    {
+        return $this->movieRepository->getMovieActive();
     }
 }

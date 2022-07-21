@@ -12,12 +12,6 @@ class Cinema extends Model
 
     protected $guarded = [];
 
-    public function movies()
-    {
-        return $this->belongsToMany(Movie::class, 'cinema_movies', 'cinema_id', 'movie_id');
-    }
-
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -31,5 +25,10 @@ class Cinema extends Model
     public function province()
     {
         return $this->belongsTo(Province::class);
+    }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
     }
 }

@@ -23,12 +23,23 @@ class CinemaRepository extends BaseRepository
         return Cinema::class;
     }
 
+    public function getMasterCinema($request)
+    {
+        return Province::query()
+            ->whereIn('id', $this->getProvinceHasCinema())
+            ->withCount('cinemas')->paginate(12);
+    }
+
+    public function getProvinceHasCinema()
+    {
+        return $this->model->distinct('province_id')->pluck('province_id')->all();
+    }
+
+
     public function getProvinceAllCinema()
     {
-        $provinceIds = $this->model->distinct('province_id')->pluck('province_id')->all();
-
         return Province::query()
-            ->whereIn('id', $provinceIds)
+            ->whereIn('id', $this->getProvinceHasCinema())
             ->withCount('cinemas')->get();
     }
 
@@ -71,10 +82,7 @@ class CinemaRepository extends BaseRepository
     public function getMovieByCinema($id)
     {
         return $this->model
-            ->newQuery()
-            ->with(["movies" => function ($q) {
-                $q->where('status', Movie::MOVIE_ACTIVE);
-            }, 'user'])
+            ->with(['user'])
             ->where('id', $id)
             ->firstOrFail();
     }

@@ -39,13 +39,12 @@ class CinemaController extends Controller
 
     public function getMasterCinema(Request $request)
     {
-        dd("đang bảo trì");
 
-        // $master_cinemas = $this->cinemaService->getMasterCinema($request);
+        $master_cinemas = $this->cinemaService->getMasterCinema($request);
 
         return Inertia::render("Backs/SuperAdmin/MasterCinema", [
-            // 'master_cinemas' => $master_cinemas,
-            // 'filtersBE' => $request->all(),
+            'master_cinemas' => $master_cinemas,
+            'filtersBE' => $request->all(),
         ]);
     }
 
@@ -87,10 +86,12 @@ class CinemaController extends Controller
         $seat_types = $this->seatTypeService->getAllSeatType();
         $cinema = $this->cinemaService->getMovieByCinema($id);
         $rooms = $this->roomService->getRoomByCinema($id);
+        $movies = $this->movieService->getMovieActive();
         return Inertia::render("Backs/Admin/CinemaDetail", [
             'cinema' => $cinema,
             'seat_types' => $seat_types,
             'rooms' => $rooms,
+            'movies' => $movies,
             'movie_formats' => $movie_formats,
         ]);
     }

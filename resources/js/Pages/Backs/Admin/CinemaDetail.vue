@@ -15,9 +15,7 @@
                     <div class="w-1/2">
                         <p class="my-2">
                             <el-icon><video-camera-filled /></el-icon>
-                            <span class="text-red-400 font-bold">{{
-                                " " + cinema.movies.length
-                            }}</span>
+                            <span class="text-red-400 font-bold">10</span>
                             phim công chiếu
                         </p>
                         <p>
@@ -44,7 +42,11 @@
                 <el-tabs>
                     <!-- Tab Suất chiếu -->
                     <el-tab-pane label="Suất chiếu">
-                        <ShowTime :rooms="rooms" :cinema="cinema" />
+                        <ShowTime
+                            :rooms="rooms"
+                            :cinema="cinema"
+                            :movies="movies"
+                        />
                     </el-tab-pane>
                     <!-- Tab Phòng chiếu  -->
                     <el-tab-pane label="Phòng chiếu">
@@ -82,10 +84,8 @@ export default {
         School,
     },
     props: {
-        cinema: {
-            type: Object,
-            required: true,
-        },
+        cinema: { type: Object, required: true },
+        movies: { type: Object, required: true },
         seat_types: {
             type: Object,
             required: true,

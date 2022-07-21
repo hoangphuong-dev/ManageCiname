@@ -45,7 +45,7 @@
                                 :key="item.id"
                                 :value="item.id"
                                 :label="item.name"
-                                v-for="item in cinema.movies"
+                                v-for="item in movies"
                                 @click="changeMovie(item)"
                             >
                                 <div class="option-grid">
@@ -216,6 +216,10 @@ export default {
             required: true,
         },
         rooms: {
+            type: Array,
+            required: true,
+        },
+        movies: {
             type: Array,
             required: true,
         },

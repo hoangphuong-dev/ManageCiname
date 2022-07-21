@@ -91,4 +91,9 @@ class MovieRepository extends BaseRepository
             }])
             ->findOrFail($id);
     }
+
+    public function getMovieActive()
+    {
+        return $this->model->where('status', Movie::MOVIE_ACTIVE)->get();
+    }
 }
