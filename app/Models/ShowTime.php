@@ -13,11 +13,6 @@ class ShowTime extends Model
 
     public $timestamps = false;
 
-    // public function cinema()
-    // {
-    //     return $this->hasOne(Cinema::class);
-    // }
-
     public function room()
     {
         return $this->belongsTo(Room::class);

@@ -50,6 +50,7 @@ class CinemaController extends Controller
     {
         $cinemas = $this->cinemaService->getListCinema($request, $cinemaId);
 
+        // dd($cinemas);
 
         $provinceRepository = new ProvinceRepository();
 

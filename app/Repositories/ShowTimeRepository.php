@@ -109,7 +109,7 @@ class ShowTimeRepository extends BaseRepository
             ->withCount('tickets')
             // ->whereRaw("UNIX_TIMESTAMP(time_start) >= " . Carbon::now()->timestamp)
             ->where("time_start", '>=', Carbon::now()->format("Y-m-d H:i:s"))
-            ->where('show_times.movie_id', $data['movie_id'])
+            ->where('show_times.movie_id', $data['movie_id'])meter is required for r
             ->whereRaw("time_start like '" . $data['current_date'] . "%'")
             ->get();
     }

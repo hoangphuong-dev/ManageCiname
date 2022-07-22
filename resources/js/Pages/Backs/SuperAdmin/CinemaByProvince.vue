@@ -33,13 +33,11 @@
                         paginate-background
                         @page="handleCurrentPage"
                     >
-                        <template #image="{ row }">
-                            <div>
-                                <el-image
-                                    class="mr-5 cursor-pointer h-32 w-52"
-                                    :src="getImage(row?.image)"
-                                ></el-image>
-                            </div>
+                        <template #hotline="{ row }">
+                            <div>{{ row?.user.phone }}</div>
+                        </template>
+                        <template #manage="{ row }">
+                            <div>{{ row?.user.name }}</div>
                         </template>
 
                         <template #created_at="{ row }">
@@ -195,9 +193,9 @@ export default {
 
             fields: [
                 { key: "name", label: "Tên rạp", width: 250 },
-                { key: "room", label: "Số phòng" },
+                { key: "number_room", label: "Số phòng" },
                 { key: "number_movie", label: "Phim đang chiếu", width: 250 },
-                { key: "phone", label: "Hotline", width: 250 },
+                { key: "hotline", label: "Hotline", width: 250 },
                 { key: "manage", label: "Người quản lý", width: 250 },
                 { key: "actions", label: "Thao tác", width: 250 },
             ],
@@ -275,8 +273,8 @@ export default {
         formatDateTime,
         inertia() {
             Inertia.get(
-                route("superadmin.cinema.province", this.filter),
-                {},
+                route("superadmin.cinema.province", 1),
+                { ...this.filter },
                 { onBefore, onFinish, preserveScroll: true }
             );
         },

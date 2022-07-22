@@ -18,7 +18,7 @@ class CinemaResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'address' => $this->address,
-            'movies' => MovieResource::collection($this->whenLoaded('movies')),
+            'number_room' => $this->rooms_count,
             'user' =>  $this->user ? UserResource::make($this->user)->resolve() : [],
         ];
     }
