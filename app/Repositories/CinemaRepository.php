@@ -23,18 +23,10 @@ class CinemaRepository extends BaseRepository
         return Cinema::class;
     }
 
-    public function getMasterCinema($request)
-    {
-        return Province::query()
-            ->whereIn('id', $this->getProvinceHasCinema())
-            ->withCount('cinemas')->paginate(12);
-    }
-
     public function getProvinceHasCinema()
     {
         return $this->model->distinct('province_id')->pluck('province_id')->all();
     }
-
 
     public function getProvinceAllCinema()
     {

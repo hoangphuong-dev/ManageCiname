@@ -24,13 +24,6 @@ class CinemaService extends BaseService
         $this->userService = $userService;
     }
 
-    public function getMasterCinema($request)
-    {
-        $data = $this->cinemaRepository->getMasterCinema($request);
-
-        return $data;
-    }
-
     public function getProvinceAllCinema()
     {
         $province =  $this->cinemaRepository->getProvinceAllCinema();

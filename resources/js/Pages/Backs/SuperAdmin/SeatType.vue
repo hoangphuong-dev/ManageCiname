@@ -1,18 +1,16 @@
 <template>
-    <admin-layout v-loading="loading">
+    <admin-layout>
         <template #main>
             <div class="bg-white min-h-full sm:m-4 mb-0 p-4">
                 <h2 class="mb-5 text-red-500">Danh sách thể loại ghế</h2>
                 <div class="w-full flex relative">
                     <div class="w-3/4 flex items-end">
-                        <div class="search">
-                            <search-input
-                                :filter="filter"
-                                v-model="filter.name"
-                                label="Nhập tên thể loại"
-                                @submit="onSubmitSearch"
-                            ></search-input>
-                        </div>
+                        <SearchInput
+                            :filter="filter"
+                            v-model="filter.name"
+                            label="Tìm kiếm"
+                            @submit="onFilter"
+                        />
                     </div>
                     <div class="w-1/4 flex items-end">
                         <button
@@ -206,7 +204,6 @@ export default {
         return {
             imagePreview: "",
             selectedItem: null,
-            loading: false,
             dialogVisible: false,
 
             formData: this.$inertia.form({
@@ -370,6 +367,11 @@ export default {
                 this.formData.image = image;
                 reader.readAsDataURL(image);
             }
+        },
+
+        onFilter() {
+            this.filter.page = 1;
+            this.inertia();
         },
     },
 };

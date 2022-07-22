@@ -39,24 +39,24 @@ class CinemaController extends Controller
 
     public function getMasterCinema(Request $request)
     {
-
-        $master_cinemas = $this->cinemaService->getMasterCinema($request);
+        $masterCinema = $this->cinemaService->getProvinceAllCinema($request);
 
         return Inertia::render("Backs/SuperAdmin/MasterCinema", [
-            'master_cinemas' => $master_cinemas,
-            'filtersBE' => $request->all(),
+            'masterCinema' => $masterCinema,
         ]);
     }
 
-    public function getListCinemaByProvince(Request $request)
+    public function getCinemaByProvince(Request $request, $cinemaId)
     {
-        $cinemas = $this->cinemaService->getListCinema($request, $request->province_id);
+        $cinemas = $this->cinemaService->getListCinema($request, $cinemaId);
+
+
         $provinceRepository = new ProvinceRepository();
 
         return Inertia::render("Backs/SuperAdmin/CinemaByProvince", [
             'cinemas' => $cinemas,
             'filtersBE' => $request->all(),
-            'province' => $provinceRepository->getById($request->province_id),
+            'province' => $provinceRepository->getById($cinemaId),
         ]);
     }
 

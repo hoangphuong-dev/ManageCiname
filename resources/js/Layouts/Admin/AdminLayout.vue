@@ -161,7 +161,7 @@ export default {
                 {
                     label: "Hệ thống rạp",
                     icon: "cinema",
-                    path: "superadmin.admin_info.index",
+                    path: "superadmin.cinema.master",
                 },
                 {
                     label: "Quản lý loại ghế",

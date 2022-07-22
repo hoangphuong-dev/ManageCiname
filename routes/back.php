@@ -51,9 +51,12 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     // Route::get('/create_admin', [AdminInfoController::class, 'create'])->name('create_admin');
 
     // Quản lý hệ thống rạp
-    Route::get('/master-cinema', [CinemaController::class, 'getMasterCinema'])->name('admin_info.index');
+    Route::prefix('/cinema')->as('cinema.')->group(function () {
+        Route::get('/master', [CinemaController::class, 'getMasterCinema'])->name('master');
+        Route::get('/province/{id}', [CinemaController::class, 'getCinemaByProvince'])->name('province');
+    });
 
-    Route::get('/cinemas', [CinemaController::class, 'getListCinemaByProvince'])->name('cinema.province');
+
     Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
     Route::post('cinemas', [CinemaController::class, 'store'])->name('cinemas.store');
     Route::post('cinemas/{id}', [CinemaController::class, 'edit'])->name('cinemas.edit');
