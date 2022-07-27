@@ -36,7 +36,7 @@ class StaffController extends Controller
         ]);
         try {
             $this->staffInfoService->updateStatus($id, $data);
-            $message = ['success' => 'Xóa thành công'];
+            $message = ['success' => 'Cập nhật trạng thái thành công'];
         } catch (\Exception $e) {
             $message = ['error' => __('something went wrong')];
         } finally {

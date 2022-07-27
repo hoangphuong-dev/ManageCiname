@@ -50,7 +50,7 @@ class UserService
             DB::beginTransaction();
             $staff = $this->userRepository->createStaff($data);
             $cinema = $this->userRepository->createStaffInfo($data, $staff->id);
-            $admin = $this->cinemaRepository->cinemaRepository($cinema->cinema_id);
+            $admin = $this->cinemaRepository->getUserByCinema($cinema->cinema_id);
 
             DB::commit();
             event(new CreateStaff($staff, $admin));

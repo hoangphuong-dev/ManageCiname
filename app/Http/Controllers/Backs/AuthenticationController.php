@@ -40,11 +40,9 @@ class AuthenticationController extends Controller
             $this->userService->createStaff($data);
             $message = ['success' => 'Đăng ký thành công , Vui lòng chờ xác nhận của quản trị viên rạp phim !'];
         } catch (\Exception $e) {
-            dd($e);
             $message = ['error' => $e->getMessage()];
-        } finally {
-            return redirect()->route('back.login.get')->with($message);
         }
+        return redirect()->route('back.login.get')->with($message);
     }
 
 

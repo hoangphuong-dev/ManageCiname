@@ -223,19 +223,9 @@ export default {
             )
                 .then(async () => {
                     this.loading = true;
-                    await updateStatusStaff(row.id, status)
-                        .then(async (res) => {
-                            this.inertia();
-                            this.$message.success(
-                                "Cập nhật trạng thái thành công !"
-                            );
-                        })
-                        .catch(() => {
-                            this.inertia();
-                            this.$message.error(
-                                "Có lỗi trong quá trình thực thi"
-                            );
-                        });
+                    await updateStatusStaff(row.id, status);
+
+                    this.inertia();
                     this.loading = false;
                 })
                 .catch(() => {
