@@ -25,12 +25,29 @@
                         />
                     </div>
                 </div>
+
+                <div class="w-full">
+                    <MovieItem :movies="movies" />
+                </div>
+
+                <div
+                    v-if="movies.meta.total > movies.meta.per_page"
+                    class="w-full justify-center my-16 flex"
+                >
+                    <Pagination
+                        v-model="movies.meta.current_page"
+                        @current-change="handleCurrentPage"
+                        :page-size="Number(movies.meta.per_page)"
+                        :total="Number(movies.meta.total)"
+                    />
+                </div>
             </div>
         </template>
     </admin-layout>
 </template>
 
 <script>
+import MovieItem from "@/Components/MovieItem.vue";
 import SelectFilter from "@/Components/Element/SelectFilter.vue";
 import Pagination from "@/Components/Pagination.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
@@ -41,7 +58,13 @@ import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import * as Movie from "@/store/const.js";
 
 export default {
-    components: { Pagination, AdminLayout, SearchInput, SelectFilter },
+    components: {
+        Pagination,
+        AdminLayout,
+        SearchInput,
+        SelectFilter,
+        MovieItem,
+    },
 
     props: {
         movies: {
@@ -74,8 +97,8 @@ export default {
 
     computed: {
         filter() {
-            const display = this.filtersBE?.display?.toInt();
-            const movie_genre = this.filtersBE?.movie_genre?.toInt();
+            const display = this.filtersBE?.display;
+            const movie_genre = this.filtersBE?.movie_genre;
             const redirect = this.filtersBE?.redirect;
             return {
                 page: this.filtersBE.page?.toInt() || 1,

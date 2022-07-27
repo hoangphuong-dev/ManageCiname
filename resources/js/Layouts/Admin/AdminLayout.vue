@@ -200,7 +200,7 @@ export default {
                 {
                     label: "Phim đang chiếu",
                     icon: "movie",
-                    path: "staff.movie",
+                    path: "staff.movie-now-showing",
                     param: {
                         display: 1,
                     },
@@ -208,7 +208,7 @@ export default {
                 {
                     label: "Phim sắp chiếu",
                     icon: "movie",
-                    path: "staff.fff",
+                    path: "staff.movie-comming",
                     param: {
                         display: 2,
                         redirect: "customer",

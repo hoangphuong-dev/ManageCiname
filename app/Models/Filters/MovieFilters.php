@@ -85,7 +85,6 @@ class MovieFilters implements Filters
 
     protected function filterByDisplay(Builder $query): void
     {
-
         $query->when($this->request->query('display'), function (Builder $q, $display) {
             if ($display == 1) {
                 $q->whereIn('id', self::getMovieIdNowShowing())

@@ -7,7 +7,6 @@ use App\Http\Controllers\Backs\Admin\RoomController;
 use App\Http\Controllers\Backs\Admin\ShowTimeController;
 use App\Http\Controllers\Backs\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Backs\AuthenticationController;
-use App\Http\Controllers\Backs\Staff\ShowTimeController as StaffShowTimeController;
 use App\Http\Controllers\Backs\Staff\StaffController;
 use App\Http\Controllers\Backs\SuperAdmin\MovieController;
 use App\Http\Controllers\Backs\SuperAdmin\SeatTypeController;
@@ -99,7 +98,6 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutStaff'])->name('logout');
     Route::get('/', [StaffController::class, 'index'])->name('home');
-    Route::get('/movie', [StaffController::class, 'movie'])->name('movie');
-    Route::get('/movie', [StaffController::class, 'movie'])->name('movie');
-    Route::get('/showtime', [StaffShowTimeController::class, 'index'])->name('showtime');
+    Route::get('/movie-now-showing', [StaffController::class, 'movie'])->name('movie-now-showing');
+    Route::get('/movie-comming-soon', [StaffController::class, 'movie'])->name('movie-comming-soon');
 });
