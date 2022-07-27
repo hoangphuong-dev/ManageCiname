@@ -19,6 +19,19 @@
             </h2>
             <div class="w-full text-center">
                 <el-button
+                    v-if="isStaff"
+                    size="small"
+                    @click="
+                        this.$inertia.visit(
+                            route('staff.movie.detail', item.id)
+                        )
+                    "
+                    type="danger"
+                >
+                    FFFFF
+                </el-button>
+                <el-button
+                    v-else
                     size="small"
                     @click="this.$inertia.visit(route('movie.detail', item.id))"
                     type="danger"
@@ -35,12 +48,19 @@
 
 <script>
 import { getYoutubeId } from "@/Helpers/youtube.js";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
     props: {
         movies: {
             type: Object,
             required: true,
+        },
+    },
+
+    computed: {
+        isStaff() {
+            return Inertia?.page?.props?.user?.role == 2;
         },
     },
 

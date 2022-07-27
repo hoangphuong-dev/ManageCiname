@@ -50,4 +50,13 @@ class StaffController extends Controller
             'filtersBE' => $request->all(),
         ]);
     }
+
+    public function detail($id)
+    {
+        $movie = $this->movieService->show($id);
+
+        return Inertia::render('Backs/Staff/MovieDetail', [
+            'movie' => $movie,
+        ]);
+    }
 }

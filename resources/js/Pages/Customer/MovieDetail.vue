@@ -5,7 +5,9 @@
                 <h2 class="pb-4">Xem chi tiết phim</h2>
                 <div class="w-full flex">
                     <!-- component chi tiết phim  -->
-                    <movie-detail :movie="movie"></movie-detail>
+                    <div class="w-3/4">
+                        <MovieDetail :movie="movie" />
+                    </div>
 
                     <!-- Danh sách phim liên quan  -->
                     <div class="w-1/4 shadow-xl ml-6">
@@ -29,7 +31,6 @@
                             <h2 class="text-center my-2">{{ item.name }}</h2>
                         </div>
                     </div>
-                    <!-- end danh sách liên quan  -->
                 </div>
 
                 <!-- comment  -->
