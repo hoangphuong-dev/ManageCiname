@@ -36,6 +36,8 @@
 </head>
 @foreach($tickets as $ticket)
 
+{{ dd($ticket) }}
+
 <body>
     <div class="ticket_pdf">
         <h3>Vé xem phim</h3>
