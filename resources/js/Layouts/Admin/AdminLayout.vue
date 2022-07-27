@@ -208,7 +208,7 @@ export default {
                 {
                     label: "Phim sắp chiếu",
                     icon: "movie",
-                    path: "staff.movie-comming",
+                    path: "staff.movie-comming-soon",
                     param: {
                         display: 2,
                         redirect: "customer",

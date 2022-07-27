@@ -6,12 +6,6 @@
                 <div class="w-full flex relative">
                     <div class="w-4/5 flex items-end">
                         <SelectFilter
-                            :type="'display'"
-                            :modelSelect="filter.display"
-                            :listOption="pageDisplay"
-                            @onchangeFilter="onFilter"
-                        />
-                        <SelectFilter
                             :type="'movie_genre'"
                             :modelSelect="filter.movie_genre"
                             :listOption="movieGenre"
@@ -98,24 +92,17 @@ export default {
     computed: {
         filter() {
             const display = this.filtersBE?.display;
-            const movie_genre = this.filtersBE?.movie_genre;
+            const movie_genre = this.filtersBE?.movie_genre?.toInt();
             const redirect = this.filtersBE?.redirect;
             return {
                 page: this.filtersBE.page?.toInt() || 1,
                 limit: this.filtersBE.limit?.toInt() || 12,
                 name: this.filtersBE?.name || null,
-                display:
-                    display == null || typeof display === "undefined"
-                        ? null
-                        : display,
+                display: display || null,
                 movie_genre:
                     movie_genre == null || typeof movie_genre === "undefined"
                         ? null
                         : movie_genre,
-                redirect:
-                    redirect == null || typeof redirect === "undefined"
-                        ? null
-                        : redirect,
             };
         },
     },
@@ -123,7 +110,7 @@ export default {
     methods: {
         inertia() {
             Inertia.get(
-                route("home", this.filter),
+                route("staff.movie-now-showing", this.filter),
                 {},
                 { onBefore, onFinish, preserveScroll: true }
             );
@@ -143,9 +130,7 @@ export default {
         },
 
         onFilter(value, type) {
-            if (type === "display") {
-                this.filter.display = value;
-            } else if (type === "movie_genre") {
+            if (type === "movie_genre") {
                 this.filter.movie_genre = value;
             }
             this.filter.page = 1;

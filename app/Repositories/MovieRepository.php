@@ -45,7 +45,6 @@ class MovieRepository extends BaseRepository
 
     public function list($request)
     {
-
         return $this->model
             ->orderBy('id', "DESC")
             ->filters(new MovieFilters($request))

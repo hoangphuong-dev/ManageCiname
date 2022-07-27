@@ -27,17 +27,22 @@ class StaffController extends Controller
         return Inertia::render('Backs/Staff/Index');
     }
 
-    public function movie(Request $request)
+    public function getMovieNowShowing(Request $request)
     {
         $request->merge(['display' => 1]);
+        return $this->movie($request);
+    }
 
-        // $request->display = 1;
+    public function getMovieCommingSoon(Request $request)
+    {
+        $request->merge(['display' => 2]);
+        return $this->movie($request);
+    }
 
-        // dd($request->display);
-
+    public function movie(Request $request)
+    {
         $movie_genres = $this->movieGenreService->all();
         $movies = $this->movieService->list($request);
-
 
         return Inertia::render('Backs/Staff/Movie', [
             'movieGenre' => $movie_genres,
