@@ -34,6 +34,7 @@ class StaffController extends Controller
         $data = $request->validate([
             'status' => 'required',
         ]);
+
         try {
             $this->staffInfoService->updateStatus($id, $data);
             $message = ['success' => 'Cập nhật trạng thái thành công'];

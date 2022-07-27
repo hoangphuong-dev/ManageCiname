@@ -18,7 +18,6 @@ use App\Http\Controllers\NotificationController;
 Route::apiResource('moviegenres', MovieGenreController::class);
 
 Route::get('get-all-staff', [StaffController::class, 'getAll'])->name('staff.getAll');
-Route::put('update-status-staff/{id}', [StaffController::class, 'updateStatus'])->name('staff.update-status');
 Route::apiResource('admins', AdminController::class);
 
 

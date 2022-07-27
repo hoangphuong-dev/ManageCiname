@@ -35,7 +35,7 @@ class ChangeStatusStaff extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $title = '';
-        $this->staffInfo->status == 1 ? $title = 'đăng ký nhân viên thành công' : $title = 'nghỉ việc';
+        $this->staffInfo->status == StaffInfo::STATUS_WORKING ? $title = 'đăng ký nhân viên thành công' : $title = 'nghỉ việc';
 
         return (new MailMessage)
             ->subject("Thông báo " . $title)

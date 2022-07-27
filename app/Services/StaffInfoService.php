@@ -33,13 +33,14 @@ class StaffInfoService
             // update password user 
             $password = Str::random(12);
             $staff = $this->staffInfoRepository->updateById($id, ['status' => StaffInfo::STATUS_WORKING]);
-            return $this->userRepository->updateUserById(['password' => Hash::make($password)], $staff->user_id);
+            $this->userRepository->updateUserById(['password' => Hash::make($password)], $staff->user_id);
         } else {
             // nếu nghỉ việc => set pass = NULL để hủy quyền đăng nhập
             $staff = $this->staffInfoRepository->updateById($id, ['status' => StaffInfo::STATUS_RESIGN]);
             $this->userRepository->updateUserById(['password' => $password], $staff->user_id);
         }
         Notification::send($staff->user, new ChangeStatusStaff($staff, $password));
+        return;
     }
 
     public function delete($id)

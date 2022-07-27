@@ -92,6 +92,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
     Route::prefix('/staff')->as('staff.')->group(function () {
         Route::get('/', [AdminStaffController::class, 'index'])->name('index');
         Route::delete('delete/{id}', [AdminStaffController::class, 'delete'])->name('delete');
+        Route::put('update-status-staff/{id}', [AdminStaffController::class, 'updateStatus'])->name('update-status');
     });
 });
 

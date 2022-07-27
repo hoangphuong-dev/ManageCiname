@@ -220,17 +220,18 @@ export default {
                     cancelButtonText: "Hủy",
                     type: "warning",
                 }
-            )
-                .then(async () => {
-                    this.loading = true;
-                    await updateStatusStaff(row.id, status);
-
-                    this.inertia();
-                    this.loading = false;
-                })
-                .catch(() => {
-                    this.inertia();
-                });
+            ).then(async () => {
+                Inertia.put(
+                    route("admin.staff.update-status", row?.id),
+                    { status },
+                    {
+                        onBefore,
+                        onFinish,
+                        preserveScroll: true,
+                        onError: (e) => console.log(e),
+                    }
+                );
+            });
         },
 
         showStatus(page_display) {
