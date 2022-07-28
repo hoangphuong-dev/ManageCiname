@@ -13,12 +13,15 @@ heroku config:add APP_ENV="develop"
 heroku config:add APP_KEY="base64:53FiXUlgz+i0RuBX6sYJ4/XdEHzYqUSR951GkjaPbvo="
 heroku config:add APP_DEBUG="true"
 
+heroku config:add SESSION_DOMAIN="phc-cinema.herokuapp.com"
+
 # heroku config:add BROADCAST_DRIVER="log"
 # heroku config:add CACHE_DRIVER="file"
 # heroku config:add FILESYSTEM_DRIVER="local"
 # heroku config:add QUEUE_CONNECTION="sync"
-# heroku config:add SESSION_DRIVER="database"
-# heroku config:add SESSION_LIFETIME="120"
+heroku config:add SESSION_DRIVER="database"
+heroku config:add SESSION_LIFETIME="120"
+heroku config:add SESSION_SECURE_COOKIE="false"
 
 # vn_pay
 heroku config:add VNP_URL="https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
