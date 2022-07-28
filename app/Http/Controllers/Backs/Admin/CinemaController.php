@@ -49,9 +49,6 @@ class CinemaController extends Controller
     public function getCinemaByProvince(Request $request, $cinemaId)
     {
         $cinemas = $this->cinemaService->getListCinema($request, $cinemaId);
-
-        // dd($cinemas);
-
         $provinceRepository = new ProvinceRepository();
 
         return Inertia::render("Backs/SuperAdmin/CinemaByProvince", [

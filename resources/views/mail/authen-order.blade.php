@@ -4,8 +4,7 @@ Cảm ơn bạn đã tin tưởng và sử dụng các dịch vụ xem phim củ
 Để tiếp tục quy trình đặt vé . Vui lòng click vào đường link bên dưới để tiếp tục
 
 <div>
-    <a style=" word-wrap: break-word;"
-        href="{{route('order.authen-token', $token)}}">{{route('order.authen-token', $token)}}</a>
+    <a style=" word-wrap: break-word;" href="{{route('order.authen-token', $token)}}">Tiếp tục</a>
 </div>
 
 
