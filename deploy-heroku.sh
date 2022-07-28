@@ -10,7 +10,7 @@ heroku config:add DB_PASSWORD="g4iibwh0lvzk6l0t"
 
 # enviroment
 heroku config:add APP_ENV="develop"
-heroku config:add APP_KEY="base64:53FiXUlgz+i0RuBX6sYJ4/XdEHzYqUSR951GkjaPbvo="
+heroku config:add APP_KEY="base64:Mc3wUUWs93zJvgrmSkv88ATblaNhKayCCyBQblW+Ls0="
 heroku config:add APP_DEBUG="true"
 
 heroku config:add SESSION_DOMAIN="phc-cinema.herokuapp.com"
