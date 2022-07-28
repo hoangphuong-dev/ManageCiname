@@ -3,7 +3,9 @@
         <Bar
             :chart-data="dataChart"
             :chart-options="chartOptions"
-            :height="200"
+            :height="300"
+            :max_post="5000000"
+            :max_engagement="max_engagement"
         />
     </div>
 </template>
@@ -64,9 +66,52 @@ export default {
                         },
                     },
                 },
+                datalabels: {
+                    display: false,
+                },
+                legend: {
+                    display: true,
+                },
+                scales: {
+                    A: {
+                        type: "linear",
+                        position: "left",
+                        grid: {
+                            display: false,
+                        },
+                        max: 100,
+                        ticks: {
+                            stepSize: 100 / 10,
+                        },
+                    },
+                    B: {
+                        type: "linear",
+                        position: "right",
+                        grid: {
+                            display: true,
+                        },
+                        max: 5000000,
+                        ticks: {
+                            stepSize: 5000000 / 100,
+                        },
+                        min: 0,
+                    },
+                },
             },
         };
     },
-    methods: {},
+
+    mounted() {
+        this.hiddenLegend();
+    },
+    methods: {
+        hiddenLegend() {
+            // if (this.max_post) {
+            this.chartOptions.plugins.legend.display = true;
+            // } else {
+            // this.chartOptions.plugins.legend.display = false;
+            // }
+        },
+    },
 };
 </script>
