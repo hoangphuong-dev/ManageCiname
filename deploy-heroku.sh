@@ -27,8 +27,9 @@ heroku config:add VNP_HASH_SECRECT="WXGSQGHLCVHKWUIRLEHHNZVKDYLQCWEO"
 
 # send_mail
 heroku config:add MAIL_MAILER="smtp"
-heroku config:add MAIL_HOST="smtp.mailtrap.io"
-heroku config:add MAIL_PORT="2525"
-heroku config:add MAIL_USERNAME="1ac66ca8a984fa"
-heroku config:add MAIL_PASSWORD="3d118fe083a8b9"
+heroku config:add MAIL_HOST="smtp.gmail.com"
+heroku config:add MAIL_PORT="587"
+heroku config:add MAIL_USERNAME="hoangphuong.work01@gmail.com"
+heroku config:add MAIL_PASSWORD="bhqxntmkealieave"
 heroku config:add MAIL_ENCRYPTION="tls"
+heroku config:add MAIL_FROM_NAME="PHC"
