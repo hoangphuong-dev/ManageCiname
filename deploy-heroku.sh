@@ -4,9 +4,9 @@
 heroku config:add DB_CONNECTION="mysql"
 heroku config:add DB_HOST="y6aj3qju8efqj0w1.cbetxkdyhwsb.us-east-1.rds.amazonaws.com"
 heroku config:add DB_PORT="3306"
-heroku config:add DB_DATABASE="snxh8m6io10253i3"
-heroku config:add DB_USERNAME="y2rkbds1chv8g63x"
-heroku config:add DB_PASSWORD="vmvylg4k6n7thod4"
+heroku config:add DB_DATABASE="vobid10v2aildx7n"
+heroku config:add DB_USERNAME="ccl6sgymg3c7lcgv"
+heroku config:add DB_PASSWORD="g4iibwh0lvzk6l0t"
 
 # enviroment
 heroku config:add APP_ENV="develop"
