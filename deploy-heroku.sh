@@ -2,23 +2,23 @@
 
 # database
 heroku config:add DB_CONNECTION="mysql"
-heroku config:add DB_HOST="j21q532mu148i8ms.cbetxkdyhwsb.us-east-1.rds.amazonaws.com"
+heroku config:add DB_HOST="y6aj3qju8efqj0w1.cbetxkdyhwsb.us-east-1.rds.amazonaws.com"
 heroku config:add DB_PORT="3306"
-heroku config:add DB_DATABASE="fi50x51xsrqvawj7"
-heroku config:add DB_USERNAME="k05jakoqqzsdd68q"
-heroku config:add DB_PASSWORD="y6n551k0hmla40f4"
+heroku config:add DB_DATABASE="snxh8m6io10253i3"
+heroku config:add DB_USERNAME="y2rkbds1chv8g63x"
+heroku config:add DB_PASSWORD="vmvylg4k6n7thod4"
 
 # enviroment
 heroku config:add APP_ENV="develop"
 heroku config:add APP_KEY="base64:53FiXUlgz+i0RuBX6sYJ4/XdEHzYqUSR951GkjaPbvo="
 heroku config:add APP_DEBUG="true"
 
-heroku config:add BROADCAST_DRIVER="log"
-heroku config:add CACHE_DRIVER="file"
-heroku config:add FILESYSTEM_DISK="public"
-heroku config:add QUEUE_CONNECTION="sync"
-heroku config:add SESSION_DRIVER="database"
-heroku config:add SESSION_LIFETIME="120"
+# heroku config:add BROADCAST_DRIVER="log"
+# heroku config:add CACHE_DRIVER="file"
+# heroku config:add FILESYSTEM_DRIVER="local"
+# heroku config:add QUEUE_CONNECTION="sync"
+# heroku config:add SESSION_DRIVER="database"
+# heroku config:add SESSION_LIFETIME="120"
 
 # vn_pay
 heroku config:add VNP_URL="https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
