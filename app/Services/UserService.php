@@ -300,6 +300,13 @@ class UserService
         }
     }
 
+    public function loginProxy($user)
+    {
+        Auth::guard('admin')->loginUsingId($user->id);
+
+        return redirect()->route('admin.home');
+    }
+
     // logout system
     public function logoutAllGuard()
     {

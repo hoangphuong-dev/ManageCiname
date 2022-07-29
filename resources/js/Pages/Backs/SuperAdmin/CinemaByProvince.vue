@@ -46,19 +46,18 @@
 
                         <template #actions="{ row }">
                             <div v-if="row" class="flex items-center">
-                                <template v-if="!row.status">
-                                    <button
-                                        class="btn-warning bg-gray-200"
-                                        @click="edit(row)"
-                                    >
-                                        <img
-                                            src="/images/edit.svg"
-                                            class="size-icon"
-                                            alt=""
-                                        />
-                                    </button>
-                                    &nbsp;
-                                </template>
+                                <button
+                                    v-if="!row.status"
+                                    class="btn-warning bg-gray-200"
+                                    @click="edit(row)"
+                                >
+                                    <img
+                                        src="/images/edit.svg"
+                                        class="size-icon"
+                                        alt=""
+                                    />
+                                </button>
+                                &nbsp;
                                 <button
                                     class="btn-warning bg-gray-200"
                                     @click="confirmEventDelete(row)"
@@ -68,6 +67,20 @@
                                         alt=""
                                         class="size-icon"
                                     />
+                                </button>
+                                &nbsp;
+                                <button
+                                    class="btn-warning bg-green-600"
+                                    @click="
+                                        this.$inertia.visit(
+                                            route(
+                                                'superadmin.cinema.impersonate',
+                                                row?.user?.id
+                                            )
+                                        )
+                                    "
+                                >
+                                    Đăng nhập ủy quyền  
                                 </button>
                             </div>
                         </template>
@@ -194,10 +207,9 @@ export default {
             fields: [
                 { key: "name", label: "Tên rạp", width: 250 },
                 { key: "number_room", label: "Số phòng" },
-                { key: "number_movie", label: "Phim đang chiếu", width: 250 },
                 { key: "hotline", label: "Hotline", width: 250 },
                 { key: "manage", label: "Người quản lý", width: 250 },
-                { key: "actions", label: "Thao tác", width: 250 },
+                { key: "actions", label: "Thao tác", width: 400 },
             ],
 
             rules: {

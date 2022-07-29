@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Backs\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CinemaRequest;
 use App\Models\FormatMovie;
+use App\Models\User;
 use App\Repositories\ProvinceRepository;
+use App\Services\BaseService;
 use App\Services\CinemaService;
 use App\Services\MovieService;
 use App\Services\RoomService;
@@ -126,5 +128,10 @@ class CinemaController extends Controller
         } finally {
             return back()->with($message);
         }
+    }
+
+    public function loginProxy(User $user)
+    {
+        return $this->userService->loginProxy($user);
     }
 }
