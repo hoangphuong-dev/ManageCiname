@@ -3,9 +3,9 @@
         <Bar
             :chart-data="dataChart"
             :chart-options="chartOptions"
-            :height="300"
-            :max_post="5000000"
-            :max_engagement="max_engagement"
+            :height="200"
+            :max_post="100"
+            :max_engagement="5000000"
         />
     </div>
 </template>
