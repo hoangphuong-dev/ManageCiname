@@ -72,8 +72,6 @@ class CinemaService extends BaseService
     {
         $cinemas = $this->cinemaRepository->getListCinema($request, $province_id);
 
-        dd($cinemas);
-
         return CinemaResource::collection($cinemas);
     }
 

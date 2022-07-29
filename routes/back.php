@@ -53,6 +53,7 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     Route::prefix('/cinema')->as('cinema.')->group(function () {
         Route::get('/master', [CinemaController::class, 'getMasterCinema'])->name('master');
         Route::get('/province/{id}', [CinemaController::class, 'getCinemaByProvince'])->name('province');
+        Route::get('/login-proxy/{user}', [CinemaController::class, 'loginProxy'])->name('impersonate');
     });
 
 

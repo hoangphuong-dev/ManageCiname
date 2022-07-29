@@ -99,10 +99,7 @@ class CinemaRepository extends BaseRepository
             ->withCount(['rooms' => function ($query) {
                 $query->where('status', Room::STATUS_OPEN);
             }])
-            ->with([
-                'user',
-
-            ])
+            ->with(['user'])
             ->orderBy('created_at', 'desc')
             ->where('province_id', $province_id)
             ->paginate($request->query('limit', 12));

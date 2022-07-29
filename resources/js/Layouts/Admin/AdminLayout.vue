@@ -33,6 +33,18 @@
             >
                 <div class="ml-auto flex items-center mr-5">
                     <div class="mr-3">
+                        <button
+                            v-if="$page?.props?.auth?.impersonate"
+                            @click="leaveImpersonate()"
+                            class="bg-orange-600 text-white px-3.5 py-2 m-auto button-shadow rounded text-2sm mr-3 flex items-center"
+                        >
+                            <span class="mr-1 text-white whitespace-nowrap"
+                                >Đăng xuất ủy quyền</span
+                            >
+                            <el-icon :size="20"><switch-button /></el-icon>
+                        </button>
+                    </div>
+                    <div class="mr-3">
                         <!-- popup nitification   -->
                         <PopupNotification />
                     </div>
@@ -233,6 +245,11 @@ export default {
                 (menu?.other || []).includes(route().current())
             );
         },
+
+        leaveImpersonate() {
+            console.log(8888, this.$page.props.user);
+        },
+
         handleCommand(command) {
             switch (command) {
                 case "logout":

@@ -30,10 +30,6 @@ class SuperAdminAnalysisService
 
     public function getDataAnalysisDetail($request)
     {
-
-        // dd($request->month_detail);
-
-
         $data = $this->analysisRepository->analysisByProvinceDetail($request);
 
         return $data;
