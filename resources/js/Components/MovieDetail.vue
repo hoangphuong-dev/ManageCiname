@@ -27,7 +27,22 @@
                 </h3>
                 <div class="text-center mt-4">
                     <div v-if="movie.showtimes.length > 0">
-                        <el-button @click="openDialog(movie.id)" type="danger">
+                        <el-button
+                            v-if="$page?.props?.user.role == 2"
+                            @click="
+                                this.$inertia.visit(
+                                    route('staff.order', movie.id)
+                                )
+                            "
+                            type="danger"
+                        >
+                            Đặt vé
+                        </el-button>
+                        <el-button
+                            v-else
+                            @click="openDialog(movie.id)"
+                            type="danger"
+                        >
                             Đặt vé
                         </el-button>
                     </div>

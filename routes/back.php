@@ -106,4 +106,6 @@ Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']],
         Route::get('/comming-soon', [StaffController::class, 'getMovieCommingSoon'])->name('comming-soon');
         Route::get('/detail/{id}', [StaffController::class, 'detail'])->name('detail');
     });
+
+    Route::get('/order/{movie_id}', [StaffController::class, 'order'])->name('order');
 });

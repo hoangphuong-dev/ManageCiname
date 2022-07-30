@@ -59,4 +59,9 @@ class StaffController extends Controller
             'movie' => $movie,
         ]);
     }
+
+    public function order(Request $request, $movieId)
+    {
+        return Inertia::render('Backs/Staff/ShowTime');
+    }
 }
