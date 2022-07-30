@@ -101,9 +101,6 @@ Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']],
     Route::get('/logout', [AuthenticationController::class, 'logoutStaff'])->name('logout');
     Route::get('/', [StaffController::class, 'index'])->name('home');
 
-    Route::get('/movie-now-showing', [StaffController::class, 'movie'])->name('movie-now-showing');
-    Route::get('/movie-comming-soon', [StaffController::class, 'movie'])->name('movie-comming-soon');
-
     Route::group(['as' => 'movie.', 'prefix' => 'movie'], function () {
         Route::get('/now-showing', [StaffController::class, 'getMovieNowShowing'])->name('now-showing');
         Route::get('/comming-soon', [StaffController::class, 'getMovieCommingSoon'])->name('comming-soon');
