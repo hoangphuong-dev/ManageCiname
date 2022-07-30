@@ -28,7 +28,7 @@
                 <div class="text-center mt-4">
                     <div v-if="movie.showtimes.length > 0">
                         <el-button
-                            v-if="$page?.props?.user.role == 2"
+                            v-if="$page?.props?.user?.role == 2"
                             @click="
                                 this.$inertia.visit(
                                     route('order.ticket', {
