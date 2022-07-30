@@ -201,11 +201,18 @@ class CustomerController extends Controller
 
         $formatDate = new FormatDate();
         $twoWeeks = $formatDate->getTwoWeek();
-        return Inertia::render('Customer/ViewShowTime', [
+
+        $result = [
             'twoWeeks' => $twoWeeks,
             'filterFE' => $data,
             'showtimes' => $showtimes,
-        ]);
+        ];
+
+        if ($request->redirect == 'staff') {
+            return Inertia::render('Backs/Staff/ShowTime', $result);
+        } else {
+            return Inertia::render('Customer/ViewShowTime', $result);
+        }
     }
 
     public function NoticationSendMail()

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backs\Staff;
 
 use App\Http\Controllers\Controller;
-use App\Models\Movie;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
 use Illuminate\Http\Request;
@@ -16,7 +15,7 @@ class StaffController extends Controller
 
     public function __construct(
         MovieService $movieService,
-        MovieGenreService $movieGenreService
+        MovieGenreService $movieGenreService,
     ) {
         $this->movieService = $movieService;
         $this->movieGenreService = $movieGenreService;
@@ -54,14 +53,12 @@ class StaffController extends Controller
     public function detail($id)
     {
         $movie = $this->movieService->show($id);
+        $cinemaId = $this->movieService->getCinemaId();
+
+        dd($cinemaId);
 
         return Inertia::render('Backs/Staff/MovieDetail', [
             'movie' => $movie,
         ]);
-    }
-
-    public function order(Request $request, $movieId)
-    {
-        return Inertia::render('Backs/Staff/ShowTime');
     }
 }

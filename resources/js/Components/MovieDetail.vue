@@ -31,7 +31,11 @@
                             v-if="$page?.props?.user.role == 2"
                             @click="
                                 this.$inertia.visit(
-                                    route('staff.order', movie.id)
+                                    route('order.ticket', {
+                                        movie_id: movie.id,
+                                        cinema_id: 2,
+                                        redirect: 'staff',
+                                    })
                                 )
                             "
                             type="danger"

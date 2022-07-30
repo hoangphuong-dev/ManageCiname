@@ -6,6 +6,7 @@ use App\Models\StaffInfo;
 use App\Notifications\ChangeStatusStaff;
 use App\Repositories\StaffInfoRepository;
 use App\Repositories\UserRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -14,7 +15,7 @@ use Illuminate\Support\Str;
  * Class StaffInfoService
  * @package App\Services
  */
-class StaffInfoService
+class StaffInfoService extends BaseService
 {
     protected $staffInfoRepository;
     protected $userRepository;
