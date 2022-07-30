@@ -181,20 +181,24 @@ class CustomerController extends Controller
         $time = strtotime('+1 minute', strtotime(date_format(now(), "Y-m-d H:i:s")));
         $count_down = date('Y-m-d H:i:s', $time);
 
-        return Inertia::render('Customer/ViewRoom', [
+        $result = [
             'showtime' => $showtime,
             'seat_ordered' => $seat_ordered,
             'seat_types' => $seat_types,
             'count_down' => $count_down,
-        ]);
+        ];
+
+        if ($request->redirect == 'staff') {
+            return Inertia::render('Backs/Staff/ViewRoom', $result);
+        }
+
+        return Inertia::render('Customer/ViewRoom', $result);
     }
 
 
     public function orderTicket(Request $request)
     {
         $data = $request->all();
-
-        dd($data);
 
         $date = Carbon::now()->toDateString();
         if (!isset($data['current_date'])) {
@@ -213,9 +217,9 @@ class CustomerController extends Controller
 
         if ($request->redirect == 'staff') {
             return Inertia::render('Backs/Staff/ShowTime', $result);
-        } else {
-            return Inertia::render('Customer/ViewShowTime', $result);
         }
+
+        return Inertia::render('Customer/ViewShowTime', $result);
     }
 
     public function NoticationSendMail()

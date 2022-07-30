@@ -86,6 +86,7 @@ export default {
                 cinema_id: this.filterFE.cinema_id,
                 current_date: this.filterFE.current_date,
                 current_showtime: this.active_showtime,
+                redirect: this.filterFE?.redirect ?? null,
             },
         };
     },
@@ -124,7 +125,6 @@ export default {
         },
 
         chooseShowTime(id) {
-            console.log(id);
             this.active_showtime = id;
             this.formData.current_showtime = id;
         },
