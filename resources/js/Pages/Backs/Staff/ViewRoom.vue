@@ -2,7 +2,7 @@
     <admin-layout>
         <template #main>
             <div class="bg-white min-h-full sm:m-4 mb-0 p-4">
-                <h2 class="mb-5 text-center text-red-400">Đặt vé cho khách</h2>
+                <h2 class="mb-5 text-red-400">Đặt vé cho khách</h2>
                 <ViewRoom
                     :showtime="showtime"
                     :seat_ordered="seat_ordered"
