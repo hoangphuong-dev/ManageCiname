@@ -11,8 +11,8 @@ class CommentFavorite extends Model
 
     protected $guarded = [];
 
-    public function users() {
-        return $this->
-    }
-    
+    // public function users() {
+    //     return $this->
+    // }
+
 }

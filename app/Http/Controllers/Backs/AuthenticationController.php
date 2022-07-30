@@ -74,19 +74,19 @@ class AuthenticationController extends Controller
 
     public function logoutAdmin()
     {
-        $this->userService->logoutAdmin();
+        $this->userService->logoutAllGuard();
         return redirect()->route('back.login.get');
     }
 
     public function logoutSuperAdmin()
     {
-        $this->userService->logoutSuperAdmin();
+        $this->userService->logoutAllGuard();
         return redirect()->route('back.login.get');
     }
 
     public function logoutStaff()
     {
-        $this->userService->logoutStaff();
+        $this->userService->logoutAllGuard();
         return redirect()->route('back.login.get');
     }
 }

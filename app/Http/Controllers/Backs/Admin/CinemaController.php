@@ -130,8 +130,13 @@ class CinemaController extends Controller
         }
     }
 
-    public function loginProxy(User $user)
+    public function loginProxy(User $user, $provinceId)
     {
-        return $this->userService->loginProxy($user);
+        return $this->userService->loginProxy($user, $provinceId);
+    }
+
+    public function logoutProxy()
+    {
+        return $this->userService->logoutProxy();
     }
 }

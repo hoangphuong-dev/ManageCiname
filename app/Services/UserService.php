@@ -40,7 +40,6 @@ class UserService
         $cinemaId = $admin->cinema->id;
         $staff = $this->userRepository->getStaffOfAdmin($request, $cinemaId);
 
-
         return StaffResource::collection($staff);
     }
 
@@ -300,11 +299,28 @@ class UserService
         }
     }
 
-    public function loginProxy($user)
+    public function loginProxy($user, $provinceId)
     {
-        Auth::guard('admin')->loginUsingId($user->id);
+        $baseService = new BaseService();
+        $currentId = $baseService->getCurrentUserId();
 
+        $this->logoutAllGuard();
+        session()->put('is_proxy', $currentId);
+        session()->put('province_id', $provinceId);
+
+        Auth::guard('admin')->loginUsingId($user->id);
         return redirect()->route('admin.home');
+    }
+
+    public function logoutProxy()
+    {
+        $userParentId = session()->pull('is_proxy');
+        $provinceId = session()->pull('province_id');
+
+        $this->logoutAllGuard();
+
+        Auth::guard('superadmin')->loginUsingId($userParentId);
+        return redirect()->route('superadmin.cinema.province', $provinceId);
     }
 
     // logout system
@@ -313,24 +329,6 @@ class UserService
         auth('admin')->logout();
         auth('superadmin')->logout();
         auth('staff')->logout();
-    }
-
-    public function logoutAdmin()
-    {
-        $this->logout('admin');
-        $this->logoutAllGuard();
-    }
-
-    public function logoutSuperAdmin()
-    {
-        $this->logout('superadmin');
-        $this->logoutAllGuard();
-    }
-
-    public function logoutStaff()
-    {
-        $this->logout('staff');
-        $this->logoutAllGuard();
     }
 
     public function logoutCustomer()

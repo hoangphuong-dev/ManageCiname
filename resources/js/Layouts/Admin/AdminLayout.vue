@@ -33,23 +33,27 @@
             >
                 <div class="ml-auto flex items-center mr-5">
                     <div class="mr-3">
-                        <button
-                            v-if="$page?.props?.auth?.impersonate"
+                        <div
+                            v-if="$page?.props?.isProxy != null"
                             @click="leaveImpersonate()"
-                            class="bg-orange-600 text-white px-3.5 py-2 m-auto button-shadow rounded text-2sm mr-3 flex items-center"
+                            class="cursor-pointer bg-yellowPrimary px-3.5 py-1 m-auto rounded mr-3 flex items-center"
                         >
-                            <span class="mr-1 text-white whitespace-nowrap"
+                            <span class="mr-1 whitespace-nowrap"
                                 >Đăng xuất ủy quyền</span
                             >
-                            <el-icon :size="20"><switch-button /></el-icon>
-                        </button>
+                            <el-icon :size="20"><SwitchButton /></el-icon>
+                        </div>
                     </div>
                     <div class="mr-3">
                         <!-- popup nitification   -->
                         <PopupNotification />
                     </div>
                     <h3>{{ user?.name || "" }}</h3>
-                    <el-dropdown trigger="click" @command="handleCommand">
+                    <el-dropdown
+                        v-if="$page?.props?.isProxy == null"
+                        trigger="click"
+                        @command="handleCommand"
+                    >
                         <span
                             class="el-dropdown-link flex items-center justify-center"
                         >
@@ -66,9 +70,7 @@
                                         }}
                                     </div>
                                 </template> </el-image
-                            ><el-icon class="el-icon--right"
-                                ><arrow-down
-                            /></el-icon>
+                            ><el-icon><ArrowDown /></el-icon>
                         </span>
 
                         <template #dropdown>
@@ -87,7 +89,7 @@
                                             >
                                         </div>
                                         <div class="flex items-center">
-                                            <el-icon><arrow-right /></el-icon>
+                                            <el-icon><ArrowRight /></el-icon>
                                         </div>
                                     </div>
                                 </el-dropdown-item>
@@ -105,7 +107,7 @@
                                             >
                                         </div>
                                         <div class="flex items-center">
-                                            <el-icon><arrow-right /></el-icon>
+                                            <el-icon><ArrowRight /></el-icon>
                                         </div>
                                     </div>
                                 </el-dropdown-item>
@@ -124,7 +126,7 @@
 <script>
 import { Menu } from "@element-plus/icons";
 import AlertNoticeMixin from "@/Mixins/alert-notice";
-import { ArrowDown, ArrowRight, Right, Watch } from "@element-plus/icons-vue";
+import { ArrowDown, ArrowRight, SwitchButton } from "@element-plus/icons-vue";
 import PopupNotification from "@/Components/Notifications/Popup.vue";
 import { ElLoading } from "element-plus";
 
@@ -134,8 +136,7 @@ export default {
         Menu,
         ArrowDown,
         ArrowRight,
-        Right,
-        Watch,
+        SwitchButton,
         PopupNotification,
     },
     mixins: [AlertNoticeMixin],
@@ -247,7 +248,7 @@ export default {
         },
 
         leaveImpersonate() {
-            console.log(8888, this.$page.props.user);
+            window.location.href = route("admin.leave-impersonate");
         },
 
         handleCommand(command) {

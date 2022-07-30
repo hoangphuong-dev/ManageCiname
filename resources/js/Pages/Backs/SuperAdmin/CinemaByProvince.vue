@@ -2,7 +2,7 @@
     <admin-layout>
         <template #main>
             <div class="bg-white min-h-full sm:m-4 mb-0 p-4">
-                <h2 class="mb-5 text-red-500">Khu vuc Ha Noi</h2>
+                <h2 class="mb-5 text-red-500">Khu vuc {{ province?.name }}</h2>
                 <div class="w-full flex relative">
                     <div class="w-3/4 flex items-end">
                         <SearchInput
@@ -72,15 +72,10 @@
                                 <button
                                     class="btn-warning bg-green-600"
                                     @click="
-                                        this.$inertia.visit(
-                                            route(
-                                                'superadmin.cinema.impersonate',
-                                                row?.user?.id
-                                            )
-                                        )
+                                        loginProxy(row?.user?.id, province?.id)
                                     "
                                 >
-                                    Đăng nhập ủy quyền  
+                                    Đăng nhập ủy quyền
                                 </button>
                             </div>
                         </template>
@@ -398,6 +393,13 @@ export default {
                     onError: (e) => console.log(e),
                 });
             });
+        },
+
+        loginProxy(id, province_id) {
+            window.location.href = route("superadmin.cinema.impersonate", [
+                id,
+                province_id,
+            ]);
         },
     },
 };

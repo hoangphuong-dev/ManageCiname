@@ -53,7 +53,7 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
     Route::prefix('/cinema')->as('cinema.')->group(function () {
         Route::get('/master', [CinemaController::class, 'getMasterCinema'])->name('master');
         Route::get('/province/{id}', [CinemaController::class, 'getCinemaByProvince'])->name('province');
-        Route::get('/login-proxy/{user}', [CinemaController::class, 'loginProxy'])->name('impersonate');
+        Route::get('/login-proxy/{user}/{province_id}', [CinemaController::class, 'loginProxy'])->name('impersonate');
     });
 
 
@@ -67,6 +67,7 @@ Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => [
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
     Route::get('/', [AdminController::class, 'index'])->name('home');
+    Route::get('/logout-proxy', [CinemaController::class, 'logoutProxy'])->name('leave-impersonate');
 
     // start manage cinema
     Route::get('showtimes', [ShowTimeController::class, 'index'])->name('showtime.index');
@@ -99,6 +100,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutStaff'])->name('logout');
     Route::get('/', [StaffController::class, 'index'])->name('home');
+
+    Route::get('/movie-now-showing', [StaffController::class, 'movie'])->name('movie-now-showing');
+    Route::get('/movie-comming-soon', [StaffController::class, 'movie'])->name('movie-comming-soon');
 
     Route::group(['as' => 'movie.', 'prefix' => 'movie'], function () {
         Route::get('/now-showing', [StaffController::class, 'getMovieNowShowing'])->name('now-showing');

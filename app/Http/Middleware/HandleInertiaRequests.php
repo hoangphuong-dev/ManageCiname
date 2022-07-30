@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), ViewComposeMiddleware::share(),  [
             'isSuccess' => Session::get('success'),
             'isError' => Session::get('error'),
+            'isProxy' => Session::get('is_proxy'),
             'timestamp' => time(),
             'user' => $user,
             'customer' => Auth::guard('customer')->user(),
