@@ -29,15 +29,7 @@
                     <div v-if="movie.showtimes.length > 0">
                         <el-button
                             v-if="$page?.props?.user?.role == 2"
-                            @click="
-                                this.$inertia.visit(
-                                    route('order.ticket', {
-                                        movie_id: movie.id,
-                                        cinema_id: 2,
-                                        redirect: 'staff',
-                                    })
-                                )
-                            "
+                            @click="detailMovie(movie?.id)"
                             type="danger"
                         >
                             Đặt vé
@@ -144,7 +136,14 @@ import { listProvinceHasCinema, getCinemaByProvince } from "@/API/main.js";
 export default {
     components: { AppLayout },
     props: {
-        movie: Object,
+        movie: { type: Object, required: true },
+        cinemaId: { type: Number, default: null },
+    },
+
+    created() {
+        if (this.cinemaId !== null) {
+            this.formData.redirect = "staff";
+        }
     },
 
     data: function () {
@@ -163,6 +162,16 @@ export default {
         };
     },
     methods: {
+        detailMovie(movie_id) {
+            this.formData.movie_id = movie_id;
+            this.formData.cinema_id = this.cinemaId;
+
+            Inertia.get(route("order.ticket", { ...this.formData }), {
+                onBefore,
+                onFinish,
+            });
+        },
+
         formatDate(day) {
             var now = new Date(day);
             return now.toLocaleDateString();

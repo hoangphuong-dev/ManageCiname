@@ -2,13 +2,8 @@
 
 namespace App\Services;
 
-use App\Http\Resources\AdminInfoResource;
 use App\Http\Resources\CinemaResource;
-use App\Http\Resources\ViewCinemaByProvinceResource;
 use App\Repositories\CinemaRepository;
-use App\Repositories\ProvinceRepository;
-use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\DB;
 
 class CinemaService extends BaseService
 {

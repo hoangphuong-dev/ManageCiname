@@ -9,11 +9,11 @@
                 <div class="w-4/5 shadow-lg p-4 my-6 rounded border-2">
                     <div class="w-11/12 m-auto">
                         <h3 class="mb-6">Voucher của tôi</h3>
-                        <view-voucher
+                        <ViewVoucher
                             :member_card="member_card"
                             :vouchers="vouchers"
                             :filterBE="filterBE"
-                        ></view-voucher>
+                        />
                     </div>
                 </div>
             </div>

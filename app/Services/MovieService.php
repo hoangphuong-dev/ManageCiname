@@ -116,4 +116,9 @@ class MovieService extends BaseService
     {
         return $this->movieRepository->getMovieActive();
     }
+
+    public function getCinemaId()
+    {
+        return $this->getCinemaByStaff();
+    }
 }

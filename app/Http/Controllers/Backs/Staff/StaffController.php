@@ -55,10 +55,9 @@ class StaffController extends Controller
         $movie = $this->movieService->show($id);
         $cinemaId = $this->movieService->getCinemaId();
 
-        dd($cinemaId);
-
         return Inertia::render('Backs/Staff/MovieDetail', [
             'movie' => $movie,
+            'cinemaId' => $cinemaId,
         ]);
     }
 }

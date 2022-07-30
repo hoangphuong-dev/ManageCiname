@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class BaseService
@@ -61,5 +62,11 @@ class BaseService
     public function isSuperAdminRole()
     {
         return $this->getGuard() === 'superadmin';
+    }
+
+    public function getCinemaByStaff()
+    {
+        $user = User::whereId($this->getUserId('staff'))->with('staffInfo')->first();
+        return $user->staffInfo->cinema_id ?? null;
     }
 }

@@ -193,6 +193,9 @@ class CustomerController extends Controller
     public function orderTicket(Request $request)
     {
         $data = $request->all();
+
+        dd($data);
+
         $date = Carbon::now()->toDateString();
         if (!isset($data['current_date'])) {
             $data['current_date'] = $date;
