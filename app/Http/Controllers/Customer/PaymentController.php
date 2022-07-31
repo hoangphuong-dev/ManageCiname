@@ -71,7 +71,7 @@ class PaymentController extends Controller
     {
         $fill = $request->all();
 
-        if ($fill['redirect'] == 'staff') {
+        if ($request->redirect == 'staff') {
             return $this->orderByStaff($request);
         }
 

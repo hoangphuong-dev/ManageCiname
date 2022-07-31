@@ -47,7 +47,7 @@
                 <div>{{ row?.user.email }}</div>
             </template>
             <template #total_money="{ row }">
-                <div>{{ row?.total_money }} VNĐ</div>
+                <div>{{ row?.total_money.toLocaleString() }} VNĐ</div>
             </template>
             <template #voucher="{ row }">
                 <div
@@ -78,9 +78,7 @@
                     }"
                     class="p-2 text-center rounded-md"
                 >
-                    {{
-                        row?.status === 1 ? "Đã thanh toán" : "Chưa thanh toán"
-                    }}
+                    {{ row?.status == 1 ? "Đã thanh toán" : "Chưa thanh toán" }}
                 </div>
             </template>
         </data-table>

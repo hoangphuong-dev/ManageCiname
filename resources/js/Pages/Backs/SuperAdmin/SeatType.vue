@@ -42,6 +42,10 @@
                             </div>
                         </template>
 
+                        <template #price="{ row }">
+                            <p>{{ row?.price.toLocaleString() }} VNĐ</p>
+                        </template>
+
                         <template #created_at="{ row }">
                             {{ formatDateTime(row?.created_at) }}
                         </template>

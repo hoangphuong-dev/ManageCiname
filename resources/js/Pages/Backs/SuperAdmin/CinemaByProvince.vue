@@ -2,7 +2,7 @@
     <admin-layout>
         <template #main>
             <div class="bg-white min-h-full sm:m-4 mb-0 p-4">
-                <h2 class="mb-5 text-red-500">Khu vuc {{ province?.name }}</h2>
+                <h2 class="mb-5 text-red-500">Khu vực {{ province?.name }}</h2>
                 <div class="w-full flex relative">
                     <div class="w-3/4 flex items-end">
                         <SearchInput
@@ -204,6 +204,7 @@ export default {
                 { key: "number_room", label: "Số phòng" },
                 { key: "hotline", label: "Hotline", width: 250 },
                 { key: "manage", label: "Người quản lý", width: 250 },
+                { key: "created_at", label: "Ngày tạo", width: 250 },
                 { key: "actions", label: "Thao tác", width: 400 },
             ],
 
