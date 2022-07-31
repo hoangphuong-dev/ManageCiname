@@ -24,6 +24,13 @@
                             @submit="onFilter"
                         />
                     </div>
+                    <div class="w-1/4">
+                        <DateFilter
+                            :type="''"
+                            :modelSelect="filter.range"
+                            @onchangeFilter="onFilter"
+                        />
+                    </div>
                 </div>
 
                 <div class="mt-5">
@@ -43,13 +50,11 @@
                         <template #status="{ row }">
                             <div
                                 :class="{
-                                    'bg-yellow-500 text-white':
-                                        row?.status === 1,
-                                    'bg-green-600 text-white':
-                                        row?.status === 2,
-                                    'text-red-500 font-bold': row?.status === 3,
+                                    'text-yellow-500': row?.status === 1,
+                                    'text-green-600': row?.status === 2,
+                                    'text-red-500': row?.status === 3,
                                 }"
-                                class="p-2 text-center rounded-md"
+                                class="p-2 text-center font-bold rounded-md"
                             >
                                 {{ showStatus(row?.status) }}
                             </div>
@@ -101,12 +106,12 @@
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import SearchInput from "@/Components/Element/SearchInput.vue";
 import SelectFilter from "@/Components/Element/SelectFilter.vue";
+import DateFilter from "@/Components/Element/DateFilter.vue";
 import DataTable from "@/Components/DataTable.vue";
 import { formatDateTime } from "@/libs/datetime";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import * as Staff from "@/store/const";
-import { updateStatusStaff } from "@/API/main.js";
 
 export default {
     name: "Staff",
@@ -115,6 +120,7 @@ export default {
         SearchInput,
         SelectFilter,
         DataTable,
+        DateFilter,
     },
     props: {
         blogs: {
@@ -145,9 +151,9 @@ export default {
                 { key: "name", label: "Tên nhân viên", width: 250 },
                 { key: "email", label: "Email", width: 300 },
                 { key: "phone", label: "Số điện thoại", width: 200 },
-                { key: "status", label: "Trạng thái", width: 130 },
                 { key: "type_of_work", label: "Loại công việc", width: 130 },
                 { key: "created_at", label: "Ngày đăng ký", width: 150 },
+                { key: "status", label: "Trạng thái", width: 130 },
                 { key: "actions", label: "Thao tác", width: 250 },
             ],
         };
@@ -160,6 +166,7 @@ export default {
                 page: this.filtersBE.page?.toInt() || 1,
                 limit: this.filtersBE.limit?.toInt() || 12,
                 name: this.filtersBE?.name || "",
+                range: this.filtersBE?.range || [],
                 status:
                     status == null || typeof status === "undefined"
                         ? null

@@ -86,6 +86,10 @@
                             </div>
                         </template>
 
+                        <template #created_at="{ row }">
+                            {{ formatDateTime(row?.created_at) }}
+                        </template>
+
                         <template #actions="{ row }">
                             <div v-if="row" class="flex items-center">
                                 <template v-if="!row.status">
@@ -194,10 +198,10 @@ import DataTable from "@/Components/DataTable.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import xss from "@/Helpers/xss";
-import { formatDate } from "@/libs/datetime";
 import * as Movie from "@/store/const.js";
 import { getYoutubeId } from "@/Helpers/youtube.js";
 import { updateStatusMovie } from "@/API/main.js";
+import { formatDateTime } from "@/libs/datetime";
 
 export default {
     name: "Movie",
@@ -237,12 +241,12 @@ export default {
             dialogVisibleDetail: false,
 
             fields: [
-                { key: "id", label: "ID" },
                 { key: "image", label: "Ảnh" },
                 { key: "name", label: "Tên phim", width: 350 },
                 { key: "director", label: "Đạo diễn", width: 150 },
                 { key: "rated", label: "Giới hạn độ tuổi", width: 150 },
                 { key: "status", label: "Trạng thái", width: 200 },
+                { key: "created_at", label: "Ngày tạo", width: 200 },
                 { key: "actions", label: "Thao tác", width: 250 },
             ],
 
@@ -289,7 +293,7 @@ export default {
             return getYoutubeId(row);
         },
         xss,
-        formatDate,
+        formatDateTime,
         inertia() {
             Inertia.get(
                 route("superadmin.movie.index", this.filter),
