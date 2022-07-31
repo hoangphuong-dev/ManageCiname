@@ -60,4 +60,11 @@ class StaffController extends Controller
             'cinemaId' => $cinemaId,
         ]);
     }
+
+    public function orderSuccess($id)
+    {
+        return Inertia::render("Backs/Staff/OrderSuccess", [
+            'billId' => $id,
+        ]);
+    }
 }

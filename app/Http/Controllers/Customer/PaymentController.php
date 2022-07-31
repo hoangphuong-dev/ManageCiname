@@ -55,15 +55,26 @@ class PaymentController extends Controller
         $showtime = $this->showTimeService->getRoomByShowTime($data['show_time_id']);
         session()->put(self::SESSION_KEY, $data);
 
-        return Inertia::render('Customer/ConfirmOrder', [
+        $compact = [
             'showtime' => $showtime,
             'data' => $data,
-        ]);
+        ];
+
+        if ($request->redirect == 'staff') {
+            return Inertia::render('Backs/Staff/ConfirmOrder', $compact);
+        }
+
+        return Inertia::render('Customer/ConfirmOrder', $compact);
     }
 
     public function authenEmail(Request $request)
     {
         $fill = $request->all();
+
+        if ($fill['redirect'] == 'staff') {
+            return $this->orderByStaff($request);
+        }
+
         $fill = $this->voucherService->checkVoucher($fill);
         $data = array_merge($fill, session()->get(self::SESSION_KEY, []));
 
@@ -85,29 +96,12 @@ class PaymentController extends Controller
             return redirect()->route("home")->with($message);
         }
 
-        $data = JwtHelper::parse($token);
+        $fill = JwtHelper::parse($token);
 
         try {
             DB::beginTransaction();
+            $data = array_merge($fill, $this->processOrder($fill));
 
-            $data = $this->voucherService->applyVoucher($data);
-            $user = $this->userService->checkOrderCustomer($data);
-            $bill = $this->billService->createBill($user->id, $data);
-            $ticket = $this->ticketService->createTicket($data, $bill->id, $user->id);
-
-            session()->put(self::SESSION_USER, [
-                'user' => $user,
-                'bill' => $bill,
-                'ticket' => $ticket,
-                'voucher_id' => isset($data['voucher_id']) ? $data['voucher_id'] : null
-            ]);
-
-            $data['bill_id'] = $bill->id;
-            unset($data['seat_id'], $data['seat_name'], $data['expired'], $data['voucher']);
-
-            if ($data['flag_voucher']) {
-                $this->voucherService->updateBillId($data);
-            }
             $dataUrlPayment = $this->paymentService->createUrlPayment($data);
 
             DB::commit();
@@ -119,6 +113,54 @@ class PaymentController extends Controller
             DB::rollback();
             return redirect()->route('home')->with($message);
         }
+    }
+
+    public function orderByStaff($request)
+    {
+        $fill = array_merge($request->all(), session()->get(self::SESSION_KEY, []));
+        try {
+            DB::beginTransaction();
+            $this->processOrder($fill);
+
+            $getSession = session()->get(self::SESSION_USER, []);
+            $bill = $getSession['bill'];
+
+            $this->billService->updateStatus($bill->id);
+            DB::commit();
+            session()->forget(self::SESSION_KEY);
+        } catch (\Exception $e) {
+            $message = ['error' => __('Ghế này đã được đặt , Vui lòng chọn ghế khác')];
+            DB::rollback();
+            return redirect()->route('staff.movie.now-showing')->with($message);
+        }
+
+        event(new CustomerOrder($bill, $getSession['user']));
+
+        return redirect()->route('staff.order-success', $bill->id);
+    }
+
+    private function processOrder($data)
+    {
+        $data = $this->voucherService->applyVoucher($data);
+        $user = $this->userService->checkOrderCustomer($data);
+        $bill = $this->billService->createBill($user->id, $data);
+        $ticket = $this->ticketService->createTicket($data, $bill->id, $user->id);
+
+        session()->put(self::SESSION_USER, [
+            'user' => $user,
+            'bill' => $bill,
+            'ticket' => $ticket,
+            'voucher_id' => isset($data['voucher_id']) ? $data['voucher_id'] : null
+        ]);
+
+        $data['bill_id'] = $bill->id;
+        unset($data['seat_id'], $data['seat_name'], $data['expired'], $data['voucher']);
+
+        if ($data['flag_voucher']) {
+            $this->voucherService->updateBillId($data);
+        }
+
+        return $data;
     }
 
     public function vnpayReturn(Request $request)

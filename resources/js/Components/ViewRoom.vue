@@ -176,6 +176,13 @@ export default {
         count_down: { type: String, required: true },
     },
 
+    created() {
+        let isUser = this.$page?.props?.user?.role;
+        if (isUser === 2) {
+            this.formData.redirect = "staff";
+        }
+    },
+
     data() {
         return {
             seat_name: [],
