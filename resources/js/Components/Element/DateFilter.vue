@@ -18,6 +18,7 @@ export default {
     name: "SelectFilter",
     props: {
         title: { type: String, required: true },
+        type: { type: String, required: true },
         modelSelect: { type: Array, required: true },
     },
     emits: ["onchangeFilter"],

@@ -26,7 +26,8 @@
                     </div>
                     <div class="w-1/4">
                         <DateFilter
-                            :type="''"
+                            :title="'Ngày đăng ký'"
+                            :type="'date_register'"
                             :modelSelect="filter.range"
                             @onchangeFilter="onFilter"
                         />
@@ -286,6 +287,8 @@ export default {
                 this.filter.type_of_work = value;
             } else if (type === "status") {
                 this.filter.status = value;
+            } else if (type === "date_register") {
+                this.filter.range = value;
             }
             this.filter.page = 1;
             this.inertia();

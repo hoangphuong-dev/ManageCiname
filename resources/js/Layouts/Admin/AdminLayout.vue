@@ -255,9 +255,9 @@ export default {
             switch (command) {
                 case "logout":
                     let key = "";
-                    if (this.user.role === 0) {
+                    if (this.user?.role === 0) {
                         key = route("superadmin.logout_super");
-                    } else if (this.user.role == 4) {
+                    } else if (this.user?.role == 4) {
                         key = route("admin.logout_admin");
                     } else {
                         key = route("staff.logout");
