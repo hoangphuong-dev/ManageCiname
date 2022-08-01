@@ -2,11 +2,11 @@
 
 # database
 heroku config:add DB_CONNECTION="mysql"
-heroku config:add DB_HOST="y6aj3qju8efqj0w1.cbetxkdyhwsb.us-east-1.rds.amazonaws.com"
+heroku config:add DB_HOST="t07cxyau6qg7o5nz.cbetxkdyhwsb.us-east-1.rds.amazonaws.com"
 heroku config:add DB_PORT="3306"
-heroku config:add DB_DATABASE="vobid10v2aildx7n"
-heroku config:add DB_USERNAME="ccl6sgymg3c7lcgv"
-heroku config:add DB_PASSWORD="g4iibwh0lvzk6l0t"
+heroku config:add DB_DATABASE="pqo71p93z2k6cu8x"
+heroku config:add DB_USERNAME="chy4qk6ld8wtoqrq"
+heroku config:add DB_PASSWORD="m4mlq07ipz1wwacf"
 
 # enviroment
 heroku config:add APP_ENV="develop"
