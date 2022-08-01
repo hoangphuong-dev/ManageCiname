@@ -5,10 +5,13 @@
             @change="onFilter"
             v-model="modelSelect"
             type="daterange"
-            :clearable="false"
+            clearable
             start-placeholder="Ngày bắt đầu"
             end-placeholder="Ngày kết thúc"
             size="large"
+            format="DD/MM/YYYY"
+            value-format="YYYY-MM-DD"
+            :disabled-date="disabledDate"
         />
     </div>
 </template>
@@ -26,6 +29,11 @@ export default {
     methods: {
         onFilter() {
             this.$emit("onchangeFilter", this.modelSelect, this.type);
+        },
+
+        disabledDate(time) {
+            let d = new Date();
+            return time.getTime() > d.setDate(d.getDate() - 1);
         },
     },
 };

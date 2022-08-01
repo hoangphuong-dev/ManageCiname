@@ -23,8 +23,6 @@ class StaffController extends Controller
 
     public function index(Request $request)
     {
-        // dd($request->all());
-
         $staff = $this->userService->getStaffOfAdmin($request);
         return Inertia::render('Backs/Admin/Staff', [
             'blogs' => $staff,

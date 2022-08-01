@@ -2,6 +2,7 @@
 
 namespace App\Models\Filters;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,7 @@ class UserInfoFilters implements Filters
         $this->filterByTypeOfWork($query);
         $this->filterByEmail($query);
         $this->filterByStatus($query);
+        $this->filterByRange($query);
 
         return $query;
     }
@@ -78,6 +80,7 @@ class UserInfoFilters implements Filters
             $q->where('staff_infos.status', $status);
         });
     }
+
     /**
      * Apply filter by type of work
      *
@@ -88,6 +91,19 @@ class UserInfoFilters implements Filters
     {
         $query->when($this->request->query('type_of_work'), function (Builder $q, $type_of_work) {
             $q->where('type_of_work', $type_of_work);
+        });
+    }
+
+    /**
+     * Apply filter by type of work
+     *
+     * @param  Builder $query
+     * @return void
+     */
+    protected function filterByRange(Builder $query): void
+    {
+        $query->when($this->request->query('range'), function (Builder $q, $range) {
+            $q->whereBetween('created_at',  [Carbon::parse($range[0])->startOfDay(), Carbon::parse($range[1])->endOfDay()]);
         });
     }
 }
