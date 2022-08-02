@@ -21,6 +21,14 @@
                 @submit="onFilter"
             />
         </div>
+        <div class="w-1/4">
+            <DateFilter
+                :title="'Ngày tạo'"
+                :type="'created_at'"
+                :modelSelect="filter.range"
+                @onchangeFilter="onFilter"
+            />
+        </div>
     </div>
 
     <div class="mt-5" style="min-height: 500px">
@@ -284,25 +292,16 @@ import { formatDateTime } from "@/libs/datetime.js";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 import { detailBill } from "@/API/main.js";
+import DateFilter from "@/Components/Element/DateFilter.vue";
+
 export default {
     name: "ViewBillComponent",
 
-    components: {
-        SearchInput,
-        DataTable,
-        SelectFilter,
-    },
+    components: { SearchInput, DataTable, SelectFilter, DateFilter },
 
     props: {
-        bills: {
-            type: Object,
-            required: true,
-        },
-        filtersBE: {
-            type: Object,
-            required: true,
-            default: {},
-        },
+        bills: { type: Object, required: true },
+        filtersBE: { type: Object, required: true, default: {} },
     },
 
     computed: {
@@ -313,6 +312,7 @@ export default {
                 page: this.filtersBE.page?.toInt() || 1,
                 limit: this.filtersBE.limit?.toInt() || 12,
                 name: this.filtersBE?.name || "",
+                range: this.filtersBE?.range || [],
                 status:
                     status == null || typeof status === "undefined"
                         ? null
@@ -401,6 +401,8 @@ export default {
                 this.filter.voucher = value;
             } else if (type === "status") {
                 this.filter.status = value;
+            } else if (type === "created_at") {
+                this.filter.range = value;
             }
             this.filter.page = 1;
             this.inertia();

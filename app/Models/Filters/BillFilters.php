@@ -3,6 +3,7 @@
 namespace App\Models\Filters;
 
 use App\Models\Voucher;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,7 @@ class BillFilters implements Filters
         $this->filterByName($query);
         $this->filterByStatus($query);
         $this->filterByVoucher($query);
+        $this->filterByRange($query);
 
         return $query;
     }
@@ -87,5 +89,18 @@ class BillFilters implements Filters
         return Voucher::query()
             ->whereNotNull('bill_id')->get()
             ->pluck('bill_id')->toArray();
+    }
+
+    /**
+     * Apply filter by name
+     *
+     * @param  Builder $query
+     * @return void
+     */
+    protected function filterByRange(Builder $query): void
+    {
+        $query->when($this->request->query('range'), function (Builder $q, $range) {
+            $q->whereBetween('created_at',  [Carbon::parse($range[0])->startOfDay(), Carbon::parse($range[1])->endOfDay()]);
+        });
     }
 }
