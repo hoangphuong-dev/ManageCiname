@@ -4,7 +4,7 @@
             <div class="bg-white min-h-full sm:m-4 mb-0 p-4">
                 <h2 class="mb-5 text-red-400">Quản lý phim</h2>
                 <div class="w-full flex relative">
-                    <div class="w-4/5 flex items-end">
+                    <div class="w-6/10 flex items-end">
                         <SelectFilter
                             :type="'display'"
                             :modelSelect="filter.display"
@@ -28,6 +28,14 @@
                             v-model="filter.name"
                             label="Tìm kiếm"
                             @submit="onFilter"
+                        />
+                    </div>
+                    <div class="w-1/5 ml-10">
+                        <DateFilter
+                            :title="'Ngày tạo'"
+                            :type="'created_at'"
+                            :modelSelect="filter.range"
+                            @onchangeFilter="onFilter"
                         />
                     </div>
                     <div class="w-1/5 flex items-end">
@@ -202,6 +210,7 @@ import * as Movie from "@/store/const.js";
 import { getYoutubeId } from "@/Helpers/youtube.js";
 import { updateStatusMovie } from "@/API/main.js";
 import { formatDateTime } from "@/libs/datetime";
+import DateFilter from "@/Components/Element/DateFilter.vue";
 
 export default {
     name: "Movie",
@@ -210,20 +219,13 @@ export default {
         SearchInput,
         SelectFilter,
         DataTable,
+        DateFilter,
     },
+
     props: {
-        movies: {
-            type: Object,
-            required: true,
-        },
-        movieGenre: {
-            type: Object,
-            required: true,
-        },
-        filtersBE: {
-            type: Object,
-            required: true,
-        },
+        movies: { type: Object, required: true },
+        movieGenre: { type: Object, required: true },
+        filtersBE: { type: Object, required: true },
     },
 
     data() {
@@ -272,6 +274,7 @@ export default {
                 page: this.filtersBE.page?.toInt() || 1,
                 limit: this.filtersBE.limit?.toInt() || 12,
                 name: this.filtersBE?.name || "",
+                range: this.filtersBE?.range || [],
                 status:
                     status == null || typeof status === "undefined"
                         ? 0
@@ -366,6 +369,8 @@ export default {
                 this.filter.movie_genre = value;
             } else if (type === "status") {
                 this.filter.status = value;
+            } else if (type === "created_at") {
+                this.filter.range = value;
             }
             this.filter.page = 1;
             this.inertia();

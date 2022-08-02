@@ -28,6 +28,7 @@ class MovieFilters implements Filters
         $this->filterByDisplay($query);
         $this->filterByMovieGenre($query);
         $this->filterByCinema($query);
+        $this->filterByRange($query);
 
         return $query;
     }
@@ -128,5 +129,19 @@ class MovieFilters implements Filters
             $movieId = $movieId->whereIn('room_id', $arrRoom);
         }
         return $movieId->distinct()->get('movie_id')->pluck('movie_id')->toArray();
+    }
+
+    /**
+     * Apply filter by cinema now Showing
+     *
+     * @param  Builder $query
+     * @return void
+     */
+
+    protected function filterByRange(Builder $query): void
+    {
+        $query->when($this->request->query('range'), function (Builder $q, $range) {
+            $q->whereBetween('created_at',  [Carbon::parse($range[0])->startOfDay(), Carbon::parse($range[1])->endOfDay()]);
+        });
     }
 }
