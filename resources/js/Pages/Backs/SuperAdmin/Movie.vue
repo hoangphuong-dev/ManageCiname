@@ -4,7 +4,7 @@
             <div class="bg-white min-h-full sm:m-4 mb-0 p-4">
                 <h2 class="mb-5 text-red-400">Quản lý phim</h2>
                 <div class="w-full flex relative">
-                    <div class="w-6/10 flex items-end">
+                    <div class="w-5/10 flex items-end">
                         <SelectFilter
                             :type="'display'"
                             :modelSelect="filter.display"
@@ -38,7 +38,7 @@
                             @onchangeFilter="onFilter"
                         />
                     </div>
-                    <div class="w-1/5 flex items-end">
+                    <div class="w-3/10 flex items-end justify-end">
                         <button
                             class="btn-primary ml-8 mr-2 bg-gray-400"
                             @click="dialogImportCSV = !dialogImportCSV"

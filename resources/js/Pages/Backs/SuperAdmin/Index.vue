@@ -76,6 +76,7 @@ export default {
                         backgroundColor: "#C71585",
                         borderColor: "#C71585",
                         lineTension: 0.5,
+                        yAxisID: "A",
                     },
                     {
                         label: "Doanh thu",
@@ -83,6 +84,7 @@ export default {
                         type: "bar",
                         backgroundColor: "#F0C478",
                         lineTension: 0.5,
+                        yAxisID: "B",
                     },
                 ],
                 labels: this.revenuaProvince.provinces,

@@ -79,9 +79,9 @@ export default {
                         grid: {
                             display: false,
                         },
-                        max: 100,
+                        max: 1000,
                         ticks: {
-                            stepSize: 100 / 10,
+                            stepSize: 1000 / 20,
                         },
                     },
                     B: {
@@ -92,7 +92,7 @@ export default {
                         },
                         max: 5000000,
                         ticks: {
-                            stepSize: 5000000 / 100,
+                            stepSize: 5000000 / 10000,
                         },
                         min: 0,
                     },
