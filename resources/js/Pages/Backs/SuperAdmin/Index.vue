@@ -6,7 +6,7 @@
                 <div class="p-2 shadow-lg">
                     <div class="w-2/10 float-right mb-6">
                         <el-date-picker
-                            v-model="currentMonth"
+                            v-model="filter.selected_month"
                             type="month"
                             placeholder="Chọn tháng"
                         />
@@ -14,7 +14,7 @@
                     <ChartAnalytic :dataChart="chartDataByProvince" />
                 </div>
             </div>
-            <div class="bg-white min-h-full m-4 mb-0 p-4">
+            <!-- <div class="bg-white min-h-full m-4 mb-0 p-4">
                 <h2 class="mb-5">Doanh thu chi tiết khu vực</h2>
                 <el-select
                     v-model="provinceSelected"
@@ -38,7 +38,7 @@
                 <div class="p-2 shadow-lg">
                     <ChartAnalytic :dataChart="chartData" />
                 </div>
-            </div>
+            </div> -->
         </template>
     </admin-layout>
 </template>
@@ -65,7 +65,7 @@ export default {
     data() {
         return {
             provinceSelected: "",
-            currentMonth: this.filtersBE?.selected_month,
+            currentMonth: new Date(),
             month_detail: "",
             chartDataByProvince: {
                 datasets: [
@@ -73,16 +73,17 @@ export default {
                         label: "Số vé đã bán",
                         data: this.revenuaProvince.ticketOrdered,
                         type: "line",
-                        backgroundColor: "#C71585",
-                        borderColor: "#C71585",
+                        backgroundColor: "#6A5BCD",
+                        borderColor: "#6A5BCD",
                         lineTension: 0.5,
                         yAxisID: "A",
                     },
                     {
-                        label: "Doanh thu",
+                        label: "Doanh số",
                         data: this.revenuaProvince.revenua,
                         type: "bar",
                         backgroundColor: "#F0C478",
+                        borderColor: "#F0C478",
                         lineTension: 0.5,
                         yAxisID: "B",
                     },
@@ -90,55 +91,54 @@ export default {
                 labels: this.revenuaProvince.provinces,
             },
 
-            chartData: {
-                datasets: [
-                    {
-                        label: "chart 1",
-                        data: [2, 1, 6, 7, 8, 5, 4, 1],
-                        type: "line",
-                        backgroundColor: "#C71585",
-                        borderColor: "#C71585",
-                        lineTension: 0.5,
-                    },
-                    // {
-                    //     label: "chart 2",
-                    //     data: [1, 5, 3, 7, 9, 5, 3, 2],
-                    //     type: "bar",
-                    //     borderColor: "#000D8D",
-                    //     backgroundColor: "#000D8D",
-                    //     lineTension: 0.5,
-                    // },
-                ],
-                labels: [
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                ],
-            },
+            // chartData: {
+            //     datasets: [
+            //         {
+            //             label: "chart 1",
+            //             data: [2, 1, 6, 7, 8, 5, 4, 1],
+            //             type: "line",
+            //             backgroundColor: "#C71585",
+            //             borderColor: "#C71585",
+            //             lineTension: 0.5,
+            //         },
+            //         // {
+            //         //     label: "chart 2",
+            //         //     data: [1, 5, 3, 7, 9, 5, 3, 2],
+            //         //     type: "bar",
+            //         //     borderColor: "#000D8D",
+            //         //     backgroundColor: "#000D8D",
+            //         //     lineTension: 0.5,
+            //         // },
+            //     ],
+            //     labels: [
+            //         "2022/05/29",
+            //         "2022/05/29",
+            //         "2022/05/29",
+            //         "2022/05/29",
+            //         "2022/05/29",
+            //         "2022/05/29",
+            //         "2022/05/29",
+            //         "2022/05/29",
+            //     ],
+            // },
         };
     },
 
-    watch: {
-        currentMonth() {
-            this.filter.selected_month = this.currentMonth;
-            this.inertia();
-            // new Date(this.currentMonth).toISOString
-        },
-    },
+    watch: {},
 
     computed: {
         filter() {
+            let ddddd = this.filtersBE?.selected_month;
             return {
-                type: this.filtersBE?.type || "",
-                selected_month: this.filtersBE?.selected_month || new Date(),
-                month_detail: this.filtersBE?.month_detail || new Date(),
+                selected_month:
+                    ddddd == undefined ? new Date() : selected_month,
+                // month_detail: this.filtersBE?.month_detail || new Date(),
             };
         },
+    },
+
+    created() {
+        console.log(this.filter, this.filtersBE);
     },
 
     methods: {

@@ -4,8 +4,6 @@
             :chart-data="dataChart"
             :chart-options="chartOptions"
             :height="200"
-            :max_post="100"
-            :max_engagement="5000000"
         />
     </div>
 </template>
@@ -43,6 +41,8 @@ export default {
     components: { Bar, Line },
     props: {
         dataChart: { label: [], datasets: [] },
+        maxAxisA: { type: Number, default: null },
+        maxAxisB: { type: Number, default: null },
     },
     data() {
         return {
@@ -79,9 +79,9 @@ export default {
                         grid: {
                             display: false,
                         },
-                        max: 1000,
+                        max: this.maxAxisA,
                         ticks: {
-                            stepSize: 1000 / 20,
+                            stepSize: this.maxAxisA / 20,
                         },
                     },
                     B: {
@@ -90,11 +90,10 @@ export default {
                         grid: {
                             display: true,
                         },
-                        max: 5000000,
+                        max: this.maxAxisB,
                         ticks: {
-                            stepSize: 5000000 / 10000,
+                            stepSize: this.maxAxisB / 10000,
                         },
-                        min: 0,
                     },
                 },
             },
