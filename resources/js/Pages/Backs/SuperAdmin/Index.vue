@@ -9,10 +9,10 @@
                             :title="'Chọn tháng'"
                             :type="'created_at'"
                             :typeDate="'month'"
-                                                                                                                             :modelSelect="filter.range"
+                            :modelSelect="filter.selected_month"
                             @onchangeFilter="onFilter"
                         />
-        </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+                    </div>
                     <ChartAnalytic :dataChart="chartDataByProvince" />
                 </div>
             </div>
@@ -128,29 +128,19 @@ export default {
         };
     },
 
-    // watch: {
-    //     currentMonth() {
-    //         this.filter.selected_month = this.currentMonth;
-    //         this.inertia();
-    //     },
-    // },
-
     computed: {
         filter() {
-            let ddddd = this.filtersBE?.selected_month;
+            let selected_month = this.filtersBE?.selected_month;
             return {
-                selected_month: ddddd == undefined ? new Date() : ddddd,
+                selected_month: selected_month == undefined ? new Date().toISOString() : selected_month,
                 // month_detail: this.filtersBE?.month_detail || new Date(),
             };
         },
     },
 
-    created() {
-        // this.currentMonth = this.filter.selected_month;
-    },
-
     methods: {
         onFilter(value, type) {
+            this.filter.selected_month = value;
             this.inertia();
         },
 

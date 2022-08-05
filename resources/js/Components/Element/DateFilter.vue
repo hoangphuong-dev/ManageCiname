@@ -9,7 +9,6 @@
             start-placeholder="Ngày bắt đầu"
             end-placeholder="Ngày kết thúc"
             size="large"
-            format="DD/MM/YYYY"
             value-format="YYYY-MM-DD"
             :disabled-date="disabledDate"
         />
