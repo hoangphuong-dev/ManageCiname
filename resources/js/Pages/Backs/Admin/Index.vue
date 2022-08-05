@@ -3,8 +3,11 @@
         <template #main>
             <div class="bg-white min-h-full m-4 mb-0 p-4">
                 <h2 class="mb-5">màn thống kê toàn hệ thống</h2>
-                <div class="p-2 shadow-lg">
+                <div class="p-2 mb-10 shadow-lg">
                     <ChartAnalytic :dataChart="chartData" />
+                </div>
+                <div class="p-2 mb-10 shadow-xl">
+                    <WeekAnalysis />
                 </div>
             </div>
         </template>
@@ -14,11 +17,13 @@
 <script>
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import ChartAnalytic from "../SuperAdmin/ChartAnalytic.vue";
+import WeekAnalysis from "./WeekAnalysis.vue";
 export default {
     name: "HomeStaff",
     components: {
         AdminLayout,
         ChartAnalytic,
+        WeekAnalysis,
     },
 
     data() {
