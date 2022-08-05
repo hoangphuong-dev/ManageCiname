@@ -26,6 +26,7 @@
                 :title="'Ngày tạo'"
                 :type="'created_at'"
                 :modelSelect="filter.range"
+                :typeDate="'daterange'"
                 @onchangeFilter="onFilter"
             />
         </div>

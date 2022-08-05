@@ -34,6 +34,7 @@
                         <DateFilter
                             :title="'Ngày tạo'"
                             :type="'created_at'"
+                            :typeDate="'daterange'"
                             :modelSelect="filter.range"
                             @onchangeFilter="onFilter"
                         />

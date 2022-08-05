@@ -5,12 +5,14 @@
                 <h2 class="mb-5">Doanh thu theo khu vực</h2>
                 <div class="p-2 shadow-lg">
                     <div class="w-2/10 float-right mb-6">
-                        <el-date-picker
-                            v-model="filter.selected_month"
-                            type="month"
-                            placeholder="Chọn tháng"
+                        <DateFilter
+                            :title="'Chọn tháng'"
+                            :type="'created_at'"
+                            :typeDate="'month'"
+                                                                                                                             :modelSelect="filter.range"
+                            @onchangeFilter="onFilter"
                         />
-                    </div>
+        </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
                     <ChartAnalytic :dataChart="chartDataByProvince" />
                 </div>
             </div>
@@ -48,12 +50,14 @@ import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import ChartAnalytic from "./ChartAnalytic.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
+import DateFilter from "@/Components/Element/DateFilter.vue";
 
 export default {
     name: "Index",
     components: {
         AdminLayout,
         ChartAnalytic,
+        DateFilter,
     },
 
     props: {
@@ -65,7 +69,7 @@ export default {
     data() {
         return {
             provinceSelected: "",
-            currentMonth: new Date(),
+            currentMonth: "",
             month_detail: "",
             chartDataByProvince: {
                 datasets: [
@@ -124,24 +128,32 @@ export default {
         };
     },
 
-    watch: {},
+    // watch: {
+    //     currentMonth() {
+    //         this.filter.selected_month = this.currentMonth;
+    //         this.inertia();
+    //     },
+    // },
 
     computed: {
         filter() {
             let ddddd = this.filtersBE?.selected_month;
             return {
-                selected_month:
-                    ddddd == undefined ? new Date() : selected_month,
+                selected_month: ddddd == undefined ? new Date() : ddddd,
                 // month_detail: this.filtersBE?.month_detail || new Date(),
             };
         },
     },
 
     created() {
-        console.log(this.filter, this.filtersBE);
+        // this.currentMonth = this.filter.selected_month;
     },
 
     methods: {
+        onFilter(value, type) {
+            this.inertia();
+        },
+
         inertia() {
             Inertia.get(
                 route("superadmin.home", this.filter),
