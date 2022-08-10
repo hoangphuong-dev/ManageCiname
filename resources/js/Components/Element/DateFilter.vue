@@ -4,12 +4,11 @@
         <el-date-picker
             @change="onFilter"
             v-model="modelSelect"
-            type="daterange"
+            :type="typeDate"
             clearable
             start-placeholder="Ngày bắt đầu"
             end-placeholder="Ngày kết thúc"
             size="large"
-            format="DD/MM/YYYY"
             value-format="YYYY-MM-DD"
             :disabled-date="disabledDate"
         />
@@ -20,9 +19,10 @@
 export default {
     name: "SelectFilter",
     props: {
+        typeDate: { type: String, required: true },
         title: { type: String, required: true },
         type: { type: String, required: true },
-        modelSelect: { type: Array, required: true },
+        modelSelect: { required: true },
     },
     emits: ["onchangeFilter"],
 

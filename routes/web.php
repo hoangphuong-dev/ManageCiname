@@ -9,7 +9,7 @@ use App\Http\Controllers\ErrorPageController;
 use App\Http\Middleware\IgnoreCustomerMiddleware;
 
 // Customer
-Route::get('/home', [CustomerController::class, 'index'])->name('home');
+Route::get('/', [CustomerController::class, 'index'])->name('home');
 
 Route::get('/cinema', [CustomerController::class, 'showCinemaFromCustomer'])->name('cinema');
 
@@ -23,9 +23,7 @@ Route::get('/show-seats-by-showtime', [CustomerController::class, 'showSeatBySho
 
 Route::get('/order-success-bill-{id}', [CustomerController::class, 'orderSuccess'])->name('order-success');
 
-
 Route::get('/download-bill-pdf/{id}', [CustomerController::class, 'downloadPDF'])->name('download_bill_pdf');
-
 
 Route::get('/order-send-mail', [CustomerController::class, 'NoticationSendMail'])->name('notication-send-mail');
 

@@ -5,10 +5,12 @@
                 <h2 class="mb-5">Doanh thu theo khu vực</h2>
                 <div class="p-2 shadow-lg">
                     <div class="w-2/10 float-right mb-6">
-                        <el-date-picker
-                            v-model="filter.selected_month"
-                            type="month"
-                            placeholder="Chọn tháng"
+                        <DateFilter
+                            :title="'Chọn tháng'"
+                            :type="'created_at'"
+                            :typeDate="'month'"
+                            :modelSelect="filter.selected_month"
+                            @onchangeFilter="onFilter"
                         />
                     </div>
                     <ChartAnalytic :dataChart="chartDataByProvince" />
@@ -48,12 +50,14 @@ import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import ChartAnalytic from "./ChartAnalytic.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
+import DateFilter from "@/Components/Element/DateFilter.vue";
 
 export default {
     name: "Index",
     components: {
         AdminLayout,
         ChartAnalytic,
+        DateFilter,
     },
 
     props: {
@@ -65,7 +69,7 @@ export default {
     data() {
         return {
             provinceSelected: "",
-            currentMonth: new Date(),
+            currentMonth: "",
             month_detail: "",
             chartDataByProvince: {
                 datasets: [
@@ -124,24 +128,22 @@ export default {
         };
     },
 
-    watch: {},
-
     computed: {
         filter() {
-            let ddddd = this.filtersBE?.selected_month;
+            let selected_month = this.filtersBE?.selected_month;
             return {
-                selected_month:
-                    ddddd == undefined ? new Date() : selected_month,
+                selected_month: selected_month == undefined ? new Date().toISOString() : selected_month,
                 // month_detail: this.filtersBE?.month_detail || new Date(),
             };
         },
     },
 
-    created() {
-        console.log(this.filter, this.filtersBE);
-    },
-
     methods: {
+        onFilter(value, type) {
+            this.filter.selected_month = value;
+            this.inertia();
+        },
+
         inertia() {
             Inertia.get(
                 route("superadmin.home", this.filter),

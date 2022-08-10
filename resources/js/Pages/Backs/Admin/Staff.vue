@@ -28,6 +28,7 @@
                         <DateFilter
                             :title="'Ngày đăng ký'"
                             :type="'date_register'"
+                            :typeDate="'daterange'"
                             :modelSelect="filter.range"
                             @onchangeFilter="onFilter"
                         />

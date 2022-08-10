@@ -20,38 +20,38 @@ class ApiMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    protected function inExceptArray($request)
-    {
-        foreach ($this->except as $except) {
-            if ($except !== '/') {
-                $except = trim($except, '/');
-            }
+    // protected function inExceptArray($request)
+    // {
+    //     foreach ($this->except as $except) {
+    //         if ($except !== '/') {
+    //             $except = trim($except, '/');
+    //         }
 
-            if ($request->is($except)) {
-                return true;
-            }
-        }
+    //         if ($request->is($except)) {
+    //             return true;
+    //         }
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
 
-    public function handle(Request $request, Closure $next, $guard = null)
-    {
-        if (is_null($guard)) {
-            return $next($request);
-        }
+    // public function handle(Request $request, Closure $next, $guard = null)
+    // {
+    //     if (is_null($guard)) {
+    //         return $next($request);
+    //     }
 
-        if ($guard === 'common') {
-            if (Auth::guard('caretaker')->check() || Auth::guard('hospital')->check()) {
-                return $next($request);
-            }
-        }
+    //     if ($guard === 'common') {
+    //         if (Auth::guard('caretaker')->check() || Auth::guard('hospital')->check()) {
+    //             return $next($request);
+    //         }
+    //     }
 
-        if (!Auth::guard($guard)->check() && !$this->inExceptArray($request)) {
-            abort(401);
-        }
+    //     if (!Auth::guard($guard)->check() && !$this->inExceptArray($request)) {
+    //         abort(401);
+    //     }
 
-        return $next($request);
-    }
+    //     return $next($request);
+    // }
 }

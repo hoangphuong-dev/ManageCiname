@@ -48,6 +48,7 @@ class BillSeeder extends Seeder
                     'user_id' => $user->id,
                     'cinema_id' => $cinema[array_rand($cinema)],
                     'total_money' => $faker->randomDigitNotZero() * 10000,
+                    'status' => Bill::PAYMENTED,
                 ]);
 
                 $showtime = ShowTime::all()->pluck('id')->toArray();

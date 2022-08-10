@@ -17,9 +17,18 @@ class IgnoreAdminLoginMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::guard('superadmin')->check() || Auth::guard('admin')->check() || Auth::guard('staff')->check()) {
-            return redirect()->back();
+        if (Auth::guard('superadmin')->check()) {
+            return redirect()->route('superadmin.home');;
         }
+
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.home');;
+        }
+
+        if (Auth::guard('staff')->check()) {
+            return redirect()->route('staff.home');;
+        }
+
         return $next($request);
     }
 }

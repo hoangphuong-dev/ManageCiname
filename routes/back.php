@@ -12,14 +12,14 @@ use App\Http\Controllers\Backs\SuperAdmin\MovieController;
 use App\Http\Controllers\Backs\SuperAdmin\SeatTypeController;
 use App\Http\Controllers\Backs\SuperAdmin\SuperAdminController;
 use App\Http\Middleware\IgnoreAdminLoginMiddleware;
-use App\Http\Middleware\IgnoreLoginMiddleware;
 use Illuminate\Support\Facades\Route;
 
 
 Route::group(['as' => 'back.'], function () {
-    Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login.get')->middleware(IgnoreAdminLoginMiddleware::class);
-    Route::get('/register-staff', [AuthenticationController::class, 'registerStaff'])->name('register.staff');
-    // ->middleware(IgnoreLoginMiddleware::class);
+    Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login.get')
+        ->middleware(IgnoreAdminLoginMiddleware::class);
+    Route::get('/register-staff', [AuthenticationController::class, 'registerStaff'])->name('register.staff')
+        ->middleware(IgnoreAdminLoginMiddleware::class);
     Route::post('/login', [AuthenticationController::class, 'login'])->name('login.post');
     Route::post('/register', [AuthenticationController::class, 'registerSubmit'])->name('staff.register');
     Route::get('/confirm-acount/{admin_id}', [AuthenticationController::class, 'confirmAdmin'])->name('confirm.acount');
