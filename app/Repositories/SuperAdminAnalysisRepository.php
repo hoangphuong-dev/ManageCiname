@@ -13,17 +13,21 @@ use Carbon\Carbon;
 class SuperAdminAnalysisRepository extends ProvinceRepository
 {
 
+    private function getCinemaByProvince($provinceId)
+    {
+        $province = Province::query()
+            ->with('cinemas')->where('id', $provinceId)->first();
+
+        return is_null($province) ? null : $province->cinemas;
+    }
+
     public function analysisByProvince($request)
     {
         $arrRevenuaProvince = $arrTicketOrdered = [];
         $provinces = $this->getProvinceHasCinema();
 
         foreach ($provinces as $province) {
-            $data = Province::query()
-                ->with('cinemas')
-                ->where('id', $province->id)->first();
-
-            $arrCinemaId = $data->cinemas->pluck('id')->toArray();
+            $arrCinemaId = $this->getCinemaByProvince($province->id)->pluck('id')->toArray();
 
             $result = $this->getDataByProvince($arrCinemaId, $request->selected_month);
 
@@ -77,7 +81,26 @@ class SuperAdminAnalysisRepository extends ProvinceRepository
         return $this->getProvinceHasCinema();
     }
 
-    public function analysisByProvinceDetail()
+    public function analysisByProvinceDetail($request)
     {
+        $cinemas = $this->getCinemaByProvince($request->province);
+
+        $monthFormat = Carbon::parse($request->selected_month)->format('Y-m');
+        $arrRevenuaCinema =  $arrTicketOrdered = [];
+
+        foreach ($cinemas as $cinema) {
+            $bills = Bill::query()
+                ->where('created_at', 'LIKE', "{$monthFormat}%")
+                ->where('cinema_id', $cinema->id)->get();
+
+            array_push($arrRevenuaCinema, $bills->sum('total_money'));
+            array_push($arrTicketOrdered, $this->getCountTicker($bills));
+        }
+
+        return [
+            'ticketOrdered' => $arrTicketOrdered,
+            'revenua' => $arrRevenuaCinema,
+            'cinemas' => $cinemas->pluck('name')->toArray(),
+        ];
     }
 }

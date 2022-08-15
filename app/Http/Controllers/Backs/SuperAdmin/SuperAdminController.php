@@ -21,13 +21,14 @@ class SuperAdminController extends Controller
     public function index(Request $request)
     {
         $revenuaProvince = $this->superAdminAnalysisService->getDataAnalysis($request);
-        $revenuaProvinceDetail = $this->superAdminAnalysisService->getDataAnalysisDetail($request);
         $listProvince = $this->superAdminAnalysisService->getListProvince();
+        $revenuaProvinceDetail = $this->superAdminAnalysisService->getDataAnalysisDetail($request);
 
         return Inertia::render('Backs/SuperAdmin/Index', [
             'filtersBE' => $request->all(),
-            'revenuaProvince' => $revenuaProvince,
             'listProvince' => $listProvince,
+            'revenuaProvince' => $revenuaProvince,
+            'revenuaProvinceDetail' => $revenuaProvinceDetail,
         ]);
     }
 }

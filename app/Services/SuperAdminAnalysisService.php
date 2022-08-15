@@ -19,25 +19,16 @@ class SuperAdminAnalysisService
 
     public function getDataAnalysis($request)
     {
-        // if ($request->type == "by-province") {
-        $data = $this->analysisByProvince($request);
-        // } else {
-        // $data = [];
-        // }
-
-        return $data;
+        return $this->analysisRepository->analysisByProvince($request);
     }
 
     public function getDataAnalysisDetail($request)
     {
-        $data = $this->analysisRepository->analysisByProvinceDetail($request);
+        if (is_null($request->province)) {
+            $request->province = $this->getListProvince()->first()->id;
+        }
 
-        return $data;
-    }
-
-    public function analysisByProvince($request)
-    {
-        return $this->analysisRepository->analysisByProvince($request);
+        return $this->analysisRepository->analysisByProvinceDetail($request);
     }
 
     public function getListProvince()

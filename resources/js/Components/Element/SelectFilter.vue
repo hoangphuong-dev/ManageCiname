@@ -64,6 +64,10 @@ export default {
                     this.title = "Voucher";
                     break;
 
+                case "province":
+                    this.title = "Chọn thành phố";
+                    break;
+
                 default:
                     this.title = "Undefine";
                     break;
