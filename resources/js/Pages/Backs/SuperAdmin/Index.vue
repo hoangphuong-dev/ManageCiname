@@ -59,8 +59,6 @@ export default {
 
     data() {
         return {
-            currentMonth: "",
-            month_detail: "",
             chartDataByProvince: {
                 datasets: [
                     {
