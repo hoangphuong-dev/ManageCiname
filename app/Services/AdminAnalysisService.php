@@ -21,10 +21,10 @@ class AdminAnalysisService extends BaseService
 
     public function getDataAnalysis($request)
     {
-        $adminId = $this->getUserId('admin');
+        $cinemaId = $this->getCinemaId();
         $label = $this->getDataLabels($request);
 
-        return $this->adminAnalysisRepository->analysisByCinema($request, $label, $adminId);
+        return $this->adminAnalysisRepository->analysisByCinema($request, $label, $cinemaId);
     }
 
     private function getDataLabels($request)

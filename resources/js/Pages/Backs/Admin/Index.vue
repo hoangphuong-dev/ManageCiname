@@ -3,7 +3,17 @@
         <template #main>
             <div class="bg-white min-h-full m-4 mb-0 p-4">
                 <h2 class="mb-5">màn thống kê toàn hệ thống</h2>
-                <div class="p-2 mb-10 shadow-lg">
+                <div class="p-2 shadow-lg">
+                    <div class="w-2/10 float-right mb-6">
+                        <DateFilter
+                            :title="'Chọn tháng'"
+                            :type="'created_at'"
+                            :typeDate="'month'"
+                            :modelSelect="filter.selected_month"
+                            @onchangeFilter="onFilter"
+                        />
+                    </div>
+
                     <ChartAnalytic :dataChart="chartData" />
                 </div>
                 <div class="p-2 mb-10 shadow-xl">
@@ -18,12 +28,22 @@
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import ChartAnalytic from "../SuperAdmin/ChartAnalytic.vue";
 import WeekAnalysis from "./WeekAnalysis.vue";
+import DateFilter from "@/Components/Element/DateFilter.vue";
+import { Inertia } from "@inertiajs/inertia";
+import { onBefore, onFinish } from "@/Uses/request-inertia";
+
 export default {
     name: "HomeStaff",
     components: {
         AdminLayout,
         ChartAnalytic,
         WeekAnalysis,
+        DateFilter,
+    },
+
+    props: {
+        revenuaCinema: { type: Object, require: true },
+        filtersBE: { type: Object, require: true },
     },
 
     data() {
@@ -31,35 +51,58 @@ export default {
             chartData: {
                 datasets: [
                     {
-                        label: "chart 1",
-                        data: [2, 1, 6, 7, 8, 5, 4, 1],
+                        label: "Số vé đã bán",
+                        data: this.revenuaCinema?.arrTicket,
                         type: "line",
-                        backgroundColor: "#C71585",
-                        borderColor: "#C71585",
+                        backgroundColor: "#6A5BCD",
+                        borderColor: "#6A5BCD",
                         lineTension: 0.5,
+                        yAxisID: "A",
                     },
                     {
-                        label: "chart 2",
-                        data: [1, 5, 3, 7, 9, 5, 3, 2],
+                        label: "Doanh số",
+                        data: this.revenuaCinema?.arrRenua,
                         type: "bar",
-                        borderColor: "#000D8D",
-                        backgroundColor: "#000D8D",
+                        backgroundColor: "#F0C478",
+                        borderColor: "#F0C478",
                         lineTension: 0.5,
+                        yAxisID: "B",
                     },
                 ],
-                labels: [
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                    "2022/05/29",
-                ],
+                labels: this.revenuaCinema?.dataLabel,
             },
         };
     },
-    methods: {},
+
+    computed: {
+        filter() {
+            let selected_month = this.filtersBE?.selected_month;
+
+            return {
+                selected_month:
+                    selected_month == undefined
+                        ? new Date().toISOString()
+                        : selected_month,
+            };
+        },
+    },
+
+    methods: {
+        onFilter(value, type) {
+            if (type == "created_at") {
+                this.filter.selected_month = value;
+            }
+
+            this.inertia();
+        },
+
+        inertia() {
+            Inertia.get(
+                route("admin.home", this.filter),
+                {},
+                { onBefore, onFinish, preserveScroll: true }
+            );
+        },
+    },
 };
 </script>

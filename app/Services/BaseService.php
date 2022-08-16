@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Cinema;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,5 +69,11 @@ class BaseService
     {
         $user = User::whereId($this->getUserId('staff'))->with('staffInfo')->first();
         return $user->staffInfo->cinema_id ?? null;
+    }
+
+    public function getCinemaId()
+    {
+        $adminId = $this->getUserId('admin');
+        return Cinema::where('user_id', $adminId)->first()->id;
     }
 }

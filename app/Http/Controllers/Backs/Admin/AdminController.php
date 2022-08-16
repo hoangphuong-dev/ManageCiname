@@ -29,7 +29,8 @@ class AdminController extends Controller
         // $data_ticket = $this->billService->getDataTicketByMonth($request);
 
         return Inertia::render('Backs/Admin/Index', [
-            // 'data_avenua' => $data_avenua,
+            'revenuaCinema' => $revenuaCinema,
+            'filtersBE' => $request->all(),
             // 'data_ticket' => $data_ticket,
         ]);
     }
