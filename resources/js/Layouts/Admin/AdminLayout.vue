@@ -170,11 +170,16 @@ export default {
                     label: "Quản lý phim",
                     icon: "movie",
                     path: "superadmin.movie.index",
+                    subMenu: [
+                        "superadmin.movie.create_movie",
+                        "superadmin.movie.edit",
+                    ],
                 },
                 {
                     label: "Hệ thống rạp",
                     icon: "cinema",
                     path: "superadmin.cinema.master",
+                    subMenu: ["superadmin.cinema.province"],
                 },
                 {
                     label: "Quản lý loại ghế",
@@ -217,6 +222,13 @@ export default {
                     param: {
                         display: 1,
                     },
+                    subMenu: [
+                        "staff.movie.detail",
+                        "staff.order-success",
+                        "order.ticket",
+                        "show_seat_by_showtime",
+                        "order.get_info_customer",
+                    ],
                 },
                 {
                     label: "Phim sắp chiếu",
@@ -243,7 +255,7 @@ export default {
         activeMenu(menu) {
             return (
                 route().current(menu.path) ||
-                (menu?.other || []).includes(route().current())
+                (menu?.subMenu || []).includes(route().current())
             );
         },
 
