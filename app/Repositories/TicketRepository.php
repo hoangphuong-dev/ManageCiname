@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\MemberCard;
 use App\Models\Membership;
+use App\Models\Seat;
 use App\Models\Ticket;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
 use PhpOffice\PhpSpreadsheet\Collection\Memory;
@@ -30,10 +31,12 @@ class TicketRepository extends BaseRepository
         $memmber = MemberCard::where('user_id', $user_id)->first();
         $point  = $memmber->accumulating_point;
         foreach ($data['seat_id'] as $item) {
+            $priceSeat = Seat::whereId($item)->with('seat_type')->first()->seat_type->price;
             $ticket = $this->model->updateOrCreate([
                 'bill_id' => $bill_id,
                 'show_time_id' => $data['show_time_id'],
                 'seat_id' => $item,
+                'price' => $priceSeat,
             ]);
             $point += 3000;
             array_push($arrTicket, $ticket->id);

@@ -18,6 +18,7 @@ class CreateTicketsTable extends Migration
             $table->bigInteger('bill_id')->unsigned();
             $table->bigInteger('show_time_id')->unsigned();
             $table->bigInteger('seat_id')->unsigned();
+            $table->integer("price");
             $table->unique(array('show_time_id', 'seat_id'));
 
             $table->foreign('bill_id')->references('id')->on('bills')

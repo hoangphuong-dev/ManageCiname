@@ -59,10 +59,14 @@ class BillSeeder extends Seeder
                         ->whereNotIn('id', Ticket::where('show_time_id', $i)->pluck('seat_id'))
                         ->pluck('id')->toArray();
 
+                    $seatCurrent =  $seats[array_rand($seats)];
+                    $priceSeat = Seat::whereId($seatCurrent)->with('seat_type')->first()->seat_type->price;
+
                     Ticket::create([
                         'bill_id' => $bill->id,
                         'show_time_id' =>  $i,
-                        'seat_id' => $seats[array_rand($seats)],
+                        'seat_id' => $seatCurrent,
+                        'price' => $priceSeat,
                     ]);
                 }
             }

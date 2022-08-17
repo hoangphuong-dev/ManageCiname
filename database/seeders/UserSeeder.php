@@ -91,7 +91,7 @@ class UserSeeder extends Seeder
                 ]);
             }
 
-            foreach (Room::get('id') as $room) {
+            foreach (Room::where('cinema_id', $cinema->id)->get('id') as $room) {
                 for ($i = 1; $i <= 10; $i++) {
                     for ($j = 1; $j <= 10; $j++) {
                         Seat::create([
