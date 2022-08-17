@@ -14,14 +14,23 @@ class AdminAnalysisRepository
         $cinema = Cinema::query()->whereId($cinemaId)->with(['rooms'])->first();
         $arrRoomId = $cinema->rooms->pluck('id')->toArray();
 
-        $arrMovieId = ShowTime::query()
+        $movies = ShowTime::query()
             ->where('time_start', '>', Carbon::now())
             ->whereIn('room_id', $arrRoomId)
-            ->distinct()
-            ->pluck('movie_id')
+            ->withCount(['tickets' => function ($q) {
+                // return $q->where('created_at', '>', Carbon::now());
+            }])
+            ->withSum(['tickets' => function ($q) {
+                // return $q->where('created_at', '>', Carbon::now());
+            }], 'price')
+            ->with(['room' => function ($q) {
+                return $q->select('id')->withCount('seats');
+            }])
+            ->get()
+            ->groupBy('movie_id')
             ->toArray();
 
-        // dd($arrMovieId);
+        // dd($movies);
         // Bill::
     }
 
