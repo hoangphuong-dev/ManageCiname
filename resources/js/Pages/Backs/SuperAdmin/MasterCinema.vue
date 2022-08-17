@@ -33,7 +33,6 @@
                         class="border text-center cursor-pointer rounded-md p-4 shadow-lg hover:border-red-300"
                     >
                         <h3>{{ item.name }}</h3>
-                        <h3>{{ listProvince.length }}</h3>
                         <div>{{ item.cinemas_count }} rạp</div>
                     </div>
                 </div>
