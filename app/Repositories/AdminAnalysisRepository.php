@@ -3,10 +3,29 @@
 namespace App\Repositories;
 
 use App\Models\Bill;
+use App\Models\Cinema;
+use App\Models\ShowTime;
 use Carbon\Carbon;
 
 class AdminAnalysisRepository
 {
+    public function getMovieAnalysis($request, $cinemaId)
+    {
+        $cinema = Cinema::query()->whereId($cinemaId)->with(['rooms'])->first();
+        $arrRoomId = $cinema->rooms->pluck('id')->toArray();
+
+        $arrMovieId = ShowTime::query()
+            ->where('time_start', '>', Carbon::now())
+            ->whereIn('room_id', $arrRoomId)
+            ->distinct()
+            ->pluck('movie_id')
+            ->toArray();
+
+        // dd($arrMovieId);
+        // Bill::
+    }
+
+
     public function analysisByCinema($request, $labels, $cinemaId)
     {
         $arrRenua = $arrTicket = [];

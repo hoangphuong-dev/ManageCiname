@@ -27,6 +27,12 @@ class AdminAnalysisService extends BaseService
         return $this->adminAnalysisRepository->analysisByCinema($request, $label, $cinemaId);
     }
 
+    public function getMovieAnalysis($request)
+    {
+        $cinemaId = $this->getCinemaId();
+        return $this->adminAnalysisRepository->getMovieAnalysis($request, $cinemaId);
+    }
+
     private function getDataLabels($request)
     {
         $arr = array();

@@ -20,6 +20,10 @@ class AdminController extends Controller
     {
         $revenuaCinema = $this->adminAnalysisService->getDataAnalysis($request);
 
+        $movieAnalysis = $this->adminAnalysisService->getMovieAnalysis($request);
+
+        // dd($movieAnalysis);
+
         // $request['date_from'] = substr($request->date_from, 0, -14);
         // $request['date_to'] = substr($request->date_to, 0, -14);
         // $request['date_from_ticket'] = substr($request->date_from_ticket, 0, -14);
