@@ -3,7 +3,7 @@
         <Bar
             :chart-data="dataChart"
             :chart-options="chartOptions"
-            :height="200"
+            :height="150"
         />
     </div>
 </template>

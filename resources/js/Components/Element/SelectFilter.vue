@@ -1,7 +1,12 @@
 <template>
     <div class="mr-2">
         <div class="text-sm text-blackPrimary-300">{{ title }}</div>
-        <el-select v-model="modelSelect" @change="onFilter" clearable>
+        <el-select
+            filterable
+            v-model="modelSelect"
+            @change="onFilter"
+            clearable
+        >
             <el-option
                 v-for="item in listOption"
                 :key="item.id"
