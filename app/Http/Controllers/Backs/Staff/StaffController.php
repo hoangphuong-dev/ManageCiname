@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\MovieGenreService;
 use App\Services\MovieService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class StaffController extends Controller
@@ -19,6 +20,13 @@ class StaffController extends Controller
     ) {
         $this->movieService = $movieService;
         $this->movieGenreService = $movieGenreService;
+    }
+
+    public function profile()
+    {
+        return Inertia::render('Backs/Profile', [
+            'user' => Auth::guard('staff')->user(),
+        ]);
     }
 
     public function index()

@@ -14,7 +14,6 @@ use App\Http\Controllers\Backs\SuperAdmin\SuperAdminController;
 use App\Http\Middleware\IgnoreAdminLoginMiddleware;
 use Illuminate\Support\Facades\Route;
 
-
 Route::group(['as' => 'back.'], function () {
     Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('login.get')
         ->middleware(IgnoreAdminLoginMiddleware::class);
@@ -28,6 +27,7 @@ Route::group(['as' => 'back.'], function () {
 Route::group(['as' => 'superadmin.', 'prefix' => 'superadmin', 'middleware' => ['superadmin']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutSuperAdmin'])->name('logout_super');
     Route::get('/', [SuperAdminController::class, 'index'])->name('home');
+    Route::get('/profile', [SuperAdminController::class, 'profile'])->name('profile');
 
     Route::prefix('/seat_type')->as('seat_type.')->group(function () {
         Route::get('', [SeatTypeController::class, 'index'])->name('index');
@@ -68,6 +68,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
     Route::get('/logout', [AuthenticationController::class, 'logoutAdmin'])->name('logout_admin');
     Route::get('/', [AdminController::class, 'index'])->name('home');
     Route::get('/logout-proxy', [CinemaController::class, 'logoutProxy'])->name('leave-impersonate');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
 
     // start manage cinema
     Route::get('showtimes', [ShowTimeController::class, 'index'])->name('showtime.index');
@@ -100,6 +101,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['admin']],
 Route::group(['as' => 'staff.', 'prefix' => 'staff', 'middleware' => ['staff']], function () {
     Route::get('/logout', [AuthenticationController::class, 'logoutStaff'])->name('logout');
     Route::get('/', [StaffController::class, 'index'])->name('home');
+    Route::get('/profile', [StaffController::class, 'profile'])->name('profile');
     Route::get('/order-success/{id}', [StaffController::class, 'orderSuccess'])->name('order-success');
 
     Route::group(['as' => 'movie.', 'prefix' => 'movie'], function () {

@@ -45,7 +45,6 @@
                         </div>
                     </div>
                     <div class="mr-3">
-                        <!-- popup nitification   -->
                         <PopupNotification />
                     </div>
                     <h3>{{ user?.name || "" }}</h3>
@@ -58,8 +57,9 @@
                             class="el-dropdown-link flex items-center justify-center"
                         >
                             <el-image
+                                fit="fill"
                                 class="rounded-full w-10 h-10 ml-2 border"
-                                :src="user?.avatar || ''"
+                                :src="getImage(user?.image) || ''"
                             >
                                 <template #error>
                                     <div class="mt-3 ml-2 font-black">
@@ -85,8 +85,9 @@
                                         >
                                             <span
                                                 class="whitespace-nowrap mt-1-5"
-                                                >Hồ sơ</span
                                             >
+                                                Tài khoản
+                                            </span>
                                         </div>
                                         <div class="flex items-center">
                                             <el-icon><ArrowRight /></el-icon>
@@ -129,6 +130,7 @@ import AlertNoticeMixin from "@/Mixins/alert-notice";
 import { ArrowDown, ArrowRight, SwitchButton } from "@element-plus/icons-vue";
 import PopupNotification from "@/Components/Notifications/Popup.vue";
 import { ElLoading } from "element-plus";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
     name: "AdminLayout",
@@ -186,6 +188,11 @@ export default {
                     icon: "seat",
                     path: "superadmin.seat_type.index",
                 },
+                {
+                    label: "Tài khoản",
+                    icon: "staff",
+                    path: "superadmin.profile",
+                },
             ],
             menuAdmin: [
                 {
@@ -195,7 +202,7 @@ export default {
                 },
                 {
                     label: "Quản lý rạp",
-                    icon: "bill",
+                    icon: "movie",
                     path: "admin.cinemas.show",
                 },
                 {
@@ -205,8 +212,13 @@ export default {
                 },
                 {
                     label: "Quản lý nhân viên",
-                    icon: "staff",
+                    icon: "seat",
                     path: "admin.staff.index",
+                },
+                {
+                    label: "Tài khoản",
+                    icon: "staff",
+                    path: "admin.profile",
                 },
             ],
             menuStaff: [
@@ -232,17 +244,27 @@ export default {
                 },
                 {
                     label: "Phim sắp chiếu",
-                    icon: "movie",
+                    icon: "seat",
                     path: "staff.movie.comming-soon",
                     param: {
                         display: 2,
                         redirect: "customer",
                     },
                 },
+                {
+                    label: "Tài khoản",
+                    icon: "staff",
+                    path: "staff.profile",
+                },
             ],
         };
     },
     methods: {
+        getImage(file) {
+            if (!file) return;
+            if (this.isValidHttpUrl(file)) return file;
+            return `/uploads/${file}`;
+        },
         onMenuClick(menu) {
             const loading = ElLoading.service({
                 lock: true,
@@ -276,9 +298,30 @@ export default {
                     }
                     window.location.href = key;
                     break;
+                case "profile":
+                    let routeName = "";
+                    if (this.user?.role === 0) {
+                        routeName = "superadmin.profile";
+                    } else if (this.user?.role == 4) {
+                        routeName = "admin.profile";
+                    } else {
+                        routeName = "staff.profile";
+                    }
+                    Inertia.get(route(routeName));
+                    break;
                 default:
                     break;
             }
+        },
+
+        isValidHttpUrl(string) {
+            let url;
+            try {
+                url = new URL(string);
+            } catch (_) {
+                return false;
+            }
+            return url.protocol === "http:" || url.protocol === "https:";
         },
     },
 };

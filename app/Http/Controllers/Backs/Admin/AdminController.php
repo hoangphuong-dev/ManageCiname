@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backs\Admin;
 use App\Http\Controllers\Controller;
 use App\Services\AdminAnalysisService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -36,6 +37,13 @@ class AdminController extends Controller
             'revenuaCinema' => $revenuaCinema,
             'filtersBE' => $request->all(),
             // 'data_ticket' => $data_ticket,
+        ]);
+    }
+
+    public function profile()
+    {
+        return Inertia::render('Backs/Profile', [
+            'user' => Auth::guard('admin')->user(),
         ]);
     }
 }

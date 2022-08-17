@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-class UserService
+class UserService extends BaseService
 {
     protected $userRepository;
     protected $cinemaRepository;

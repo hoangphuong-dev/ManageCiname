@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\SuperAdminAnalysisService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class SuperAdminController extends Controller
@@ -29,6 +30,13 @@ class SuperAdminController extends Controller
             'listProvince' => $listProvince,
             'revenuaProvince' => $revenuaProvince,
             'revenuaProvinceDetail' => $revenuaProvinceDetail,
+        ]);
+    }
+
+    public function profile()
+    {
+        return Inertia::render('Backs/Profile', [
+            'user' => Auth::guard('superadmin')->user(),
         ]);
     }
 }

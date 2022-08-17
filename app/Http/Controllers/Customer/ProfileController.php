@@ -100,7 +100,7 @@ class ProfileController extends Controller
     public function update(UpdateUserRequest $request)
     {
         $fill = $request->validated();
-        $user = Auth::guard('customer')->user();
+        $user = $this->userService->getUser();
         try {
             $this->userService->updateUser($request, $user);
             $user->email != $fill['email']
