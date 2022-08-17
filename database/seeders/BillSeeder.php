@@ -5,10 +5,12 @@ namespace Database\Seeders;
 use App\Models\Bill;
 use App\Models\Cinema;
 use App\Models\MemberCard;
+use App\Models\Room;
 use App\Models\Seat;
 use App\Models\ShowTime;
 use App\Models\Ticket;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -21,14 +23,13 @@ class BillSeeder extends Seeder
      */
     public function run()
     {
-        $cinema = Cinema::all()->pluck('id')->toArray();
+        $cinemas = Room::distinct('cinema_id')->pluck('cinema_id')->toArray();
 
         $faker = \Faker\Factory::create();
-
         try {
             DB::beginTransaction();
 
-            for ($i = 1; $i < 1000; $i++) {
+            for ($i = 1; $i < 250; $i++) { // 250 => tương ứng 250 xuất chiếu
                 $user = User::create([
                     'name' => $faker->name,
                     'email' => $faker->unique()->safeEmail,
@@ -43,36 +44,32 @@ class BillSeeder extends Seeder
                     'role' => MemberCard::ROLE_NOMAL,
                 ]);
 
-
                 $bill = Bill::create([
                     'user_id' => $user->id,
-                    'cinema_id' => $cinema[array_rand($cinema)],
+                    'cinema_id' => $cinemas[array_rand($cinemas)],
                     'total_money' => $faker->randomDigitNotZero() * 10000,
                     'status' => Bill::PAYMENTED,
+                    'created_at' => $faker->dateTimeBetween(Carbon::now()->startOfYear(), Carbon::now()),
                 ]);
 
-                $showtime = ShowTime::all()->pluck('id')->toArray();
+                $roomCurrent = ShowTime::where('id', $i)->first()->room_id;
 
-                $showtime_current = $showtime[array_rand($showtime)];
+                for ($j = 0; $j < 15; $j++) { // 1 bill sẽ order 15 ticket
+                    $seats = Seat::where('room_id', $roomCurrent)
+                        ->whereNotIn('id', Ticket::where('show_time_id', $i)->pluck('seat_id'))
+                        ->pluck('id')->toArray();
 
-                $room_of_current = ShowTime::where('id', $showtime_current)->first()->room_id;
-
-                $ticket = Ticket::where('show_time_id', $showtime_current)->pluck('seat_id');
-
-                $seat = Seat::where('room_id', $room_of_current)
-                    ->whereNotIn('id', $ticket)
-                    ->pluck('id')->toArray();
-
-                Ticket::create([
-                    'bill_id' => $bill->id,
-                    'show_time_id' => $showtime_current,
-                    'seat_id' => $seat[array_rand($seat)],
-                ]);
+                    Ticket::create([
+                        'bill_id' => $bill->id,
+                        'show_time_id' =>  $i,
+                        'seat_id' => $seats[array_rand($seats)],
+                    ]);
+                }
             }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            return dd($e);
+            dd($e);
         }
     }
 }

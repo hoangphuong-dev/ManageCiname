@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\Array_;
 
 class UserSeeder extends Seeder
 {
@@ -54,19 +55,34 @@ class UserSeeder extends Seeder
 
         try {
             User::insert($dataUser);
-            $seat_type = SeatType::all()->pluck('id')->toArray();
+
             $admin = User::where('role', User::ROLE_ADMIN)->firstOrFail();
 
-            Cinema::create([
+            $cinema = Cinema::create([
                 'user_id' => $admin->id,
                 'province_id' => 1,
                 'name' => "PHC Thanh Nhàn",
                 'address' => $faker->address,
             ]);
 
+            self::createRoom($cinema);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return dd($e);
+        }
+    }
+
+    public static function createRoom(Cinema $cinema)
+    {
+        try {
+            DB::beginTransaction();
+
+            $seat_type = SeatType::all()->pluck('id')->toArray();
             for ($i = 1; $i < 4; $i++) {
                 Room::create([
-                    'cinema_id' => 1, // Quận 1 ( HCM)
+                    'cinema_id' => $cinema->id,
                     'name' => "Phòng 10" . $i,
                     'status' => Room::STATUS_OPEN,
                     'format_movie_id' => 1,
@@ -75,33 +91,23 @@ class UserSeeder extends Seeder
                 ]);
             }
 
-            for ($i = 1; $i <= 10; $i++) {
-                for ($j = 1; $j <= 10; $j++) {
-                    Seat::create([
-                        'room_id' => 1,
-                        'seat_type_id' => $seat_type[array_rand($seat_type)],
-                        'row_name' => chr($i + 64),
-                        'columns_number' => $j,
-                    ]);
-                    Seat::create([
-                        'room_id' => 2,
-                        'seat_type_id' => $seat_type[array_rand($seat_type)],
-                        'row_name' => chr($i + 64),
-                        'columns_number' => $j,
-                    ]);
-                    Seat::create([
-                        'room_id' => 3,
-                        'seat_type_id' => $seat_type[array_rand($seat_type)],
-                        'row_name' => chr($i + 64),
-                        'columns_number' => $j,
-                    ]);
+            foreach (Room::get('id') as $room) {
+                for ($i = 1; $i <= 10; $i++) {
+                    for ($j = 1; $j <= 10; $j++) {
+                        Seat::create([
+                            'room_id' => $room->id,
+                            'seat_type_id' => $seat_type[array_rand($seat_type)],
+                            'row_name' => chr($i + 64),
+                            'columns_number' => $j,
+                        ]);
+                    }
                 }
             }
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            return dd($e);
+            dd($e);
         }
     }
 }

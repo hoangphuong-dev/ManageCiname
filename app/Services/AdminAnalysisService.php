@@ -31,8 +31,8 @@ class AdminAnalysisService extends BaseService
     {
         $arr = array();
 
-        $startDate = Carbon::parse($request->month)->startOfMonth();
-        $endDate = is_null($request->month) ? Carbon::now() : Carbon::parse($request->month)->endOfMonth();
+        $startDate = Carbon::parse($request->selected_month)->startOfMonth();
+        $endDate = is_null($request->selected_month) ? Carbon::now() : Carbon::parse($request->selected_month)->endOfMonth();
 
         $period = CarbonPeriod::create($startDate, $endDate);
 
