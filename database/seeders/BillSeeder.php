@@ -44,12 +44,14 @@ class BillSeeder extends Seeder
                     'role' => MemberCard::ROLE_NOMAL,
                 ]);
 
+                $dataFaker = $faker->dateTimeBetween(Carbon::now()->startOfYear(), Carbon::now());
+
                 $bill = Bill::create([
                     'user_id' => $user->id,
                     'cinema_id' => $cinemas[array_rand($cinemas)],
                     'total_money' => $faker->randomDigitNotZero() * 10000,
                     'status' => Bill::PAYMENTED,
-                    'created_at' => $faker->dateTimeBetween(Carbon::now()->startOfYear(), Carbon::now()),
+                    'created_at' => $dataFaker,
                 ]);
 
                 $roomCurrent = ShowTime::where('id', $i)->first()->room_id;
@@ -67,6 +69,7 @@ class BillSeeder extends Seeder
                         'show_time_id' =>  $i,
                         'seat_id' => $seatCurrent,
                         'price' => $priceSeat,
+                        'created_at' => $dataFaker,
                     ]);
                 }
             }

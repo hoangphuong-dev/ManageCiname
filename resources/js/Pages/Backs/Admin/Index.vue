@@ -2,7 +2,7 @@
     <admin-layout>
         <template #main>
             <div class="bg-white min-h-full m-4 mb-0 p-4">
-                <h2 class="mb-5">màn thống kê toàn hệ thống</h2>
+                <h2 class="mb-5">Thống kê của rạp</h2>
                 <div class="p-2 shadow-lg">
                     <div class="w-2/10 float-right mb-6">
                         <DateFilter
@@ -16,8 +16,8 @@
 
                     <ChartAnalytic :dataChart="chartData" />
                 </div>
-                <div class="p-2 mb-10 shadow-xl">
-                    <WeekAnalysis />
+                <div class="mb-10 shadow-xl">
+                    <WeekAnalysis :movieAnalysis="movieAnalysis" />
                 </div>
             </div>
         </template>
@@ -33,7 +33,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { onBefore, onFinish } from "@/Uses/request-inertia";
 
 export default {
-    name: "HomeStaff",
+    name: "Analysis",
     components: {
         AdminLayout,
         ChartAnalytic,
@@ -43,6 +43,7 @@ export default {
 
     props: {
         revenuaCinema: { type: Object, require: true },
+        movieAnalysis: { type: Object, require: true },
         filtersBE: { type: Object, require: true },
     },
 

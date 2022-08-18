@@ -215,11 +215,6 @@ export default {
                     icon: "seat",
                     path: "admin.staff.index",
                 },
-                {
-                    label: "Tài khoản",
-                    icon: "staff",
-                    path: "admin.profile",
-                },
             ],
             menuStaff: [
                 {

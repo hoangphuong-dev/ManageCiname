@@ -1,28 +1,52 @@
 <template>
     <div class="text-xl bg-white px-4 pb-10">
         <h2 class="text-button_pink font-semibold pt-5 text-14">
-            Thống kê doanh thu 7 ngày theo từng phim
+            Thống kê doanh thu theo từng phim
         </h2>
         <data-table
             :fields="fields"
-            :items="dataAccounts"
-            :current-page="filter.page || 1"
+            :items="movieAnalysis"
             disable-table-info
             footer-center
             paginate-background
-            @page="handleCurrentPage"
-            class="el-table-header__black mt-5 rou"
+            class="mt-5"
         >
-            <!-- chart -->
-            <template #followers_change_chart="{ row }">
-                <Line
-                    :chart-options="options"
-                    :chart-data="
-                        getChartData(row?.data_labels, row?.post_last_week)
+            <template #image="{ row }">
+                <img
+                    :src="
+                        'https://i3.ytimg.com/vi/' +
+                        videoId(row) +
+                        '/maxresdefault.jpg'
                     "
+                    alt="ảnh từ youtube"
+                />
+            </template>
+
+            <template #sumPrice="{ row }">
+                <p>{{ row?.sumPrice.toLocaleString() }} VNĐ</p>
+            </template>
+
+            <template #percent="{ row }">
+                <p>
+                    {{
+                        row?.seatCount > 0
+                            ? (
+                                  (row?.ticketCount / row?.seatCount) *
+                                  100
+                              ).toFixed(2)
+                            : 0
+                    }}
+                    %
+                </p>
+            </template>
+
+            <template #chart="{ row }">
+                <Line
+                    :chart-options="chartOptions"
+                    :chart-data="getChartData(row?.labelWeek, row?.dataChart)"
                     :width="120"
                     :height="20"
-                    v-if="row?.post_last_week"
+                    v-if="row"
                 />
             </template>
         </data-table>
@@ -33,6 +57,7 @@
 import DataTable from "@/Components/DataTable.vue";
 import { Line } from "vue-chartjs";
 import { CategoryScale } from "chart.js";
+import { getYoutubeId } from "@/Helpers/youtube.js";
 import {
     Chart as ChartJS,
     Title,
@@ -60,62 +85,56 @@ ChartJS.register(
 export default {
     components: { DataTable, Line },
     props: {
-        dataAllAccount: { type: Array },
-    },
-
-    watch: {
-        dataAllAccount: {
-            handler() {
-                this.getChartData();
-            },
-        },
+        movieAnalysis: { type: Array, require: true },
     },
     data() {
         return {
             dataAccounts: [],
-
             loading: false,
-            filter: {
-                page: 1,
-                limit: 6,
-            },
+
             fields: [
-                { key: "image", label: "Ảnh", width: 300, align: "center" },
+                { key: "image", label: "Ảnh", align: "center" },
                 { key: "name", label: "Tên phim", width: 200, align: "center" },
                 {
-                    key: "avenua",
-                    label: "Doanh thu 7 ngày",
-                    width: 250,
+                    key: "sumPrice",
+                    label: "Doanh thu",
+                    width: 200,
                     align: "center",
                 },
                 {
-                    key: "number_post_last_week",
+                    key: "ticketCount",
                     label: "Số  lượng vé bán ra",
-                    width: 250,
+                    width: 150,
                     align: "center",
                 },
                 {
-                    key: "ttttt",
-                    label: "Tỉ lệ vé được bán ra",
+                    key: "percent",
+                    label: "Tỉ lệ vé bán được",
                     align: "center",
-                    width: 300,
+                    width: 200,
                 },
                 {
-                    key: "hhhhh",
-                    label: "Biểu đồ doah thu 7 ngày",
+                    key: "chart",
+                    label: "Biểu đồ doanh thu 7 ngày gần nhất",
                     align: "center",
-                    width: 550,
+                    width: 600,
                 },
             ],
             isShowChart: false,
-            options: {
+            chartOptions: {
                 responsive: true,
                 scales: {
                     x: {
-                        display: false,
+                        ticks: {
+                            display: false, //this will remove only the label
+                        },
                     },
                     y: {
-                        display: false,
+                        grid: {
+                            display: true,
+                            borderDash: [2],
+                            borderDashOffset: 2,
+                        },
                     },
                 },
                 plugins: {
@@ -135,44 +154,25 @@ export default {
         };
     },
     methods: {
-        // calculatorPercen(row) {
-        //     if (row) {
-        //         let result = (this.calculator(row) / row?.followers) * 100;
-        //         result = result.toFixed(2);
-        //         if (result == "-0.00") {
-        //             return (result = "0.00");
-        //         }
-
-        //         result = result > 0 ? "+" + result : result;
-        //         return result;
-        //     }
-        // },
-
-        calculator(row) {
-            let temp = row?.old_followers ? row.old_followers : 0;
-            return row?.followers - temp;
+        videoId(row) {
+            return getYoutubeId(row);
         },
-        getChartData(labels, data) {
-            if (!labels || !data) return;
 
+        getChartData(labels, data) {
             const chartData = {
                 datasets: [
                     {
-                        data: data,
-                        borderColor: "#BE3D8F",
-                        backgroundColor: "#BE3D8F",
+                        data: data ?? [],
+                        borderColor: "#5264CD",
+                        backgroundColor: "#5264CD",
                         borderWidth: 3,
                         pointRadius: 3,
+                        label: "Doanh thu",
                     },
                 ],
-                labels: labels,
+                labels: labels ?? [],
             };
             return chartData;
-        },
-
-        handleCurrentPage(value) {
-            this.filter.page = value;
-            this.fetchData();
         },
     },
 };

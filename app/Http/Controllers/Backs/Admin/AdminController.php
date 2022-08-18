@@ -23,20 +23,10 @@ class AdminController extends Controller
 
         $movieAnalysis = $this->adminAnalysisService->getMovieAnalysis($request);
 
-        // dd($movieAnalysis);
-
-        // $request['date_from'] = substr($request->date_from, 0, -14);
-        // $request['date_to'] = substr($request->date_to, 0, -14);
-        // $request['date_from_ticket'] = substr($request->date_from_ticket, 0, -14);
-        // $request['date_to_ticket'] = substr($request->date_to_ticket, 0, -14);
-
-        // $data_avenua = $this->billService->getDataByMonth($request);
-        // $data_ticket = $this->billService->getDataTicketByMonth($request);
-
         return Inertia::render('Backs/Admin/Index', [
             'revenuaCinema' => $revenuaCinema,
             'filtersBE' => $request->all(),
-            // 'data_ticket' => $data_ticket,
+            'movieAnalysis' => $movieAnalysis,
         ]);
     }
 

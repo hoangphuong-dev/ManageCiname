@@ -30,16 +30,35 @@ class AdminAnalysisService extends BaseService
     public function getMovieAnalysis($request)
     {
         $cinemaId = $this->getCinemaId();
-        return $this->adminAnalysisRepository->getMovieAnalysis($request, $cinemaId);
+        $labelWeek = $this->dataWeekAnalysis($request);
+
+        return $this->adminAnalysisRepository->getMovieAnalysis($request, $cinemaId, $labelWeek);
     }
 
     private function getDataLabels($request)
     {
-        $arr = array();
-
         $startDate = Carbon::parse($request->selected_month)->startOfMonth();
         $endDate = is_null($request->selected_month) ? Carbon::now() : Carbon::parse($request->selected_month)->endOfMonth();
+        return $this->formatDate($startDate, $endDate);
+    }
 
+
+    private function dataWeekAnalysis($request)
+    {
+        if ($request->selected_month) {
+            $startDate = Carbon::parse($request->selected_month)->endOfMonth()->subDays(6);
+            $endDate = Carbon::parse($request->selected_month)->endOfMonth();
+        } else {
+            $startDate = Carbon::now()->subDays(6);
+            $endDate = Carbon::now();
+        }
+
+        return $this->formatDate($startDate, $endDate);
+    }
+
+    private function formatDate($startDate, $endDate)
+    {
+        $arr = array();
         $period = CarbonPeriod::create($startDate, $endDate);
 
         foreach ($period as $day) {

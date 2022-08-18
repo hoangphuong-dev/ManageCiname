@@ -4,36 +4,87 @@ namespace App\Repositories;
 
 use App\Models\Bill;
 use App\Models\Cinema;
+use App\Models\Movie;
 use App\Models\ShowTime;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AdminAnalysisRepository
 {
-    public function getMovieAnalysis($request, $cinemaId)
+    public function getMovieAnalysis($request, $cinemaId, $labelWeek)
     {
         $cinema = Cinema::query()->whereId($cinemaId)->with(['rooms'])->first();
         $arrRoomId = $cinema->rooms->pluck('id')->toArray();
 
+        $monthFormat = Carbon::parse($request->selected_month)->format('Y-m');
+
         $movies = ShowTime::query()
             ->where('time_start', '>', Carbon::now())
             ->whereIn('room_id', $arrRoomId)
-            ->withCount(['tickets' => function ($q) {
-                // return $q->where('created_at', '>', Carbon::now());
+            ->withCount(['tickets' => function ($q) use ($monthFormat) {
+                return $q->where('created_at', 'LIKE', "{$monthFormat}%");
             }])
-            ->withSum(['tickets' => function ($q) {
-                // return $q->where('created_at', '>', Carbon::now());
+            ->with(['tickets' => function ($q) use ($monthFormat) {
+                return $q->where('created_at', 'LIKE', "{$monthFormat}%");
+            }])
+            ->withSum(['tickets' => function ($q) use ($monthFormat) {
+                return $q->where('created_at', 'LIKE', "{$monthFormat}%");
             }], 'price')
             ->with(['room' => function ($q) {
                 return $q->select('id')->withCount('seats');
             }])
-            ->get()
-            ->groupBy('movie_id')
-            ->toArray();
+            ->get()->groupBy('movie_id');
 
-        // dd($movies);
-        // Bill::
+        $result = [];
+
+        foreach ($movies as $key => $movie) {
+            $movieInfo = Movie::select('trailer', 'name')->whereId($key)->first();
+
+            $ticketCount =  $sumPrice = $seatCount = 0;
+            foreach ($movie as $item) {
+                $dataChart = $this->mapDataWeek($item->tickets, $labelWeek);
+                $ticketCount += $item->tickets_count;
+                $sumPrice += $item->tickets_sum_price;
+                $seatCount += $item->room->seats_count;
+            }
+
+            array_push(
+                $result,
+                [
+                    'name' => $movieInfo->name,
+                    'trailer' => $movieInfo->trailer,
+                    'ticketCount' => $ticketCount,
+                    'sumPrice' => $sumPrice,
+                    'seatCount' => $seatCount,
+                    'dataChart' => $dataChart,
+                    'labelWeek' => $labelWeek,
+                ]
+            );
+        }
+
+        return $result;
     }
 
+    private function mapDataWeek($data, $label)
+    {
+        if (is_null($data)) {
+            return [];
+        }
+
+        $arr = [];
+        $revenua = 0;
+
+        foreach ($label as $day) {
+            foreach ($data as $item) {
+                if (Carbon::parse($item->created_at)->format('d-m-Y') == $day) {
+                    $revenua += $item->price;
+                }
+            }
+
+            array_push($arr, $revenua);
+        }
+        return $arr;
+    }
 
     public function analysisByCinema($request, $labels, $cinemaId)
     {
