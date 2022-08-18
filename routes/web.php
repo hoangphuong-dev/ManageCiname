@@ -61,7 +61,6 @@ Route::group(['middleware' => ['customer']], function () {
     Route::get('/my-voucher', [ProfileController::class, 'myVoucher'])->name('voucher');
     Route::post('/exchange-point', [ProfileController::class, 'exchangePoint'])->name('customer.exchange-point');
 
-    Route::post('/update', [ProfileController::class, 'update'])->name('customer.update-profile');
 
     Route::resources([
         'comments' => CommentController::class,
@@ -70,6 +69,7 @@ Route::group(['middleware' => ['customer']], function () {
     Route::put('toggle-favorite', [CommentController::class, 'toggleFavorite'])->name('comment.toggle-favorite');
 });
 
+Route::post('/update', [ProfileController::class, 'update'])->name('customer.update-profile');
 Route::prefix('/')->group(function () {
     Route::get('404', [ErrorPageController::class, 'Error404'])->name('404-page');
 });

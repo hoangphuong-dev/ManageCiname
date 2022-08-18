@@ -101,6 +101,11 @@ class ProfileController extends Controller
     {
         $fill = $request->validated();
         $user = $this->userService->getUser();
+
+        if (is_null($user)) {
+            throw new \Exception(__('Bạn phải đăng nhập để cập nhật thông tin !'));
+        }
+
         try {
             $this->userService->updateUser($request, $user);
             $user->email != $fill['email']
