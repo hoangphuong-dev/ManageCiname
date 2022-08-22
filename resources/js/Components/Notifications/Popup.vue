@@ -132,28 +132,23 @@ export default {
 
         async showNotice(id, index) {
             const { type } = this.data[index];
-            if (type === "App\\Notifications\\RegisterStaff") {
-                if (this.data[index].read_at === null) {
-                    await markRead(id).then((res) => {
-                        this.notificationCount > 0 && this.notificationCount--;
-                    });
-                }
-                return Inertia.get(
-                    route("admin.staff.index"),
-                    { email: this.data[index].data.email },
-                    { onBefore, onFinish, preserveScroll: true }
-                );
-            } else {
-                // return Inertia.get(
-                //   "https://www.youtube.com/watch?v=Tj7YO60CG-g",
-                //   {},
-                //   {
-                //     preserveScroll: true,
-                //     onBefore,
-                //     onFinish,
-                //   }
-                // );
+            if (this.data[index].read_at === null) {
+                await markRead(id).then((res) => {
+                    this.notificationCount > 0 && this.notificationCount--;
+                });
             }
+
+            switch (type) {
+                case "App\\Notifications\\RegisterStaff":
+                    return Inertia.get(route("admin.staff.index"), {
+                        email: this.data[index].data.email,
+                    });
+                    break;
+                case "App\\Notifications\\SendAdminEndWeekNotification":
+                    return Inertia.get(route("admin.cinemas.show"));
+                    break;
+            }
+
             this.isShowNotification = false;
         },
     },

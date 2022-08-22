@@ -59,4 +59,15 @@ class FormatDate
         }
         return $weekday;
     }
+
+    public static function getPeriodDate($startDate, $endDate)
+    {
+        $arr = array();
+        $period = CarbonPeriod::create($startDate, $endDate);
+
+        foreach ($period as $day) {
+            array_push($arr, $day->format('d-m-Y'));
+        }
+        return $arr;
+    }
 }

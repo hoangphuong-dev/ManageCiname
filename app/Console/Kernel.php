@@ -15,6 +15,13 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Ho_Chi_Minh')
             ->withoutOverlapping()
             ->runInBackground();
+
+        // Gửi thông báo phim nổi bật trong tuần cho admin
+        $schedule->command('admin:send_noti_end_week')
+            ->weeklyOn(Schedule::SUNDAY, '23:50')
+            ->timezone('Asia/Ho_Chi_Minh')
+            ->withoutOverlapping()
+            ->runInBackground();
     }
 
 

@@ -11,23 +11,21 @@ use Illuminate\Support\Facades\Log;
 
 class AdminAnalysisRepository
 {
-    public function getMovieAnalysis($request, $cinemaId, $labelWeek)
+    public static function getMovieAnalysis($startDate, $endDate, $cinemaId, $labelWeek)
     {
         $cinema = Cinema::query()->whereId($cinemaId)->with(['rooms'])->first();
         $arrRoomId = $cinema->rooms->pluck('id')->toArray();
 
-        $monthFormat = Carbon::parse($request->selected_month)->format('Y-m');
-
         $movies = ShowTime::query()
             ->whereIn('room_id', $arrRoomId)
-            ->withCount(['tickets' => function ($q) use ($monthFormat) {
-                return $q->where('created_at', 'LIKE', "{$monthFormat}%");
+            ->withCount(['tickets' => function ($q) use ($startDate, $endDate) {
+                return $q->whereBetween('created_at', [$startDate, $endDate]);
             }])
-            ->with(['tickets' => function ($q) use ($monthFormat) {
-                return $q->where('created_at', 'LIKE', "{$monthFormat}%");
+            ->with(['tickets' => function ($q) use ($startDate, $endDate) {
+                return $q->whereBetween('created_at', [$startDate, $endDate]);
             }])
-            ->withSum(['tickets' => function ($q) use ($monthFormat) {
-                return $q->where('created_at', 'LIKE', "{$monthFormat}%");
+            ->withSum(['tickets' => function ($q) use ($startDate, $endDate) {
+                return $q->whereBetween('created_at', [$startDate, $endDate]);
             }], 'price')
             ->with(['room' => function ($q) {
                 return $q->select('id')->withCount('seats');
@@ -41,7 +39,7 @@ class AdminAnalysisRepository
 
             $ticketCount =  $sumPrice = $seatCount = 0;
             foreach ($movie as $item) {
-                $dataChart = $this->mapDataWeek($item->tickets, $labelWeek);
+                $dataChart = (new self)->mapDataWeek($item->tickets, $labelWeek);
                 $ticketCount += $item->tickets_count;
                 $sumPrice += $item->tickets_sum_price;
                 $seatCount += $item->room->seats_count;

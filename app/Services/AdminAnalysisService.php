@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helper\FormatDate;
 use App\Repositories\AdminAnalysisRepository;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -31,8 +32,12 @@ class AdminAnalysisService extends BaseService
     {
         $cinemaId = $this->getCinemaId();
         $labelWeek = $this->dataWeekAnalysis($request);
+        $month = $request->selected_month;
 
-        return $this->adminAnalysisRepository->getMovieAnalysis($request, $cinemaId, $labelWeek);
+        $startOfMonth = Carbon::parse($month)->startOfMonth();
+        $endOfMonth = is_null($month) ? Carbon::now() : Carbon::parse($month)->endOfMonth();
+
+        return $this->adminAnalysisRepository->getMovieAnalysis($startOfMonth, $endOfMonth, $cinemaId, $labelWeek);
     }
 
     private function getDataLabels($request)
@@ -43,7 +48,7 @@ class AdminAnalysisService extends BaseService
         $endDate = is_null($month) || (!is_null($month) && Carbon::parse($month)->month == Carbon::now()->month)
             ? Carbon::now()
             : Carbon::parse($month)->endOfMonth();
-        return $this->formatDate($startDate, $endDate);
+        return  FormatDate::getPeriodDate($startDate, $endDate);
     }
 
 
@@ -59,18 +64,6 @@ class AdminAnalysisService extends BaseService
             $endDate = Carbon::parse($month)->endOfMonth();
         }
 
-        return $this->formatDate($startDate, $endDate);
-    }
-
-    private function formatDate($startDate, $endDate)
-    {
-        $arr = array();
-        $period = CarbonPeriod::create($startDate, $endDate);
-
-        foreach ($period as $day) {
-            array_push($arr, $day->format('d-m-Y'));
-        }
-
-        return $arr;
+        return FormatDate::getPeriodDate($startDate, $endDate);
     }
 }
