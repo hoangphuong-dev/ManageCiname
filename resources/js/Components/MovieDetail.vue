@@ -190,7 +190,6 @@ export default {
         async fetchDataProvince() {
             listProvinceHasCinema()
                 .then(({ status, data }) => {
-                    console.log(5555, data);
                     this.provinces = data;
                 })
                 .catch(() => {});
