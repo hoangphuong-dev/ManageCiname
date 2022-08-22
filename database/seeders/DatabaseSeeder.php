@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             StaffInfoSeeder::class,
             ShowTimeSeeder::class,
             BillSeeder::class,
-            // CommentMovieSeeder::class
+            CommentMovieSeeder::class
         ]);
     }
 }

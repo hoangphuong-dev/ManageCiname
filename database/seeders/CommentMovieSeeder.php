@@ -28,7 +28,6 @@ class CommentMovieSeeder extends Seeder
                 'user_id' => $user_id[array_rand($user_id)],
                 'parent_id' => CommentMovie::MASTER_COMMENT,
                 'content' => $faker->paragraph,
-                'amount_feel' => count($user_id),
             ]);
         }
         //comment level 2 
@@ -41,7 +40,6 @@ class CommentMovieSeeder extends Seeder
                 'user_id' => $user_id[array_rand($user_id)],
                 'parent_id' => $key,
                 'content' => $faker->paragraph,
-                'amount_feel' => count($user_id),
             ]);
         }
     }
