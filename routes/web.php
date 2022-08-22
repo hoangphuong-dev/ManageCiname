@@ -61,11 +61,6 @@ Route::group(['middleware' => ['customer']], function () {
     Route::get('/my-voucher', [ProfileController::class, 'myVoucher'])->name('voucher');
     Route::post('/exchange-point', [ProfileController::class, 'exchangePoint'])->name('customer.exchange-point');
 
-
-    Route::resources([
-        'comments' => CommentController::class,
-    ]);
-
     Route::put('toggle-favorite', [CommentController::class, 'toggleFavorite'])->name('comment.toggle-favorite');
 });
 

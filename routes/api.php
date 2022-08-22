@@ -39,6 +39,8 @@ Route::get('get-cinema-by-province/{id}', [CustomerController::class, 'getCinema
 
 Route::get('/get-comments', [CommentController::class, 'getComment'])
     ->name('movies.comment');
+Route::post('/comments', [CommentController::class, 'store'])
+    ->name('comments.store');
 
 
 Route::prefix('/notification')->as('notification.')->group(function () {

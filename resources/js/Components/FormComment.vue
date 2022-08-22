@@ -15,23 +15,23 @@
                     />
                     <h4 class="mt-2 ml-2">{{ item?.user.name }}</h4>
                 </div>
-                <div class="w-full my-1 border p-2 rounded">
+                <div class="w-full mt-1 border p-1 rounded">
                     {{ item.content }}
                 </div>
                 <div class="w-full flex mb-6">
                     <div class="w-8/10">
                         <span
                             @click="onFavoriteClick(item.id, item.isFavorite)"
-                            class="cursor-pointer mx-2 font-bold hover:text-blue-500"
+                            class="cursor-pointer text-xs mx-2 hover:text-blue-500"
                         >
                             Yêu thích
                         </span>
                         <span
                             @click="reply(item.id)"
-                            class="cursor-pointer mx-2 font-bold hover:text-blue-500"
+                            class="cursor-pointer text-xs mx-2 hover:text-blue-500"
                             >Trả lời
                         </span>
-                        <span class="mx-2 text-sm">
+                        <span class="mx-2 text-xs">
                             {{ showTime(item.created_at) }}
                         </span>
                     </div>
@@ -40,11 +40,7 @@
                         <span
                             class="cursor-pointer mx-2 font-bold hover:text-blue-500"
                         >
-                            <el-badge
-                                :value="item.amount_feel"
-                                :max="2000"
-                                class="-mr-4"
-                            >
+                            <el-badge :value="50" :max="2000" class="-mr-4">
                                 <el-image
                                     style="width: 20px; height: 20px"
                                     src="/images/favorite.svg"
@@ -70,22 +66,22 @@
                         />
                         <h4 class="mt-2 ml-2">{{ each?.user.name }}</h4>
                     </div>
-                    <div class="w-full my-1 border p-2 rounded">
+                    <div class="w-full mt-1 border p-1 rounded">
                         {{ each.content }}
                     </div>
-                    <div class="w-full mb-6 flex mt-2">
+                    <div class="w-full mb-2 flex">
                         <div class="w-8/10">
                             <span
                                 @click="
                                     onFavoriteClick(each.id, each.isFavorite)
                                 "
-                                class="cursor-pointer mx-2 font-bold hover:text-blue-500"
+                                class="cursor-pointer text-xs mx-2 hover:text-blue-500"
                             >
                                 Yêu thích
                             </span>
                             <span
                                 @click="reply(item.id)"
-                                class="cursor-pointer mx-2 font-bold hover:text-blue-500"
+                                class="cursor-pointer text-xs mx-2 hover:text-blue-500"
                                 >Trả lời
                             </span>
                             <span class="mx-2 text-xs">
@@ -94,7 +90,7 @@
                         </div>
 
                         <div class="w-2/12 text-right mt-2">
-                            <el-badge :value="item.amount_feel" class="-mr-4">
+                            <el-badge :value="80" class="-mr-4">
                                 <el-image
                                     style="width: 20px; height: 20px"
                                     src="/images/favorite.svg"
@@ -257,27 +253,35 @@ export default {
             this.checkLogin;
             this.formReply.user_id = this.user?.id;
             this.formReply.movie_id = this.movie?.id;
-            this.$refs["formReply"][0].validate((valid) => {
+            this.$refs["formReply"][0].validate(async (valid) => {
                 if (valid) {
-                    Inertia.post(route("comments.store", this.formReply));
+                    await axios
+                        .post(route("comments.store"), this.formReply)
+                        .then((res) => {
+                            this.formReply.content = "";
+                            this.showFormReply = "";
+                            this.fetchData();
+                        });
                 }
             });
-            this.formReply.content = "";
-            this.showFormReply = "";
-            this.fetchData();
         },
 
         submitComment() {
             this.checkLogin;
             this.form.user_id = this.user?.id;
             this.form.movie_id = this.movie?.id;
-            this.$refs["form"].validate((valid) => {
+            this.$refs["form"].validate(async (valid) => {
                 if (valid) {
-                    Inertia.post(route("comments.store", this.form));
+                    await axios.post(route("comments.store"), this.form);
+
+                    await axios
+                        .post(route("comments.store"), this.form)
+                        .then((res) => {
+                            this.form.content = "";
+                            this.fetchData();
+                        });
                 }
             });
-            this.form.content = "";
-            this.fetchData();
         },
 
         checkLogin() {

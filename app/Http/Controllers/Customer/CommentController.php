@@ -15,7 +15,7 @@ class CommentController extends Controller
         $result =  CommentMovie::where('movie_id', $request->movie_id)
             ->with('user')->get();
 
-        dd($result);
+        return $result;
     }
     /**
      * Store a newly created resource in storage.
@@ -28,8 +28,7 @@ class CommentController extends Controller
         $fill = $request->validated();
 
         try {
-            CommentMovie::create($fill);
-            return back();
+            return CommentMovie::create($fill);
         } catch (\Exception $e) {
             $message = ['error' => __('Bình luận thất bại !')];
             return back()->with($message);
