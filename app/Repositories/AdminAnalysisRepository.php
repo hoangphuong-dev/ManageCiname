@@ -19,7 +19,6 @@ class AdminAnalysisRepository
         $monthFormat = Carbon::parse($request->selected_month)->format('Y-m');
 
         $movies = ShowTime::query()
-            ->where('time_start', '>', Carbon::now())
             ->whereIn('room_id', $arrRoomId)
             ->withCount(['tickets' => function ($q) use ($monthFormat) {
                 return $q->where('created_at', 'LIKE', "{$monthFormat}%");
@@ -58,10 +57,14 @@ class AdminAnalysisRepository
                     'seatCount' => $seatCount,
                     'dataChart' => $dataChart,
                     'labelWeek' => $labelWeek,
+                    'percent' => $seatCount > 0 ? ($ticketCount / $seatCount * 100) : 0,
                 ]
             );
         }
 
+        usort($result, function ($a, $b) {
+            return $b['percent'] <=> $a['percent'];
+        });
         return $result;
     }
 
@@ -73,7 +76,6 @@ class AdminAnalysisRepository
 
         $arr = [];
         $revenua = 0;
-
         foreach ($label as $day) {
             foreach ($data as $item) {
                 if (Carbon::parse($item->created_at)->format('d-m-Y') == $day) {
@@ -91,21 +93,20 @@ class AdminAnalysisRepository
         $arrRenua = $arrTicket = [];
         $monthFormat = Carbon::parse($request->selected_month)->format('Y-m');
 
-        $revenuas = Bill::query()
-            ->selectRaw('DATE_FORMAT(bills.created_at, "%d-%m-%Y") as day, count(tickets.id) as "number_ticker", sum(bills.total_money) as "revenua"')
-            ->join('tickets', 'tickets.bill_id', '=', 'bills.id')
+        $revenuas = Bill::query()->select('total_money')
+            ->selectRaw('DATE_FORMAT(bills.created_at, "%d-%m-%Y") as day')
             ->where('bills.created_at', 'LIKE', "{$monthFormat}%")
             ->where('status', BiLL::PAYMENTED)
             ->where('cinema_id', $cinemaId)
-            ->groupBy('day')
+            ->withCount('tickets')
             ->get();
 
         foreach ($labels as $day) {
             $temp = $numberTicket = 0;
             foreach ($revenuas as $item) {
                 if ($day == $item->day) {
-                    $temp = $item->revenua;
-                    $numberTicket = $item->number_ticker;
+                    $temp += $item->total_money;
+                    $numberTicket += $item->tickets_count;
                 }
             }
             array_push($arrRenua, $temp);

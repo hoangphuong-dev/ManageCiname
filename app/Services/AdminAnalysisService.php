@@ -37,20 +37,26 @@ class AdminAnalysisService extends BaseService
 
     private function getDataLabels($request)
     {
-        $startDate = Carbon::parse($request->selected_month)->startOfMonth();
-        $endDate = is_null($request->selected_month) ? Carbon::now() : Carbon::parse($request->selected_month)->endOfMonth();
+        $month = $request->selected_month;
+        $startDate = Carbon::parse($month)->startOfMonth();
+
+        $endDate = is_null($month) || (!is_null($month) && Carbon::parse($month)->month == Carbon::now()->month)
+            ? Carbon::now()
+            : Carbon::parse($month)->endOfMonth();
         return $this->formatDate($startDate, $endDate);
     }
 
 
     private function dataWeekAnalysis($request)
     {
-        if ($request->selected_month) {
-            $startDate = Carbon::parse($request->selected_month)->endOfMonth()->subDays(6);
-            $endDate = Carbon::parse($request->selected_month)->endOfMonth();
-        } else {
+        $month = $request->selected_month;
+
+        if (is_null($month) || (!is_null($month) && Carbon::parse($month)->month == Carbon::now()->month)) {
             $startDate = Carbon::now()->subDays(6);
             $endDate = Carbon::now();
+        } else {
+            $startDate = Carbon::parse($month)->endOfMonth()->subDays(6);
+            $endDate = Carbon::parse($month)->endOfMonth();
         }
 
         return $this->formatDate($startDate, $endDate);

@@ -27,17 +27,7 @@
             </template>
 
             <template #percent="{ row }">
-                <p>
-                    {{
-                        row?.seatCount > 0
-                            ? (
-                                  (row?.ticketCount / row?.seatCount) *
-                                  100
-                              ).toFixed(2)
-                            : 0
-                    }}
-                    %
-                </p>
+                <p>{{ row?.percent ? row?.percent.toFixed(2) : 0 }}%</p>
             </template>
 
             <template #chart="{ row }">
