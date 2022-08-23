@@ -145,6 +145,7 @@
                             }"
                             :showDays="false"
                             :showHours="false"
+                            @timeElapsed="reloadCountDown"
                         />
                     </div>
                 </div>
@@ -210,6 +211,10 @@ export default {
         };
     },
     methods: {
+        reloadCountDown() {
+            location.reload();
+        },
+
         submit() {
             if (this.formData.seat_id.length > 0) {
                 Inertia.get(
