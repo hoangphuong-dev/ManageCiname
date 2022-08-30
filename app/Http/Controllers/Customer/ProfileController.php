@@ -99,6 +99,8 @@ class ProfileController extends Controller
      */
     public function update(UpdateUserRequest $request)
     {
+        $message = '';
+
         $fill = $request->validated();
         $user = $this->userService->getUser();
 
